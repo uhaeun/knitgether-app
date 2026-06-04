@@ -17,6 +17,8 @@ struct ProjectPatternCopy: Codable, Identifiable, Hashable {
     let fileNameSnapshot: String?
     let localCopyPath: String?
     let pageCountSnapshot: Int?
+    let drawingDataPath: String?
+    let drawingUpdatedAt: Date?
     let copiedAt: Date
     let createdAt: Date
     let updatedAt: Date
@@ -33,6 +35,8 @@ struct ProjectPatternCopy: Codable, Identifiable, Hashable {
         fileNameSnapshot: String?,
         localCopyPath: String?,
         pageCountSnapshot: Int?,
+        drawingDataPath: String? = nil,
+        drawingUpdatedAt: Date? = nil,
         copiedAt: Date,
         createdAt: Date,
         updatedAt: Date,
@@ -48,10 +52,36 @@ struct ProjectPatternCopy: Codable, Identifiable, Hashable {
         self.fileNameSnapshot = fileNameSnapshot
         self.localCopyPath = localCopyPath
         self.pageCountSnapshot = pageCountSnapshot
+        self.drawingDataPath = drawingDataPath
+        self.drawingUpdatedAt = drawingUpdatedAt
         self.copiedAt = copiedAt
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
         self.syncStatus = syncStatus
+    }
+
+    func updatingDrawingDataPath(
+        _ drawingDataPath: String?,
+        at date: Date = Date()
+    ) -> ProjectPatternCopy {
+        ProjectPatternCopy(
+            id: id,
+            ownerId: ownerId,
+            projectId: projectId,
+            sourcePatternDocumentId: sourcePatternDocumentId,
+            titleSnapshot: titleSnapshot,
+            designerSnapshot: designerSnapshot,
+            fileNameSnapshot: fileNameSnapshot,
+            localCopyPath: localCopyPath,
+            pageCountSnapshot: pageCountSnapshot,
+            drawingDataPath: drawingDataPath,
+            drawingUpdatedAt: drawingDataPath == nil ? nil : date,
+            copiedAt: copiedAt,
+            createdAt: createdAt,
+            updatedAt: date,
+            deletedAt: deletedAt,
+            syncStatus: syncStatus
+        )
     }
 }

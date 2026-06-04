@@ -17,6 +17,8 @@ struct KnittingProject: Codable, Identifiable, Hashable {
     let startDate: Date
     let lastWorkedAt: Date?
     let patternCopy: ProjectPatternCopy?
+    let workspaceDisplayMode: ProjectWorkspaceDisplayMode?
+    let workspaceSheetPosition: ProjectWorkspaceSheetPosition?
     let rowCounter: RowCounter
     let workSessions: [WorkSession]
     let relatedSkillIds: [UUID]
@@ -35,6 +37,8 @@ struct KnittingProject: Codable, Identifiable, Hashable {
         startDate: Date,
         lastWorkedAt: Date?,
         patternCopy: ProjectPatternCopy?,
+        workspaceDisplayMode: ProjectWorkspaceDisplayMode? = .patternAndCounter,
+        workspaceSheetPosition: ProjectWorkspaceSheetPosition? = .medium,
         rowCounter: RowCounter,
         workSessions: [WorkSession],
         relatedSkillIds: [UUID] = [],
@@ -52,6 +56,8 @@ struct KnittingProject: Codable, Identifiable, Hashable {
         self.startDate = startDate
         self.lastWorkedAt = lastWorkedAt
         self.patternCopy = patternCopy
+        self.workspaceDisplayMode = workspaceDisplayMode
+        self.workspaceSheetPosition = workspaceSheetPosition
         self.rowCounter = rowCounter
         self.workSessions = workSessions
         self.relatedSkillIds = relatedSkillIds
@@ -130,6 +136,8 @@ struct KnittingProject: Codable, Identifiable, Hashable {
         startDate: Date? = nil,
         lastWorkedAt: Date? = nil,
         patternCopy: ProjectPatternCopy? = nil,
+        workspaceDisplayMode: ProjectWorkspaceDisplayMode? = nil,
+        workspaceSheetPosition: ProjectWorkspaceSheetPosition? = nil,
         rowCounter: RowCounter? = nil,
         workSessions: [WorkSession]? = nil,
         relatedSkillIds: [UUID]? = nil,
@@ -145,6 +153,8 @@ struct KnittingProject: Codable, Identifiable, Hashable {
             startDate: startDate ?? self.startDate,
             lastWorkedAt: lastWorkedAt ?? self.lastWorkedAt,
             patternCopy: patternCopy ?? self.patternCopy,
+            workspaceDisplayMode: workspaceDisplayMode ?? self.workspaceDisplayMode,
+            workspaceSheetPosition: workspaceSheetPosition ?? self.workspaceSheetPosition,
             rowCounter: rowCounter ?? self.rowCounter,
             workSessions: workSessions ?? self.workSessions,
             relatedSkillIds: relatedSkillIds ?? self.relatedSkillIds,

@@ -8,16 +8,52 @@
 import SwiftUI
 
 struct ToolView: View {
-    private let rows = [
-        NavigationRowItem(title: "게이지 계산기", subtitle: "코와 단수를 계산합니다", systemImage: "function"),
-        NavigationRowItem(title: "뜨개 사전", subtitle: "뜨개 용어를 찾아봅니다", systemImage: "text.book.closed"),
-        NavigationRowItem(title: "뜨개 애니메이션", subtitle: "스킬 동작을 확인합니다", systemImage: "play.rectangle")
-    ]
+    private let skillRepository: any SkillRepository
+
+    init(repositories: AppRepositoryContainer) {
+        skillRepository = repositories.skillRepository
+    }
 
     var body: some View {
-        List(rows) { row in
-            AppNavigationRow(item: row) {
-                ToolPlaceholderView(title: row.title, systemImage: row.systemImage)
+        List {
+            AppNavigationRow(
+                item: NavigationRowItem(
+                    title: "게이지 계산기",
+                    subtitle: "코와 단수를 계산합니다",
+                    systemImage: "function"
+                )
+            ) {
+                ToolPlaceholderView(title: "게이지 계산기", systemImage: "function")
+            }
+
+            AppNavigationRow(
+                item: NavigationRowItem(
+                    title: "뜨개니게이션",
+                    subtitle: "약어와 기법을 빠르게 찾습니다",
+                    systemImage: "signpost.right"
+                )
+            ) {
+                SkillToolListView(skillRepository: skillRepository, mode: .navigation)
+            }
+
+            AppNavigationRow(
+                item: NavigationRowItem(
+                    title: "뜨개 사전",
+                    subtitle: "뜨개 용어를 찾아봅니다",
+                    systemImage: "text.book.closed"
+                )
+            ) {
+                SkillToolListView(skillRepository: skillRepository, mode: .dictionary)
+            }
+
+            AppNavigationRow(
+                item: NavigationRowItem(
+                    title: "뜨개 애니메이션",
+                    subtitle: "스킬 동작을 확인합니다",
+                    systemImage: "play.rectangle"
+                )
+            ) {
+                SkillToolListView(skillRepository: skillRepository, mode: .animations)
             }
         }
         .navigationTitle("Tool")
@@ -51,6 +87,6 @@ private struct ToolPlaceholderView: View {
 
 #Preview {
     NavigationStack {
-        ToolView()
+        ToolView(repositories: .shared)
     }
 }

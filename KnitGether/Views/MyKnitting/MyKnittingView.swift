@@ -15,6 +15,7 @@ struct MyKnittingView: View {
     @State private var isShowingDeleteConfirmation = false
 
     private let projectRepository: any ProjectRepository
+    private let patternRepository: any PatternRepository
     private let skillRepository: any SkillRepository
 
     init(repositories: AppRepositoryContainer) {
@@ -22,6 +23,7 @@ struct MyKnittingView: View {
             wrappedValue: MyKnittingViewModel(projectRepository: repositories.projectRepository)
         )
         projectRepository = repositories.projectRepository
+        patternRepository = repositories.patternRepository
         skillRepository = repositories.skillRepository
     }
 
@@ -100,6 +102,7 @@ struct MyKnittingView: View {
                         viewModel: ProjectWorkspaceViewModel(
                             project: project,
                             projectRepository: projectRepository,
+                            patternRepository: patternRepository,
                             skillRepository: skillRepository
                         )
                     )

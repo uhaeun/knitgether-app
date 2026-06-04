@@ -25,7 +25,7 @@ struct ContentView: View {
             }
 
             NavigationStack {
-                ToolView()
+                ToolView(repositories: .shared)
             }
             .tabItem {
                 Label("Tool", systemImage: "wrench.and.screwdriver")

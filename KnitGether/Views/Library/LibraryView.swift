@@ -9,6 +9,8 @@ import SwiftUI
 
 struct LibraryView: View {
     @StateObject private var viewModel: LibraryViewModel
+    private let patternRepository: any PatternRepository
+    private let skillRepository: any SkillRepository
 
     init(repositories: AppRepositoryContainer) {
         _viewModel = StateObject(
@@ -18,6 +20,8 @@ struct LibraryView: View {
                 skillRepository: repositories.skillRepository
             )
         )
+        patternRepository = repositories.patternRepository
+        skillRepository = repositories.skillRepository
     }
 
     var body: some View {
@@ -34,10 +38,7 @@ struct LibraryView: View {
                     systemImage: "doc.text"
                 )
             ) {
-                LibraryCollectionPlaceholderView(
-                    title: "도안 창고",
-                    items: viewModel.patterns.map(\.title)
-                )
+                PatternLibraryView(patternRepository: patternRepository)
             }
 
             AppNavigationRow(
@@ -73,10 +74,7 @@ struct LibraryView: View {
                     systemImage: "graduationcap"
                 )
             ) {
-                LibraryCollectionPlaceholderView(
-                    title: "스킬 창고",
-                    items: viewModel.skills.map(\.title)
-                )
+                SkillLibraryView(skillRepository: skillRepository)
             }
         }
         .navigationTitle("Library")

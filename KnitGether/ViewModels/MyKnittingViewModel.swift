@@ -89,6 +89,8 @@ final class MyKnittingViewModel: ObservableObject {
             startDate: formData.startDate,
             lastWorkedAt: nil,
             patternCopy: patternCopy,
+            workspaceDisplayMode: .patternAndCounter,
+            workspaceSheetPosition: .medium,
             rowCounter: RowCounter(
                 ownerId: SampleData.ownerId,
                 projectId: projectId,
@@ -118,6 +120,8 @@ final class MyKnittingViewModel: ObservableObject {
             startDate: formData.startDate,
             lastWorkedAt: project.lastWorkedAt,
             patternCopy: project.patternCopy,
+            workspaceDisplayMode: project.workspaceDisplayMode,
+            workspaceSheetPosition: project.workspaceSheetPosition,
             rowCounter: project.rowCounter,
             workSessions: project.workSessions,
             relatedSkillIds: project.relatedSkillIds,
