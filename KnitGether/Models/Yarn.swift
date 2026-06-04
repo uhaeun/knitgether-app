@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Yarn: Identifiable, Hashable {
+struct Yarn: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let name: String

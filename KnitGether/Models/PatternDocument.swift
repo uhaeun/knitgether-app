@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PatternDocument: Identifiable, Hashable {
+struct PatternDocument: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let title: String

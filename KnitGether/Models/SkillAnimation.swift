@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SkillAnimation: Identifiable, Hashable {
+struct SkillAnimation: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let skillId: UUID?

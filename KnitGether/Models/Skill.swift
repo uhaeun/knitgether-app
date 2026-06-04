@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Skill: Identifiable, Hashable {
+struct Skill: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let title: String

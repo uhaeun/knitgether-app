@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Needle: Identifiable, Hashable {
+struct Needle: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let name: String

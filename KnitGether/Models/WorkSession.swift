@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WorkSession: Identifiable, Hashable {
+struct WorkSession: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let projectId: UUID

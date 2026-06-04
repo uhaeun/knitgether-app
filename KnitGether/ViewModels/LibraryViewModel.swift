@@ -38,7 +38,7 @@ final class LibraryViewModel: ObservableObject {
             skills = try await skillRepository.fetchSkills()
             errorMessage = nil
         } catch {
-            errorMessage = "Could not load library."
+            errorMessage = "Library를 불러오지 못했어요."
         }
     }
 }

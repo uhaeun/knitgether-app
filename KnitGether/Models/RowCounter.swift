@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RowCounter: Identifiable, Hashable {
+struct RowCounter: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let projectId: UUID

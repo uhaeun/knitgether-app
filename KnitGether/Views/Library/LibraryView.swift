@@ -29,52 +29,52 @@ struct LibraryView: View {
 
             AppNavigationRow(
                 item: NavigationRowItem(
-                    title: "Pattern Library",
-                    subtitle: "\(viewModel.patterns.count) patterns",
+                    title: "도안 창고",
+                    subtitle: "\(viewModel.patterns.count)개 도안",
                     systemImage: "doc.text"
                 )
             ) {
                 LibraryCollectionPlaceholderView(
-                    title: "Pattern Library",
+                    title: "도안 창고",
                     items: viewModel.patterns.map(\.title)
                 )
             }
 
             AppNavigationRow(
                 item: NavigationRowItem(
-                    title: "Yarn Library",
-                    subtitle: "\(viewModel.yarns.count) yarns",
+                    title: "실 창고",
+                    subtitle: "\(viewModel.yarns.count)개 실",
                     systemImage: "circle.hexagongrid"
                 )
             ) {
                 LibraryCollectionPlaceholderView(
-                    title: "Yarn Library",
+                    title: "실 창고",
                     items: viewModel.yarns.map(\.name)
                 )
             }
 
             AppNavigationRow(
                 item: NavigationRowItem(
-                    title: "Needle Library",
-                    subtitle: "\(viewModel.needles.count) needles",
+                    title: "바늘 창고",
+                    subtitle: "\(viewModel.needles.count)개 바늘",
                     systemImage: "ruler"
                 )
             ) {
                 LibraryCollectionPlaceholderView(
-                    title: "Needle Library",
+                    title: "바늘 창고",
                     items: viewModel.needles.map(\.name)
                 )
             }
 
             AppNavigationRow(
                 item: NavigationRowItem(
-                    title: "Skill Library",
-                    subtitle: "\(viewModel.skills.count) skills",
+                    title: "스킬 창고",
+                    subtitle: "\(viewModel.skills.count)개 스킬",
                     systemImage: "graduationcap"
                 )
             ) {
                 LibraryCollectionPlaceholderView(
-                    title: "Skill Library",
+                    title: "스킬 창고",
                     items: viewModel.skills.map(\.title)
                 )
             }
@@ -93,7 +93,7 @@ private struct LibraryCollectionPlaceholderView: View {
     var body: some View {
         List {
             if items.isEmpty {
-                Text("No local sample items yet.")
+                Text("아직 등록된 항목이 없어요.")
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(items, id: \.self) { item in

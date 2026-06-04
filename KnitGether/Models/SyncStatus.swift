@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SyncStatus: String, CaseIterable, Identifiable, Hashable {
+enum SyncStatus: String, CaseIterable, Codable, Identifiable, Hashable {
     case localOnly = "Local Only"
     case pendingUpload = "Pending Upload"
     case synced = "Synced"

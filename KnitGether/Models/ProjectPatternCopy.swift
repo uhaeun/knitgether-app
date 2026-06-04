@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProjectPatternCopy: Identifiable, Hashable {
+struct ProjectPatternCopy: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let projectId: UUID

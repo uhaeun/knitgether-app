@@ -11,7 +11,7 @@ struct StatusBadgeView: View {
     let status: ProjectStatus
 
     var body: some View {
-        Text(status.title)
+        Text(status.badgeTitle)
             .font(.caption)
             .fontWeight(.semibold)
             .padding(.horizontal, 10)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserProfile: Identifiable, Hashable {
+struct UserProfile: Codable, Identifiable, Hashable {
     let id: String
     var ownerId: String?
     let displayName: String

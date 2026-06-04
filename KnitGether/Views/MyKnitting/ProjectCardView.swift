@@ -28,20 +28,20 @@ struct ProjectCardView: View {
 
                     Image(systemName: project.isFavorite ? "star.fill" : "star")
                         .foregroundStyle(project.isFavorite ? .yellow : .secondary)
-                        .accessibilityLabel(project.isFavorite ? "Favorite project" : "Not favorite")
+                        .accessibilityLabel(project.isFavorite ? "즐겨찾기" : "즐겨찾기 아님")
                 }
 
                 Label(
-                    project.hasPatternAttached ? "Pattern attached" : "Pattern missing",
+                    project.hasPatternAttached ? "도안 있음" : "도안 없음",
                     systemImage: project.hasPatternAttached ? "doc.text.fill" : "doc.badge.plus"
                 )
                 .font(.subheadline)
                 .foregroundStyle(project.hasPatternAttached ? .green : .secondary)
 
                 HStack(spacing: 14) {
-                    metadata(title: "Started", value: formattedDate(project.startDate))
-                    metadata(title: "Last worked", value: formattedDate(project.lastWorkedAt))
-                    metadata(title: "Work time", value: formattedDuration(project.totalWorkTime))
+                    metadata(title: "시작일", value: formattedDate(project.startDate))
+                    metadata(title: "최근 작업", value: formattedDate(project.lastWorkedAt))
+                    metadata(title: "총 작업 시간", value: formattedDuration(project.totalWorkTime))
                 }
             }
         }
@@ -59,7 +59,7 @@ struct ProjectCardView: View {
                     .font(.title2)
                     .foregroundStyle(.secondary)
             }
-            .accessibilityLabel("Project thumbnail placeholder")
+            .accessibilityLabel("프로젝트 썸네일 자리")
     }
 
     private func metadata(title: String, value: String) -> some View {
@@ -80,22 +80,28 @@ struct ProjectCardView: View {
 
     private func formattedDate(_ date: Date?) -> String {
         guard let date else {
-            return "None"
+            return "없음"
         }
 
         return date.formatted(.dateTime.month(.abbreviated).day().year())
     }
 
     private func formattedDuration(_ duration: TimeInterval) -> String {
-        let totalMinutes = Int(duration / 60)
+        let totalSeconds = max(0, Int(duration.rounded()))
+        let totalMinutes = totalSeconds / 60
         let hours = totalMinutes / 60
         let minutes = totalMinutes % 60
+        let seconds = totalSeconds % 60
 
         if hours > 0 {
-            return "\(hours)h \(minutes)m"
+            return "\(hours)시간 \(minutes)분"
         }
 
-        return "\(minutes)m"
+        if minutes > 0 {
+            return "\(minutes)분 \(seconds)초"
+        }
+
+        return "\(seconds)초"
     }
 }
 

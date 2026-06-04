@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct KnittingProject: Identifiable, Hashable {
+struct KnittingProject: Codable, Identifiable, Hashable {
     let id: UUID
     var ownerId: String?
     let name: String
@@ -69,5 +69,89 @@ struct KnittingProject: Identifiable, Hashable {
 
     var hasPatternAttached: Bool {
         patternCopy != nil
+    }
+
+    func updatingRow(to row: Int, at date: Date = Date()) -> KnittingProject {
+        let updatedCounter = RowCounter(
+            id: rowCounter.id,
+            ownerId: rowCounter.ownerId,
+            projectId: rowCounter.projectId,
+            name: rowCounter.name,
+            currentRow: max(0, row),
+            targetRow: rowCounter.targetRow,
+            createdAt: rowCounter.createdAt,
+            updatedAt: date,
+            deletedAt: rowCounter.deletedAt,
+            syncStatus: rowCounter.syncStatus
+        )
+
+        return copy(
+            lastWorkedAt: date,
+            rowCounter: updatedCounter,
+            updatedAt: date
+        )
+    }
+
+    func updatingMemo(to memo: String, at date: Date = Date()) -> KnittingProject {
+        copy(
+            memo: memo,
+            updatedAt: date
+        )
+    }
+
+    func recordingWorkSession(
+        startedAt: Date,
+        endedAt: Date,
+        memo: String? = nil
+    ) -> KnittingProject {
+        let session = WorkSession(
+            ownerId: ownerId,
+            projectId: id,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            memo: memo,
+            createdAt: endedAt,
+            updatedAt: endedAt,
+            syncStatus: syncStatus
+        )
+
+        return copy(
+            lastWorkedAt: endedAt,
+            workSessions: workSessions + [session],
+            updatedAt: endedAt
+        )
+    }
+
+    func copy(
+        name: String? = nil,
+        status: ProjectStatus? = nil,
+        isFavorite: Bool? = nil,
+        memo: String? = nil,
+        startDate: Date? = nil,
+        lastWorkedAt: Date? = nil,
+        patternCopy: ProjectPatternCopy? = nil,
+        rowCounter: RowCounter? = nil,
+        workSessions: [WorkSession]? = nil,
+        relatedSkillIds: [UUID]? = nil,
+        updatedAt: Date = Date()
+    ) -> KnittingProject {
+        KnittingProject(
+            id: id,
+            ownerId: ownerId,
+            name: name ?? self.name,
+            status: status ?? self.status,
+            isFavorite: isFavorite ?? self.isFavorite,
+            memo: memo ?? self.memo,
+            startDate: startDate ?? self.startDate,
+            lastWorkedAt: lastWorkedAt ?? self.lastWorkedAt,
+            patternCopy: patternCopy ?? self.patternCopy,
+            rowCounter: rowCounter ?? self.rowCounter,
+            workSessions: workSessions ?? self.workSessions,
+            relatedSkillIds: relatedSkillIds ?? self.relatedSkillIds,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            syncStatus: syncStatus
+        )
     }
 }

@@ -8,10 +8,26 @@
 import Foundation
 
 final class LocalProjectRepository: ProjectRepository {
+    private let fileURL: URL
+    private let fileManager: FileManager
     private var projects: [KnittingProject]
 
-    init(projects: [KnittingProject] = SampleData.projects) {
-        self.projects = projects
+    init(
+        projects: [KnittingProject]? = nil,
+        fileManager: FileManager = .default,
+        fileURL: URL? = nil
+    ) {
+        self.fileManager = fileManager
+        self.fileURL = fileURL ?? Self.defaultFileURL(fileManager: fileManager)
+
+        if let projects {
+            self.projects = projects
+        } else {
+            self.projects = Self.loadProjects(
+                fileURL: self.fileURL,
+                fileManager: fileManager
+            )
+        }
     }
 
     func fetchProjects() async throws -> [KnittingProject] {
@@ -34,6 +50,73 @@ final class LocalProjectRepository: ProjectRepository {
         } else {
             projects.append(project)
         }
+
+        try persistProjects()
+    }
+
+    func deleteProject(id: UUID) async throws {
+        projects.removeAll { $0.id == id }
+        try persistProjects()
+    }
+
+    private func persistProjects() throws {
+        let directoryURL = fileURL.deletingLastPathComponent()
+        try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+        let data = try encoder.encode(projects)
+        try data.write(to: fileURL, options: [.atomic])
+    }
+
+    private static func loadProjects(
+        fileURL: URL,
+        fileManager: FileManager
+    ) -> [KnittingProject] {
+        guard fileManager.fileExists(atPath: fileURL.path) else {
+            let sampleProjects = SampleData.projects
+            persistInitialProjects(sampleProjects, fileURL: fileURL, fileManager: fileManager)
+            return sampleProjects
+        }
+
+        do {
+            let data = try Data(contentsOf: fileURL)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode([KnittingProject].self, from: data)
+        } catch {
+            return SampleData.projects
+        }
+    }
+
+    private static func persistInitialProjects(
+        _ projects: [KnittingProject],
+        fileURL: URL,
+        fileManager: FileManager
+    ) {
+        do {
+            let directoryURL = fileURL.deletingLastPathComponent()
+            try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+            let data = try encoder.encode(projects)
+            try data.write(to: fileURL, options: [.atomic])
+        } catch {
+        }
+    }
+
+    private static func defaultFileURL(fileManager: FileManager) -> URL {
+        let baseURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? fileManager.temporaryDirectory
+
+        return baseURL
+            .appendingPathComponent("KnitGether", isDirectory: true)
+            .appendingPathComponent("projects.json")
     }
 }
 

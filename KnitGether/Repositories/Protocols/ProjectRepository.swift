@@ -11,4 +11,5 @@ protocol ProjectRepository {
     func fetchProjects() async throws -> [KnittingProject]
     func fetchProject(id: UUID) async throws -> KnittingProject?
     func saveProject(_ project: KnittingProject) async throws
+    func deleteProject(id: UUID) async throws
 }
