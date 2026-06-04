@@ -8,12 +8,16 @@
 import Foundation
 
 enum ProjectStatus: String, CaseIterable, Identifiable {
-    case planning = "Planning"
-    case inProgress = "In Progress"
-    case paused = "Paused"
-    case finished = "Finished"
+    case planned = "Planned"
+    case wip = "WIP"
+    case ufo = "UFO"
+    case fo = "FO"
 
     var id: String {
+        rawValue
+    }
+
+    var title: String {
         rawValue
     }
 }

@@ -2,7 +2,7 @@
 //  StatusBadgeView.swift
 //  KnitGether
 //
-//  Created by yu haeun on 6/2/26.
+//  Created by yu haeun on 6/4/26.
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ struct StatusBadgeView: View {
     let status: ProjectStatus
 
     var body: some View {
-        Text(status.rawValue)
+        Text(status.title)
             .font(.caption)
             .fontWeight(.semibold)
             .padding(.horizontal, 10)
@@ -23,14 +23,14 @@ struct StatusBadgeView: View {
 
     private var tint: Color {
         switch status {
-        case .planning:
-            .blue
-        case .inProgress:
-            .green
-        case .paused:
-            .orange
-        case .finished:
-            .purple
+        case .planned:
+            return .blue
+        case .wip:
+            return .green
+        case .ufo:
+            return .orange
+        case .fo:
+            return .purple
         }
     }
 }

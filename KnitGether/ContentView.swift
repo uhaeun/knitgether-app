@@ -11,24 +11,24 @@ struct ContentView: View {
     var body: some View {
         TabView {
             NavigationStack {
-                MyKnittingsView(projects: SampleKnittingData.projects)
+                MyKnittingView(repositories: .shared)
             }
             .tabItem {
-                Label("My Knittings", systemImage: "heart.text.square")
+                Label("My Knitting", systemImage: "heart.text.square")
             }
 
             NavigationStack {
-                LibraryView()
+                LibraryView(repositories: .shared)
             }
             .tabItem {
                 Label("Library", systemImage: "books.vertical")
             }
 
             NavigationStack {
-                ToolsView()
+                ToolView()
             }
             .tabItem {
-                Label("Tools", systemImage: "wrench.and.screwdriver")
+                Label("Tool", systemImage: "wrench.and.screwdriver")
             }
         }
     }
