@@ -23,7 +23,7 @@ struct ToolView: View {
                     systemImage: "function"
                 )
             ) {
-                ToolPlaceholderView(title: "게이지 계산기", systemImage: "function")
+                GaugeCalculatorView()
             }
 
             AppNavigationRow(
@@ -57,31 +57,6 @@ struct ToolView: View {
             }
         }
         .navigationTitle("Tool")
-    }
-}
-
-private struct ToolPlaceholderView: View {
-    let title: String
-    let systemImage: String
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: systemImage)
-                .font(.system(size: 52))
-                .foregroundStyle(.secondary)
-
-            Text(title)
-                .font(.title2)
-                .fontWeight(.semibold)
-
-            Text("다음 단계에서 로컬 도구 기능이 추가됩니다.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding()
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
