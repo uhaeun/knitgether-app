@@ -10,6 +10,7 @@ import SwiftUI
 struct LibraryView: View {
     @StateObject private var viewModel: LibraryViewModel
     private let patternRepository: any PatternRepository
+    private let libraryRepository: any LibraryRepository
     private let skillRepository: any SkillRepository
 
     init(repositories: AppRepositoryContainer) {
@@ -21,6 +22,7 @@ struct LibraryView: View {
             )
         )
         patternRepository = repositories.patternRepository
+        libraryRepository = repositories.libraryRepository
         skillRepository = repositories.skillRepository
     }
 
@@ -48,10 +50,7 @@ struct LibraryView: View {
                     systemImage: "circle.hexagongrid"
                 )
             ) {
-                LibraryCollectionPlaceholderView(
-                    title: "실 창고",
-                    items: viewModel.yarns.map(\.name)
-                )
+                YarnLibraryView(libraryRepository: libraryRepository)
             }
 
             AppNavigationRow(

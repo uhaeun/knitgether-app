@@ -471,23 +471,118 @@ final class LocalPatternRepository: PatternRepository {
 }
 
 final class LocalLibraryRepository: LibraryRepository {
-    private let yarns: [Yarn]
+    private let yarnFileURL: URL
+    private let fileManager: FileManager
+    private var yarns: [Yarn]
     private let needles: [Needle]
 
     init(
-        yarns: [Yarn] = SampleData.yarns,
-        needles: [Needle] = SampleData.needles
+        yarns: [Yarn]? = nil,
+        needles: [Needle] = SampleData.needles,
+        fileManager: FileManager = .default,
+        yarnFileURL: URL? = nil
     ) {
-        self.yarns = yarns
+        self.fileManager = fileManager
+        self.yarnFileURL = yarnFileURL ?? Self.defaultYarnFileURL(fileManager: fileManager)
         self.needles = needles
+
+        if let yarns {
+            self.yarns = yarns
+        } else {
+            self.yarns = Self.loadYarns(
+                fileURL: self.yarnFileURL,
+                fileManager: fileManager
+            )
+        }
     }
 
     func fetchYarns() async throws -> [Yarn] {
-        yarns.filter { $0.deletedAt == nil }
+        yarns
+            .filter { $0.deletedAt == nil }
+            .sorted { $0.updatedAt > $1.updatedAt }
+    }
+
+    func fetchYarn(id: UUID) async throws -> Yarn? {
+        yarns.first { $0.id == id && $0.deletedAt == nil }
+    }
+
+    func saveYarn(_ yarn: Yarn) async throws {
+        if let index = yarns.firstIndex(where: { $0.id == yarn.id }) {
+            yarns[index] = yarn
+        } else {
+            yarns.append(yarn)
+        }
+
+        try persistYarns()
+    }
+
+    func deleteYarn(id: UUID) async throws {
+        yarns.removeAll { $0.id == id }
+        try persistYarns()
     }
 
     func fetchNeedles() async throws -> [Needle] {
         needles.filter { $0.deletedAt == nil }
+    }
+
+    private func persistYarns() throws {
+        let directoryURL = yarnFileURL.deletingLastPathComponent()
+        try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+        let data = try encoder.encode(yarns)
+        try data.write(to: yarnFileURL, options: [.atomic])
+    }
+
+    private static func loadYarns(
+        fileURL: URL,
+        fileManager: FileManager
+    ) -> [Yarn] {
+        guard fileManager.fileExists(atPath: fileURL.path) else {
+            let sampleYarns = SampleData.yarns
+            persistInitialYarns(sampleYarns, fileURL: fileURL, fileManager: fileManager)
+            return sampleYarns
+        }
+
+        do {
+            let data = try Data(contentsOf: fileURL)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode([Yarn].self, from: data)
+        } catch {
+            return SampleData.yarns
+        }
+    }
+
+    private static func persistInitialYarns(
+        _ yarns: [Yarn],
+        fileURL: URL,
+        fileManager: FileManager
+    ) {
+        do {
+            let directoryURL = fileURL.deletingLastPathComponent()
+            try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+            let data = try encoder.encode(yarns)
+            try data.write(to: fileURL, options: [.atomic])
+        } catch {
+        }
+    }
+
+    private static func defaultYarnFileURL(fileManager: FileManager) -> URL {
+        let baseURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? fileManager.temporaryDirectory
+
+        return baseURL
+            .appendingPathComponent("KnitGether", isDirectory: true)
+            .appendingPathComponent("yarns.json")
     }
 }
 
