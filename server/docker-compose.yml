@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: knitgether-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: knitgether
+      POSTGRES_PASSWORD: knitgether
+      POSTGRES_DB: knitgether_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - knitgether-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  knitgether-postgres-data:

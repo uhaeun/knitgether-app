@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id             String    @id
+  displayName    String
+  preferredUnits String    @default("metric")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  projects     Project[]
+  rowCounters  RowCounter[]
+  workSessions WorkSession[]
+}
+
+model Project {
+  id                     String        @id @db.Uuid
+  ownerId                String
+  name                   String
+  status                 String
+  isFavorite             Boolean       @default(false)
+  memo                   String        @default("")
+  startDate              DateTime
+  lastWorkedAt           DateTime?
+  workspaceDisplayMode   String?
+  workspaceSheetPosition String?
+  relatedSkillIds        String[]      @default([])
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  deletedAt              DateTime?
+
+  owner        UserProfile  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  rowCounter   RowCounter?
+  workSessions WorkSession[]
+
+  @@index([ownerId, deletedAt])
+}
+
+model RowCounter {
+  id         String    @id @db.Uuid
+  ownerId    String
+  projectId  String    @unique @db.Uuid
+  name       String    @default("Main Counter")
+  currentRow Int
+  targetRow  Int?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, deletedAt])
+}
+
+model WorkSession {
+  id        String    @id @db.Uuid
+  ownerId   String
+  projectId String    @db.Uuid
+  startedAt DateTime
+  endedAt   DateTime?
+  memo      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, projectId, deletedAt])
+}
