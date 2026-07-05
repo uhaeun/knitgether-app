@@ -51,6 +51,10 @@ final class APIClient {
         return try await request(path, method: method, body: data)
     }
 
+    func delete(_ path: String) async throws {
+        try await requestWithoutResponse(path, method: "DELETE", body: Optional<Data>.none)
+    }
+
     private func request<Response: Decodable>(
         _ path: String,
         method: String,
@@ -89,6 +93,41 @@ final class APIClient {
             return try decoder.decode(Response.self, from: data)
         } catch {
             throw APIError.decodingFailed(message: String(describing: error))
+        }
+    }
+
+    private func requestWithoutResponse(
+        _ path: String,
+        method: String,
+        body: Data?
+    ) async throws {
+        let url = configuration.baseURL.appendingPathComponent(path)
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        if let body {
+            request.httpBody = body
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+
+        if let token = try await configuration.authTokenProvider() {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        let (data, response) = try await session.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+
+        guard (200..<300).contains(httpResponse.statusCode) else {
+            let envelope = try? decoder.decode(APIErrorEnvelope.self, from: data)
+            throw APIError.requestFailed(
+                statusCode: httpResponse.statusCode,
+                code: envelope?.code,
+                message: envelope?.message
+            )
         }
     }
 

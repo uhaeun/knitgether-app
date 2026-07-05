@@ -28,7 +28,7 @@ struct RemoteProjectRepositoryTests {
             return
         }
 
-        #expect(project.id.uuidString.lowercased() == "11111111-1111-1111-1111-111111111111")
+        #expect(project.id.uuidString.lowercased() == "11111111-1111-4111-8111-111111111111")
         #expect(project.ownerId == "user-a")
         #expect(project.name == "Favorite Cardigan")
         #expect(project.status == .wip)
@@ -42,13 +42,13 @@ struct RemoteProjectRepositoryTests {
         #expect(project.workSessions.count == 1)
         #expect(project.workSessions.first?.memo == "Sleeve increases.")
         #expect(project.relatedSkillIds.map(\.uuidString).map { $0.lowercased() } == [
-            "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
         ])
         #expect(project.syncStatus == .synced)
     }
 
     @Test func fetchProjectRequestsProjectEndpointAndReturnsNilForNotFound() async throws {
-        let projectID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+        let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let session = MockURLProtocol.makeSession { request in
             #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects/\(projectID.uuidString.lowercased())")
             #expect(request.httpMethod == "GET")
@@ -72,34 +72,82 @@ struct RemoteProjectRepositoryTests {
         #expect(project == nil)
     }
 
-    @Test func saveProjectThrowsUnsupportedOperation() async throws {
-        let repository = Self.makeRepository(session: URLSession(configuration: .ephemeral))
+    @Test func saveNewProjectPostsProjectPayload() async throws {
+        let project = Self.project(syncStatus: .localOnly)
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects")
+            #expect(request.httpMethod == "POST")
+            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer dev-token")
+            #expect(request.value(forHTTPHeaderField: "Content-Type") == "application/json")
 
-        do {
-            try await repository.saveProject(Self.project())
-            Issue.record("Expected APIError.unsupportedOperation")
-        } catch let error as APIError {
-            guard case let .unsupportedOperation(message) = error else {
-                Issue.record("Expected unsupported operation, got \(error)")
-                return
-            }
-            #expect(message.contains("saveProject"))
+            let body = try Self.bodyData(from: request)
+            let object = try #require(
+                JSONSerialization.jsonObject(with: body) as? [String: Any]
+            )
+            #expect(object["id"] as? String == "11111111-1111-4111-8111-111111111111")
+            #expect(object["name"] as? String == "Favorite Cardigan")
+            #expect(object["status"] as? String == "WIP")
+            #expect(object["isFavorite"] as? Bool == true)
+            #expect(object["memo"] as? String == "Use smaller needles for ribbing.")
+            #expect(object["relatedSkillIds"] as? [String] == [
+                "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            ])
+            let rowCounter = try #require(object["rowCounter"] as? [String: Any])
+            #expect(rowCounter["currentRow"] as? Int == 42)
+            #expect(rowCounter["targetRow"] as? Int == 120)
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.projectResponseJSON.utf8))
         }
+
+        let repository = Self.makeRepository(session: session)
+
+        try await repository.saveProject(project)
     }
 
-    @Test func deleteProjectThrowsUnsupportedOperation() async throws {
-        let repository = Self.makeRepository(session: URLSession(configuration: .ephemeral))
+    @Test func saveSyncedProjectPatchesProjectPayload() async throws {
+        let project = Self.project(syncStatus: .synced)
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111")
+            #expect(request.httpMethod == "PATCH")
 
-        do {
-            try await repository.deleteProject(id: UUID())
-            Issue.record("Expected APIError.unsupportedOperation")
-        } catch let error as APIError {
-            guard case let .unsupportedOperation(message) = error else {
-                Issue.record("Expected unsupported operation, got \(error)")
-                return
-            }
-            #expect(message.contains("deleteProject"))
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.projectResponseJSON.utf8))
         }
+
+        let repository = Self.makeRepository(session: session)
+
+        try await repository.saveProject(project)
+    }
+
+    @Test func deleteProjectRequestsProjectDeleteEndpoint() async throws {
+        let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects/\(projectID.uuidString.lowercased())")
+            #expect(request.httpMethod == "DELETE")
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 204,
+                httpVersion: nil,
+                headerFields: nil
+            )!
+            return (response, Data())
+        }
+
+        let repository = Self.makeRepository(session: session)
+
+        try await repository.deleteProject(id: projectID)
     }
 
     private static func makeRepository(session: URLSession) -> RemoteProjectRepository {
@@ -114,8 +162,8 @@ struct RemoteProjectRepositoryTests {
         )
     }
 
-    private static func project() -> KnittingProject {
-        let projectID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+    private static func project(syncStatus: SyncStatus = .synced) -> KnittingProject {
+        let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let now = Date(timeIntervalSince1970: 1_783_071_200)
 
         return KnittingProject(
@@ -137,16 +185,83 @@ struct RemoteProjectRepositoryTests {
                 updatedAt: now
             ),
             workSessions: [],
+            relatedSkillIds: [UUID(uuidString: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa")!],
             createdAt: now,
             updatedAt: now,
-            syncStatus: .synced
+            syncStatus: syncStatus
         )
     }
+
+    private static func bodyData(from request: URLRequest) throws -> Data {
+        if let body = request.httpBody {
+            return body
+        }
+
+        guard let bodyStream = request.httpBodyStream else {
+            Issue.record("Expected request body")
+            return Data()
+        }
+
+        bodyStream.open()
+        defer { bodyStream.close() }
+
+        var data = Data()
+        let bufferSize = 1_024
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        defer { buffer.deallocate() }
+
+        while bodyStream.hasBytesAvailable {
+            let readCount = bodyStream.read(buffer, maxLength: bufferSize)
+            if readCount < 0 {
+                throw bodyStream.streamError ?? URLError(.cannotDecodeContentData)
+            }
+            if readCount == 0 {
+                break
+            }
+            data.append(buffer, count: readCount)
+        }
+
+        return data
+    }
+
+    private static let projectResponseJSON = """
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "ownerId": "user-a",
+      "name": "Favorite Cardigan",
+      "status": "WIP",
+      "isFavorite": true,
+      "memo": "Use smaller needles for ribbing.",
+      "startDate": "2026-07-01T00:00:00.000Z",
+      "lastWorkedAt": "2026-07-03T09:00:00.000Z",
+      "patternCopy": null,
+      "workspaceDisplayMode": "patternAndCounter",
+      "workspaceSheetPosition": "medium",
+      "rowCounter": {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "ownerId": "user-a",
+        "projectId": "11111111-1111-4111-8111-111111111111",
+        "name": "Main Counter",
+        "currentRow": 42,
+        "targetRow": 120,
+        "createdAt": "2026-07-01T00:00:00.000Z",
+        "updatedAt": "2026-07-03T09:00:00.000Z",
+        "deletedAt": null,
+        "syncStatus": "Synced"
+      },
+      "workSessions": [],
+      "relatedSkillIds": ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+      "createdAt": "2026-07-01T00:00:00.000Z",
+      "updatedAt": "2026-07-03T09:00:00.000Z",
+      "deletedAt": null,
+      "syncStatus": "Synced"
+    }
+    """
 
     private static let projectsResponseJSON = """
     [
       {
-        "id": "11111111-1111-1111-1111-111111111111",
+        "id": "11111111-1111-4111-8111-111111111111",
         "ownerId": "user-a",
         "name": "Favorite Cardigan",
         "status": "WIP",
@@ -158,9 +273,9 @@ struct RemoteProjectRepositoryTests {
         "workspaceDisplayMode": "patternAndCounter",
         "workspaceSheetPosition": "medium",
         "rowCounter": {
-          "id": "22222222-2222-2222-2222-222222222222",
+          "id": "22222222-2222-4222-8222-222222222222",
           "ownerId": "user-a",
-          "projectId": "11111111-1111-1111-1111-111111111111",
+          "projectId": "11111111-1111-4111-8111-111111111111",
           "name": "Main Counter",
           "currentRow": 42,
           "targetRow": 120,
@@ -171,9 +286,9 @@ struct RemoteProjectRepositoryTests {
         },
         "workSessions": [
           {
-            "id": "33333333-3333-3333-3333-333333333333",
+            "id": "33333333-3333-4333-8333-333333333333",
             "ownerId": "user-a",
-            "projectId": "11111111-1111-1111-1111-111111111111",
+            "projectId": "11111111-1111-4111-8111-111111111111",
             "startedAt": "2026-07-03T08:00:00.000Z",
             "endedAt": "2026-07-03T09:00:00.000Z",
             "memo": "Sleeve increases.",
@@ -183,7 +298,7 @@ struct RemoteProjectRepositoryTests {
             "syncStatus": "Synced"
           }
         ],
-        "relatedSkillIds": ["aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"],
+        "relatedSkillIds": ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
         "createdAt": "2026-07-01T00:00:00.000Z",
         "updatedAt": "2026-07-03T09:00:00.000Z",
         "deletedAt": null,
