@@ -8,6 +8,7 @@ import { PrismaService } from '../src/database/prisma.service';
 type MockPrismaService = {
   project: {
     findMany: jest.Mock;
+    findFirst: jest.Mock;
   };
 };
 
@@ -63,6 +64,7 @@ describe('Projects route', () => {
     prisma = {
       project: {
         findMany: jest.fn(),
+        findFirst: jest.fn(),
       },
     };
 
@@ -80,12 +82,25 @@ describe('Projects route', () => {
 
   beforeEach(() => {
     prisma.project.findMany.mockReset();
+    prisma.project.findFirst.mockReset();
+
     prisma.project.findMany.mockImplementation(async ({ where }) => {
       if (where.ownerId === 'user-a') {
         return [userAProject];
       }
 
       return [];
+    });
+    prisma.project.findFirst.mockImplementation(async ({ where }) => {
+      if (
+        where.id === userAProject.id &&
+        where.ownerId === 'user-a' &&
+        where.deletedAt === null
+      ) {
+        return userAProject;
+      }
+
+      return null;
     });
   });
 
@@ -185,5 +200,45 @@ describe('Projects route', () => {
         syncStatus: 'Synced',
       },
     ]);
+  });
+
+  it('returns one active project owned by the current user', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/projects/11111111-1111-1111-1111-111111111111')
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200);
+
+    expect(prisma.project.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: '11111111-1111-1111-1111-111111111111',
+        ownerId: 'user-a',
+        deletedAt: null,
+      },
+      include: {
+        rowCounter: true,
+        workSessions: {
+          where: {
+            ownerId: 'user-a',
+            deletedAt: null,
+          },
+          orderBy: {
+            startedAt: 'asc',
+          },
+        },
+      },
+    });
+    expect(response.body.id).toBe('11111111-1111-1111-1111-111111111111');
+    expect(response.body.name).toBe('Favorite Cardigan');
+    expect(response.body.syncStatus).toBe('Synced');
+  });
+
+  it('returns 404 when a project is missing or not owned by the current user', async () => {
+    await request(app.getHttpServer())
+      .get('/api/v1/projects/99999999-9999-9999-9999-999999999999')
+      .set('Authorization', 'Bearer dev-token')
+      .expect(404)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_NOT_FOUND');
+      });
   });
 });

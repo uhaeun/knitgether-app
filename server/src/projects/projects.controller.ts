@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import {
   CurrentUser,
   CurrentUserPayload,
@@ -17,5 +17,13 @@ export class ProjectsController {
     @CurrentUser() currentUser: CurrentUserPayload,
   ): Promise<ProjectResponseDto[]> {
     return this.projectsService.listProjects(currentUser.id);
+  }
+
+  @Get(':id')
+  getProject(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<ProjectResponseDto> {
+    return this.projectsService.getProject(currentUser.id, id);
   }
 }

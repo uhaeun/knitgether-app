@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma, RowCounter, WorkSession } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import {
@@ -24,23 +28,47 @@ export class ProjectsService {
         ownerId,
         deletedAt: null,
       },
-      include: {
-        rowCounter: true,
-        workSessions: {
-          where: {
-            ownerId,
-            deletedAt: null,
-          },
-          orderBy: {
-            startedAt: 'asc',
-          },
-        },
-      },
+      include: this.projectInclude(ownerId),
     });
 
     return projects
       .sort((first, second) => this.compareProjects(first, second))
       .map((project) => this.toResponse(project, ownerId));
+  }
+
+  async getProject(ownerId: string, id: string): Promise<ProjectResponseDto> {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id,
+        ownerId,
+        deletedAt: null,
+      },
+      include: this.projectInclude(ownerId),
+    });
+
+    if (!project) {
+      throw new NotFoundException({
+        code: 'PROJECT_NOT_FOUND',
+        message: 'Project not found.',
+      });
+    }
+
+    return this.toResponse(project, ownerId);
+  }
+
+  private projectInclude(ownerId: string): Prisma.ProjectInclude {
+    return {
+      rowCounter: true,
+      workSessions: {
+        where: {
+          ownerId,
+          deletedAt: null,
+        },
+        orderBy: {
+          startedAt: 'asc',
+        },
+      },
+    };
   }
 
   private compareProjects(
