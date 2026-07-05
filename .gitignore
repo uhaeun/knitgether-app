@@ -12,3 +12,6 @@ build/
 .swiftpm/
 
 .worktrees/
+
+server/dist/
+server/node_modules/
