@@ -10,6 +10,7 @@ import {
   RowCounterResponseDto,
   WorkSessionResponseDto,
 } from './project-response.dto';
+import { SaveProjectDto } from './project-save.dto';
 
 type ProjectWithChildren = Prisma.ProjectGetPayload<{
   include: {
@@ -56,6 +57,98 @@ export class ProjectsService {
     return this.toResponse(project, ownerId);
   }
 
+  async createProject(
+    ownerId: string,
+    body: SaveProjectDto,
+  ): Promise<ProjectResponseDto> {
+    return this.prisma.$transaction(async (transaction) => {
+      await this.ensureUserProfile(transaction, ownerId);
+
+      const existingProject = await transaction.project.findFirst({
+        where: {
+          id: body.id,
+          ownerId,
+        },
+        include: this.projectInclude(ownerId),
+      });
+
+      if (existingProject) {
+        await transaction.project.update({
+          where: { id: body.id },
+          data: this.toProjectUpdateInput(ownerId, body),
+          include: this.projectInclude(ownerId),
+        });
+      } else {
+        await transaction.project.create({
+          data: this.toProjectCreateInput(ownerId, body),
+          include: this.projectInclude(ownerId),
+        });
+      }
+
+      await this.saveProjectChildren(transaction, ownerId, body);
+
+      const project = await transaction.project.findFirstOrThrow({
+        where: {
+          id: body.id,
+          ownerId,
+          deletedAt: null,
+        },
+        include: this.projectInclude(ownerId),
+      });
+
+      return this.toResponse(project, ownerId);
+    });
+  }
+
+  async updateProject(
+    ownerId: string,
+    id: string,
+    body: SaveProjectDto,
+  ): Promise<ProjectResponseDto> {
+    if (id !== body.id) {
+      throw new NotFoundException({
+        code: 'PROJECT_NOT_FOUND',
+        message: 'Project not found.',
+      });
+    }
+
+    return this.prisma.$transaction(async (transaction) => {
+      const existingProject = await transaction.project.findFirst({
+        where: {
+          id,
+          ownerId,
+          deletedAt: null,
+        },
+        include: this.projectInclude(ownerId),
+      });
+
+      if (!existingProject) {
+        throw new NotFoundException({
+          code: 'PROJECT_NOT_FOUND',
+          message: 'Project not found.',
+        });
+      }
+
+      await transaction.project.update({
+        where: { id },
+        data: this.toProjectUpdateInput(ownerId, body),
+        include: this.projectInclude(ownerId),
+      });
+      await this.saveProjectChildren(transaction, ownerId, body);
+
+      const project = await transaction.project.findFirstOrThrow({
+        where: {
+          id,
+          ownerId,
+          deletedAt: null,
+        },
+        include: this.projectInclude(ownerId),
+      });
+
+      return this.toResponse(project, ownerId);
+    });
+  }
+
   private projectInclude(ownerId: string): Prisma.ProjectInclude {
     return {
       rowCounter: true,
@@ -69,6 +162,106 @@ export class ProjectsService {
         },
       },
     };
+  }
+
+  private async ensureUserProfile(
+    transaction: Prisma.TransactionClient,
+    ownerId: string,
+  ): Promise<void> {
+    await transaction.userProfile.upsert({
+      where: { id: ownerId },
+      create: {
+        id: ownerId,
+        displayName: ownerId,
+      },
+      update: {},
+    });
+  }
+
+  private toProjectCreateInput(
+    ownerId: string,
+    body: SaveProjectDto,
+  ): Prisma.ProjectUncheckedCreateInput {
+    return {
+      id: body.id,
+      ownerId,
+      ...this.toProjectScalarInput(body),
+      deletedAt: null,
+    };
+  }
+
+  private toProjectUpdateInput(
+    ownerId: string,
+    body: SaveProjectDto,
+  ): Prisma.ProjectUncheckedUpdateInput {
+    return {
+      ownerId,
+      ...this.toProjectScalarInput(body),
+      deletedAt: null,
+    };
+  }
+
+  private toProjectScalarInput(body: SaveProjectDto) {
+    return {
+      name: body.name.trim(),
+      status: body.status,
+      isFavorite: body.isFavorite,
+      memo: body.memo,
+      startDate: new Date(body.startDate),
+      lastWorkedAt: body.lastWorkedAt ? new Date(body.lastWorkedAt) : null,
+      workspaceDisplayMode: body.workspaceDisplayMode,
+      workspaceSheetPosition: body.workspaceSheetPosition,
+      relatedSkillIds: body.relatedSkillIds,
+    };
+  }
+
+  private async saveProjectChildren(
+    transaction: Prisma.TransactionClient,
+    ownerId: string,
+    body: SaveProjectDto,
+  ): Promise<void> {
+    await transaction.rowCounter.upsert({
+      where: { projectId: body.id },
+      create: {
+        id: body.rowCounter.id,
+        ownerId,
+        projectId: body.id,
+        name: body.rowCounter.name,
+        currentRow: body.rowCounter.currentRow,
+        targetRow: body.rowCounter.targetRow,
+        deletedAt: null,
+      },
+      update: {
+        ownerId,
+        name: body.rowCounter.name,
+        currentRow: body.rowCounter.currentRow,
+        targetRow: body.rowCounter.targetRow,
+        deletedAt: null,
+      },
+    });
+
+    await transaction.workSession.deleteMany({
+      where: {
+        ownerId,
+        projectId: body.id,
+      },
+    });
+
+    if (body.workSessions.length === 0) {
+      return;
+    }
+
+    await transaction.workSession.createMany({
+      data: body.workSessions.map((session) => ({
+        id: session.id,
+        ownerId,
+        projectId: body.id,
+        startedAt: new Date(session.startedAt),
+        endedAt: session.endedAt ? new Date(session.endedAt) : null,
+        memo: session.memo,
+        deletedAt: null,
+      })),
+    });
   }
 
   private compareProjects(
