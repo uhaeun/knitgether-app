@@ -149,6 +149,46 @@ export class ProjectsService {
     });
   }
 
+  async deleteProject(ownerId: string, id: string): Promise<void> {
+    const existingProject = await this.prisma.project.findFirst({
+      where: {
+        id,
+        ownerId,
+        deletedAt: null,
+      },
+      include: this.projectInclude(ownerId),
+    });
+
+    if (!existingProject) {
+      throw new NotFoundException({
+        code: 'PROJECT_NOT_FOUND',
+        message: 'Project not found.',
+      });
+    }
+
+    const deletedAt = new Date();
+    await this.prisma.project.update({
+      where: { id },
+      data: {
+        deletedAt,
+        rowCounter: {
+          update: {
+            deletedAt,
+          },
+        },
+      },
+    });
+    await this.prisma.workSession.updateMany({
+      where: {
+        ownerId,
+        projectId: id,
+      },
+      data: {
+        deletedAt,
+      },
+    });
+  }
+
   private projectInclude(ownerId: string): Prisma.ProjectInclude {
     return {
       rowCounter: true,

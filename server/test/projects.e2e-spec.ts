@@ -404,4 +404,50 @@ describe('Projects route', () => {
     );
     expect(response.body.name).toBe(saveProjectBody.name);
   });
+
+  it('soft-deletes an active project owned by the current user', async () => {
+    await request(app.getHttpServer())
+      .delete('/api/v1/projects/11111111-1111-4111-8111-111111111111')
+      .set('Authorization', 'Bearer dev-token')
+      .expect(204);
+
+    expect(prisma.project.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: userAProject.id,
+        ownerId: 'user-a',
+        deletedAt: null,
+      },
+      include: expect.any(Object),
+    });
+    expect(prisma.project.update).toHaveBeenCalledWith({
+      where: { id: userAProject.id },
+      data: expect.objectContaining({
+        deletedAt: expect.any(Date),
+        rowCounter: {
+          update: {
+            deletedAt: expect.any(Date),
+          },
+        },
+      }),
+    });
+    expect(prisma.workSession.updateMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        projectId: userAProject.id,
+      },
+      data: {
+        deletedAt: expect.any(Date),
+      },
+    });
+  });
+
+  it('returns 404 when deleting a missing project', async () => {
+    await request(app.getHttpServer())
+      .delete('/api/v1/projects/99999999-9999-4999-8999-999999999999')
+      .set('Authorization', 'Bearer dev-token')
+      .expect(404)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_NOT_FOUND');
+      });
+  });
 });

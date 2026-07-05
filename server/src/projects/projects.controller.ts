@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   CurrentUser,
   CurrentUserPayload,
@@ -43,5 +53,14 @@ export class ProjectsController {
     @Body() body: SaveProjectDto,
   ): Promise<ProjectResponseDto> {
     return this.projectsService.updateProject(currentUser.id, id, body);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  deleteProject(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.projectsService.deleteProject(currentUser.id, id);
   }
 }
