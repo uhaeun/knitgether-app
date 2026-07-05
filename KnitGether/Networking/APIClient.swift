@@ -88,7 +88,7 @@ final class APIClient {
         do {
             return try decoder.decode(Response.self, from: data)
         } catch {
-            throw APIError.decodingFailed
+            throw APIError.decodingFailed(message: String(describing: error))
         }
     }
 

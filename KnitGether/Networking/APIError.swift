@@ -8,7 +8,7 @@ struct APIErrorEnvelope: Decodable {
 enum APIError: Error, Equatable {
     case invalidResponse
     case requestFailed(statusCode: Int, code: String?, message: String?)
-    case decodingFailed
+    case decodingFailed(message: String)
     case unsupportedOperation(String)
 
     var statusCode: Int? {

@@ -1,7 +1,25 @@
 import Foundation
 
 final class MockURLProtocol: URLProtocol {
-    static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
+    typealias RequestHandler = (URLRequest) throws -> (HTTPURLResponse, Data)
+
+    private static let requestHandlerHeader = "X-MockURLProtocol-Handler-ID"
+    private static let handlersLock = NSLock()
+    private static var requestHandlers: [String: RequestHandler] = [:]
+
+    static func makeSession(
+        requestHandler: @escaping RequestHandler
+    ) -> URLSession {
+        let handlerID = UUID().uuidString
+        handlersLock.lock()
+        requestHandlers[handlerID] = requestHandler
+        handlersLock.unlock()
+
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [MockURLProtocol.self]
+        configuration.httpAdditionalHeaders = [requestHandlerHeader: handlerID]
+        return URLSession(configuration: configuration)
+    }
 
     override class func canInit(with request: URLRequest) -> Bool {
         true
@@ -12,7 +30,10 @@ final class MockURLProtocol: URLProtocol {
     }
 
     override func startLoading() {
-        guard let requestHandler = Self.requestHandler else {
+        guard
+            let handlerID = request.value(forHTTPHeaderField: Self.requestHandlerHeader),
+            let requestHandler = Self.requestHandler(for: handlerID)
+        else {
             client?.urlProtocol(
                 self,
                 didFailWithError: URLError(.badServerResponse)
@@ -31,5 +52,11 @@ final class MockURLProtocol: URLProtocol {
     }
 
     override func stopLoading() {
+    }
+
+    private static func requestHandler(for handlerID: String) -> RequestHandler? {
+        handlersLock.lock()
+        defer { handlersLock.unlock() }
+        return requestHandlers[handlerID]
     }
 }

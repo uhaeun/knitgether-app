@@ -8,8 +8,7 @@ struct APIClientTests {
             let value: String
         }
 
-        let session = Self.makeMockSession()
-        MockURLProtocol.requestHandler = { request in
+        let session = MockURLProtocol.makeSession { request in
             #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects")
             #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer dev-token")
 
@@ -35,8 +34,7 @@ struct APIClientTests {
     }
 
     @Test func getThrowsStructuredErrorForHTTPFailure() async throws {
-        let session = Self.makeMockSession()
-        MockURLProtocol.requestHandler = { request in
+        let session = MockURLProtocol.makeSession { request in
             let response = HTTPURLResponse(
                 url: request.url!,
                 statusCode: 401,
@@ -66,9 +64,4 @@ struct APIClientTests {
         }
     }
 
-    private static func makeMockSession() -> URLSession {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [MockURLProtocol.self]
-        return URLSession(configuration: configuration)
-    }
 }
