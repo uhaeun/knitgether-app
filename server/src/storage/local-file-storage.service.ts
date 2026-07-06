@@ -1,0 +1,87 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import {
+  createReadStream,
+  promises as fs,
+  type ReadStream,
+} from 'node:fs';
+import { dirname, resolve } from 'node:path';
+
+export type StoredPatternPdf = {
+  storageKey: string;
+  byteSize: number;
+};
+
+@Injectable()
+export class LocalFileStorageService {
+  private readonly rootDirectory: string;
+
+  constructor(configService: ConfigService) {
+    const configuredRoot = configService.get<string>('FILE_STORAGE_ROOT')?.trim();
+    this.rootDirectory = resolve(process.cwd(), configuredRoot || './storage');
+  }
+
+  async savePatternPdf(params: {
+    ownerId: string;
+    patternId: string;
+    fileId: string;
+    buffer: Buffer;
+  }): Promise<StoredPatternPdf> {
+    const storageKey = [
+      'patterns',
+      params.ownerId,
+      params.patternId,
+      `${params.fileId}.pdf`,
+    ].join('/');
+    const absolutePath = this.absolutePath(storageKey);
+
+    await fs.mkdir(dirname(absolutePath), { recursive: true });
+    await fs.writeFile(absolutePath, params.buffer);
+
+    return {
+      storageKey,
+      byteSize: params.buffer.byteLength,
+    };
+  }
+
+  async assertExists(storageKey: string): Promise<void> {
+    try {
+      await fs.access(this.absolutePath(storageKey));
+    } catch {
+      throw new NotFoundException({
+        code: 'PATTERN_FILE_NOT_FOUND',
+        message: 'Pattern file not found.',
+      });
+    }
+  }
+
+  openReadStream(storageKey: string): ReadStream {
+    return createReadStream(this.absolutePath(storageKey));
+  }
+
+  async remove(storageKey: string | null | undefined): Promise<void> {
+    if (!storageKey) {
+      return;
+    }
+
+    try {
+      await fs.unlink(this.absolutePath(storageKey));
+    } catch (error) {
+      const nodeError = error as NodeJS.ErrnoException;
+      if (nodeError.code !== 'ENOENT') {
+        throw error;
+      }
+    }
+  }
+
+  private absolutePath(storageKey: string): string {
+    const absolutePath = resolve(this.rootDirectory, storageKey);
+    const rootPrefix = `${this.rootDirectory}/`;
+
+    if (!absolutePath.startsWith(rootPrefix)) {
+      throw new Error('Invalid storage key.');
+    }
+
+    return absolutePath;
+  }
+}
