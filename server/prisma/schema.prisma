@@ -18,6 +18,8 @@ model UserProfile {
   projects     Project[]
   rowCounters  RowCounter[]
   workSessions WorkSession[]
+  storedFiles  StoredFile[]
+  patterns     PatternDocument[]
 }
 
 model Project {
@@ -75,4 +77,43 @@ model WorkSession {
   project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([ownerId, projectId, deletedAt])
+}
+
+model StoredFile {
+  id               String    @id @db.Uuid
+  ownerId          String
+  kind             String
+  originalFileName String
+  contentType      String
+  byteSize         Int
+  storageKey       String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  owner    UserProfile       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  patterns PatternDocument[]
+
+  @@unique([storageKey])
+  @@index([ownerId, kind, deletedAt])
+}
+
+model PatternDocument {
+  id           String    @id @db.Uuid
+  ownerId      String
+  title        String
+  designer     String?
+  fileName     String?
+  pageCount    Int?
+  notes        String    @default("")
+  storedFileId String?   @db.Uuid
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  owner      UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  storedFile StoredFile? @relation(fields: [storedFileId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, deletedAt])
+  @@index([storedFileId])
 }
