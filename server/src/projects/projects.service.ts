@@ -7,21 +7,38 @@ import { Prisma, RowCounter, WorkSession } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import {
   ProjectResponseDto,
+  ProjectPatternCopyResponseDto,
   RowCounterResponseDto,
   WorkSessionResponseDto,
 } from './project-response.dto';
-import { SaveProjectDto } from './project-save.dto';
+import { SaveProjectDto, SaveProjectPatternCopyDto } from './project-save.dto';
+import { LocalFileStorageService } from '../storage/local-file-storage.service';
 
 type ProjectWithChildren = Prisma.ProjectGetPayload<{
   include: {
     rowCounter: true;
     workSessions: true;
+    patternCopy: {
+      include: {
+        sourcePatternDocument: {
+          include: {
+            storedFile: true;
+          };
+        };
+      };
+    };
   };
 }>;
+type ProjectPatternCopyWithSource = NonNullable<
+  ProjectWithChildren['patternCopy']
+>;
 
 @Injectable()
 export class ProjectsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly fileStorage: LocalFileStorageService,
+  ) {}
 
   async listProjects(ownerId: string): Promise<ProjectResponseDto[]> {
     const projects = await this.prisma.project.findMany({
@@ -187,10 +204,66 @@ export class ProjectsService {
         deletedAt,
       },
     });
+    await this.prisma.projectPatternCopy.updateMany({
+      where: {
+        ownerId,
+        projectId: id,
+      },
+      data: {
+        deletedAt,
+      },
+    });
   }
 
-  private projectInclude(ownerId: string): Prisma.ProjectInclude {
-    return {
+  async getProjectPatternCopyFile(
+    ownerId: string,
+    projectId: string,
+  ): Promise<ProjectPatternCopyWithSource> {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        id: projectId,
+        ownerId,
+        deletedAt: null,
+      },
+      include: {
+        patternCopy: {
+          include: {
+            sourcePatternDocument: {
+              include: {
+                storedFile: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const patternCopy = project?.patternCopy;
+    const storedFile = patternCopy?.sourcePatternDocument?.storedFile;
+
+    if (
+      !patternCopy ||
+      patternCopy.ownerId !== ownerId ||
+      patternCopy.deletedAt !== null ||
+      !storedFile ||
+      storedFile.deletedAt !== null
+    ) {
+      throw new NotFoundException({
+        code: 'PROJECT_PATTERN_COPY_FILE_NOT_FOUND',
+        message: 'Project pattern copy file not found.',
+      });
+    }
+
+    await this.fileStorage.assertExists(storedFile.storageKey);
+    return patternCopy;
+  }
+
+  openFileReadStream(storageKey: string) {
+    return this.fileStorage.openReadStream(storageKey);
+  }
+
+  private projectInclude(ownerId: string) {
+    const include = {
       rowCounter: true,
       workSessions: {
         where: {
@@ -201,7 +274,18 @@ export class ProjectsService {
           startedAt: 'asc',
         },
       },
-    };
+      patternCopy: {
+        include: {
+          sourcePatternDocument: {
+            include: {
+              storedFile: true,
+            },
+          },
+        },
+      },
+    } satisfies Prisma.ProjectInclude;
+
+    return include;
   }
 
   private async ensureUserProfile(
@@ -287,21 +371,101 @@ export class ProjectsService {
       },
     });
 
-    if (body.workSessions.length === 0) {
+    if (body.workSessions.length > 0) {
+      await transaction.workSession.createMany({
+        data: body.workSessions.map((session) => ({
+          id: session.id,
+          ownerId,
+          projectId: body.id,
+          startedAt: new Date(session.startedAt),
+          endedAt: session.endedAt ? new Date(session.endedAt) : null,
+          memo: session.memo,
+          deletedAt: null,
+        })),
+      });
+    }
+
+    await this.saveProjectPatternCopy(transaction, ownerId, body);
+  }
+
+  private async saveProjectPatternCopy(
+    transaction: Prisma.TransactionClient,
+    ownerId: string,
+    body: SaveProjectDto,
+  ): Promise<void> {
+    if (body.patternCopy === undefined) {
       return;
     }
 
-    await transaction.workSession.createMany({
-      data: body.workSessions.map((session) => ({
-        id: session.id,
+    if (body.patternCopy === null) {
+      await transaction.projectPatternCopy.deleteMany({
+        where: {
+          ownerId,
+          projectId: body.id,
+        },
+      });
+      return;
+    }
+
+    const copy = body.patternCopy;
+
+    if (copy.projectId !== body.id) {
+      throw new NotFoundException({
+        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+        message: 'Project pattern copy not found.',
+      });
+    }
+
+    if (copy.sourcePatternDocumentId) {
+      const sourcePattern = await transaction.patternDocument.findFirst({
+        where: {
+          id: copy.sourcePatternDocumentId,
+          ownerId,
+          deletedAt: null,
+        },
+      });
+
+      if (!sourcePattern) {
+        throw new NotFoundException({
+          code: 'PATTERN_NOT_FOUND',
+          message: 'Pattern not found.',
+        });
+      }
+    }
+
+    const scalarInput = this.toProjectPatternCopyScalarInput(copy);
+
+    await transaction.projectPatternCopy.upsert({
+      where: {
+        projectId: body.id,
+      },
+      create: {
+        id: copy.id,
         ownerId,
         projectId: body.id,
-        startedAt: new Date(session.startedAt),
-        endedAt: session.endedAt ? new Date(session.endedAt) : null,
-        memo: session.memo,
+        ...scalarInput,
         deletedAt: null,
-      })),
+      },
+      update: {
+        ownerId,
+        ...scalarInput,
+        deletedAt: null,
+      },
     });
+  }
+
+  private toProjectPatternCopyScalarInput(copy: SaveProjectPatternCopyDto) {
+    return {
+      sourcePatternDocumentId: copy.sourcePatternDocumentId,
+      titleSnapshot: copy.titleSnapshot.trim(),
+      designerSnapshot: this.trimmedOrNull(copy.designerSnapshot),
+      fileNameSnapshot: this.trimmedOrNull(copy.fileNameSnapshot),
+      pageCountSnapshot: copy.pageCountSnapshot,
+      drawingUpdatedAt: copy.drawingUpdatedAt
+        ? new Date(copy.drawingUpdatedAt)
+        : null,
+      copiedAt: new Date(copy.copiedAt),
+    };
   }
 
   private compareProjects(
@@ -344,7 +508,7 @@ export class ProjectsService {
       memo: project.memo,
       startDate: project.startDate.toISOString(),
       lastWorkedAt: project.lastWorkedAt?.toISOString() ?? null,
-      patternCopy: null,
+      patternCopy: this.toProjectPatternCopyResponse(project.patternCopy, ownerId),
       workspaceDisplayMode: project.workspaceDisplayMode,
       workspaceSheetPosition: project.workspaceSheetPosition,
       rowCounter: this.toRowCounterResponse(project.rowCounter),
@@ -389,5 +553,42 @@ export class ProjectsService {
       deletedAt: session.deletedAt?.toISOString() ?? null,
       syncStatus: 'Synced',
     };
+  }
+
+  private toProjectPatternCopyResponse(
+    patternCopy: ProjectWithChildren['patternCopy'],
+    ownerId: string,
+  ): ProjectPatternCopyResponseDto | null {
+    if (
+      !patternCopy ||
+      patternCopy.ownerId !== ownerId ||
+      patternCopy.deletedAt !== null
+    ) {
+      return null;
+    }
+
+    return {
+      id: patternCopy.id,
+      ownerId: patternCopy.ownerId,
+      projectId: patternCopy.projectId,
+      sourcePatternDocumentId: patternCopy.sourcePatternDocumentId,
+      titleSnapshot: patternCopy.titleSnapshot,
+      designerSnapshot: patternCopy.designerSnapshot,
+      fileNameSnapshot: patternCopy.fileNameSnapshot,
+      localCopyPath: null,
+      pageCountSnapshot: patternCopy.pageCountSnapshot,
+      drawingDataPath: null,
+      drawingUpdatedAt: patternCopy.drawingUpdatedAt?.toISOString() ?? null,
+      copiedAt: patternCopy.copiedAt.toISOString(),
+      createdAt: patternCopy.createdAt.toISOString(),
+      updatedAt: patternCopy.updatedAt.toISOString(),
+      deletedAt: null,
+      syncStatus: 'Synced',
+    };
+  }
+
+  private trimmedOrNull(value: string | null | undefined): string | null {
+    const trimmed = value?.trim();
+    return trimmed && trimmed.length > 0 ? trimmed : null;
   }
 }

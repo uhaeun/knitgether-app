@@ -26,6 +26,25 @@ export type WorkSessionResponseDto = {
   syncStatus: SyncStatusDto;
 };
 
+export type ProjectPatternCopyResponseDto = {
+  id: string;
+  ownerId: string;
+  projectId: string;
+  sourcePatternDocumentId: string | null;
+  titleSnapshot: string;
+  designerSnapshot: string | null;
+  fileNameSnapshot: string | null;
+  localCopyPath: string | null;
+  pageCountSnapshot: number | null;
+  drawingDataPath: string | null;
+  drawingUpdatedAt: string | null;
+  copiedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  syncStatus: SyncStatusDto;
+};
+
 export type ProjectResponseDto = {
   id: string;
   ownerId: string;
@@ -35,7 +54,7 @@ export type ProjectResponseDto = {
   memo: string;
   startDate: string;
   lastWorkedAt: string | null;
-  patternCopy: null;
+  patternCopy: ProjectPatternCopyResponseDto | null;
   workspaceDisplayMode: string | null;
   workspaceSheetPosition: string | null;
   rowCounter: RowCounterResponseDto;

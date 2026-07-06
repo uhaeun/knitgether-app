@@ -50,6 +50,49 @@ export class SaveWorkSessionDto {
   memo!: string | null;
 }
 
+export class SaveProjectPatternCopyDto {
+  @IsUUID()
+  id!: string;
+
+  @IsUUID()
+  projectId!: string;
+
+  @IsOptional()
+  @IsUUID()
+  sourcePatternDocumentId!: string | null;
+
+  @IsString()
+  titleSnapshot!: string;
+
+  @IsOptional()
+  @IsString()
+  designerSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  fileNameSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  localCopyPath!: string | null;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  pageCountSnapshot!: number | null;
+
+  @IsOptional()
+  @IsString()
+  drawingDataPath!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  drawingUpdatedAt!: string | null;
+
+  @IsISO8601()
+  copiedAt!: string;
+}
+
 export class SaveProjectDto {
   @IsUUID()
   id!: string;
@@ -88,6 +131,11 @@ export class SaveProjectDto {
   @ValidateNested()
   @Type(() => SaveRowCounterDto)
   rowCounter!: SaveRowCounterDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SaveProjectPatternCopyDto)
+  patternCopy!: SaveProjectPatternCopyDto | null | undefined;
 
   @IsArray()
   @ValidateNested({ each: true })

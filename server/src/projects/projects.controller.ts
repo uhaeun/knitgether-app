@@ -7,8 +7,10 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   CurrentUser,
   CurrentUserPayload,
@@ -44,6 +46,31 @@ export class ProjectsController {
     @Param('id') id: string,
   ): Promise<ProjectResponseDto> {
     return this.projectsService.getProject(currentUser.id, id);
+  }
+
+  @Get(':id/pattern-copy/file')
+  async downloadProjectPatternCopyFile(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const patternCopy = await this.projectsService.getProjectPatternCopyFile(
+      currentUser.id,
+      id,
+    );
+    const storedFile = patternCopy.sourcePatternDocument?.storedFile;
+
+    if (!storedFile) {
+      response.status(404).send();
+      return;
+    }
+
+    response.setHeader('Content-Type', 'application/pdf');
+    response.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${storedFile.originalFileName.replace(/"/g, '')}"`,
+    );
+    this.projectsService.openFileReadStream(storedFile.storageKey).pipe(response);
   }
 
   @Patch(':id')

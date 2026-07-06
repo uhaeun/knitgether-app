@@ -1,5 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { promises as fs } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/app.setup';
@@ -24,12 +27,21 @@ type MockPrismaService = {
     updateMany: jest.Mock;
     createMany: jest.Mock;
   };
+  projectPatternCopy: {
+    upsert: jest.Mock;
+    deleteMany: jest.Mock;
+    updateMany: jest.Mock;
+  };
+  patternDocument: {
+    findFirst: jest.Mock;
+  };
   $transaction: jest.Mock;
 };
 
 describe('Projects route', () => {
   let app: INestApplication;
   let prisma: MockPrismaService;
+  let storageRoot: string;
 
   const userAProject = {
     id: '11111111-1111-4111-8111-111111111111',
@@ -101,9 +113,65 @@ describe('Projects route', () => {
     ],
   };
 
+  const projectPatternCopy = {
+    id: '66666666-6666-4666-8666-666666666666',
+    ownerId: 'user-a',
+    projectId: '11111111-1111-4111-8111-111111111111',
+    sourcePatternDocumentId: '44444444-4444-4444-8444-444444444444',
+    titleSnapshot: 'Cozy Shawl',
+    designerSnapshot: 'Yu',
+    fileNameSnapshot: 'cozy-shawl.pdf',
+    pageCountSnapshot: 12,
+    drawingUpdatedAt: null,
+    copiedAt: new Date('2026-07-04T12:00:00.000Z'),
+    createdAt: new Date('2026-07-04T12:00:00.000Z'),
+    updatedAt: new Date('2026-07-05T12:00:00.000Z'),
+    deletedAt: null,
+    sourcePatternDocument: {
+      id: '44444444-4444-4444-8444-444444444444',
+      ownerId: 'user-a',
+      storedFile: {
+        id: '55555555-5555-4555-8555-555555555555',
+        ownerId: 'user-a',
+        kind: 'patternPdf',
+        originalFileName: 'cozy-shawl.pdf',
+        contentType: 'application/pdf',
+        byteSize: 8,
+        storageKey: 'patterns/user-a/44444444-4444-4444-8444-444444444444/55555555-5555-4555-8555-555555555555.pdf',
+        createdAt: new Date('2026-07-04T12:00:00.000Z'),
+        updatedAt: new Date('2026-07-04T12:00:00.000Z'),
+        deletedAt: null,
+      },
+    },
+  };
+
+  const userAProjectWithPatternCopy = {
+    ...userAProject,
+    patternCopy: projectPatternCopy,
+  };
+
+  const saveProjectWithPatternCopyBody = {
+    ...saveProjectBody,
+    patternCopy: {
+      id: projectPatternCopy.id,
+      projectId: saveProjectBody.id,
+      sourcePatternDocumentId: projectPatternCopy.sourcePatternDocumentId,
+      titleSnapshot: projectPatternCopy.titleSnapshot,
+      designerSnapshot: projectPatternCopy.designerSnapshot,
+      fileNameSnapshot: projectPatternCopy.fileNameSnapshot,
+      localCopyPath: 'Projects/11111111-1111-4111-8111-111111111111/Patterns/66666666-6666-4666-8666-666666666666/cozy-shawl.pdf',
+      pageCountSnapshot: projectPatternCopy.pageCountSnapshot,
+      drawingDataPath: null,
+      drawingUpdatedAt: null,
+      copiedAt: '2026-07-04T12:00:00.000Z',
+    },
+  };
+
   beforeAll(async () => {
+    storageRoot = await fs.mkdtemp(join(tmpdir(), 'knitgether-projects-'));
     process.env.DEV_AUTH_TOKEN = 'dev-token';
     process.env.DEV_AUTH_USER_ID = 'user-a';
+    process.env.FILE_STORAGE_ROOT = storageRoot;
 
     prisma = {
       userProfile: {
@@ -123,6 +191,14 @@ describe('Projects route', () => {
         deleteMany: jest.fn(),
         updateMany: jest.fn(),
         createMany: jest.fn(),
+      },
+      projectPatternCopy: {
+        upsert: jest.fn(),
+        deleteMany: jest.fn(),
+        updateMany: jest.fn(),
+      },
+      patternDocument: {
+        findFirst: jest.fn(),
       },
       $transaction: jest.fn(async (callback) => callback(prisma)),
     };
@@ -150,6 +226,10 @@ describe('Projects route', () => {
     prisma.workSession.deleteMany.mockReset();
     prisma.workSession.updateMany.mockReset();
     prisma.workSession.createMany.mockReset();
+    prisma.projectPatternCopy.upsert.mockReset();
+    prisma.projectPatternCopy.deleteMany.mockReset();
+    prisma.projectPatternCopy.updateMany.mockReset();
+    prisma.patternDocument.findFirst.mockReset();
     prisma.$transaction.mockReset();
     prisma.$transaction.mockImplementation(async (callback) => callback(prisma));
 
@@ -179,12 +259,20 @@ describe('Projects route', () => {
     prisma.workSession.deleteMany.mockResolvedValue({ count: 0 });
     prisma.workSession.updateMany.mockResolvedValue({ count: 0 });
     prisma.workSession.createMany.mockResolvedValue({ count: 1 });
+    prisma.projectPatternCopy.upsert.mockResolvedValue(projectPatternCopy);
+    prisma.projectPatternCopy.deleteMany.mockResolvedValue({ count: 0 });
+    prisma.projectPatternCopy.updateMany.mockResolvedValue({ count: 0 });
+    prisma.patternDocument.findFirst.mockResolvedValue(
+      projectPatternCopy.sourcePatternDocument,
+    );
   });
 
   afterAll(async () => {
     delete process.env.DEV_AUTH_TOKEN;
     delete process.env.DEV_AUTH_USER_ID;
+    delete process.env.FILE_STORAGE_ROOT;
     await app.close();
+    await fs.rm(storageRoot, { recursive: true, force: true });
   });
 
   it('rejects unauthenticated requests', async () => {
@@ -226,6 +314,15 @@ describe('Projects route', () => {
           },
           orderBy: {
             startedAt: 'asc',
+          },
+        },
+        patternCopy: {
+          include: {
+            sourcePatternDocument: {
+              include: {
+                storedFile: true,
+              },
+            },
           },
         },
       },
@@ -302,11 +399,95 @@ describe('Projects route', () => {
             startedAt: 'asc',
           },
         },
+        patternCopy: {
+          include: {
+            sourcePatternDocument: {
+              include: {
+                storedFile: true,
+              },
+            },
+          },
+        },
       },
     });
     expect(response.body.id).toBe('11111111-1111-4111-8111-111111111111');
     expect(response.body.name).toBe('Favorite Cardigan');
     expect(response.body.syncStatus).toBe('Synced');
+  });
+
+  it('returns project pattern copy metadata with projects', async () => {
+    prisma.project.findMany.mockResolvedValueOnce([userAProjectWithPatternCopy]);
+
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200);
+
+    expect(prisma.project.findMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        deletedAt: null,
+      },
+      include: {
+        rowCounter: true,
+        workSessions: {
+          where: {
+            ownerId: 'user-a',
+            deletedAt: null,
+          },
+          orderBy: {
+            startedAt: 'asc',
+          },
+        },
+        patternCopy: {
+          include: {
+            sourcePatternDocument: {
+              include: {
+                storedFile: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    expect(response.body[0].patternCopy).toEqual({
+      id: projectPatternCopy.id,
+      ownerId: 'user-a',
+      projectId: userAProject.id,
+      sourcePatternDocumentId: projectPatternCopy.sourcePatternDocumentId,
+      titleSnapshot: 'Cozy Shawl',
+      designerSnapshot: 'Yu',
+      fileNameSnapshot: 'cozy-shawl.pdf',
+      localCopyPath: null,
+      pageCountSnapshot: 12,
+      drawingDataPath: null,
+      drawingUpdatedAt: null,
+      copiedAt: '2026-07-04T12:00:00.000Z',
+      createdAt: '2026-07-04T12:00:00.000Z',
+      updatedAt: '2026-07-05T12:00:00.000Z',
+      deletedAt: null,
+      syncStatus: 'Synced',
+    });
+  });
+
+  it('downloads the active project pattern copy PDF', async () => {
+    const pdfBytes = Buffer.from('%PDF-1.4');
+    const filePath = join(
+      storageRoot,
+      projectPatternCopy.sourcePatternDocument.storedFile.storageKey,
+    );
+    await fs.mkdir(dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, pdfBytes);
+    prisma.project.findFirst.mockResolvedValueOnce(userAProjectWithPatternCopy);
+
+    const response = await request(app.getHttpServer())
+      .get(`/api/v1/projects/${userAProject.id}/pattern-copy/file`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200)
+      .expect('Content-Type', /application\/pdf/);
+
+    expect(Buffer.from(response.body)).toEqual(pdfBytes);
+    expect(response.header['content-disposition']).toContain('cozy-shawl.pdf');
   });
 
   it('returns 404 when a project is missing or not owned by the current user', async () => {
@@ -373,6 +554,45 @@ describe('Projects route', () => {
       ],
     });
     expect(response.body.id).toBe(saveProjectBody.id);
+  });
+
+  it('saves a project pattern copy with the project', async () => {
+    prisma.project.findFirstOrThrow.mockResolvedValueOnce(userAProjectWithPatternCopy);
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send(saveProjectWithPatternCopyBody)
+      .expect(201);
+
+    expect(prisma.patternDocument.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: projectPatternCopy.sourcePatternDocumentId,
+        ownerId: 'user-a',
+        deletedAt: null,
+      },
+    });
+    expect(prisma.projectPatternCopy.upsert).toHaveBeenCalledWith({
+      where: {
+        projectId: saveProjectBody.id,
+      },
+      create: expect.objectContaining({
+        id: projectPatternCopy.id,
+        ownerId: 'user-a',
+        projectId: saveProjectBody.id,
+        sourcePatternDocumentId: projectPatternCopy.sourcePatternDocumentId,
+        titleSnapshot: 'Cozy Shawl',
+        fileNameSnapshot: 'cozy-shawl.pdf',
+        deletedAt: null,
+      }),
+      update: expect.objectContaining({
+        ownerId: 'user-a',
+        sourcePatternDocumentId: projectPatternCopy.sourcePatternDocumentId,
+        titleSnapshot: 'Cozy Shawl',
+        fileNameSnapshot: 'cozy-shawl.pdf',
+        deletedAt: null,
+      }),
+    });
   });
 
   it('updates an active project owned by the current user', async () => {
