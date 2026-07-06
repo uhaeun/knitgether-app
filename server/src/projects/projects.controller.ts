@@ -18,13 +18,13 @@ import {
   CurrentUser,
   CurrentUserPayload,
 } from '../auth/current-user.decorator';
-import { DevAuthGuard } from '../auth/dev-auth.guard';
+import { ApiAuthGuard } from '../auth/api-auth.guard';
 import { ProjectResponseDto } from './project-response.dto';
 import { SaveProjectDto } from './project-save.dto';
 import { ProjectsService } from './projects.service';
 import { UploadedPatternFile } from '../patterns/uploaded-pattern-file';
 
-@UseGuards(DevAuthGuard)
+@UseGuards(ApiAuthGuard)
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}

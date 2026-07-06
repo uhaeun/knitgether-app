@@ -18,14 +18,14 @@ import {
   CurrentUser,
   CurrentUserPayload,
 } from '../auth/current-user.decorator';
-import { DevAuthGuard } from '../auth/dev-auth.guard';
+import { ApiAuthGuard } from '../auth/api-auth.guard';
 import { PatternCreateFieldsDto } from './pattern-create-fields.dto';
 import { PatternResponseDto } from './pattern-response.dto';
 import { PatternUpdateDto } from './pattern-update.dto';
 import { PatternsService } from './patterns.service';
 import { UploadedPatternFile } from './uploaded-pattern-file';
 
-@UseGuards(DevAuthGuard)
+@UseGuards(ApiAuthGuard)
 @Controller('patterns')
 export class PatternsController {
   constructor(private readonly patternsService: PatternsService) {}

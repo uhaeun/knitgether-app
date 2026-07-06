@@ -38,8 +38,7 @@ final class AppRepositoryContainer {
         let patternRepository: any PatternRepository
 
         if let baseURL = apiBaseURL(from: environment) {
-            let token = environment["KNITGETHER_DEV_AUTH_TOKEN"]?
-                .trimmingCharacters(in: .whitespacesAndNewlines)
+            let token = apiAuthToken(from: environment)
 
             let apiClient = APIClient(
                 configuration: APIConfiguration(
@@ -80,5 +79,13 @@ final class AppRepositoryContainer {
         }
 
         return url
+    }
+
+    private static func apiAuthToken(from environment: [String: String]) -> String? {
+        let candidate = environment["KNITGETHER_API_AUTH_TOKEN"]
+            ?? environment["KNITGETHER_DEV_AUTH_TOKEN"]
+        let token = candidate?.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        return token?.isEmpty == false ? token : nil
     }
 }

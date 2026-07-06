@@ -315,6 +315,29 @@ describe('Projects route', () => {
       });
   });
 
+  it('authenticates API tokens as their configured user', async () => {
+    process.env.KNITGETHER_API_TOKENS = 'user-a:api-token,user-b:other-token';
+
+    try {
+      const response = await request(app.getHttpServer())
+        .get('/api/v1/projects')
+        .set('Authorization', 'Bearer api-token')
+        .expect(200);
+
+      expect(prisma.project.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            ownerId: 'user-a',
+            deletedAt: null,
+          },
+        }),
+      );
+      expect(response.body[0].ownerId).toBe('user-a');
+    } finally {
+      delete process.env.KNITGETHER_API_TOKENS;
+    }
+  });
+
   it('returns only active projects owned by the current user', async () => {
     const response = await request(app.getHttpServer())
       .get('/api/v1/projects')

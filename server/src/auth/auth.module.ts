@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DevAuthGuard } from './dev-auth.guard';
+import { ApiAuthGuard } from './api-auth.guard';
 
 @Module({
-  providers: [DevAuthGuard],
-  exports: [DevAuthGuard],
+  providers: [ApiAuthGuard],
+  exports: [ApiAuthGuard],
 })
 export class AuthModule {}

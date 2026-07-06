@@ -52,4 +52,28 @@ struct AppRepositoryContainerTests {
         let patterns = try await container.patternRepository.fetchPatterns()
         #expect(patterns.isEmpty)
     }
+
+    @Test func makeDefaultUsesAPIAuthTokenWhenConfigured() async throws {
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer api-token")
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data("[]".utf8))
+        }
+
+        let container = AppRepositoryContainer.makeDefault(
+            environment: [
+                "KNITGETHER_API_BASE_URL": "https://api.knitgether.test/api/v1",
+                "KNITGETHER_API_AUTH_TOKEN": "api-token",
+            ],
+            session: session
+        )
+
+        _ = try await container.projectRepository.fetchProjects()
+    }
 }
