@@ -131,6 +131,9 @@ model ProjectPatternCopy {
   fileNameSnapshot        String?
   pageCountSnapshot       Int?
   drawingUpdatedAt        DateTime?
+  drawingStorageKey       String?
+  drawingContentType      String?
+  drawingByteSize         Int?
   copiedAt                DateTime
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt

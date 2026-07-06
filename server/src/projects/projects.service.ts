@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -13,6 +14,7 @@ import {
 } from './project-response.dto';
 import { SaveProjectDto, SaveProjectPatternCopyDto } from './project-save.dto';
 import { LocalFileStorageService } from '../storage/local-file-storage.service';
+import { UploadedPatternFile } from '../patterns/uploaded-pattern-file';
 
 type ProjectWithChildren = Prisma.ProjectGetPayload<{
   include: {
@@ -219,6 +221,124 @@ export class ProjectsService {
     ownerId: string,
     projectId: string,
   ): Promise<ProjectPatternCopyWithSource> {
+    const patternCopy = await this.findActiveProjectPatternCopy(
+      ownerId,
+      projectId,
+    );
+    const storedFile = patternCopy?.sourcePatternDocument?.storedFile;
+
+    if (
+      !storedFile ||
+      storedFile.deletedAt !== null
+    ) {
+      throw new NotFoundException({
+        code: 'PROJECT_PATTERN_COPY_FILE_NOT_FOUND',
+        message: 'Project pattern copy file not found.',
+      });
+    }
+
+    await this.fileStorage.assertExists(storedFile.storageKey);
+    return patternCopy;
+  }
+
+  async uploadProjectPatternCopyDrawing(
+    ownerId: string,
+    projectId: string,
+    file: UploadedPatternFile | undefined,
+  ): Promise<ProjectPatternCopyResponseDto> {
+    this.assertDrawingFile(file);
+
+    const patternCopy = await this.findActiveProjectPatternCopy(
+      ownerId,
+      projectId,
+    );
+    const stored = await this.fileStorage.saveProjectPatternDrawing({
+      ownerId,
+      projectId,
+      copyId: patternCopy.id,
+      buffer: file.buffer,
+    });
+    const updated = await this.prisma.projectPatternCopy.update({
+      where: {
+        id: patternCopy.id,
+      },
+      data: {
+        drawingStorageKey: stored.storageKey,
+        drawingContentType: file.mimetype || 'application/octet-stream',
+        drawingByteSize: stored.byteSize,
+        drawingUpdatedAt: new Date(),
+      },
+      include: {
+        sourcePatternDocument: {
+          include: {
+            storedFile: true,
+          },
+        },
+      },
+    });
+    const response = this.toProjectPatternCopyResponse(updated, ownerId);
+
+    if (!response) {
+      throw new NotFoundException({
+        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+        message: 'Project pattern copy not found.',
+      });
+    }
+
+    return response;
+  }
+
+  async getProjectPatternCopyDrawing(
+    ownerId: string,
+    projectId: string,
+  ): Promise<ProjectPatternCopyWithSource> {
+    const patternCopy = await this.findActiveProjectPatternCopy(
+      ownerId,
+      projectId,
+    );
+
+    if (!patternCopy.drawingStorageKey) {
+      throw new NotFoundException({
+        code: 'PROJECT_PATTERN_COPY_DRAWING_NOT_FOUND',
+        message: 'Project pattern copy drawing not found.',
+      });
+    }
+
+    await this.fileStorage.assertExists(patternCopy.drawingStorageKey);
+    return patternCopy;
+  }
+
+  async deleteProjectPatternCopyDrawing(
+    ownerId: string,
+    projectId: string,
+  ): Promise<void> {
+    const patternCopy = await this.findActiveProjectPatternCopy(
+      ownerId,
+      projectId,
+    );
+
+    await this.fileStorage.remove(patternCopy.drawingStorageKey);
+    await this.prisma.projectPatternCopy.update({
+      where: {
+        id: patternCopy.id,
+      },
+      data: {
+        drawingStorageKey: null,
+        drawingContentType: null,
+        drawingByteSize: null,
+        drawingUpdatedAt: null,
+      },
+    });
+  }
+
+  openFileReadStream(storageKey: string) {
+    return this.fileStorage.openReadStream(storageKey);
+  }
+
+  private async findActiveProjectPatternCopy(
+    ownerId: string,
+    projectId: string,
+  ): Promise<ProjectPatternCopyWithSource> {
     const project = await this.prisma.project.findFirst({
       where: {
         id: projectId,
@@ -239,27 +359,30 @@ export class ProjectsService {
     });
 
     const patternCopy = project?.patternCopy;
-    const storedFile = patternCopy?.sourcePatternDocument?.storedFile;
 
     if (
       !patternCopy ||
       patternCopy.ownerId !== ownerId ||
-      patternCopy.deletedAt !== null ||
-      !storedFile ||
-      storedFile.deletedAt !== null
+      patternCopy.deletedAt !== null
     ) {
       throw new NotFoundException({
-        code: 'PROJECT_PATTERN_COPY_FILE_NOT_FOUND',
-        message: 'Project pattern copy file not found.',
+        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+        message: 'Project pattern copy not found.',
       });
     }
 
-    await this.fileStorage.assertExists(storedFile.storageKey);
     return patternCopy;
   }
 
-  openFileReadStream(storageKey: string) {
-    return this.fileStorage.openReadStream(storageKey);
+  private assertDrawingFile(
+    file: UploadedPatternFile | undefined,
+  ): asserts file is UploadedPatternFile {
+    if (!file) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Drawing file is required.',
+      });
+    }
   }
 
   private projectInclude(ownerId: string) {

@@ -55,32 +55,90 @@ final class RemoteProjectRepository: ProjectRepository {
             return project
         }
 
+        var cachedPatternCopy = patternCopy
+
         if let localCopyPath = patternCopy.localCopyPath,
            fileExists(at: localCopyPath) {
-            return project
+            cachedPatternCopy = patternCopy
+        } else {
+            do {
+                let fileData = try await apiClient.downloadData(
+                    "projects/\(project.id.uuidString.lowercased())/pattern-copy/file"
+                )
+                let storedFile = try fileStore.storeProjectPatternData(
+                    fileData,
+                    fileName: patternCopy.fileNameSnapshot ?? "\(patternCopy.titleSnapshot).pdf",
+                    projectId: project.id,
+                    copyId: patternCopy.id
+                )
+                cachedPatternCopy = ProjectPatternCopy(
+                    id: patternCopy.id,
+                    ownerId: patternCopy.ownerId,
+                    projectId: patternCopy.projectId,
+                    sourcePatternDocumentId: patternCopy.sourcePatternDocumentId,
+                    titleSnapshot: patternCopy.titleSnapshot,
+                    designerSnapshot: patternCopy.designerSnapshot,
+                    fileNameSnapshot: storedFile.fileName,
+                    localCopyPath: storedFile.relativePath,
+                    pageCountSnapshot: patternCopy.pageCountSnapshot,
+                    drawingDataPath: patternCopy.drawingDataPath,
+                    drawingUpdatedAt: patternCopy.drawingUpdatedAt,
+                    copiedAt: patternCopy.copiedAt,
+                    createdAt: patternCopy.createdAt,
+                    updatedAt: patternCopy.updatedAt,
+                    deletedAt: patternCopy.deletedAt,
+                    syncStatus: patternCopy.syncStatus
+                )
+            } catch let error as APIError where error.statusCode == 404 {
+                cachedPatternCopy = patternCopy
+            }
+        }
+
+        cachedPatternCopy = try await cachePatternCopyDrawingIfNeeded(
+            cachedPatternCopy,
+            for: project
+        )
+
+        return project.copy(
+            patternCopy: cachedPatternCopy,
+            updatedAt: project.updatedAt
+        )
+    }
+
+    private func cachePatternCopyDrawingIfNeeded(
+        _ patternCopy: ProjectPatternCopy,
+        for project: KnittingProject
+    ) async throws -> ProjectPatternCopy {
+        guard patternCopy.drawingUpdatedAt != nil else {
+            return patternCopy
+        }
+
+        if let drawingDataPath = patternCopy.drawingDataPath,
+           fileExists(at: drawingDataPath) {
+            return patternCopy
         }
 
         do {
-            let fileData = try await apiClient.downloadData(
-                "projects/\(project.id.uuidString.lowercased())/pattern-copy/file"
+            let drawingData = try await apiClient.downloadData(
+                "projects/\(project.id.uuidString.lowercased())/pattern-copy/drawing"
             )
-            let storedFile = try fileStore.storeProjectPatternData(
-                fileData,
-                fileName: patternCopy.fileNameSnapshot ?? "\(patternCopy.titleSnapshot).pdf",
-                projectId: project.id,
+            let relativePath = try fileStore.storeProjectPatternDrawingData(
+                drawingData,
+                projectId: patternCopy.projectId,
                 copyId: patternCopy.id
             )
-            let cachedPatternCopy = ProjectPatternCopy(
+
+            return ProjectPatternCopy(
                 id: patternCopy.id,
                 ownerId: patternCopy.ownerId,
                 projectId: patternCopy.projectId,
                 sourcePatternDocumentId: patternCopy.sourcePatternDocumentId,
                 titleSnapshot: patternCopy.titleSnapshot,
                 designerSnapshot: patternCopy.designerSnapshot,
-                fileNameSnapshot: storedFile.fileName,
-                localCopyPath: storedFile.relativePath,
+                fileNameSnapshot: patternCopy.fileNameSnapshot,
+                localCopyPath: patternCopy.localCopyPath,
                 pageCountSnapshot: patternCopy.pageCountSnapshot,
-                drawingDataPath: patternCopy.drawingDataPath,
+                drawingDataPath: relativePath,
                 drawingUpdatedAt: patternCopy.drawingUpdatedAt,
                 copiedAt: patternCopy.copiedAt,
                 createdAt: patternCopy.createdAt,
@@ -88,13 +146,8 @@ final class RemoteProjectRepository: ProjectRepository {
                 deletedAt: patternCopy.deletedAt,
                 syncStatus: patternCopy.syncStatus
             )
-
-            return project.copy(
-                patternCopy: cachedPatternCopy,
-                updatedAt: project.updatedAt
-            )
         } catch let error as APIError where error.statusCode == 404 {
-            return project
+            return patternCopy
         }
     }
 

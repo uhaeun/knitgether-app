@@ -44,6 +44,31 @@ export class LocalFileStorageService {
     };
   }
 
+  async saveProjectPatternDrawing(params: {
+    ownerId: string;
+    projectId: string;
+    copyId: string;
+    buffer: Buffer;
+  }): Promise<StoredPatternPdf> {
+    const storageKey = [
+      'projects',
+      params.ownerId,
+      params.projectId,
+      'pattern-copies',
+      params.copyId,
+      'drawing.pkdrawing',
+    ].join('/');
+    const absolutePath = this.absolutePath(storageKey);
+
+    await fs.mkdir(dirname(absolutePath), { recursive: true });
+    await fs.writeFile(absolutePath, params.buffer);
+
+    return {
+      storageKey,
+      byteSize: params.buffer.byteLength,
+    };
+  }
+
   async assertExists(storageKey: string): Promise<void> {
     try {
       await fs.access(this.absolutePath(storageKey));

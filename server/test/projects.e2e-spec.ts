@@ -29,6 +29,7 @@ type MockPrismaService = {
   };
   projectPatternCopy: {
     upsert: jest.Mock;
+    update: jest.Mock;
     deleteMany: jest.Mock;
     updateMany: jest.Mock;
   };
@@ -123,6 +124,9 @@ describe('Projects route', () => {
     fileNameSnapshot: 'cozy-shawl.pdf',
     pageCountSnapshot: 12,
     drawingUpdatedAt: null,
+    drawingStorageKey: null,
+    drawingContentType: null,
+    drawingByteSize: null,
     copiedAt: new Date('2026-07-04T12:00:00.000Z'),
     createdAt: new Date('2026-07-04T12:00:00.000Z'),
     updatedAt: new Date('2026-07-05T12:00:00.000Z'),
@@ -148,6 +152,20 @@ describe('Projects route', () => {
   const userAProjectWithPatternCopy = {
     ...userAProject,
     patternCopy: projectPatternCopy,
+  };
+
+  const projectPatternCopyWithDrawing = {
+    ...projectPatternCopy,
+    drawingUpdatedAt: new Date('2026-07-05T13:00:00.000Z'),
+    drawingStorageKey:
+      'projects/user-a/11111111-1111-4111-8111-111111111111/pattern-copies/66666666-6666-4666-8666-666666666666/drawing.pkdrawing',
+    drawingContentType: 'application/octet-stream',
+    drawingByteSize: 9,
+  };
+
+  const userAProjectWithPatternCopyDrawing = {
+    ...userAProject,
+    patternCopy: projectPatternCopyWithDrawing,
   };
 
   const saveProjectWithPatternCopyBody = {
@@ -194,6 +212,7 @@ describe('Projects route', () => {
       },
       projectPatternCopy: {
         upsert: jest.fn(),
+        update: jest.fn(),
         deleteMany: jest.fn(),
         updateMany: jest.fn(),
       },
@@ -227,6 +246,7 @@ describe('Projects route', () => {
     prisma.workSession.updateMany.mockReset();
     prisma.workSession.createMany.mockReset();
     prisma.projectPatternCopy.upsert.mockReset();
+    prisma.projectPatternCopy.update.mockReset();
     prisma.projectPatternCopy.deleteMany.mockReset();
     prisma.projectPatternCopy.updateMany.mockReset();
     prisma.patternDocument.findFirst.mockReset();
@@ -260,6 +280,7 @@ describe('Projects route', () => {
     prisma.workSession.updateMany.mockResolvedValue({ count: 0 });
     prisma.workSession.createMany.mockResolvedValue({ count: 1 });
     prisma.projectPatternCopy.upsert.mockResolvedValue(projectPatternCopy);
+    prisma.projectPatternCopy.update.mockResolvedValue(projectPatternCopyWithDrawing);
     prisma.projectPatternCopy.deleteMany.mockResolvedValue({ count: 0 });
     prisma.projectPatternCopy.updateMany.mockResolvedValue({ count: 0 });
     prisma.patternDocument.findFirst.mockResolvedValue(
@@ -488,6 +509,65 @@ describe('Projects route', () => {
 
     expect(Buffer.from(response.body)).toEqual(pdfBytes);
     expect(response.header['content-disposition']).toContain('cozy-shawl.pdf');
+  });
+
+  it('uploads drawing data for the active project pattern copy', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce(userAProjectWithPatternCopy);
+    prisma.projectPatternCopy.update.mockResolvedValueOnce(projectPatternCopyWithDrawing);
+
+    const response = await request(app.getHttpServer())
+      .post(`/api/v1/projects/${userAProject.id}/pattern-copy/drawing`)
+      .set('Authorization', 'Bearer dev-token')
+      .attach('file', Buffer.from('PKDRAWING'), {
+        filename: 'drawing.pkdrawing',
+        contentType: 'application/octet-stream',
+      })
+      .expect(201);
+
+    expect(prisma.projectPatternCopy.update).toHaveBeenCalledWith({
+      where: {
+        id: projectPatternCopy.id,
+      },
+      data: expect.objectContaining({
+        drawingStorageKey:
+          'projects/user-a/11111111-1111-4111-8111-111111111111/pattern-copies/66666666-6666-4666-8666-666666666666/drawing.pkdrawing',
+        drawingContentType: 'application/octet-stream',
+        drawingByteSize: 9,
+        drawingUpdatedAt: expect.any(Date),
+      }),
+      include: expect.any(Object),
+    });
+    expect(response.body.drawingUpdatedAt).toBe('2026-07-05T13:00:00.000Z');
+
+    const storedDrawing = await fs.readFile(
+      join(
+        storageRoot,
+        'projects/user-a/11111111-1111-4111-8111-111111111111/pattern-copies/66666666-6666-4666-8666-666666666666/drawing.pkdrawing',
+      ),
+    );
+    expect(storedDrawing).toEqual(Buffer.from('PKDRAWING'));
+  });
+
+  it('downloads drawing data for the active project pattern copy', async () => {
+    const drawingBytes = Buffer.from('PKDRAWING');
+    const filePath = join(
+      storageRoot,
+      projectPatternCopyWithDrawing.drawingStorageKey,
+    );
+    await fs.mkdir(dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, drawingBytes);
+    prisma.project.findFirst.mockResolvedValueOnce(
+      userAProjectWithPatternCopyDrawing,
+    );
+
+    const response = await request(app.getHttpServer())
+      .get(`/api/v1/projects/${userAProject.id}/pattern-copy/drawing`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200)
+      .expect('Content-Type', /application\/octet-stream/);
+
+    expect(Buffer.from(response.body)).toEqual(drawingBytes);
+    expect(response.header['content-disposition']).toContain('drawing.pkdrawing');
   });
 
   it('returns 404 when a project is missing or not owned by the current user', async () => {

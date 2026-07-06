@@ -8,8 +8,11 @@ import {
   Patch,
   Post,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import {
   CurrentUser,
@@ -19,6 +22,7 @@ import { DevAuthGuard } from '../auth/dev-auth.guard';
 import { ProjectResponseDto } from './project-response.dto';
 import { SaveProjectDto } from './project-save.dto';
 import { ProjectsService } from './projects.service';
+import { UploadedPatternFile } from '../patterns/uploaded-pattern-file';
 
 @UseGuards(DevAuthGuard)
 @Controller('projects')
@@ -71,6 +75,67 @@ export class ProjectsController {
       `attachment; filename="${storedFile.originalFileName.replace(/"/g, '')}"`,
     );
     this.projectsService.openFileReadStream(storedFile.storageKey).pipe(response);
+  }
+
+  @Post(':id/pattern-copy/drawing')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: Number(process.env.DRAWING_UPLOAD_MAX_BYTES ?? 10_485_760),
+      },
+    }),
+  )
+  uploadProjectPatternCopyDrawing(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @UploadedFile() file?: UploadedPatternFile,
+  ) {
+    return this.projectsService.uploadProjectPatternCopyDrawing(
+      currentUser.id,
+      id,
+      file,
+    );
+  }
+
+  @Get(':id/pattern-copy/drawing')
+  async downloadProjectPatternCopyDrawing(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const patternCopy =
+      await this.projectsService.getProjectPatternCopyDrawing(
+        currentUser.id,
+        id,
+      );
+    const storageKey = patternCopy.drawingStorageKey;
+
+    if (!storageKey) {
+      response.status(404).send();
+      return;
+    }
+
+    response.setHeader(
+      'Content-Type',
+      patternCopy.drawingContentType ?? 'application/octet-stream',
+    );
+    response.setHeader(
+      'Content-Disposition',
+      'attachment; filename="drawing.pkdrawing"',
+    );
+    this.projectsService.openFileReadStream(storageKey).pipe(response);
+  }
+
+  @Delete(':id/pattern-copy/drawing')
+  @HttpCode(204)
+  deleteProjectPatternCopyDrawing(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.projectsService.deleteProjectPatternCopyDrawing(
+      currentUser.id,
+      id,
+    );
   }
 
   @Patch(':id')

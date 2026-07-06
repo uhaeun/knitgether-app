@@ -164,11 +164,46 @@ final class RemotePatternRepository: PatternRepository {
             projectId: patternCopy.projectId,
             copyId: patternCopy.id
         )
+        let uploaded: ProjectPatternCopy = try await apiClient.uploadMultipart(
+            "projects/\(patternCopy.projectId.uuidString.lowercased())/pattern-copy/drawing",
+            fields: [:],
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: "drawing.pkdrawing",
+                contentType: "application/octet-stream",
+                data: data
+            )
+        )
 
-        return patternCopy.updatingDrawingDataPath(relativePath)
+        return ProjectPatternCopy(
+            id: uploaded.id,
+            ownerId: uploaded.ownerId,
+            projectId: uploaded.projectId,
+            sourcePatternDocumentId: uploaded.sourcePatternDocumentId,
+            titleSnapshot: uploaded.titleSnapshot,
+            designerSnapshot: uploaded.designerSnapshot,
+            fileNameSnapshot: uploaded.fileNameSnapshot,
+            localCopyPath: patternCopy.localCopyPath,
+            pageCountSnapshot: uploaded.pageCountSnapshot,
+            drawingDataPath: relativePath,
+            drawingUpdatedAt: uploaded.drawingUpdatedAt,
+            copiedAt: uploaded.copiedAt,
+            createdAt: uploaded.createdAt,
+            updatedAt: uploaded.updatedAt,
+            deletedAt: uploaded.deletedAt,
+            syncStatus: uploaded.syncStatus
+        )
     }
 
     func deleteDrawingData(for patternCopy: ProjectPatternCopy) async throws -> ProjectPatternCopy {
+        do {
+            try await apiClient.delete(
+                "projects/\(patternCopy.projectId.uuidString.lowercased())/pattern-copy/drawing"
+            )
+        } catch let error as APIError where error.statusCode == 404 {
+            // Local drawing can still be cleared if the server no longer has a copy.
+        }
+
         try fileStore.removeFile(at: patternCopy.drawingDataPath)
         return patternCopy.updatingDrawingDataPath(nil)
     }
