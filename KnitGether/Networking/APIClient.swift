@@ -1,5 +1,12 @@
 import Foundation
 
+struct MultipartFile {
+    let fieldName: String
+    let fileName: String
+    let contentType: String
+    let data: Data
+}
+
 final class APIClient {
     private let configuration: APIConfiguration
     private let session: URLSession
@@ -55,39 +62,42 @@ final class APIClient {
         try await requestWithoutResponse(path, method: "DELETE", body: Optional<Data>.none)
     }
 
+    func uploadMultipart<Response: Decodable>(
+        _ path: String,
+        fields: [String: String],
+        file: MultipartFile
+    ) async throws -> Response {
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let body = multipartBody(boundary: boundary, fields: fields, file: file)
+        return try await request(
+            path,
+            method: "POST",
+            body: body,
+            contentType: "multipart/form-data; boundary=\(boundary)"
+        )
+    }
+
+    func downloadData(_ path: String) async throws -> Data {
+        try await requestData(
+            path,
+            method: "GET",
+            body: Optional<Data>.none,
+            contentType: nil
+        )
+    }
+
     private func request<Response: Decodable>(
         _ path: String,
         method: String,
-        body: Data?
+        body: Data?,
+        contentType: String? = "application/json"
     ) async throws -> Response {
-        let url = configuration.baseURL.appendingPathComponent(path)
-        var request = URLRequest(url: url)
-        request.httpMethod = method
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-
-        if let body {
-            request.httpBody = body
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        }
-
-        if let token = try await configuration.authTokenProvider() {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-
-        let (data, response) = try await session.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.invalidResponse
-        }
-
-        guard (200..<300).contains(httpResponse.statusCode) else {
-            let envelope = try? decoder.decode(APIErrorEnvelope.self, from: data)
-            throw APIError.requestFailed(
-                statusCode: httpResponse.statusCode,
-                code: envelope?.code,
-                message: envelope?.message
-            )
-        }
+        let data = try await requestData(
+            path,
+            method: method,
+            body: body,
+            contentType: contentType
+        )
 
         do {
             return try decoder.decode(Response.self, from: data)
@@ -101,6 +111,20 @@ final class APIClient {
         method: String,
         body: Data?
     ) async throws {
+        _ = try await requestData(
+            path,
+            method: method,
+            body: body,
+            contentType: "application/json"
+        )
+    }
+
+    private func requestData(
+        _ path: String,
+        method: String,
+        body: Data?,
+        contentType: String?
+    ) async throws -> Data {
         let url = configuration.baseURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
         request.httpMethod = method
@@ -108,7 +132,9 @@ final class APIClient {
 
         if let body {
             request.httpBody = body
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if let contentType {
+                request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+            }
         }
 
         if let token = try await configuration.authTokenProvider() {
@@ -129,6 +155,35 @@ final class APIClient {
                 message: envelope?.message
             )
         }
+
+        return data
+    }
+
+    private func multipartBody(
+        boundary: String,
+        fields: [String: String],
+        file: MultipartFile
+    ) -> Data {
+        var data = Data()
+        let lineBreak = "\r\n"
+
+        for key in fields.keys.sorted() {
+            guard let value = fields[key] else {
+                continue
+            }
+            data.appendString("--\(boundary)\(lineBreak)")
+            data.appendString("Content-Disposition: form-data; name=\"\(key)\"\(lineBreak)\(lineBreak)")
+            data.appendString("\(value)\(lineBreak)")
+        }
+
+        data.appendString("--\(boundary)\(lineBreak)")
+        data.appendString("Content-Disposition: form-data; name=\"\(file.fieldName)\"; filename=\"\(file.fileName)\"\(lineBreak)")
+        data.appendString("Content-Type: \(file.contentType)\(lineBreak)\(lineBreak)")
+        data.append(file.data)
+        data.appendString(lineBreak)
+        data.appendString("--\(boundary)--\(lineBreak)")
+
+        return data
     }
 
     private static let fractionalISO8601Formatter: ISO8601DateFormatter = {
@@ -142,4 +197,10 @@ final class APIClient {
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
     }()
+}
+
+private extension Data {
+    mutating func appendString(_ string: String) {
+        append(Data(string.utf8))
+    }
 }
