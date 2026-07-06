@@ -15,11 +15,12 @@ model UserProfile {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  projects     Project[]
-  rowCounters  RowCounter[]
-  workSessions WorkSession[]
-  storedFiles  StoredFile[]
-  patterns     PatternDocument[]
+  projects             Project[]
+  rowCounters          RowCounter[]
+  workSessions         WorkSession[]
+  storedFiles          StoredFile[]
+  patterns             PatternDocument[]
+  projectPatternCopies ProjectPatternCopy[]
 }
 
 model Project {
@@ -38,9 +39,10 @@ model Project {
   updatedAt              DateTime      @updatedAt
   deletedAt              DateTime?
 
-  owner        UserProfile  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner        UserProfile         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   rowCounter   RowCounter?
   workSessions WorkSession[]
+  patternCopy  ProjectPatternCopy?
 
   @@index([ownerId, deletedAt])
 }
@@ -111,9 +113,33 @@ model PatternDocument {
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
 
-  owner      UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  storedFile StoredFile? @relation(fields: [storedFileId], references: [id], onDelete: SetNull)
+  owner                UserProfile          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  storedFile           StoredFile?          @relation(fields: [storedFileId], references: [id], onDelete: SetNull)
+  projectPatternCopies ProjectPatternCopy[]
 
   @@index([ownerId, deletedAt])
   @@index([storedFileId])
+}
+
+model ProjectPatternCopy {
+  id                      String    @id @db.Uuid
+  ownerId                 String
+  projectId               String    @unique @db.Uuid
+  sourcePatternDocumentId String?   @db.Uuid
+  titleSnapshot           String
+  designerSnapshot        String?
+  fileNameSnapshot        String?
+  pageCountSnapshot       Int?
+  drawingUpdatedAt        DateTime?
+  copiedAt                DateTime
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  deletedAt               DateTime?
+
+  owner                 UserProfile      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project               Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sourcePatternDocument PatternDocument? @relation(fields: [sourcePatternDocumentId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, deletedAt])
+  @@index([sourcePatternDocumentId])
 }
