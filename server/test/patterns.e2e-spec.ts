@@ -160,13 +160,17 @@ describe('Patterns route', () => {
     expect(prisma.patternDocument.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         id: patternId,
-        ownerId: 'user-a',
         title: 'Cozy Shawl',
         designer: 'Yu',
         fileName: 'cozy-shawl.pdf',
         pageCount: 12,
         notes: 'Use lace markers.',
         deletedAt: null,
+        owner: {
+          connect: {
+            id: 'user-a',
+          },
+        },
         storedFile: {
           create: expect.objectContaining({
             ownerId: 'user-a',
