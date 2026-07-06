@@ -141,6 +141,61 @@ struct RemotePatternRepositoryTests {
         try await repository.deletePattern(id: patternID)
     }
 
+    @Test func createProjectPatternCopyUploadsPdfToLibraryAndCachesProjectCopy() async throws {
+        let tempDirectory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: tempDirectory) }
+
+        let sourceURL = tempDirectory.appendingPathComponent("project-shawl.pdf")
+        try Data("%PDF-1.4".utf8).write(to: sourceURL)
+        let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
+        var callCount = 0
+
+        let session = MockURLProtocol.makeSession { request in
+            callCount += 1
+
+            if callCount == 1 {
+                #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/patterns")
+                #expect(request.httpMethod == "POST")
+                let body = try Self.bodyData(from: request)
+                let bodyString = String(decoding: body, as: UTF8.self)
+                #expect(bodyString.contains(#"filename="project-shawl.pdf""#))
+
+                let response = HTTPURLResponse(
+                    url: request.url!,
+                    statusCode: 201,
+                    httpVersion: nil,
+                    headerFields: ["Content-Type": "application/json"]
+                )!
+                return (response, Data(Self.patternResponseJSON.utf8))
+            }
+
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file")
+            #expect(request.httpMethod == "GET")
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/pdf"]
+            )!
+            return (response, Data("%PDF-1.4".utf8))
+        }
+
+        let repository = Self.makeRepository(
+            session: session,
+            cacheRootURL: tempDirectory.appendingPathComponent("cache", isDirectory: true)
+        )
+        let patternCopy = try await repository.createProjectPatternCopy(
+            fromFileAt: sourceURL,
+            forProjectId: projectID
+        )
+
+        #expect(callCount == 2)
+        #expect(patternCopy.sourcePatternDocumentId?.uuidString.lowercased() == "44444444-4444-4444-8444-444444444444")
+        #expect(patternCopy.localCopyPath?.contains("Projects/11111111-1111-4111-8111-111111111111/Patterns/") == true)
+        let copyURL = try #require(repository.fileURL(for: patternCopy))
+        #expect(FileManager.default.fileExists(atPath: copyURL.path))
+    }
+
     private static func makeRepository(
         session: URLSession,
         cacheRootURL: URL? = nil

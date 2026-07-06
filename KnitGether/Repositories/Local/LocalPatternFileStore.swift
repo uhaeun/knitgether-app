@@ -49,6 +49,19 @@ final class LocalPatternFileStore {
         )
     }
 
+    func storeProjectPatternData(
+        _ data: Data,
+        fileName: String,
+        projectId: UUID,
+        copyId: UUID
+    ) throws -> StoredPatternFile {
+        try writeFile(
+            data,
+            fileName: fileName,
+            relativeDirectoryPath: "Projects/\(projectId.uuidString)/Patterns/\(copyId.uuidString)"
+        )
+    }
+
     func storeLibraryPatternData(
         _ data: Data,
         fileName: String,

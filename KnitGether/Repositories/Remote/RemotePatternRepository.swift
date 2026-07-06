@@ -98,25 +98,44 @@ final class RemotePatternRepository: PatternRepository {
     }
 
     func createProjectPatternCopy(fromFileAt fileURL: URL, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
+        let didStartAccessing = fileURL.startAccessingSecurityScopedResource()
+        defer {
+            if didStartAccessing {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        let fileData = try Data(contentsOf: fileURL)
+        let title = fileURL.deletingPathExtension().lastPathComponent
+        let uploaded: PatternDocument = try await apiClient.uploadMultipart(
+            "patterns",
+            fields: ["title": title],
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: fileURL.lastPathComponent,
+                contentType: "application/pdf",
+                data: fileData
+            )
+        )
+        let cachedPattern = try await cacheFileIfNeeded(for: uploaded)
         let copyId = UUID()
-        let storedFile = try fileStore.storeProjectPatternFile(
-            from: fileURL,
+        let copiedFile = try fileStore.copyLibraryPatternFileToProject(
+            cachedPattern,
             projectId: projectId,
             copyId: copyId
         )
         let now = Date()
-        let title = fileURL.deletingPathExtension().lastPathComponent
 
         return ProjectPatternCopy(
             id: copyId,
-            ownerId: nil,
+            ownerId: cachedPattern.ownerId,
             projectId: projectId,
-            sourcePatternDocumentId: nil,
-            titleSnapshot: title.isEmpty ? storedFile.fileName : title,
-            designerSnapshot: nil,
-            fileNameSnapshot: storedFile.fileName,
-            localCopyPath: storedFile.relativePath,
-            pageCountSnapshot: nil,
+            sourcePatternDocumentId: cachedPattern.id,
+            titleSnapshot: cachedPattern.title,
+            designerSnapshot: cachedPattern.designer,
+            fileNameSnapshot: copiedFile?.fileName ?? cachedPattern.fileName,
+            localCopyPath: copiedFile?.relativePath,
+            pageCountSnapshot: cachedPattern.pageCount,
             copiedAt: now,
             createdAt: now,
             updatedAt: now,
