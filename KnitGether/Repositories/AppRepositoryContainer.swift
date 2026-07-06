@@ -35,6 +35,7 @@ final class AppRepositoryContainer {
         session: URLSession = .shared
     ) -> AppRepositoryContainer {
         let projectRepository: any ProjectRepository
+        let patternRepository: any PatternRepository
 
         if let baseURL = apiBaseURL(from: environment) {
             let token = environment["KNITGETHER_DEV_AUTH_TOKEN"]?
@@ -53,11 +54,16 @@ final class AppRepositoryContainer {
                 session: session
             )
             projectRepository = RemoteProjectRepository(apiClient: apiClient)
+            patternRepository = RemotePatternRepository(apiClient: apiClient)
         } else {
             projectRepository = LocalProjectRepository()
+            patternRepository = LocalPatternRepository()
         }
 
-        return AppRepositoryContainer(projectRepository: projectRepository)
+        return AppRepositoryContainer(
+            projectRepository: projectRepository,
+            patternRepository: patternRepository
+        )
     }
 
     private static func apiBaseURL(from environment: [String: String]) -> URL? {

@@ -13,9 +13,8 @@ struct AppRepositoryContainerTests {
         #expect(container.profileRepository is LocalProfileRepository)
     }
 
-    @Test func makeDefaultUsesRemoteProjectRepositoryWhenAPIBaseURLIsConfigured() async throws {
+    @Test func makeDefaultUsesRemoteRepositoriesWhenAPIBaseURLIsConfigured() async throws {
         let session = MockURLProtocol.makeSession { request in
-            #expect(request.url?.absoluteString == "https://api.knitgether.test/api/v1/projects")
             #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer dev-token")
 
             let response = HTTPURLResponse(
@@ -24,6 +23,12 @@ struct AppRepositoryContainerTests {
                 httpVersion: nil,
                 headerFields: ["Content-Type": "application/json"]
             )!
+
+            if request.url?.absoluteString == "https://api.knitgether.test/api/v1/projects" {
+                return (response, Data("[]".utf8))
+            }
+
+            #expect(request.url?.absoluteString == "https://api.knitgether.test/api/v1/patterns")
             return (response, Data("[]".utf8))
         }
 
@@ -36,12 +41,15 @@ struct AppRepositoryContainerTests {
         )
 
         #expect(container.projectRepository is RemoteProjectRepository)
-        #expect(container.patternRepository is LocalPatternRepository)
+        #expect(container.patternRepository is RemotePatternRepository)
         #expect(container.libraryRepository is LocalLibraryRepository)
         #expect(container.skillRepository is LocalSkillRepository)
         #expect(container.profileRepository is LocalProfileRepository)
 
         let projects = try await container.projectRepository.fetchProjects()
         #expect(projects.isEmpty)
+
+        let patterns = try await container.patternRepository.fetchPatterns()
+        #expect(patterns.isEmpty)
     }
 }
