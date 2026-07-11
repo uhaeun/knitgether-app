@@ -11,12 +11,28 @@ import Foundation
 @MainActor
 final class MyKnittingViewModel: ObservableObject {
     @Published private(set) var projects: [KnittingProject] = []
+    @Published private(set) var availableYarns: [Yarn] = []
+    @Published private(set) var availableNeedles: [Needle] = []
+    @Published private(set) var availablePatterns: [PatternDocument] = []
+    @Published private(set) var isRetryingSync = false
     @Published private(set) var errorMessage: String?
 
     private let projectRepository: any ProjectRepository
+    private let patternRepository: (any PatternRepository)?
+    private let libraryRepository: (any LibraryRepository)?
 
-    init(projectRepository: any ProjectRepository) {
+    init(
+        projectRepository: any ProjectRepository,
+        patternRepository: (any PatternRepository)? = nil,
+        libraryRepository: (any LibraryRepository)? = nil
+    ) {
         self.projectRepository = projectRepository
+        self.patternRepository = patternRepository
+        self.libraryRepository = libraryRepository
+    }
+
+    var hasProjectsNeedingSync: Bool {
+        projects.contains { $0.syncStatus.needsSync }
     }
 
     func loadProjects() async {
@@ -28,10 +44,59 @@ final class MyKnittingViewModel: ObservableObject {
         }
     }
 
-    func addProject(from formData: ProjectFormData) async {
+    func reloadAfterAccountChange() async {
+        projects = []
+        availablePatterns = []
+        availableYarns = []
+        availableNeedles = []
+        errorMessage = nil
+        await loadProjects()
+        await loadProjectPatterns()
+        await loadProjectMaterials()
+    }
+
+    func loadProjectPatterns() async {
+        guard let patternRepository else {
+            return
+        }
+
+        do {
+            availablePatterns = try await patternRepository.fetchPatterns()
+            errorMessage = nil
+        } catch {
+            errorMessage = "프로젝트 도안 목록을 불러오지 못했어요."
+        }
+    }
+
+    func loadProjectMaterials() async {
+        guard let libraryRepository else {
+            return
+        }
+
+        do {
+            availableYarns = try await libraryRepository.fetchYarns()
+            availableNeedles = try await libraryRepository.fetchNeedles()
+            errorMessage = nil
+        } catch {
+            errorMessage = "프로젝트 재료를 불러오지 못했어요."
+        }
+    }
+
+    func retrySync() async {
+        guard !isRetryingSync else {
+            return
+        }
+
+        isRetryingSync = true
+        await loadProjects()
+        isRetryingSync = false
+    }
+
+    @discardableResult
+    func addProject(from formData: ProjectFormData) async -> Bool {
         guard formData.canSave else {
             errorMessage = "프로젝트 이름을 입력해 주세요."
-            return
+            return false
         }
 
         do {
@@ -39,15 +104,18 @@ final class MyKnittingViewModel: ObservableObject {
             try await projectRepository.saveProject(project)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
+            return true
         } catch {
             errorMessage = "프로젝트를 추가하지 못했어요."
+            return false
         }
     }
 
-    func updateProject(_ project: KnittingProject, with formData: ProjectFormData) async {
+    @discardableResult
+    func updateProject(_ project: KnittingProject, with formData: ProjectFormData) async -> Bool {
         guard formData.canSave else {
             errorMessage = "프로젝트 이름을 입력해 주세요."
-            return
+            return false
         }
 
         do {
@@ -55,18 +123,23 @@ final class MyKnittingViewModel: ObservableObject {
             try await projectRepository.saveProject(updatedProject)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
+            return true
         } catch {
             errorMessage = "프로젝트를 수정하지 못했어요."
+            return false
         }
     }
 
-    func deleteProject(_ project: KnittingProject) async {
+    @discardableResult
+    func deleteProject(_ project: KnittingProject) async -> Bool {
         do {
             try await projectRepository.deleteProject(id: project.id)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
+            return true
         } catch {
             errorMessage = "프로젝트를 삭제하지 못했어요."
+            return false
         }
     }
 
@@ -87,8 +160,20 @@ final class MyKnittingViewModel: ObservableObject {
             isFavorite: formData.isFavorite,
             memo: formData.trimmedMemo,
             startDate: formData.startDate,
+            targetDate: formData.effectiveTargetDate,
+            finishedAt: formData.effectiveFinishedAt,
             lastWorkedAt: nil,
             patternCopy: patternCopy,
+            yarnId: formData.yarnId,
+            yarnNameSnapshot: formData.trimmedYarnNameSnapshot,
+            yarnBrandSnapshot: formData.trimmedYarnBrandSnapshot,
+            yarnColorwaySnapshot: formData.trimmedYarnColorwaySnapshot,
+            yarnWeightSnapshot: formData.trimmedYarnWeightSnapshot,
+            needleId: formData.needleId,
+            needleNameSnapshot: formData.trimmedNeedleNameSnapshot,
+            needleTypeSnapshot: formData.trimmedNeedleTypeSnapshot,
+            needleSizeSnapshot: formData.trimmedNeedleSizeSnapshot,
+            needleLengthSnapshot: formData.trimmedNeedleLengthSnapshot,
             workspaceDisplayMode: .patternAndCounter,
             workspaceSheetPosition: .medium,
             rowCounter: RowCounter(
@@ -118,8 +203,20 @@ final class MyKnittingViewModel: ObservableObject {
             isFavorite: formData.isFavorite,
             memo: formData.trimmedMemo,
             startDate: formData.startDate,
+            targetDate: formData.effectiveTargetDate,
+            finishedAt: formData.effectiveFinishedAt,
             lastWorkedAt: project.lastWorkedAt,
             patternCopy: project.patternCopy,
+            yarnId: formData.yarnId,
+            yarnNameSnapshot: formData.trimmedYarnNameSnapshot,
+            yarnBrandSnapshot: formData.trimmedYarnBrandSnapshot,
+            yarnColorwaySnapshot: formData.trimmedYarnColorwaySnapshot,
+            yarnWeightSnapshot: formData.trimmedYarnWeightSnapshot,
+            needleId: formData.needleId,
+            needleNameSnapshot: formData.trimmedNeedleNameSnapshot,
+            needleTypeSnapshot: formData.trimmedNeedleTypeSnapshot,
+            needleSizeSnapshot: formData.trimmedNeedleSizeSnapshot,
+            needleLengthSnapshot: formData.trimmedNeedleLengthSnapshot,
             workspaceDisplayMode: project.workspaceDisplayMode,
             workspaceSheetPosition: project.workspaceSheetPosition,
             rowCounter: project.rowCounter,
@@ -146,12 +243,12 @@ final class MyKnittingViewModel: ObservableObject {
         return ProjectPatternCopy(
             ownerId: SampleData.ownerId,
             projectId: projectId,
-            sourcePatternDocumentId: nil,
+            sourcePatternDocumentId: formData.patternDocumentId,
             titleSnapshot: patternName,
-            designerSnapshot: nil,
-            fileNameSnapshot: nil,
+            designerSnapshot: formData.trimmedPatternDesignerSnapshot,
+            fileNameSnapshot: formData.trimmedPatternFileNameSnapshot,
             localCopyPath: nil,
-            pageCountSnapshot: nil,
+            pageCountSnapshot: formData.patternPageCountSnapshot,
             copiedAt: now,
             createdAt: now,
             updatedAt: now
