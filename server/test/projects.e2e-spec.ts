@@ -1648,6 +1648,57 @@ describe('Projects route', () => {
     expect(response.body.name).toBe(saveProjectBody.name);
   });
 
+  it('reconciles project children from the full patch payload', async () => {
+    await request(app.getHttpServer())
+      .patch('/api/v1/projects/11111111-1111-4111-8111-111111111111')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        name: 'Favorite Cardigan Updated Offline',
+        rowCounter: {
+          ...saveProjectBody.rowCounter,
+          currentRow: 48,
+          targetRow: 140,
+          rowInstructions: [],
+        },
+        workSessions: [],
+      })
+      .expect(200);
+
+    expect(prisma.project.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: saveProjectBody.id },
+        data: expect.objectContaining({
+          name: 'Favorite Cardigan Updated Offline',
+        }),
+      }),
+    );
+    expect(prisma.rowCounter.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { projectId: saveProjectBody.id },
+        update: expect.objectContaining({
+          currentRow: 48,
+          targetRow: 140,
+        }),
+      }),
+    );
+    expect(prisma.rowInstruction.deleteMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        projectId: saveProjectBody.id,
+        rowCounterId: saveProjectBody.rowCounter.id,
+      },
+    });
+    expect(prisma.rowInstruction.createMany).not.toHaveBeenCalled();
+    expect(prisma.workSession.deleteMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        projectId: saveProjectBody.id,
+      },
+    });
+    expect(prisma.workSession.createMany).not.toHaveBeenCalled();
+  });
+
   it('soft-deletes an active project owned by the current user', async () => {
     await request(app.getHttpServer())
       .delete('/api/v1/projects/11111111-1111-4111-8111-111111111111')

@@ -83,28 +83,54 @@ final class OfflineFirstProjectRepository: ProjectRepository {
 
     func saveRowCounter(_ rowCounter: RowCounter, forProjectId projectId: UUID) async throws -> RowCounter {
         let rollbackSnapshot = await local.makeRollbackSnapshot()
-        let savedCounter = try await local.saveRowCounter(rowCounter, forProjectId: projectId)
+        let localCounter = copyRowCounter(
+            rowCounter,
+            syncStatus: localSaveSyncStatus(for: rowCounter.syncStatus)
+        )
+        let savedCounter = try await local.saveRowCounter(localCounter, forProjectId: projectId)
+
+        let uploadCounter = copyRowCounter(
+            rowCounter,
+            syncStatus: uploadSyncStatus(for: localCounter.syncStatus)
+        )
 
         do {
-            let syncedCounter = try await remote.saveRowCounter(rowCounter, forProjectId: projectId)
-            _ = try await local.saveRowCounter(syncedCounter, forProjectId: projectId)
+            let syncedCounter = try await remote.saveRowCounter(uploadCounter, forProjectId: projectId)
+            _ = try await local.saveRowCounter(
+                copyRowCounter(syncedCounter, syncStatus: .synced),
+                forProjectId: projectId
+            )
             return syncedCounter
         } catch {
             try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await markProjectPendingForRetry(projectId: projectId, after: error)
             return savedCounter
         }
     }
 
     func saveRowInstruction(_ instruction: RowInstruction, forProjectId projectId: UUID) async throws -> RowInstruction {
         let rollbackSnapshot = await local.makeRollbackSnapshot()
-        let savedInstruction = try await local.saveRowInstruction(instruction, forProjectId: projectId)
+        let localInstruction = copyRowInstruction(
+            instruction,
+            syncStatus: localSaveSyncStatus(for: instruction.syncStatus)
+        )
+        let savedInstruction = try await local.saveRowInstruction(localInstruction, forProjectId: projectId)
+
+        let uploadInstruction = copyRowInstruction(
+            instruction,
+            syncStatus: uploadSyncStatus(for: localInstruction.syncStatus)
+        )
 
         do {
-            let syncedInstruction = try await remote.saveRowInstruction(instruction, forProjectId: projectId)
-            _ = try await local.saveRowInstruction(syncedInstruction, forProjectId: projectId)
+            let syncedInstruction = try await remote.saveRowInstruction(uploadInstruction, forProjectId: projectId)
+            _ = try await local.saveRowInstruction(
+                copyRowInstruction(syncedInstruction, syncStatus: .synced),
+                forProjectId: projectId
+            )
             return syncedInstruction
         } catch {
             try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await markProjectPendingForRetry(projectId: projectId, after: error)
             return savedInstruction
         }
     }
@@ -116,20 +142,37 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         do {
             try await remote.deleteRowInstruction(id: id, forProjectId: projectId)
         } catch {
-            try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await handleChildDeleteFailure(
+                rollbackSnapshot,
+                projectId: projectId,
+                after: error
+            )
         }
     }
 
     func saveWorkSession(_ session: WorkSession, forProjectId projectId: UUID) async throws -> WorkSession {
         let rollbackSnapshot = await local.makeRollbackSnapshot()
-        let savedSession = try await local.saveWorkSession(session, forProjectId: projectId)
+        let localSession = copyWorkSession(
+            session,
+            syncStatus: localSaveSyncStatus(for: session.syncStatus)
+        )
+        let savedSession = try await local.saveWorkSession(localSession, forProjectId: projectId)
+
+        let uploadSession = copyWorkSession(
+            session,
+            syncStatus: uploadSyncStatus(for: localSession.syncStatus)
+        )
 
         do {
-            let syncedSession = try await remote.saveWorkSession(session, forProjectId: projectId)
-            _ = try await local.saveWorkSession(syncedSession, forProjectId: projectId)
+            let syncedSession = try await remote.saveWorkSession(uploadSession, forProjectId: projectId)
+            _ = try await local.saveWorkSession(
+                copyWorkSession(syncedSession, syncStatus: .synced),
+                forProjectId: projectId
+            )
             return syncedSession
         } catch {
             try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await markProjectPendingForRetry(projectId: projectId, after: error)
             return savedSession
         }
     }
@@ -141,7 +184,11 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         do {
             try await remote.deleteWorkSession(id: id, forProjectId: projectId)
         } catch {
-            try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await handleChildDeleteFailure(
+                rollbackSnapshot,
+                projectId: projectId,
+                after: error
+            )
         }
     }
 
@@ -202,7 +249,24 @@ final class OfflineFirstProjectRepository: ProjectRepository {
             // Saving already succeeded. Keep the local cache usable even if the follow-up read fails.
         }
 
-        try await local.markProjectSynced(project)
+        try await local.markProjectSynced(syncedAggregate(project))
+    }
+
+    private func markProjectPendingForRetry(
+        projectId: UUID,
+        after error: Error
+    ) async throws {
+        guard shouldDefer(error),
+              let project = try await local.fetchProject(id: projectId) else {
+            return
+        }
+
+        let syncStatus = pendingRetrySyncStatus(for: project.syncStatus)
+        guard syncStatus != project.syncStatus else {
+            return
+        }
+
+        try await local.saveProject(project.copy(syncStatus: syncStatus))
     }
 
     private func shouldDefer(_ error: Error) -> Bool {
@@ -218,6 +282,14 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         return false
     }
 
+    private func isAlreadyDeleted(_ error: Error) -> Bool {
+        guard let apiError = error as? APIError else {
+            return false
+        }
+
+        return apiError.statusCode == 404
+    }
+
     private func rollbackLocalChangeIfRejected(
         _ snapshot: [KnittingProject],
         after error: Error
@@ -228,6 +300,19 @@ final class OfflineFirstProjectRepository: ProjectRepository {
 
         try? await local.restoreRollbackSnapshot(snapshot)
         throw error
+    }
+
+    private func handleChildDeleteFailure(
+        _ snapshot: [KnittingProject],
+        projectId: UUID,
+        after error: Error
+    ) async throws {
+        guard !isAlreadyDeleted(error) else {
+            return
+        }
+
+        try await rollbackLocalChangeIfRejected(snapshot, after: error)
+        try await markProjectPendingForRetry(projectId: projectId, after: error)
     }
 
     private func localSaveSyncStatus(for syncStatus: SyncStatus) -> SyncStatus {
@@ -241,5 +326,90 @@ final class OfflineFirstProjectRepository: ProjectRepository {
 
     private func uploadSyncStatus(for syncStatus: SyncStatus) -> SyncStatus {
         syncStatus == .pendingUpload ? .synced : syncStatus
+    }
+
+    private func pendingRetrySyncStatus(for syncStatus: SyncStatus) -> SyncStatus {
+        switch syncStatus {
+        case .synced, .pendingUpload:
+            return .pendingUpload
+        case .localOnly:
+            return .localOnly
+        default:
+            return syncStatus
+        }
+    }
+
+    private func syncedAggregate(_ project: KnittingProject) -> KnittingProject {
+        let syncedInstructions = project.rowCounter.rowInstructions.map {
+            copyRowInstruction($0, syncStatus: .synced)
+        }
+        let syncedCounter = copyRowCounter(
+            project.rowCounter,
+            rowInstructions: syncedInstructions,
+            syncStatus: .synced
+        )
+        let syncedSessions = project.workSessions.map {
+            copyWorkSession($0, syncStatus: .synced)
+        }
+
+        return project.copy(
+            rowCounter: syncedCounter,
+            workSessions: syncedSessions,
+            syncStatus: .synced
+        )
+    }
+
+    private func copyRowCounter(
+        _ rowCounter: RowCounter,
+        rowInstructions: [RowInstruction]? = nil,
+        syncStatus: SyncStatus
+    ) -> RowCounter {
+        RowCounter(
+            id: rowCounter.id,
+            ownerId: rowCounter.ownerId,
+            projectId: rowCounter.projectId,
+            name: rowCounter.name,
+            mode: rowCounter.mode,
+            sectionName: rowCounter.sectionName,
+            memo: rowCounter.memo,
+            currentRow: rowCounter.currentRow,
+            targetRow: rowCounter.targetRow,
+            rowInstructions: rowInstructions ?? rowCounter.rowInstructions,
+            createdAt: rowCounter.createdAt,
+            updatedAt: rowCounter.updatedAt,
+            deletedAt: rowCounter.deletedAt,
+            syncStatus: syncStatus
+        )
+    }
+
+    private func copyRowInstruction(_ instruction: RowInstruction, syncStatus: SyncStatus) -> RowInstruction {
+        RowInstruction(
+            id: instruction.id,
+            ownerId: instruction.ownerId,
+            projectId: instruction.projectId,
+            rowCounterId: instruction.rowCounterId,
+            rowNumber: instruction.rowNumber,
+            instructionText: instruction.instructionText,
+            skillTags: instruction.skillTags,
+            createdAt: instruction.createdAt,
+            updatedAt: instruction.updatedAt,
+            deletedAt: instruction.deletedAt,
+            syncStatus: syncStatus
+        )
+    }
+
+    private func copyWorkSession(_ session: WorkSession, syncStatus: SyncStatus) -> WorkSession {
+        WorkSession(
+            id: session.id,
+            ownerId: session.ownerId,
+            projectId: session.projectId,
+            startedAt: session.startedAt,
+            endedAt: session.endedAt,
+            memo: session.memo,
+            createdAt: session.createdAt,
+            updatedAt: session.updatedAt,
+            deletedAt: session.deletedAt,
+            syncStatus: syncStatus
+        )
     }
 }

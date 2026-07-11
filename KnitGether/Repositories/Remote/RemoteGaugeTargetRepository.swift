@@ -20,6 +20,15 @@ final class RemoteGaugeTargetRepository: GaugeTargetRepository {
         )
     }
 
+    func updateGaugeTarget(_ target: GaugeTarget) async throws -> GaugeTarget {
+        let body = SaveGaugeTargetRequest(target: target)
+        return try await apiClient.send(
+            "gauge-targets/\(target.id.uuidString.lowercased())",
+            method: "PATCH",
+            body: body
+        )
+    }
+
     func deleteGaugeTarget(id: UUID) async throws {
         try await apiClient.delete("gauge-targets/\(id.uuidString.lowercased())")
     }

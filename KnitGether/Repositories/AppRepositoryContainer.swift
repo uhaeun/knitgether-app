@@ -131,15 +131,33 @@ final class AppRepositoryContainer {
             let patternFileStore = LocalPatternFileStore(
                 rootDirectoryURL: cacheDirectoryURL.appendingPathComponent("pattern-files", isDirectory: true)
             )
-            projectRepository = RemoteProjectRepository(
-                apiClient: apiClient,
-                fileStore: patternFileStore
+            projectRepository = OfflineFirstProjectRepository(
+                local: LocalProjectRepository(
+                    seedSamples: false,
+                    fileURL: cacheFileURL("projects.json", in: cacheDirectoryURL)
+                ),
+                remote: RemoteProjectRepository(
+                    apiClient: apiClient,
+                    fileStore: patternFileStore
+                )
             )
-            patternRepository = RemotePatternRepository(
-                apiClient: apiClient,
-                fileStore: patternFileStore
+            patternRepository = OfflineFirstPatternRepository(
+                local: LocalPatternRepository(
+                    seedSamples: false,
+                    fileURL: cacheFileURL("patterns.json", in: cacheDirectoryURL),
+                    fileStore: patternFileStore
+                ),
+                remote: RemotePatternRepository(
+                    apiClient: apiClient,
+                    fileStore: patternFileStore
+                )
             )
-            gaugeRecordRepository = RemoteGaugeRecordRepository(apiClient: apiClient)
+            gaugeRecordRepository = OfflineFirstGaugeRecordRepository(
+                local: LocalGaugeRecordRepository(
+                    fileURL: cacheFileURL("gauge-records.json", in: cacheDirectoryURL)
+                ),
+                remote: RemoteGaugeRecordRepository(apiClient: apiClient)
+            )
             gaugeTargetRepository = RemoteGaugeTargetRepository(apiClient: apiClient)
             let progressPhotoFileStore = LocalProjectProgressPhotoFileStore(
                 rootDirectoryURL: cacheDirectoryURL.appendingPathComponent("progress-photos", isDirectory: true)
@@ -148,10 +166,34 @@ final class AppRepositoryContainer {
                 apiClient: apiClient,
                 fileStore: progressPhotoFileStore
             )
-            libraryRepository = RemoteLibraryRepository(apiClient: apiClient)
-            skillRepository = RemoteSkillRepository(apiClient: apiClient)
-            dictionaryRepository = RemoteDictionaryRepository(apiClient: apiClient)
-            profileRepository = RemoteProfileRepository(apiClient: apiClient)
+            libraryRepository = OfflineFirstLibraryRepository(
+                local: LocalLibraryRepository(
+                    seedSamples: false,
+                    fileURL: cacheFileURL("library.json", in: cacheDirectoryURL)
+                ),
+                remote: RemoteLibraryRepository(apiClient: apiClient)
+            )
+            skillRepository = OfflineFirstSkillRepository(
+                local: LocalSkillRepository(
+                    seedSamples: false,
+                    fileURL: cacheFileURL("skills.json", in: cacheDirectoryURL)
+                ),
+                remote: RemoteSkillRepository(apiClient: apiClient)
+            )
+            dictionaryRepository = OfflineFirstDictionaryRepository(
+                local: LocalDictionaryRepository(
+                    seedSamples: false,
+                    fileURL: cacheFileURL("dictionary-terms.json", in: cacheDirectoryURL)
+                ),
+                remote: RemoteDictionaryRepository(apiClient: apiClient)
+            )
+            profileRepository = OfflineFirstProfileRepository(
+                local: LocalProfileRepository(
+                    seedSample: false,
+                    fileURL: cacheFileURL("profile.json", in: cacheDirectoryURL)
+                ),
+                remote: RemoteProfileRepository(apiClient: apiClient)
+            )
         } else {
             authRepository = LocalAuthRepository()
             projectRepository = LocalProjectRepository()
@@ -238,6 +280,10 @@ final class AppRepositoryContainer {
         return cacheRootDirectoryURL
             .appendingPathComponent(cacheScopeName(for: baseURL), isDirectory: true)
             .appendingPathComponent(cacheUserScopeName(for: userId), isDirectory: true)
+    }
+
+    private static func cacheFileURL(_ fileName: String, in directoryURL: URL) -> URL {
+        directoryURL.appendingPathComponent(fileName)
     }
 
     private static func cacheScopeName(for baseURL: URL) -> String {

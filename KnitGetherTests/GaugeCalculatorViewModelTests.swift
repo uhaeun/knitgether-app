@@ -546,6 +546,32 @@ struct GaugeCalculatorViewModelTests {
             )
         }
 
+        func updateGaugeTarget(_ target: GaugeTarget) async throws -> GaugeTarget {
+            savedTargets.append(target)
+            if let index = targets.firstIndex(where: { $0.id == target.id }) {
+                targets[index] = target
+            } else {
+                targets.append(target)
+            }
+            return GaugeTarget(
+                id: target.id,
+                ownerId: target.ownerId,
+                name: target.name,
+                targetStitches: target.targetStitches,
+                targetWidth: target.targetWidth,
+                targetRows: target.targetRows,
+                targetHeight: target.targetHeight,
+                isQuickMeasure: target.isQuickMeasure,
+                gaugeAfterWash: target.gaugeAfterWash,
+                recommendedNeedle: target.recommendedNeedle,
+                sourcePatternId: target.sourcePatternId,
+                createdAt: target.createdAt,
+                updatedAt: target.updatedAt,
+                syncStatus: .synced,
+                swatches: target.swatches
+            )
+        }
+
         func deleteGaugeTarget(id: UUID) async throws {
             deletedTargetIDs.append(id)
             targets.removeAll { $0.id == id }

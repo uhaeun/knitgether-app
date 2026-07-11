@@ -60,6 +60,36 @@ struct RemoteGaugeTargetRepositoryTests {
         #expect(saved.swatches[0].measurements[0].method == .manual)
     }
 
+    @Test func updateGaugeTargetPatchesExistingTargetWithNestedMeasurementData() async throws {
+        let target = Self.makeGaugeTarget()
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/gauge-targets/\(target.id.uuidString.lowercased())")
+            #expect(request.httpMethod == "PATCH")
+            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer dev-token")
+
+            let body = try Self.bodyData(from: request)
+            let bodyString = String(decoding: body, as: UTF8.self)
+            #expect(bodyString.contains(#""id":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa""#))
+            #expect(bodyString.contains(#""name":"Cozy Shawl gauge""#))
+            #expect(bodyString.contains(#""washState":"before""#))
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.gaugeTargetsJSON.dropFirst().dropLast().utf8))
+        }
+
+        let repository = RemoteGaugeTargetRepository(apiClient: Self.apiClient(session: session))
+        let saved = try await repository.updateGaugeTarget(target)
+
+        #expect(saved.id == target.id)
+        #expect(saved.syncStatus == .synced)
+        #expect(saved.swatches[0].measurements[0].method == .manual)
+    }
+
     @Test func deleteGaugeTargetDeletesServerTarget() async throws {
         let targetId = UUID(uuidString: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa")!
         let session = MockURLProtocol.makeSession { request in

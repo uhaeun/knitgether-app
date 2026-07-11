@@ -423,6 +423,34 @@ struct ProjectWorkspaceViewModelTests {
         #expect(viewModel.project.workSessions.isEmpty)
     }
 
+    @Test func recordingWorkSessionCreatesLocalOnlySessionForSyncedProject() throws {
+        let project = Self.makeProject(syncStatus: .synced)
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        let endedAt = Date(timeIntervalSince1970: 1_800_003_600)
+
+        let updatedProject = project.recordingWorkSession(
+            startedAt: startedAt,
+            endedAt: endedAt
+        )
+
+        #expect(updatedProject.workSessions.last?.syncStatus == .localOnly)
+        #expect(updatedProject.syncStatus == .synced)
+    }
+
+    @Test func recordingWorkSessionKeepsLocalProjectSessionLocalOnly() throws {
+        let project = Self.makeProject(syncStatus: .localOnly)
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        let endedAt = Date(timeIntervalSince1970: 1_800_003_600)
+
+        let updatedProject = project.recordingWorkSession(
+            startedAt: startedAt,
+            endedAt: endedAt
+        )
+
+        #expect(updatedProject.workSessions.last?.syncStatus == .localOnly)
+        #expect(updatedProject.syncStatus == .localOnly)
+    }
+
     @Test func workSessionsByMostRecentSortsSessionsDescending() async throws {
         let olderSession = Self.makeWorkSession(
             id: UUID(uuidString: "44444444-4444-4444-8444-444444444444")!,

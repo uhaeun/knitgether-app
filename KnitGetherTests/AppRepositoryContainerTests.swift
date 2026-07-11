@@ -20,7 +20,7 @@ struct AppRepositoryContainerTests {
         #expect(container.profileRepository is LocalProfileRepository)
     }
 
-    @Test func makeDefaultUsesRemoteRepositoriesWhenAPIBaseURLIsConfigured() async throws {
+    @Test func makeDefaultUsesOfflineFirstRepositoriesWhenAPIBaseURLIsConfigured() async throws {
         let cacheDirectory = try Self.makeTempCacheDirectory()
         defer { try? FileManager.default.removeItem(at: cacheDirectory) }
         let session = MockURLProtocol.makeSession { request in
@@ -68,13 +68,15 @@ struct AppRepositoryContainerTests {
         )
 
         #expect(container.authRepository is RemoteAuthRepository)
-        #expect(container.projectRepository is RemoteProjectRepository)
-        #expect(container.patternRepository is RemotePatternRepository)
-        #expect(container.gaugeRecordRepository is RemoteGaugeRecordRepository)
+        #expect(container.projectRepository is OfflineFirstProjectRepository)
+        #expect(container.patternRepository is OfflineFirstPatternRepository)
+        #expect(container.gaugeRecordRepository is OfflineFirstGaugeRecordRepository)
         #expect(container.gaugeTargetRepository is RemoteGaugeTargetRepository)
-        #expect(container.libraryRepository is RemoteLibraryRepository)
-        #expect(container.skillRepository is RemoteSkillRepository)
-        #expect(container.profileRepository is RemoteProfileRepository)
+        #expect(container.progressPhotoRepository is RemoteProjectProgressPhotoRepository)
+        #expect(container.libraryRepository is OfflineFirstLibraryRepository)
+        #expect(container.skillRepository is OfflineFirstSkillRepository)
+        #expect(container.dictionaryRepository is OfflineFirstDictionaryRepository)
+        #expect(container.profileRepository is OfflineFirstProfileRepository)
 
         let projects = try await container.projectRepository.fetchProjects()
         #expect(projects.isEmpty)
@@ -93,6 +95,121 @@ struct AppRepositoryContainerTests {
 
         let profile = try await container.profileRepository.fetchCurrentProfile()
         #expect(profile.id == "user-a")
+    }
+
+    @Test func apiModeProjectRepositoryCachesRemoteProjectsAndFallsBackToCacheWhenServerFails() async throws {
+        let cacheDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+        let successSession = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "https://api.knitgether.test/api/v1/projects")
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.projectsJSON.utf8))
+        }
+
+        let firstContainer = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(cacheDirectory: cacheDirectory),
+            session: successSession,
+            authSessionStore: Self.makeEmptySessionStore()
+        )
+
+        let remoteProjects = try await firstContainer.projectRepository.fetchProjects()
+        #expect(remoteProjects.map(\.name) == ["Favorite Cardigan"])
+
+        let failingSession = MockURLProtocol.makeSession { _ in
+            throw URLError(.notConnectedToInternet)
+        }
+        let secondContainer = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(cacheDirectory: cacheDirectory),
+            session: failingSession,
+            authSessionStore: Self.makeEmptySessionStore()
+        )
+
+        let cachedProjects = try await secondContainer.projectRepository.fetchProjects()
+
+        #expect(cachedProjects.map(\.name) == ["Favorite Cardigan"])
+        #expect(cachedProjects.map(\.syncStatus) == [.synced])
+    }
+
+    @Test func apiModeProjectWriteRetryableFailurePreservesPendingAndSyncsAfterNetworkRecovery() async throws {
+        let cacheDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+        var shouldFailSaves = true
+        var savedProjectIDs: [UUID] = []
+        let project = Self.makeProject(syncStatus: .localOnly)
+        let session = MockURLProtocol.makeSession { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+
+            if request.url?.absoluteString == "https://api.knitgether.test/api/v1/projects",
+               request.httpMethod == "POST" {
+                if shouldFailSaves {
+                    let failedResponse = HTTPURLResponse(
+                        url: request.url!,
+                        statusCode: 503,
+                        httpVersion: nil,
+                        headerFields: ["Content-Type": "application/json"]
+                    )!
+                    return (
+                        failedResponse,
+                        Data(#"{"code":"TEMPORARY_UNAVAILABLE","message":"Try later."}"#.utf8)
+                    )
+                }
+
+                savedProjectIDs.append(project.id)
+                return (response, Data(Self.projectJSON.utf8))
+            }
+
+            if request.url?.absoluteString == "https://api.knitgether.test/api/v1/projects/\(project.id.uuidString.lowercased())" {
+                return (response, Data(Self.projectJSON.utf8))
+            }
+
+            #expect(request.url?.absoluteString == "https://api.knitgether.test/api/v1/projects")
+            return (response, Data(Self.projectsJSON.utf8))
+        }
+
+        let container = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(cacheDirectory: cacheDirectory),
+            session: session,
+            authSessionStore: Self.makeEmptySessionStore()
+        )
+
+        try await container.projectRepository.saveProject(project)
+
+        let pendingProjects = try Self.cachedProjects(in: cacheDirectory)
+        #expect(pendingProjects.map(\.syncStatus) == [.localOnly])
+        #expect(savedProjectIDs.isEmpty)
+
+        shouldFailSaves = false
+        _ = try await container.projectRepository.fetchProjects()
+
+        #expect(savedProjectIDs == [project.id])
+        #expect(try Self.cachedProjects(in: cacheDirectory).map(\.syncStatus) == [.synced])
+    }
+
+    @Test func apiModeProjectFetchWithoutServerAndWithoutCacheReturnsEmptyLocalCache() async throws {
+        let cacheDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+        let session = MockURLProtocol.makeSession { _ in
+            throw URLError(.notConnectedToInternet)
+        }
+        let container = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(cacheDirectory: cacheDirectory),
+            session: session,
+            authSessionStore: Self.makeEmptySessionStore()
+        )
+
+        let projects = try await container.projectRepository.fetchProjects()
+
+        #expect(projects.isEmpty)
     }
 
     @Test func makeDefaultUsesAPIAuthTokenWhenConfigured() async throws {
@@ -154,7 +271,7 @@ struct AppRepositoryContainerTests {
         _ = try await container.projectRepository.fetchProjects()
     }
 
-    @Test func remoteModeDoesNotCreateJSONDataCachesPerAccount() async throws {
+    @Test func apiModeCreatesJSONDataCachesPerAccount() async throws {
         let cacheRootDirectory = try Self.makeTempCacheDirectory()
         defer { try? FileManager.default.removeItem(at: cacheRootDirectory) }
         let session = MockURLProtocol.makeSession { request in
@@ -196,7 +313,54 @@ struct AppRepositoryContainerTests {
             under: cacheRootDirectory
         )
 
-        #expect(jsonCachePaths.isEmpty)
+        #expect(jsonCachePaths.contains { $0.contains("user-a") && $0.hasSuffix("projects.json") })
+        #expect(jsonCachePaths.contains { $0.contains("user-b") && $0.hasSuffix("projects.json") })
+    }
+
+    @Test func apiModeCacheScopeSeparatesBaseURLAndUser() async throws {
+        let cacheRootDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheRootDirectory) }
+        let session = MockURLProtocol.makeSession { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data("[]".utf8))
+        }
+
+        let firstStore = Self.makeEmptySessionStore()
+        try firstStore.save(Self.makeAuthSession(userId: "user-a", accessToken: "token-a"))
+        let firstContainer = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(
+                baseURL: "https://api.knitgether.test/api/v1",
+                cacheRootDirectory: cacheRootDirectory
+            ),
+            session: session,
+            authSessionStore: firstStore
+        )
+        _ = try await firstContainer.projectRepository.fetchProjects()
+
+        let secondStore = Self.makeEmptySessionStore()
+        try secondStore.save(Self.makeAuthSession(userId: "user-a", accessToken: "token-a"))
+        let secondContainer = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(
+                baseURL: "https://staging.knitgether.test/api/v1",
+                cacheRootDirectory: cacheRootDirectory
+            ),
+            session: session,
+            authSessionStore: secondStore
+        )
+        _ = try await secondContainer.projectRepository.fetchProjects()
+
+        let jsonCachePaths = try Self.filePaths(
+            matchingExtension: "json",
+            under: cacheRootDirectory
+        )
+
+        #expect(jsonCachePaths.contains { $0.contains("api-knitgether-test") && $0.contains("user-a") })
+        #expect(jsonCachePaths.contains { $0.contains("staging-knitgether-test") && $0.contains("user-a") })
     }
 
     @Test func repositoryStoreRebuildsContainerWhenStoredAccountChanges() async throws {
@@ -237,7 +401,21 @@ struct AppRepositoryContainerTests {
             under: cacheRootDirectory
         )
 
-        #expect(jsonCachePaths.isEmpty)
+        #expect(jsonCachePaths.contains { $0.contains("user-a") && $0.hasSuffix("projects.json") })
+        #expect(jsonCachePaths.contains { $0.contains("user-b") && $0.hasSuffix("projects.json") })
+
+        let secondContainerID = store.container.instanceID
+        try authSessionStore.clear()
+        try await Self.waitUntil {
+            store.container.instanceID != secondContainerID
+        }
+        _ = try await store.container.projectRepository.fetchProjects()
+
+        let pathsAfterLogout = try Self.filePaths(
+            matchingExtension: "json",
+            under: cacheRootDirectory
+        )
+        #expect(pathsAfterLogout.contains { $0.contains("anonymous") && $0.hasSuffix("projects.json") })
     }
 
     @Test func unauthorizedResponseClearsStoredSessionToken() async throws {
@@ -344,6 +522,65 @@ struct AppRepositoryContainerTests {
         return directory
     }
 
+    private static func apiEnvironment(
+        baseURL: String = "https://api.knitgether.test/api/v1",
+        cacheDirectory: URL
+    ) -> [String: String] {
+        [
+            "KNITGETHER_API_BASE_URL": baseURL,
+            "KNITGETHER_LOCAL_CACHE_DIRECTORY": cacheDirectory.path,
+        ]
+    }
+
+    private static func apiEnvironment(
+        baseURL: String = "https://api.knitgether.test/api/v1",
+        cacheRootDirectory: URL
+    ) -> [String: String] {
+        [
+            "KNITGETHER_API_BASE_URL": baseURL,
+            "KNITGETHER_LOCAL_CACHE_ROOT_DIRECTORY": cacheRootDirectory.path,
+        ]
+    }
+
+    private static func cachedProjects(in cacheDirectory: URL) throws -> [KnittingProject] {
+        let data = try Data(contentsOf: cacheDirectory.appendingPathComponent("projects.json"))
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode([KnittingProject].self, from: data)
+    }
+
+    private static func makeProject(syncStatus: SyncStatus) -> KnittingProject {
+        let now = Date(timeIntervalSince1970: 1_783_735_200)
+        let id = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
+        return KnittingProject(
+            id: id,
+            ownerId: "user-a",
+            name: "Favorite Cardigan",
+            status: .wip,
+            isFavorite: true,
+            memo: "Use smaller needles for ribbing.",
+            startDate: now,
+            targetDate: nil,
+            finishedAt: nil,
+            lastWorkedAt: nil,
+            patternCopy: nil,
+            rowCounter: RowCounter(
+                ownerId: "user-a",
+                projectId: id,
+                currentRow: 0,
+                targetRow: nil,
+                createdAt: now,
+                updatedAt: now,
+                syncStatus: syncStatus
+            ),
+            workSessions: [],
+            createdAt: now,
+            updatedAt: now,
+            deletedAt: nil,
+            syncStatus: syncStatus
+        )
+    }
+
     private static func makeAuthSession(
         userId: String = "user-a",
         accessToken: String = "jwt-token"
@@ -409,5 +646,47 @@ struct AppRepositoryContainerTests {
       "deletedAt":null,
       "syncStatus":"Synced"
     }
+    """
+
+    private static let projectJSON = """
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "ownerId": "user-a",
+      "name": "Favorite Cardigan",
+      "status": "WIP",
+      "isFavorite": true,
+      "memo": "Use smaller needles for ribbing.",
+      "startDate": "2026-07-01T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "patternCopy": null,
+      "workspaceDisplayMode": "counterOnly",
+      "workspaceSheetPosition": "medium",
+      "rowCounter": {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "ownerId": "user-a",
+        "projectId": "11111111-1111-4111-8111-111111111111",
+        "name": "Main Counter",
+        "currentRow": 0,
+        "targetRow": null,
+        "createdAt": "2026-07-01T00:00:00.000Z",
+        "updatedAt": "2026-07-01T00:00:00.000Z",
+        "deletedAt": null,
+        "syncStatus": "Synced"
+      },
+      "workSessions": [],
+      "relatedSkillIds": [],
+      "createdAt": "2026-07-01T00:00:00.000Z",
+      "updatedAt": "2026-07-01T00:00:00.000Z",
+      "deletedAt": null,
+      "syncStatus": "Synced"
+    }
+    """
+
+    private static let projectsJSON = """
+    [
+      \(projectJSON)
+    ]
     """
 }
