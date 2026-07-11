@@ -9,6 +9,12 @@ import SwiftUI
 
 struct SkillDetailView: View {
     let skill: Skill
+    let animations: [SkillAnimation]
+
+    init(skill: Skill, animations: [SkillAnimation] = []) {
+        self.skill = skill
+        self.animations = animations
+    }
 
     var body: some View {
         ScrollView {
@@ -36,11 +42,12 @@ struct SkillDetailView: View {
                 }
 
                 detailSection(title: "뜨개 애니메이션", systemImage: "play.rectangle") {
-                    animationPlaceholder
+                    animationContent
                 }
             }
             .padding()
         }
+        .warmScreenBackground()
         .navigationTitle(skill.name)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -64,6 +71,8 @@ struct SkillDetailView: View {
             }
 
             HStack(spacing: 8) {
+                SkillLevelBadgeView(level: skill.userLevel)
+
                 if let category = skill.category {
                     metadataChip(category)
                 }
@@ -71,23 +80,65 @@ struct SkillDetailView: View {
                 if let difficulty = skill.difficulty {
                     metadataChip(difficulty)
                 }
+
+                if skill.isSystem {
+                    metadataChip("기본 제공")
+                }
             }
         }
+        .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+    }
+
+    @ViewBuilder
+    private var animationContent: some View {
+        if animations.isEmpty {
+            animationPlaceholder
+        } else {
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(animations) { animation in
+                    animationRow(animation)
+                }
+            }
+        }
+    }
+
+    private func animationRow(_ animation: SkillAnimation) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            Image(systemName: "play.circle.fill")
+                .font(.title2)
+                .foregroundStyle(Color.accentColor)
+                .frame(width: 32)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(animation.title)
+                    .font(.headline)
+
+                Text(animationMetadataText(for: animation))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
     }
 
     private var animationPlaceholder: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
-                Image(systemName: "play.circle")
+                Image(systemName: skill.hasAnimationMetadata ? "play.circle" : "play.slash")
                     .font(.system(size: 38))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(skill.hasAnimationMetadata ? Color.accentColor : .secondary)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(skill.animationName ?? "\(skill.name) 애니메이션")
+                    Text(skill.animationName ?? "등록된 애니메이션 없음")
                         .font(.headline)
 
-                    Text("동작 애니메이션은 다음 단계에서 연결됩니다.")
+                    Text(animationDetailText)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -95,8 +146,35 @@ struct SkillDetailView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .appCard()
+    }
+
+    private var animationDetailText: String {
+        var components: [String] = []
+
+        if let animationType = skill.animationType, !animationType.isEmpty {
+            components.append(animationType)
+        }
+
+        if !skill.animationIds.isEmpty {
+            components.append("\(skill.animationIds.count)개 클립")
+        }
+
+        return components.isEmpty ? "스킬 창고에서 애니메이션 정보를 추가할 수 있어요." : components.joined(separator: " · ")
+    }
+
+    private func animationMetadataText(for animation: SkillAnimation) -> String {
+        var components: [String] = []
+
+        if let durationSeconds = animation.durationSeconds {
+            components.append("\(durationSeconds)초")
+        }
+
+        if let localAssetName = animation.localAssetName, !localAssetName.isEmpty {
+            components.append(localAssetName)
+        }
+
+        return components.isEmpty ? "연결된 애니메이션" : components.joined(separator: " · ")
     }
 
     private func metadataChip(_ text: String) -> some View {
@@ -114,17 +192,32 @@ struct SkillDetailView: View {
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Label(title, systemImage: systemImage)
-                .font(.headline)
+            HStack(spacing: 10) {
+                Image(systemName: systemImage)
+                    .foregroundStyle(AppTheme.Color.accent)
+                    .frame(width: 30, height: 30)
+                    .background(AppTheme.Color.accentSoft, in: RoundedRectangle(cornerRadius: 8))
+
+                Text(title)
+                    .font(.headline)
+            }
 
             content()
         }
+        .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
+        .appCard()
     }
 }
 
 #Preview {
     NavigationStack {
         SkillDetailView(skill: SampleData.skills[0])
+    }
+}
+
+private extension Skill {
+    var hasAnimationMetadata: Bool {
+        animationName != nil || animationType != nil || !animationIds.isEmpty
     }
 }

@@ -27,9 +27,14 @@ struct PatternSelectionView: View {
                             PatternSelectionRow(pattern: pattern)
                         }
                         .buttonStyle(.plain)
+                        .listRowStyle()
                     }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .background(AppTheme.Color.warmBackground)
                 }
             }
+            .warmScreenBackground()
             .navigationTitle("Library에서 가져오기")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -43,20 +48,12 @@ struct PatternSelectionView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "books.vertical")
-                .font(.system(size: 44))
-                .foregroundStyle(.secondary)
-
-            Text("도안 창고에 등록된 도안이 없어요.")
-                .font(.headline)
-
-            Text("Library의 도안 창고에서 PDF 도안을 먼저 추가해 주세요.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-        }
+        EmptyStateView(
+            title: "도안 창고에 등록된 도안이 없어요.",
+            description: "Library의 도안 창고에서 PDF 도안을 먼저 추가해 주세요.",
+            systemImage: "books.vertical"
+        )
+        .padding()
     }
 }
 
@@ -67,11 +64,11 @@ private struct PatternSelectionRow: View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(.secondarySystemBackground))
+                    .fill(AppTheme.Color.accentSoft)
 
                 Image(systemName: "doc.richtext")
                     .font(.title3)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.Color.accent)
             }
             .frame(width: 44, height: 56)
 
@@ -87,8 +84,13 @@ private struct PatternSelectionRow: View {
             }
 
             Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.caption.bold())
+                .foregroundStyle(AppTheme.Color.accent.opacity(0.55))
         }
-        .padding(.vertical, 4)
+        .padding(12)
+        .appCard()
     }
 }
 
