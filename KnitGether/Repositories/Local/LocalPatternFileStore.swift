@@ -16,11 +16,19 @@ final class LocalPatternFileStore {
     private let fileManager: FileManager
     private let rootDirectoryURL: URL
 
-    init(fileManager: FileManager = .default) {
+    init(
+        fileManager: FileManager = .default,
+        rootDirectoryURL: URL? = nil
+    ) {
         self.fileManager = fileManager
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-            ?? fileManager.temporaryDirectory
-        rootDirectoryURL = documentsURL.appendingPathComponent("KnitGetherFiles", isDirectory: true)
+
+        if let rootDirectoryURL {
+            self.rootDirectoryURL = rootDirectoryURL
+        } else {
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+                ?? fileManager.temporaryDirectory
+            self.rootDirectoryURL = documentsURL.appendingPathComponent("KnitGetherFiles", isDirectory: true)
+        }
     }
 
     func storeLibraryPatternFile(from sourceURL: URL, patternId: UUID) throws -> StoredPatternFile {
@@ -38,6 +46,47 @@ final class LocalPatternFileStore {
         try copyFile(
             from: sourceURL,
             relativeDirectoryPath: "Projects/\(projectId.uuidString)/Patterns/\(copyId.uuidString)"
+        )
+    }
+
+    func storeProjectPatternData(
+        _ data: Data,
+        fileName: String,
+        projectId: UUID,
+        copyId: UUID
+    ) throws -> StoredPatternFile {
+        try writeFile(
+            data,
+            fileName: fileName,
+            relativeDirectoryPath: "Projects/\(projectId.uuidString)/Patterns/\(copyId.uuidString)"
+        )
+    }
+
+    func storeLibraryPatternData(
+        _ data: Data,
+        fileName: String,
+        patternId: UUID
+    ) throws -> StoredPatternFile {
+        try writeFile(
+            data,
+            fileName: fileName,
+            relativeDirectoryPath: "Patterns/\(patternId.uuidString)"
+        )
+    }
+
+    func copyLibraryPatternFileToProject(
+        _ pattern: PatternDocument,
+        projectId: UUID,
+        copyId: UUID
+    ) throws -> StoredPatternFile? {
+        guard let sourceURL = fileURL(for: pattern.localFilePath) else {
+            return nil
+        }
+
+        return try storeProjectPatternFile(
+            from: sourceURL,
+            projectId: projectId,
+            copyId: copyId
         )
     }
 
@@ -111,6 +160,27 @@ final class LocalPatternFileStore {
         try fileManager.copyItem(at: sourceURL, to: destinationURL)
 
         return StoredPatternFile(fileName: fileName, relativePath: relativePath)
+    }
+
+    private func writeFile(
+        _ data: Data,
+        fileName: String,
+        relativeDirectoryPath: String
+    ) throws -> StoredPatternFile {
+        let sanitizedName = sanitizedFileName(fileName)
+        let relativePath = "\(relativeDirectoryPath)/\(sanitizedName)"
+        let destinationURL = rootDirectoryURL.appendingPathComponent(relativePath)
+        let destinationDirectoryURL = destinationURL.deletingLastPathComponent()
+
+        try fileManager.createDirectory(at: destinationDirectoryURL, withIntermediateDirectories: true)
+
+        if fileManager.fileExists(atPath: destinationURL.path) {
+            try fileManager.removeItem(at: destinationURL)
+        }
+
+        try data.write(to: destinationURL, options: [.atomic])
+
+        return StoredPatternFile(fileName: sanitizedName, relativePath: relativePath)
     }
 
     private func sanitizedFileName(_ fileName: String) -> String {

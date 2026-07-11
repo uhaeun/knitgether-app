@@ -15,9 +15,42 @@ model UserProfile {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  projects     Project[]
-  rowCounters  RowCounter[]
-  workSessions WorkSession[]
+  account              UserAccount?
+  projects             Project[]
+  rowCounters          RowCounter[]
+  rowInstructions      RowInstruction[]
+  workSessions         WorkSession[]
+  storedFiles          StoredFile[]
+  patterns             PatternDocument[]
+  projectPatternCopies ProjectPatternCopy[]
+  gaugeRecords         GaugeRecord[]
+  gaugeTargets         GaugeTarget[]
+  gaugeSwatches        GaugeSwatch[]
+  gaugeMeasurements    GaugeMeasurement[]
+  skills               Skill[]
+  skillLevels          UserSkillLevel[]
+  skillAnimations      SkillAnimation[]
+  dictionaryTerms      DictionaryTerm[]
+  yarns                Yarn[]
+  projectYarnUsages    ProjectYarnUsage[]
+  needles              Needle[]
+  tools                ToolItem[]
+  projectToolLinks     ProjectToolLink[]
+  projectProgressPhotos ProjectProgressPhoto[]
+}
+
+model UserAccount {
+  id           String    @id
+  email        String    @unique
+  passwordHash String
+  passwordSalt String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  profile UserProfile @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@index([email, deletedAt])
 }
 
 model Project {
@@ -28,7 +61,19 @@ model Project {
   isFavorite             Boolean       @default(false)
   memo                   String        @default("")
   startDate              DateTime
+  targetDate             DateTime?
+  finishedAt             DateTime?
   lastWorkedAt           DateTime?
+  yarnId                 String?       @db.Uuid
+  yarnNameSnapshot       String?
+  yarnBrandSnapshot      String?
+  yarnColorwaySnapshot   String?
+  yarnWeightSnapshot     String?
+  needleId               String?       @db.Uuid
+  needleNameSnapshot     String?
+  needleTypeSnapshot     String?
+  needleSizeSnapshot     String?
+  needleLengthSnapshot   String?
   workspaceDisplayMode   String?
   workspaceSheetPosition String?
   relatedSkillIds        String[]      @default([])
@@ -36,11 +81,40 @@ model Project {
   updatedAt              DateTime      @updatedAt
   deletedAt              DateTime?
 
-  owner        UserProfile  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner        UserProfile         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   rowCounter   RowCounter?
+  rowInstructions RowInstruction[]
   workSessions WorkSession[]
+  patternCopy  ProjectPatternCopy?
+  gaugeRecords GaugeRecord[]
+  yarnUsages   ProjectYarnUsage[]
+  toolLinks    ProjectToolLink[]
+  progressPhotos ProjectProgressPhoto[]
 
   @@index([ownerId, deletedAt])
+  @@index([ownerId, yarnId, deletedAt])
+  @@index([ownerId, needleId, deletedAt])
+}
+
+model ProjectProgressPhoto {
+  id               String    @id @db.Uuid
+  ownerId          String
+  projectId        String    @db.Uuid
+  fileName         String
+  contentType      String
+  byteSize         Int
+  storageKey       String
+  caption          String    @default("")
+  takenAt          DateTime
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([storageKey])
+  @@index([ownerId, projectId, deletedAt])
 }
 
 model RowCounter {
@@ -48,16 +122,40 @@ model RowCounter {
   ownerId    String
   projectId  String    @unique @db.Uuid
   name       String    @default("Main Counter")
+  mode       String    @default("simple")
+  sectionName String?
+  memo       String?
   currentRow Int
   targetRow  Int?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
 
-  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner           UserProfile      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project         Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  rowInstructions RowInstruction[]
 
   @@index([ownerId, deletedAt])
+}
+
+model RowInstruction {
+  id              String    @id @db.Uuid
+  ownerId         String
+  projectId       String    @db.Uuid
+  rowCounterId    String    @db.Uuid
+  rowNumber       Int
+  instructionText String
+  skillTags       String    @default("")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  owner      UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  rowCounter RowCounter  @relation(fields: [rowCounterId], references: [id], onDelete: Cascade)
+
+  @@unique([rowCounterId, rowNumber])
+  @@index([ownerId, projectId, deletedAt])
 }
 
 model WorkSession {
@@ -75,4 +173,361 @@ model WorkSession {
   project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([ownerId, projectId, deletedAt])
+}
+
+model StoredFile {
+  id               String    @id @db.Uuid
+  ownerId          String
+  kind             String
+  originalFileName String
+  contentType      String
+  byteSize         Int
+  storageKey       String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  owner    UserProfile       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  patterns PatternDocument[]
+
+  @@unique([storageKey])
+  @@index([ownerId, kind, deletedAt])
+}
+
+model PatternDocument {
+  id           String    @id @db.Uuid
+  ownerId      String
+  title        String
+  designer     String?
+  fileName     String?
+  pageCount    Int?
+  notes        String    @default("")
+  storedFileId String?   @db.Uuid
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  owner                UserProfile          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  storedFile           StoredFile?          @relation(fields: [storedFileId], references: [id], onDelete: SetNull)
+  projectPatternCopies ProjectPatternCopy[]
+  gaugeTargets         GaugeTarget[]
+
+  @@index([ownerId, deletedAt])
+  @@index([storedFileId])
+}
+
+model ProjectPatternCopy {
+  id                      String    @id @db.Uuid
+  ownerId                 String
+  projectId               String    @unique @db.Uuid
+  sourcePatternDocumentId String?   @db.Uuid
+  titleSnapshot           String
+  designerSnapshot        String?
+  fileNameSnapshot        String?
+  pageCountSnapshot       Int?
+  fileStorageKey          String?
+  fileContentType         String?
+  fileByteSize            Int?
+  drawingUpdatedAt        DateTime?
+  drawingStorageKey       String?
+  drawingContentType      String?
+  drawingByteSize         Int?
+  copiedAt                DateTime
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  deletedAt               DateTime?
+
+  owner                 UserProfile      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project               Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sourcePatternDocument PatternDocument? @relation(fields: [sourcePatternDocumentId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, deletedAt])
+  @@index([sourcePatternDocumentId])
+}
+
+model GaugeRecord {
+  id                  String    @id @db.Uuid
+  ownerId             String
+  projectId           String?   @db.Uuid
+  projectNameSnapshot String?
+  patternNameSnapshot String?
+  measurementStage    String
+  sampleWidthCm       Float
+  sampleHeightCm      Float
+  stitchCount         Float
+  rowCount            Float
+  targetWidthCm       Float
+  targetHeightCm      Float
+  stitchesPer10Cm     Float
+  rowsPer10Cm         Float
+  targetStitches      Int
+  targetRows          Int
+  needle              String
+  memo                String
+  measuredAt          DateTime
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  deletedAt           DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project?    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, deletedAt])
+  @@index([ownerId, projectId, measurementStage, deletedAt])
+}
+
+model GaugeTarget {
+  id                String    @id @db.Uuid
+  ownerId           String
+  name              String
+  targetStitches    Float
+  targetWidth       Float
+  targetRows        Float     @default(0)
+  targetHeight      Float     @default(0)
+  isQuickMeasure    Boolean   @default(false)
+  gaugeAfterWash    Boolean   @default(false)
+  recommendedNeedle String?
+  sourcePatternId   String?   @db.Uuid
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  owner         UserProfile      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  sourcePattern PatternDocument? @relation(fields: [sourcePatternId], references: [id], onDelete: SetNull)
+  swatches      GaugeSwatch[]
+  measurements  GaugeMeasurement[]
+
+  @@index([ownerId, deletedAt])
+  @@index([sourcePatternId])
+}
+
+model GaugeSwatch {
+  id             String    @id @db.Uuid
+  ownerId        String
+  gaugeTargetId  String    @db.Uuid
+  isSelected     Boolean   @default(false)
+  knittedAt      DateTime?
+  needleMaterial String?
+  needleSize     String?
+  needleType     String?
+  notes          String?
+  stitchPattern  String?
+  yarnBrand      String?
+  yarnColor      String?
+  yarnLot        String?
+  yarnName       String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  owner        UserProfile        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  gaugeTarget  GaugeTarget        @relation(fields: [gaugeTargetId], references: [id], onDelete: Cascade)
+  measurements GaugeMeasurement[]
+
+  @@index([ownerId, gaugeTargetId, deletedAt])
+}
+
+model GaugeMeasurement {
+  id                 String    @id @db.Uuid
+  ownerId            String
+  gaugeTargetId      String    @db.Uuid
+  gaugeSwatchId      String    @db.Uuid
+  method             String
+  washState          String
+  measuredWidth      Float
+  measuredHeight     Float
+  rawStitches        Float
+  rawRows            Float     @default(0)
+  normalizedStitches Float
+  normalizedRows     Float     @default(0)
+  finalStitches      Float
+  finalRows          Float     @default(0)
+  autoStitches       Float     @default(0)
+  autoRows           Float     @default(0)
+  autoConfidence     String?
+  userModified       Boolean   @default(false)
+  photoPath          String?
+  cornerCoordinates  String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
+
+  owner       UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  gaugeTarget GaugeTarget @relation(fields: [gaugeTargetId], references: [id], onDelete: Cascade)
+  gaugeSwatch GaugeSwatch @relation(fields: [gaugeSwatchId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, gaugeTargetId, deletedAt])
+  @@index([ownerId, gaugeSwatchId, washState, deletedAt])
+}
+
+model Skill {
+  id            String    @id @db.Uuid
+  ownerId       String
+  name          String
+  abbreviation  String
+  description   String
+  category      String?
+  difficulty    String?
+  animationName String?
+  animationType String?
+  isSystem      Boolean   @default(false)
+  steps         String[]  @default([])
+  animationIds  String[]  @default([])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  owner      UserProfile      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  animations SkillAnimation[]
+  userLevels UserSkillLevel[]
+
+  @@index([ownerId, deletedAt])
+  @@index([ownerId, category, deletedAt])
+  @@index([isSystem, deletedAt])
+}
+
+model UserSkillLevel {
+  id        String    @id @db.Uuid
+  ownerId   String
+  skillId   String    @db.Uuid
+  level     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  skill Skill       @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, skillId])
+  @@index([ownerId, deletedAt])
+  @@index([skillId])
+}
+
+model SkillAnimation {
+  id              String    @id @db.Uuid
+  ownerId         String
+  skillId         String?   @db.Uuid
+  title           String
+  localAssetName  String?
+  durationSeconds Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  skill Skill?      @relation(fields: [skillId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, deletedAt])
+  @@index([skillId])
+}
+
+model DictionaryTerm {
+  id                        String    @id @db.Uuid
+  ownerId                   String
+  term                      String
+  fullName                  String?
+  description               String
+  relatedSkillAbbreviations String    @default("")
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+  deletedAt                 DateTime?
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, deletedAt])
+  @@index([ownerId, term, deletedAt])
+}
+
+model Yarn {
+  id        String    @id @db.Uuid
+  ownerId   String
+  name      String
+  brand     String?
+  colorway  String?
+  weight    String?
+  quantity  Int
+  notes     String    @default("")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  projectYarnUsages ProjectYarnUsage[]
+
+  @@index([ownerId, deletedAt])
+}
+
+model ProjectYarnUsage {
+  id               String    @id @db.Uuid
+  ownerId          String
+  projectId        String    @db.Uuid
+  yarnId           String?   @db.Uuid
+  yarnNameSnapshot String
+  quantityUsed     Int
+  memo             String    @default("")
+  usedAt           DateTime
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  yarn    Yarn?       @relation(fields: [yarnId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, projectId, deletedAt])
+  @@index([ownerId, yarnId, deletedAt])
+}
+
+model Needle {
+  id         String    @id @db.Uuid
+  ownerId    String
+  name       String
+  needleType String
+  size       String
+  length     String?
+  notes      String    @default("")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, deletedAt])
+}
+
+model ToolItem {
+  id        String    @id @db.Uuid
+  ownerId   String
+  name      String
+  type      String
+  link      String?
+  memo      String    @default("")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  owner        UserProfile       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  projectLinks ProjectToolLink[]
+
+  @@index([ownerId, type, deletedAt])
+  @@index([ownerId, deletedAt])
+}
+
+model ProjectToolLink {
+  id        String    @id @db.Uuid
+  ownerId   String
+  projectId String    @db.Uuid
+  toolId    String    @db.Uuid
+  linkedAt  DateTime  @default(now())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tool    ToolItem    @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, toolId])
+  @@index([ownerId, projectId, deletedAt])
+  @@index([ownerId, toolId, deletedAt])
 }

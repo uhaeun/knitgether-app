@@ -1,11 +1,11 @@
 import Foundation
 
-struct APIErrorEnvelope: Decodable {
+nonisolated struct APIErrorEnvelope: Decodable {
     let code: String?
     let message: String?
 }
 
-enum APIError: Error, Equatable {
+nonisolated enum APIError: Error, Equatable {
     case invalidResponse
     case requestFailed(statusCode: Int, code: String?, message: String?)
     case decodingFailed(message: String)

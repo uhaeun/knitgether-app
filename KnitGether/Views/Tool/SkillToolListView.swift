@@ -74,7 +74,10 @@ struct SkillToolListView: View {
             } else {
                 ForEach(displayedSkills) { skill in
                     NavigationLink {
-                        SkillDetailView(skill: skill)
+                        SkillDetailView(
+                            skill: skill,
+                            animations: viewModel.animations(for: skill)
+                        )
                     } label: {
                         if mode == .animations {
                             animationCard(for: skill)
@@ -117,7 +120,9 @@ struct SkillToolListView: View {
     }
 
     private func animationCard(for skill: Skill) -> some View {
-        HStack(spacing: 12) {
+        let linkedAnimations = viewModel.animations(for: skill)
+
+        return HStack(spacing: 12) {
             Image(systemName: "play.rectangle.fill")
                 .font(.title2)
                 .foregroundStyle(Color.accentColor)
@@ -127,9 +132,13 @@ struct SkillToolListView: View {
                     .font(.headline)
 
                 HStack(spacing: 8) {
+                    SkillLevelBadgeView(level: skill.userLevel)
                     Text(skill.name)
                     Text(skill.abbreviation)
                         .monospaced()
+                    if !linkedAnimations.isEmpty {
+                        Text("\(linkedAnimations.count)개 클립")
+                    }
                 }
                 .font(.caption)
                 .foregroundStyle(.secondary)

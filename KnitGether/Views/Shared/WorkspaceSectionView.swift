@@ -24,14 +24,22 @@ struct WorkspaceSectionView<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label(title, systemImage: systemImage)
-                .font(.headline)
+            HStack(spacing: 10) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(AppTheme.Color.accent)
+                    .frame(width: 34, height: 34)
+                    .background(AppTheme.Color.accentSoft, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+
+                Text(title)
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.Color.primaryText)
+            }
 
             content
-                .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
         }
+        .padding(16)
+        .appCard(cornerRadius: 20)
     }
 }

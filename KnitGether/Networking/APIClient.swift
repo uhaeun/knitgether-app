@@ -1,6 +1,13 @@
 import Foundation
 
-final class APIClient {
+struct MultipartFile {
+    let fieldName: String
+    let fileName: String
+    let contentType: String
+    let data: Data
+}
+
+nonisolated final class APIClient {
     private let configuration: APIConfiguration
     private let session: URLSession
     private let decoder: JSONDecoder
@@ -18,11 +25,11 @@ final class APIClient {
             let container = try decoder.singleValueContainer()
             let value = try container.decode(String.self)
 
-            if let date = Self.fractionalISO8601Formatter.date(from: value) {
+            if let date = Self.date(fromISO8601String: value, includesFractionalSeconds: true) {
                 return date
             }
 
-            if let date = Self.iso8601Formatter.date(from: value) {
+            if let date = Self.date(fromISO8601String: value, includesFractionalSeconds: false) {
                 return date
             }
 
@@ -51,11 +58,73 @@ final class APIClient {
         return try await request(path, method: method, body: data)
     }
 
+    func delete(_ path: String) async throws {
+        try await requestWithoutResponse(path, method: "DELETE", body: Optional<Data>.none)
+    }
+
+    func uploadMultipart<Response: Decodable>(
+        _ path: String,
+        fields: [String: String],
+        file: MultipartFile
+    ) async throws -> Response {
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let body = multipartBody(boundary: boundary, fields: fields, file: file)
+        return try await request(
+            path,
+            method: "POST",
+            body: body,
+            contentType: "multipart/form-data; boundary=\(boundary)"
+        )
+    }
+
+    func downloadData(_ path: String) async throws -> Data {
+        try await requestData(
+            path,
+            method: "GET",
+            body: Optional<Data>.none,
+            contentType: nil
+        )
+    }
+
     private func request<Response: Decodable>(
         _ path: String,
         method: String,
-        body: Data?
+        body: Data?,
+        contentType: String? = "application/json"
     ) async throws -> Response {
+        let data = try await requestData(
+            path,
+            method: method,
+            body: body,
+            contentType: contentType
+        )
+
+        do {
+            return try decoder.decode(Response.self, from: data)
+        } catch {
+            throw APIError.decodingFailed(message: String(describing: error))
+        }
+    }
+
+    private func requestWithoutResponse(
+        _ path: String,
+        method: String,
+        body: Data?
+    ) async throws {
+        _ = try await requestData(
+            path,
+            method: method,
+            body: body,
+            contentType: "application/json"
+        )
+    }
+
+    private func requestData(
+        _ path: String,
+        method: String,
+        body: Data?,
+        contentType: String?
+    ) async throws -> Data {
         let url = configuration.baseURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
         request.httpMethod = method
@@ -63,7 +132,9 @@ final class APIClient {
 
         if let body {
             request.httpBody = body
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if let contentType {
+                request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+            }
         }
 
         if let token = try await configuration.authTokenProvider() {
@@ -77,6 +148,10 @@ final class APIClient {
         }
 
         guard (200..<300).contains(httpResponse.statusCode) else {
+            if httpResponse.statusCode == 401 {
+                await configuration.authFailureHandler()
+            }
+
             let envelope = try? decoder.decode(APIErrorEnvelope.self, from: data)
             throw APIError.requestFailed(
                 statusCode: httpResponse.statusCode,
@@ -85,22 +160,50 @@ final class APIClient {
             )
         }
 
-        do {
-            return try decoder.decode(Response.self, from: data)
-        } catch {
-            throw APIError.decodingFailed(message: String(describing: error))
-        }
+        return data
     }
 
-    private static let fractionalISO8601Formatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter
-    }()
+    private func multipartBody(
+        boundary: String,
+        fields: [String: String],
+        file: MultipartFile
+    ) -> Data {
+        var data = Data()
+        let lineBreak = "\r\n"
 
-    private static let iso8601Formatter: ISO8601DateFormatter = {
+        for key in fields.keys.sorted() {
+            guard let value = fields[key] else {
+                continue
+            }
+            data.appendString("--\(boundary)\(lineBreak)")
+            data.appendString("Content-Disposition: form-data; name=\"\(key)\"\(lineBreak)\(lineBreak)")
+            data.appendString("\(value)\(lineBreak)")
+        }
+
+        data.appendString("--\(boundary)\(lineBreak)")
+        data.appendString("Content-Disposition: form-data; name=\"\(file.fieldName)\"; filename=\"\(file.fileName)\"\(lineBreak)")
+        data.appendString("Content-Type: \(file.contentType)\(lineBreak)\(lineBreak)")
+        data.append(file.data)
+        data.appendString(lineBreak)
+        data.appendString("--\(boundary)--\(lineBreak)")
+
+        return data
+    }
+
+    private static func date(
+        fromISO8601String value: String,
+        includesFractionalSeconds: Bool
+    ) -> Date? {
         let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        return formatter
-    }()
+        formatter.formatOptions = includesFractionalSeconds
+            ? [.withInternetDateTime, .withFractionalSeconds]
+            : [.withInternetDateTime]
+        return formatter.date(from: value)
+    }
+}
+
+nonisolated private extension Data {
+    mutating func appendString(_ string: String) {
+        append(Data(string.utf8))
+    }
 }

@@ -50,4 +50,44 @@ struct WorkSession: Codable, Identifiable, Hashable {
 
         return endedAt.timeIntervalSince(startedAt)
     }
+
+    func updatingMemo(_ memo: String?, at date: Date = Date()) -> WorkSession {
+        WorkSession(
+            id: id,
+            ownerId: ownerId,
+            projectId: projectId,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            memo: memo,
+            createdAt: createdAt,
+            updatedAt: date,
+            deletedAt: deletedAt,
+            syncStatus: syncStatus
+        )
+    }
+}
+
+struct WorkSessionStatistics: Hashable {
+    let sessionCount: Int
+    let totalDuration: TimeInterval
+    let todayDuration: TimeInterval
+    let averageDuration: TimeInterval
+
+    init(
+        sessions: [WorkSession],
+        calendar: Calendar = .current,
+        referenceDate: Date = Date()
+    ) {
+        let completedSessions = sessions.filter { $0.duration > 0 }
+        sessionCount = completedSessions.count
+        totalDuration = completedSessions.reduce(0) { total, session in
+            total + session.duration
+        }
+        todayDuration = completedSessions
+            .filter { calendar.isDate($0.startedAt, inSameDayAs: referenceDate) }
+            .reduce(0) { total, session in
+                total + session.duration
+            }
+        averageDuration = sessionCount > 0 ? totalDuration / Double(sessionCount) : 0
+    }
 }

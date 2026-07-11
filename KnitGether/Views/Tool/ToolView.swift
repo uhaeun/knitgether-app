@@ -8,55 +8,124 @@
 import SwiftUI
 
 struct ToolView: View {
+    private let authSessionStore: AuthSessionStore
+    private let projectRepository: any ProjectRepository
+    private let gaugeRecordRepository: any GaugeRecordRepository
+    private let gaugeTargetRepository: any GaugeTargetRepository
+    private let patternRepository: any PatternRepository
     private let skillRepository: any SkillRepository
+    private let dictionaryRepository: any DictionaryRepository
 
     init(repositories: AppRepositoryContainer) {
+        authSessionStore = repositories.authSessionStore
+        projectRepository = repositories.projectRepository
+        gaugeRecordRepository = repositories.gaugeRecordRepository
+        gaugeTargetRepository = repositories.gaugeTargetRepository
+        patternRepository = repositories.patternRepository
         skillRepository = repositories.skillRepository
+        dictionaryRepository = repositories.dictionaryRepository
     }
 
     var body: some View {
-        List {
-            AppNavigationRow(
-                item: NavigationRowItem(
-                    title: "게이지 계산기",
-                    subtitle: "코와 단수를 계산합니다",
-                    systemImage: "function"
-                )
-            ) {
-                GaugeCalculatorView()
-            }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                header
 
-            AppNavigationRow(
-                item: NavigationRowItem(
-                    title: "뜨개니게이션",
-                    subtitle: "약어와 기법을 빠르게 찾습니다",
-                    systemImage: "signpost.right"
-                )
-            ) {
-                SkillToolListView(skillRepository: skillRepository, mode: .navigation)
-            }
+                AppNavigationList {
+                    AppNavigationListRow(
+                        item: NavigationRowItem(
+                            title: "게이지 계산기",
+                            subtitle: "코 수 · 단 수 · 치수",
+                            systemImage: "ruler.fill",
+                            tint: AppTheme.Color.accent
+                        )
+                    ) {
+                        GaugeCalculatorView(
+                            authSessionStore: authSessionStore,
+                            gaugeRecordRepository: gaugeRecordRepository,
+                            gaugeTargetRepository: gaugeTargetRepository,
+                            projectRepository: projectRepository,
+                            patternRepository: patternRepository
+                        )
+                    }
+                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeCalculatorCard)
 
-            AppNavigationRow(
-                item: NavigationRowItem(
-                    title: "뜨개 사전",
-                    subtitle: "뜨개 용어를 찾아봅니다",
-                    systemImage: "text.book.closed"
-                )
-            ) {
-                SkillToolListView(skillRepository: skillRepository, mode: .dictionary)
-            }
+                    AppNavigationListRow(
+                        item: NavigationRowItem(
+                            title: "스킬 테스트",
+                            subtitle: "몰라요 · 헷갈려요 · 잘 알아요",
+                            systemImage: "checklist",
+                            tint: AppTheme.Color.sage
+                        )
+                    ) {
+                        SkillTestView(skillRepository: skillRepository)
+                    }
+                    .accessibilityIdentifier(AppAccessibilityID.Tool.skillTestCard)
 
-            AppNavigationRow(
-                item: NavigationRowItem(
-                    title: "뜨개 애니메이션",
-                    subtitle: "스킬 동작을 확인합니다",
-                    systemImage: "play.rectangle"
-                )
-            ) {
-                SkillToolListView(skillRepository: skillRepository, mode: .animations)
+                    AppNavigationListRow(
+                        item: NavigationRowItem(
+                            title: "뜨개니게이션",
+                            subtitle: "약어 · 기법 검색",
+                            systemImage: "signpost.right.fill",
+                            tint: AppTheme.Color.amber
+                        )
+                    ) {
+                        SkillToolListView(skillRepository: skillRepository, mode: .navigation)
+                    }
+                    .accessibilityIdentifier(AppAccessibilityID.Tool.navigationCard)
+
+                    AppNavigationListRow(
+                        item: NavigationRowItem(
+                            title: "뜨개 사전",
+                            subtitle: "용어 · 관련 스킬",
+                            systemImage: "book.closed.fill",
+                            tint: AppTheme.Color.slate
+                        )
+                    ) {
+                        KnitDictionaryView(
+                            dictionaryRepository: dictionaryRepository,
+                            skillRepository: skillRepository
+                        )
+                    }
+                    .accessibilityIdentifier(AppAccessibilityID.Tool.dictionaryCard)
+
+                    AppNavigationListRow(
+                        item: NavigationRowItem(
+                            title: "뜨개 애니메이션",
+                            subtitle: "단계별 학습",
+                            systemImage: "play.rectangle.fill",
+                            tint: AppTheme.Color.lavender
+                        ),
+                        showsSeparator: false
+                    ) {
+                        KnitAnimationView(
+                            skillRepository: skillRepository,
+                            dictionaryRepository: dictionaryRepository
+                        )
+                    }
+                    .accessibilityIdentifier(AppAccessibilityID.Tool.animationCard)
+                }
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 18)
+            .padding(.bottom, 28)
         }
-        .navigationTitle("Tool")
+        .warmScreenBackground()
+        .navigationTitle("도구")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("도구")
+                .font(.system(size: 30, weight: .heavy))
+                .foregroundStyle(AppTheme.Color.primaryText)
+
+            Text("계산, 사전, 학습을 한 곳에서 이어가요")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

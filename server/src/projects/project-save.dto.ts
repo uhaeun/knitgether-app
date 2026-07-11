@@ -1,0 +1,266 @@
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsInt,
+  IsISO8601,
+  IsIn,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+
+export class SaveRowInstructionDto {
+  @IsUUID()
+  id!: string;
+
+  @IsUUID()
+  rowCounterId!: string;
+
+  @IsInt()
+  @Min(1)
+  rowNumber!: number;
+
+  @IsString()
+  instructionText!: string;
+
+  @IsOptional()
+  @IsString()
+  skillTags!: string | null;
+}
+
+export class SaveRowCounterDto {
+  @IsUUID()
+  id!: string;
+
+  @IsUUID()
+  projectId!: string;
+
+  @IsString()
+  name!: string;
+
+  @IsOptional()
+  @IsIn(['simple', 'rowGuide'])
+  mode!: string | null;
+
+  @IsOptional()
+  @IsString()
+  sectionName!: string | null;
+
+  @IsOptional()
+  @IsString()
+  memo!: string | null;
+
+  @IsInt()
+  @Min(0)
+  currentRow!: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  targetRow!: number | null;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SaveRowInstructionDto)
+  rowInstructions!: SaveRowInstructionDto[] | undefined;
+}
+
+export class SaveWorkSessionDto {
+  @IsUUID()
+  id!: string;
+
+  @IsUUID()
+  projectId!: string;
+
+  @IsISO8601()
+  startedAt!: string;
+
+  @IsOptional()
+  @IsISO8601()
+  endedAt!: string | null;
+
+  @IsOptional()
+  @IsString()
+  memo!: string | null;
+}
+
+export class SaveProjectYarnUsageDto {
+  @IsOptional()
+  @IsUUID()
+  id!: string | undefined;
+
+  @IsOptional()
+  @IsUUID()
+  yarnId!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnNameSnapshot!: string | null;
+
+  @IsInt()
+  @Min(1)
+  quantityUsed!: number;
+
+  @IsOptional()
+  @IsString()
+  memo!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  usedAt!: string | null;
+}
+
+export class SaveProjectProgressPhotoDto {
+  @IsOptional()
+  @IsString()
+  caption!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  takenAt!: string | null;
+}
+
+export class SaveProjectPatternCopyDto {
+  @IsUUID()
+  id!: string;
+
+  @IsUUID()
+  projectId!: string;
+
+  @IsOptional()
+  @IsUUID()
+  sourcePatternDocumentId!: string | null;
+
+  @IsString()
+  titleSnapshot!: string;
+
+  @IsOptional()
+  @IsString()
+  designerSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  fileNameSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  localCopyPath!: string | null;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  pageCountSnapshot!: number | null;
+
+  @IsOptional()
+  @IsString()
+  drawingDataPath!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  drawingUpdatedAt!: string | null;
+
+  @IsISO8601()
+  copiedAt!: string;
+}
+
+export class SaveProjectDto {
+  @IsUUID()
+  id!: string;
+
+  @IsString()
+  name!: string;
+
+  @IsString()
+  status!: string;
+
+  @IsBoolean()
+  isFavorite!: boolean;
+
+  @IsString()
+  memo!: string;
+
+  @IsISO8601()
+  startDate!: string;
+
+  @IsOptional()
+  @IsISO8601()
+  targetDate!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  finishedAt!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  lastWorkedAt!: string | null;
+
+  @IsOptional()
+  @IsUUID()
+  yarnId!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnNameSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnBrandSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnColorwaySnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnWeightSnapshot!: string | null;
+
+  @IsOptional()
+  @IsUUID()
+  needleId!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleNameSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleTypeSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleSizeSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleLengthSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  workspaceDisplayMode!: string | null;
+
+  @IsOptional()
+  @IsString()
+  workspaceSheetPosition!: string | null;
+
+  @IsArray()
+  @IsUUID('all', { each: true })
+  relatedSkillIds!: string[];
+
+  @ValidateNested()
+  @Type(() => SaveRowCounterDto)
+  rowCounter!: SaveRowCounterDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SaveProjectPatternCopyDto)
+  patternCopy!: SaveProjectPatternCopyDto | null | undefined;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SaveWorkSessionDto)
+  workSessions!: SaveWorkSessionDto[];
+}

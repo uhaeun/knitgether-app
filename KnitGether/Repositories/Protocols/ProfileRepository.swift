@@ -9,4 +9,5 @@ import Foundation
 
 protocol ProfileRepository {
     func fetchCurrentProfile() async throws -> UserProfile
+    func saveCurrentProfile(_ profile: UserProfile) async throws
 }
