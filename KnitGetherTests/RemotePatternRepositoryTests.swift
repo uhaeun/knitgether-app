@@ -141,6 +141,64 @@ struct RemotePatternRepositoryTests {
         try await repository.deletePattern(id: patternID)
     }
 
+    @Test func saveLocalOnlyPatternUploadsPdfWithStableID() async throws {
+        let tempDirectory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: tempDirectory) }
+
+        let patternID = UUID(uuidString: "44444444-4444-4444-8444-444444444444")!
+        let sourceURL = tempDirectory.appendingPathComponent("offline-shawl.pdf")
+        try Data("%PDF-1.4 offline".utf8).write(to: sourceURL)
+        let fileStore = LocalPatternFileStore(
+            rootDirectoryURL: tempDirectory.appendingPathComponent("cache", isDirectory: true)
+        )
+        let storedFile = try fileStore.storeLibraryPatternFile(from: sourceURL, patternId: patternID)
+        let now = Date(timeIntervalSince1970: 1_783_735_200)
+        let pattern = PatternDocument(
+            id: patternID,
+            ownerId: "user-a",
+            title: "Offline Shawl",
+            designer: "Yu",
+            fileName: storedFile.fileName,
+            localFilePath: storedFile.relativePath,
+            pageCount: 18,
+            notes: "Saved while offline.",
+            createdAt: now,
+            updatedAt: now,
+            syncStatus: .localOnly
+        )
+
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/patterns")
+            #expect(request.httpMethod == "POST")
+            #expect(request.value(forHTTPHeaderField: "Content-Type")?.hasPrefix("multipart/form-data; boundary=") == true)
+            let body = try Self.bodyData(from: request)
+            let bodyString = String(decoding: body, as: UTF8.self)
+            #expect(bodyString.contains(#"name="id""#))
+            #expect(bodyString.contains(patternID.uuidString.lowercased()))
+            #expect(bodyString.contains(#"name="title""#))
+            #expect(bodyString.contains("Offline Shawl"))
+            #expect(bodyString.contains(#"name="pageCount""#))
+            #expect(bodyString.contains("18"))
+            #expect(bodyString.contains(#"filename="offline-shawl.pdf""#))
+            #expect(bodyString.contains("%PDF-1.4 offline"))
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 201,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.patternResponseJSON.utf8))
+        }
+
+        let repository = Self.makeRepository(
+            session: session,
+            cacheRootURL: tempDirectory.appendingPathComponent("cache", isDirectory: true)
+        )
+
+        try await repository.savePattern(pattern)
+    }
+
     @Test func createProjectPatternCopyUploadsPdfToLibraryAndCachesProjectCopy() async throws {
         let tempDirectory = try Self.makeTempDirectory()
         defer { try? FileManager.default.removeItem(at: tempDirectory) }

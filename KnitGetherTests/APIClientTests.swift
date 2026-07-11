@@ -34,6 +34,7 @@ struct APIClientTests {
     }
 
     @Test func getThrowsStructuredErrorForHTTPFailure() async throws {
+        let recorder = AuthFailureRecorder()
         let session = MockURLProtocol.makeSession { request in
             let response = HTTPURLResponse(
                 url: request.url!,
@@ -50,7 +51,10 @@ struct APIClientTests {
         let client = APIClient(
             configuration: APIConfiguration(
                 baseURL: URL(string: "http://127.0.0.1:3000/api/v1")!,
-                authTokenProvider: { nil }
+                authTokenProvider: { nil },
+                authFailureHandler: {
+                    recorder.record()
+                }
             ),
             session: session
         )
@@ -61,6 +65,43 @@ struct APIClientTests {
         } catch let error as APIError {
             #expect(error.statusCode == 401)
             #expect(error.code == "UNAUTHENTICATED")
+            #expect(recorder.count == 1)
+        }
+    }
+
+    @Test func getDoesNotNotifyAuthFailureForNonUnauthorizedHTTPFailure() async throws {
+        let recorder = AuthFailureRecorder()
+        let session = MockURLProtocol.makeSession { request in
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 403,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (
+                response,
+                Data(#"{"code":"FORBIDDEN","message":"Access denied."}"#.utf8)
+            )
+        }
+
+        let client = APIClient(
+            configuration: APIConfiguration(
+                baseURL: URL(string: "http://127.0.0.1:3000/api/v1")!,
+                authTokenProvider: { nil },
+                authFailureHandler: {
+                    recorder.record()
+                }
+            ),
+            session: session
+        )
+
+        do {
+            let _: [String] = try await client.get("projects")
+            Issue.record("Expected APIError.requestFailed")
+        } catch let error as APIError {
+            #expect(error.statusCode == 403)
+            #expect(error.code == "FORBIDDEN")
+            #expect(recorder.count == 0)
         }
     }
 
@@ -173,5 +214,22 @@ struct APIClientTests {
         }
 
         return data
+    }
+}
+
+private final class AuthFailureRecorder: @unchecked Sendable {
+    private let lock = NSLock()
+    private var _count = 0
+
+    var count: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return _count
+    }
+
+    func record() {
+        lock.lock()
+        defer { lock.unlock() }
+        _count += 1
     }
 }
