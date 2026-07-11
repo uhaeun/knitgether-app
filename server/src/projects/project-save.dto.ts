@@ -4,12 +4,32 @@ import {
   IsBoolean,
   IsInt,
   IsISO8601,
+  IsIn,
   IsOptional,
   IsString,
   IsUUID,
   Min,
   ValidateNested,
 } from 'class-validator';
+
+export class SaveRowInstructionDto {
+  @IsUUID()
+  id!: string;
+
+  @IsUUID()
+  rowCounterId!: string;
+
+  @IsInt()
+  @Min(1)
+  rowNumber!: number;
+
+  @IsString()
+  instructionText!: string;
+
+  @IsOptional()
+  @IsString()
+  skillTags!: string | null;
+}
 
 export class SaveRowCounterDto {
   @IsUUID()
@@ -21,6 +41,18 @@ export class SaveRowCounterDto {
   @IsString()
   name!: string;
 
+  @IsOptional()
+  @IsIn(['simple', 'rowGuide'])
+  mode!: string | null;
+
+  @IsOptional()
+  @IsString()
+  sectionName!: string | null;
+
+  @IsOptional()
+  @IsString()
+  memo!: string | null;
+
   @IsInt()
   @Min(0)
   currentRow!: number;
@@ -29,6 +61,12 @@ export class SaveRowCounterDto {
   @IsInt()
   @Min(0)
   targetRow!: number | null;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SaveRowInstructionDto)
+  rowInstructions!: SaveRowInstructionDto[] | undefined;
 }
 
 export class SaveWorkSessionDto {
@@ -48,6 +86,42 @@ export class SaveWorkSessionDto {
   @IsOptional()
   @IsString()
   memo!: string | null;
+}
+
+export class SaveProjectYarnUsageDto {
+  @IsOptional()
+  @IsUUID()
+  id!: string | undefined;
+
+  @IsOptional()
+  @IsUUID()
+  yarnId!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnNameSnapshot!: string | null;
+
+  @IsInt()
+  @Min(1)
+  quantityUsed!: number;
+
+  @IsOptional()
+  @IsString()
+  memo!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  usedAt!: string | null;
+}
+
+export class SaveProjectProgressPhotoDto {
+  @IsOptional()
+  @IsString()
+  caption!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  takenAt!: string | null;
 }
 
 export class SaveProjectPatternCopyDto {
@@ -114,7 +188,55 @@ export class SaveProjectDto {
 
   @IsOptional()
   @IsISO8601()
+  targetDate!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
+  finishedAt!: string | null;
+
+  @IsOptional()
+  @IsISO8601()
   lastWorkedAt!: string | null;
+
+  @IsOptional()
+  @IsUUID()
+  yarnId!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnNameSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnBrandSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnColorwaySnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  yarnWeightSnapshot!: string | null;
+
+  @IsOptional()
+  @IsUUID()
+  needleId!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleNameSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleTypeSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleSizeSnapshot!: string | null;
+
+  @IsOptional()
+  @IsString()
+  needleLengthSnapshot!: string | null;
 
   @IsOptional()
   @IsString()

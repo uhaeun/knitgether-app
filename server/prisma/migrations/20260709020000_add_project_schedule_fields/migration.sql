@@ -1,0 +1,2 @@
+ALTER TABLE "Project" ADD COLUMN "targetDate" TIMESTAMP(3);
+ALTER TABLE "Project" ADD COLUMN "finishedAt" TIMESTAMP(3);

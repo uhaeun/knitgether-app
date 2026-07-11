@@ -69,6 +69,58 @@ export class LocalFileStorageService {
     };
   }
 
+  async saveProjectPatternCopyPdf(params: {
+    ownerId: string;
+    projectId: string;
+    copyId: string;
+    fileId: string;
+    buffer: Buffer;
+  }): Promise<StoredPatternPdf> {
+    const storageKey = [
+      'projects',
+      params.ownerId,
+      params.projectId,
+      'pattern-copies',
+      params.copyId,
+      `${params.fileId}.pdf`,
+    ].join('/');
+    const absolutePath = this.absolutePath(storageKey);
+
+    await fs.mkdir(dirname(absolutePath), { recursive: true });
+    await fs.writeFile(absolutePath, params.buffer);
+
+    return {
+      storageKey,
+      byteSize: params.buffer.byteLength,
+    };
+  }
+
+  async saveProjectProgressPhoto(params: {
+    ownerId: string;
+    projectId: string;
+    photoId: string;
+    fileName: string;
+    buffer: Buffer;
+  }): Promise<StoredPatternPdf> {
+    const storageKey = [
+      'projects',
+      params.ownerId,
+      params.projectId,
+      'progress-photos',
+      params.photoId,
+      params.fileName.replace(/[^a-zA-Z0-9._-]/g, '_'),
+    ].join('/');
+    const absolutePath = this.absolutePath(storageKey);
+
+    await fs.mkdir(dirname(absolutePath), { recursive: true });
+    await fs.writeFile(absolutePath, params.buffer);
+
+    return {
+      storageKey,
+      byteSize: params.buffer.byteLength,
+    };
+  }
+
   async assertExists(storageKey: string): Promise<void> {
     try {
       await fs.access(this.absolutePath(storageKey));

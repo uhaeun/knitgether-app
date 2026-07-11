@@ -5,11 +5,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AccessTokenService } from './access-token.service';
 import { AuthenticatedRequest } from './current-user.decorator';
 
 @Injectable()
 export class ApiAuthGuard implements CanActivate {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly accessTokenService: AccessTokenService,
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
@@ -32,6 +36,12 @@ export class ApiAuthGuard implements CanActivate {
   }
 
   private userIdForToken(token: string): string | null {
+    const jwtPayload = this.accessTokenService.verify(token);
+
+    if (jwtPayload) {
+      return jwtPayload.sub;
+    }
+
     const configuredTokens = this.configService.get<string>(
       'KNITGETHER_API_TOKENS',
     );
