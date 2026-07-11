@@ -35,6 +35,10 @@ final class LocalGaugeTargetRepository: GaugeTargetRepository {
         return target
     }
 
+    func updateGaugeTarget(_ target: GaugeTarget) async throws -> GaugeTarget {
+        try await saveGaugeTarget(target)
+    }
+
     func deleteGaugeTarget(id: UUID) async throws {
         targets.removeAll { $0.id == id }
         try persistTargets()

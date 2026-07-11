@@ -28,6 +28,32 @@ struct GaugeMeasureViewModelTests {
         #expect(viewModel.targets.map(\.id) == [target.id])
     }
 
+    @Test func saveExistingTargetUpdatesRepositoryTarget() async throws {
+        let target = Self.makeTarget()
+        let repository = GaugeTargetRepositorySpy(targets: [target])
+        let viewModel = GaugeMeasureViewModel(repository: repository)
+        await viewModel.load()
+
+        viewModel.targetForm = GaugeTargetFormData(
+            name: " Updated Cable Vest ",
+            width: "10",
+            height: "10",
+            stitches: "24",
+            rows: "32",
+            recommendedNeedle: " 4.5 mm "
+        )
+
+        let saved = await viewModel.saveTarget(existingID: target.id)
+
+        #expect(saved == true)
+        #expect(repository.savedTargets.isEmpty)
+        let updatedTarget = try #require(repository.updatedTargets.last)
+        #expect(updatedTarget.id == target.id)
+        #expect(updatedTarget.name == "Updated Cable Vest")
+        #expect(updatedTarget.targetStitches == 24)
+        #expect(updatedTarget.recommendedNeedle == "4.5 mm")
+    }
+
     @Test func saveSwatchAddsSwatchToExistingTarget() async throws {
         let target = Self.makeTarget()
         let repository = GaugeTargetRepositorySpy(targets: [target])
@@ -49,7 +75,7 @@ struct GaugeMeasureViewModelTests {
         let saved = await viewModel.saveSwatch(targetID: target.id)
 
         #expect(saved == true)
-        let savedTarget = try #require(repository.savedTargets.last)
+        let savedTarget = try #require(repository.updatedTargets.last)
         #expect(savedTarget.swatches.count == 1)
         #expect(savedTarget.swatches[0].needleSize == "4.0 mm")
         #expect(savedTarget.swatches[0].yarnName == "Merino")
@@ -78,7 +104,7 @@ struct GaugeMeasureViewModelTests {
         )
 
         #expect(saved == true)
-        let savedTarget = try #require(repository.savedTargets.last)
+        let savedTarget = try #require(repository.updatedTargets.last)
         let measurement = try #require(savedTarget.swatches.first?.measurements.first)
         #expect(measurement.method == .manual)
         #expect(measurement.washState == .before)
@@ -108,7 +134,7 @@ struct GaugeMeasureViewModelTests {
         )
 
         #expect(saved == true)
-        let savedTarget = try #require(repository.savedTargets.last)
+        let savedTarget = try #require(repository.updatedTargets.last)
         let measurement = try #require(savedTarget.swatches.first?.measurements.first)
         #expect(measurement.method == .photo4pt)
         #expect(measurement.washState == .after)
@@ -161,6 +187,7 @@ struct GaugeMeasureViewModelTests {
 private final class GaugeTargetRepositorySpy: GaugeTargetRepository {
     var targets: [GaugeTarget]
     var savedTargets: [GaugeTarget] = []
+    var updatedTargets: [GaugeTarget] = []
     var deletedTargetIDs: [UUID] = []
 
     init(targets: [GaugeTarget] = []) {
@@ -198,8 +225,39 @@ private final class GaugeTargetRepositorySpy: GaugeTargetRepository {
         return saved
     }
 
+    func updateGaugeTarget(_ target: GaugeTarget) async throws -> GaugeTarget {
+        let updated = syncedTarget(from: target)
+        updatedTargets.append(updated)
+        if let index = targets.firstIndex(where: { $0.id == updated.id }) {
+            targets[index] = updated
+        } else {
+            targets.insert(updated, at: 0)
+        }
+        return updated
+    }
+
     func deleteGaugeTarget(id: UUID) async throws {
         deletedTargetIDs.append(id)
         targets.removeAll { $0.id == id }
+    }
+
+    private func syncedTarget(from target: GaugeTarget) -> GaugeTarget {
+        GaugeTarget(
+            id: target.id,
+            ownerId: target.ownerId,
+            name: target.name,
+            targetStitches: target.targetStitches,
+            targetWidth: target.targetWidth,
+            targetRows: target.targetRows,
+            targetHeight: target.targetHeight,
+            isQuickMeasure: target.isQuickMeasure,
+            gaugeAfterWash: target.gaugeAfterWash,
+            recommendedNeedle: target.recommendedNeedle,
+            sourcePatternId: target.sourcePatternId,
+            createdAt: target.createdAt,
+            updatedAt: Date(timeIntervalSince1970: 200),
+            syncStatus: .synced,
+            swatches: target.swatches
+        )
     }
 }

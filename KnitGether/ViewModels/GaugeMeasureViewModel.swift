@@ -225,7 +225,12 @@ final class GaugeMeasureViewModel: ObservableObject {
         )
 
         do {
-            let saved = try await repository.saveGaugeTarget(targetToSave)
+            let saved: GaugeTarget
+            if existingTarget == nil {
+                saved = try await repository.saveGaugeTarget(targetToSave)
+            } else {
+                saved = try await repository.updateGaugeTarget(targetToSave)
+            }
             upsert(saved)
             targetForm = GaugeTargetFormData()
             statusMessage = "목표 게이지를 저장했어요."
@@ -483,7 +488,7 @@ final class GaugeMeasureViewModel: ObservableObject {
         defer { isSaving = false }
 
         do {
-            let saved = try await repository.saveGaugeTarget(target)
+            let saved = try await repository.updateGaugeTarget(target)
             upsert(saved)
             swatchForm = GaugeSwatchFormData()
             measurementForm = GaugeMeasurementFormData()
