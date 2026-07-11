@@ -190,7 +190,8 @@ struct OfflineFirstProjectRepositoryTests {
 
         _ = try await restartedRepository.fetchProjects()
 
-        #expect(remote.savedRowCounters.map(\.currentRow) == [24])
+        #expect(remote.savedProjects.map(\.rowCounter.currentRow) == [24])
+        #expect(remote.savedRowCounters.isEmpty)
         #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
         #expect(try await restartedLocal.fetchProject(id: project.id)?.rowCounter.syncStatus == .synced)
     }
@@ -212,8 +213,8 @@ struct OfflineFirstProjectRepositoryTests {
 
         _ = try await restartedRepository.fetchProjects()
 
-        #expect(remote.savedRowInstructionMethods == ["POST"])
-        #expect(remote.savedRowInstructions.map(\.id) == [instruction.id])
+        #expect(remote.savedProjects.map { $0.rowCounter.rowInstructions.map(\.id) } == [[instruction.id]])
+        #expect(remote.savedRowInstructions.isEmpty)
         #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
         #expect(try await restartedLocal.fetchProject(id: project.id)?.rowCounter.rowInstructions.first?.syncStatus == .synced)
     }
@@ -240,8 +241,8 @@ struct OfflineFirstProjectRepositoryTests {
         _ = try await restartedRepository.fetchProjects()
         _ = try await restartedRepository.fetchProjects()
 
-        #expect(remote.savedWorkSessionMethods == ["POST"])
-        #expect(remote.savedWorkSessions.map(\.id) == [session.id])
+        #expect(remote.savedProjects.map { $0.workSessions.map(\.id) } == [[session.id]])
+        #expect(remote.savedWorkSessions.isEmpty)
         #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
         #expect(try await restartedLocal.fetchProject(id: project.id)?.workSessions.first?.syncStatus == .synced)
     }
@@ -305,6 +306,213 @@ struct OfflineFirstProjectRepositoryTests {
         #expect(await local.pendingProjectsForSync().isEmpty)
     }
 
+    @Test func pendingProjectScalarAndNewRowInstructionRetryUploadsAggregateProject() async throws {
+        let fileURL = Self.tempProjectFileURL()
+        let project = Self.makeProject(syncStatus: .synced)
+        let instruction = Self.makeRowInstruction(project: project, rowNumber: 64, syncStatus: .localOnly)
+        let updatedProject = project.copy(
+            name: "Updated Offline Cardigan",
+            rowCounter: project.rowCounter.copy(targetRow: 64, rowInstructions: [instruction]),
+            syncStatus: .synced
+        )
+        let local = LocalProjectRepository(projects: [project], seedSamples: false, fileURL: fileURL)
+        let remote = ProjectRepositoryFake()
+        remote.saveProjectError = URLError(.notConnectedToInternet)
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        try await repository.saveProject(updatedProject)
+
+        let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
+        let pendingProject = try #require(await restartedLocal.pendingProjectsForSync().first)
+        #expect(pendingProject.name == "Updated Offline Cardigan")
+        #expect(pendingProject.syncStatus == .pendingUpload)
+        #expect(pendingProject.rowCounter.rowInstructions.map(\.syncStatus) == [.localOnly])
+
+        let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
+        remote.saveProjectError = nil
+        remote.updatesRemoteProjectsOnSave = true
+
+        _ = try await restartedRepository.fetchProjects()
+
+        let uploadedProject = try #require(remote.savedProjects.first)
+        #expect(uploadedProject.name == "Updated Offline Cardigan")
+        #expect(uploadedProject.rowCounter.rowInstructions.map(\.id) == [instruction.id])
+        #expect(remote.savedRowInstructions.isEmpty)
+        #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
+
+        let cachedProject = try #require(await restartedLocal.fetchProject(id: project.id))
+        #expect(cachedProject.name == "Updated Offline Cardigan")
+        #expect(cachedProject.syncStatus == .synced)
+        #expect(cachedProject.rowCounter.rowInstructions.map(\.syncStatus) == [.synced])
+    }
+
+    @Test func pendingRowCounterScalarAndChildRetryUploadsAggregateProject() async throws {
+        let fileURL = Self.tempProjectFileURL()
+        let project = Self.makeProject(syncStatus: .synced)
+        let instruction = Self.makeRowInstruction(project: project, rowNumber: 72, syncStatus: .localOnly)
+        let updatedCounter = project.rowCounter.copy(
+            currentRow: 18,
+            targetRow: 72,
+            rowInstructions: [instruction]
+        )
+        let updatedProject = project.copy(rowCounter: updatedCounter, syncStatus: .synced)
+        let local = LocalProjectRepository(projects: [project], seedSamples: false, fileURL: fileURL)
+        let remote = ProjectRepositoryFake()
+        remote.saveProjectError = Self.serverError()
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        try await repository.saveProject(updatedProject)
+
+        let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
+        let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
+        remote.saveProjectError = nil
+        remote.updatesRemoteProjectsOnSave = true
+
+        _ = try await restartedRepository.fetchProjects()
+
+        let uploadedProject = try #require(remote.savedProjects.first)
+        #expect(uploadedProject.rowCounter.currentRow == 18)
+        #expect(uploadedProject.rowCounter.targetRow == 72)
+        #expect(uploadedProject.rowCounter.rowInstructions.map(\.id) == [instruction.id])
+        #expect(remote.savedRowCounters.isEmpty)
+        #expect(remote.savedRowInstructions.isEmpty)
+        #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
+    }
+
+    @Test func pendingAggregateRetryFailureKeepsParentPendingUntilFullUploadSucceeds() async throws {
+        let project = Self.makeProject(syncStatus: .synced)
+        let instruction = Self.makeRowInstruction(project: project, rowNumber: 88, syncStatus: .localOnly)
+        let pendingProject = project.copy(
+            rowCounter: project.rowCounter.copy(targetRow: 88, rowInstructions: [instruction]),
+            syncStatus: .pendingUpload
+        )
+        let local = LocalProjectRepository(projects: [pendingProject])
+        let remote = ProjectRepositoryFake()
+        remote.saveProjectError = Self.serverError()
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        _ = try await repository.fetchProjects()
+
+        #expect(remote.savedProjects.isEmpty)
+        #expect(remote.savedRowInstructions.isEmpty)
+        let stillPending = try #require(await local.pendingProjectsForSync().first)
+        #expect(stillPending.syncStatus == .pendingUpload)
+        #expect(stillPending.rowCounter.rowInstructions.map(\.syncStatus) == [.localOnly])
+    }
+
+    @Test func retryableRowInstructionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry() async throws {
+        let fileURL = Self.tempProjectFileURL()
+        let project = Self.makeProjectWithRowInstruction()
+        let local = LocalProjectRepository(projects: [project], seedSamples: false, fileURL: fileURL)
+        let remote = ProjectRepositoryFake()
+        remote.remoteProjects = [project]
+        remote.updatesRemoteProjectsOnSave = true
+        remote.deleteRowInstructionError = URLError(.notConnectedToInternet)
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+        let instructionID = try #require(project.rowCounter.rowInstructions.first?.id)
+
+        try await repository.deleteRowInstruction(id: instructionID, forProjectId: project.id)
+
+        let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
+        let pendingProject = try #require(await restartedLocal.pendingProjectsForSync().first)
+        #expect(pendingProject.syncStatus == .pendingUpload)
+        #expect(pendingProject.rowCounter.rowInstructions.isEmpty)
+
+        let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
+        remote.deleteRowInstructionError = nil
+        _ = try await restartedRepository.fetchProjects()
+        _ = try await restartedRepository.fetchProjects()
+
+        #expect(remote.savedProjects.map { $0.rowCounter.rowInstructions.count } == [0])
+        #expect(remote.deletedRowInstructionIDs.isEmpty)
+        #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
+        #expect(try await restartedLocal.fetchProject(id: project.id)?.rowCounter.rowInstructions.isEmpty == true)
+    }
+
+    @Test func retryableWorkSessionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry() async throws {
+        let fileURL = Self.tempProjectFileURL()
+        let session = Self.makeWorkSession(syncStatus: .synced)
+        let project = Self.makeProject(syncStatus: .synced).copy(workSessions: [session], syncStatus: .synced)
+        let local = LocalProjectRepository(projects: [project], seedSamples: false, fileURL: fileURL)
+        let remote = ProjectRepositoryFake()
+        remote.remoteProjects = [project]
+        remote.updatesRemoteProjectsOnSave = true
+        remote.deleteWorkSessionError = Self.serverError()
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        try await repository.deleteWorkSession(id: session.id, forProjectId: project.id)
+
+        let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
+        let pendingProject = try #require(await restartedLocal.pendingProjectsForSync().first)
+        #expect(pendingProject.syncStatus == .pendingUpload)
+        #expect(pendingProject.workSessions.isEmpty)
+
+        let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
+        remote.deleteWorkSessionError = nil
+        _ = try await restartedRepository.fetchProjects()
+        _ = try await restartedRepository.fetchProjects()
+
+        #expect(remote.savedProjects.map { $0.workSessions.count } == [0])
+        #expect(remote.deletedWorkSessionIDs.isEmpty)
+        #expect(await restartedLocal.pendingProjectsForSync().isEmpty)
+        #expect(try await restartedLocal.fetchProject(id: project.id)?.workSessions.isEmpty == true)
+    }
+
+    @Test func successfulDirectChildDeleteLeavesNoParentPending() async throws {
+        let project = Self.makeProjectWithRowInstruction()
+        let local = LocalProjectRepository(projects: [project])
+        let remote = ProjectRepositoryFake()
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+        let instructionID = try #require(project.rowCounter.rowInstructions.first?.id)
+
+        try await repository.deleteRowInstruction(id: instructionID, forProjectId: project.id)
+
+        #expect(remote.deletedRowInstructionIDs == [instructionID])
+        #expect(await local.pendingProjectsForSync().isEmpty)
+        #expect(try await local.fetchProject(id: project.id)?.rowCounter.rowInstructions.isEmpty == true)
+    }
+
+    @Test func alreadyDeletedChildKeepsLocalDeleteWithoutPending() async throws {
+        let session = Self.makeWorkSession(syncStatus: .synced)
+        let project = Self.makeProject(syncStatus: .synced).copy(workSessions: [session], syncStatus: .synced)
+        let local = LocalProjectRepository(projects: [project])
+        let remote = ProjectRepositoryFake()
+        remote.deleteWorkSessionError = APIError.requestFailed(
+            statusCode: 404,
+            code: "WORK_SESSION_NOT_FOUND",
+            message: "Work session not found."
+        )
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        try await repository.deleteWorkSession(id: session.id, forProjectId: project.id)
+
+        #expect(await local.pendingProjectsForSync().isEmpty)
+        #expect(try await local.fetchProject(id: project.id)?.workSessions.isEmpty == true)
+    }
+
+    @Test func nonRetryableChildDeleteRestoresSnapshotAndLeavesNoPending() async throws {
+        let session = Self.makeWorkSession(syncStatus: .synced)
+        let project = Self.makeProject(syncStatus: .synced).copy(workSessions: [session], syncStatus: .synced)
+        let local = LocalProjectRepository(projects: [project])
+        let remote = ProjectRepositoryFake()
+        remote.deleteWorkSessionError = APIError.requestFailed(
+            statusCode: 400,
+            code: "VALIDATION_ERROR",
+            message: "Invalid work session delete."
+        )
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        do {
+            try await repository.deleteWorkSession(id: session.id, forProjectId: project.id)
+            Issue.record("Expected non-retryable work session delete to throw.")
+        } catch let error as APIError {
+            #expect(error.statusCode == 400)
+        }
+
+        #expect(await local.pendingProjectsForSync().isEmpty)
+        #expect(try await local.fetchProject(id: project.id)?.workSessions.map(\.id) == [session.id])
+    }
+
     private static func makeProject(
         id: UUID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!,
         name: String = "Favorite Cardigan",
@@ -340,6 +548,15 @@ struct OfflineFirstProjectRepositoryTests {
         )
     }
 
+    private static func makeProjectWithRowInstruction() -> KnittingProject {
+        let project = makeProject(syncStatus: .synced)
+        let instruction = makeRowInstruction(project: project, rowNumber: 12, syncStatus: .synced)
+        return project.copy(
+            rowCounter: project.rowCounter.copy(rowInstructions: [instruction]),
+            syncStatus: .synced
+        )
+    }
+
     private static func makeRowInstruction(
         id: UUID = UUID(uuidString: "88888888-8888-4888-8888-888888888888")!,
         project: KnittingProject,
@@ -355,6 +572,24 @@ struct OfflineFirstProjectRepositoryTests {
             rowNumber: rowNumber,
             instructionText: "Knit to marker.",
             skillTags: "K",
+            createdAt: now,
+            updatedAt: now,
+            syncStatus: syncStatus
+        )
+    }
+
+    private static func makeWorkSession(
+        id: UUID = UUID(uuidString: "77777777-7777-4777-8777-777777777777")!,
+        syncStatus: SyncStatus
+    ) -> WorkSession {
+        let now = Date(timeIntervalSince1970: 1_783_735_200)
+        return WorkSession(
+            id: id,
+            ownerId: "user-a",
+            projectId: UUID(uuidString: "11111111-1111-4111-8111-111111111111")!,
+            startedAt: now,
+            endedAt: now.addingTimeInterval(3_600),
+            memo: "Sleeve increases.",
             createdAt: now,
             updatedAt: now,
             syncStatus: syncStatus
@@ -386,12 +621,17 @@ private final class ProjectRepositoryFake: ProjectRepository {
     var savedWorkSessions: [WorkSession] = []
     var savedWorkSessionMethods: [String] = []
     var deletedProjectIDs: [UUID] = []
+    var deletedRowInstructionIDs: [UUID] = []
+    var deletedWorkSessionIDs: [UUID] = []
     var fetchProjectsError: Error?
     var saveProjectError: Error?
     var saveRowCounterError: Error?
     var saveRowInstructionError: Error?
     var saveWorkSessionError: Error?
     var deleteProjectError: Error?
+    var deleteRowInstructionError: Error?
+    var deleteWorkSessionError: Error?
+    var updatesRemoteProjectsOnSave = false
 
     func fetchProjects() async throws -> [KnittingProject] {
         if let fetchProjectsError {
@@ -415,6 +655,11 @@ private final class ProjectRepositoryFake: ProjectRepository {
         }
 
         savedProjects.append(project)
+        guard updatesRemoteProjectsOnSave else {
+            return
+        }
+
+        upsertRemoteProject(Self.syncedAggregate(project))
     }
 
     func saveRowCounter(_ rowCounter: RowCounter, forProjectId projectId: UUID) async throws -> RowCounter {
@@ -490,5 +735,111 @@ private final class ProjectRepositoryFake: ProjectRepository {
         }
 
         deletedProjectIDs.append(id)
+    }
+
+    func deleteRowInstruction(id: UUID, forProjectId projectId: UUID) async throws {
+        if let deleteRowInstructionError {
+            throw deleteRowInstructionError
+        }
+
+        deletedRowInstructionIDs.append(id)
+        guard updatesRemoteProjectsOnSave else {
+            return
+        }
+
+        remoteProjects = remoteProjects.map { project in
+            guard project.id == projectId else {
+                return project
+            }
+
+            let updatedCounter = project.rowCounter.copy(
+                rowInstructions: project.rowCounter.rowInstructions.filter { $0.id != id }
+            )
+            return project.copy(rowCounter: updatedCounter, syncStatus: .synced)
+        }
+    }
+
+    func deleteWorkSession(id: UUID, forProjectId projectId: UUID) async throws {
+        if let deleteWorkSessionError {
+            throw deleteWorkSessionError
+        }
+
+        deletedWorkSessionIDs.append(id)
+        guard updatesRemoteProjectsOnSave else {
+            return
+        }
+
+        remoteProjects = remoteProjects.map { project in
+            guard project.id == projectId else {
+                return project
+            }
+
+            return project.copy(
+                workSessions: project.workSessions.filter { $0.id != id },
+                syncStatus: .synced
+            )
+        }
+    }
+
+    private func upsertRemoteProject(_ project: KnittingProject) {
+        if let index = remoteProjects.firstIndex(where: { $0.id == project.id }) {
+            remoteProjects[index] = project
+        } else {
+            remoteProjects.append(project)
+        }
+    }
+
+    private static func syncedAggregate(_ project: KnittingProject) -> KnittingProject {
+        let syncedInstructions = project.rowCounter.rowInstructions.map { instruction in
+            RowInstruction(
+                id: instruction.id,
+                ownerId: instruction.ownerId,
+                projectId: instruction.projectId,
+                rowCounterId: instruction.rowCounterId,
+                rowNumber: instruction.rowNumber,
+                instructionText: instruction.instructionText,
+                skillTags: instruction.skillTags,
+                createdAt: instruction.createdAt,
+                updatedAt: instruction.updatedAt,
+                deletedAt: instruction.deletedAt,
+                syncStatus: .synced
+            )
+        }
+        let syncedCounter = RowCounter(
+            id: project.rowCounter.id,
+            ownerId: project.rowCounter.ownerId,
+            projectId: project.rowCounter.projectId,
+            name: project.rowCounter.name,
+            mode: project.rowCounter.mode,
+            sectionName: project.rowCounter.sectionName,
+            memo: project.rowCounter.memo,
+            currentRow: project.rowCounter.currentRow,
+            targetRow: project.rowCounter.targetRow,
+            rowInstructions: syncedInstructions,
+            createdAt: project.rowCounter.createdAt,
+            updatedAt: project.rowCounter.updatedAt,
+            deletedAt: project.rowCounter.deletedAt,
+            syncStatus: .synced
+        )
+        let syncedSessions = project.workSessions.map { session in
+            WorkSession(
+                id: session.id,
+                ownerId: session.ownerId,
+                projectId: session.projectId,
+                startedAt: session.startedAt,
+                endedAt: session.endedAt,
+                memo: session.memo,
+                createdAt: session.createdAt,
+                updatedAt: session.updatedAt,
+                deletedAt: session.deletedAt,
+                syncStatus: .synced
+            )
+        }
+
+        return project.copy(
+            rowCounter: syncedCounter,
+            workSessions: syncedSessions,
+            syncStatus: .synced
+        )
     }
 }

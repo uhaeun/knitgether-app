@@ -142,7 +142,11 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         do {
             try await remote.deleteRowInstruction(id: id, forProjectId: projectId)
         } catch {
-            try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await handleChildDeleteFailure(
+                rollbackSnapshot,
+                projectId: projectId,
+                after: error
+            )
         }
     }
 
@@ -180,7 +184,11 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         do {
             try await remote.deleteWorkSession(id: id, forProjectId: projectId)
         } catch {
-            try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            try await handleChildDeleteFailure(
+                rollbackSnapshot,
+                projectId: projectId,
+                after: error
+            )
         }
     }
 
@@ -190,10 +198,6 @@ final class OfflineFirstProjectRepository: ProjectRepository {
                 if project.syncStatus == .pendingDelete {
                     try await remote.deleteProject(id: project.id)
                     try await local.removeProjectTombstone(id: project.id)
-                } else if project.syncStatus == .pendingUpload,
-                          hasPendingChildSaves(project) {
-                    let syncedProject = try await syncPendingChildChanges(for: project)
-                    try await local.markProjectSynced(syncedProject)
                 } else {
                     let uploadProject = project.copy(
                         syncStatus: project.syncStatus == .pendingUpload ? .synced : .localOnly
@@ -245,44 +249,7 @@ final class OfflineFirstProjectRepository: ProjectRepository {
             // Saving already succeeded. Keep the local cache usable even if the follow-up read fails.
         }
 
-        try await local.markProjectSynced(project)
-    }
-
-    private func syncPendingChildChanges(for project: KnittingProject) async throws -> KnittingProject {
-        if shouldSavePendingChild(project.rowCounter.syncStatus) {
-            let syncedCounter = try await remote.saveRowCounter(
-                copyRowCounter(project.rowCounter, syncStatus: uploadSyncStatus(for: project.rowCounter.syncStatus)),
-                forProjectId: project.id
-            )
-            _ = try await local.saveRowCounter(
-                copyRowCounter(syncedCounter, syncStatus: .synced),
-                forProjectId: project.id
-            )
-        }
-
-        for instruction in project.rowCounter.rowInstructions where shouldSavePendingChild(instruction.syncStatus) {
-            let syncedInstruction = try await remote.saveRowInstruction(
-                copyRowInstruction(instruction, syncStatus: uploadSyncStatus(for: instruction.syncStatus)),
-                forProjectId: project.id
-            )
-            _ = try await local.saveRowInstruction(
-                copyRowInstruction(syncedInstruction, syncStatus: .synced),
-                forProjectId: project.id
-            )
-        }
-
-        for session in project.workSessions where shouldSavePendingChild(session.syncStatus) {
-            let syncedSession = try await remote.saveWorkSession(
-                copyWorkSession(session, syncStatus: uploadSyncStatus(for: session.syncStatus)),
-                forProjectId: project.id
-            )
-            _ = try await local.saveWorkSession(
-                copyWorkSession(syncedSession, syncStatus: .synced),
-                forProjectId: project.id
-            )
-        }
-
-        return try await local.fetchProject(id: project.id) ?? project
+        try await local.markProjectSynced(syncedAggregate(project))
     }
 
     private func markProjectPendingForRetry(
@@ -302,16 +269,6 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         try await local.saveProject(project.copy(syncStatus: syncStatus))
     }
 
-    private func hasPendingChildSaves(_ project: KnittingProject) -> Bool {
-        shouldSavePendingChild(project.rowCounter.syncStatus)
-            || project.rowCounter.rowInstructions.contains { shouldSavePendingChild($0.syncStatus) }
-            || project.workSessions.contains { shouldSavePendingChild($0.syncStatus) }
-    }
-
-    private func shouldSavePendingChild(_ syncStatus: SyncStatus) -> Bool {
-        syncStatus == .localOnly || syncStatus == .pendingUpload
-    }
-
     private func shouldDefer(_ error: Error) -> Bool {
         if error is URLError {
             return true
@@ -325,6 +282,14 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         return false
     }
 
+    private func isAlreadyDeleted(_ error: Error) -> Bool {
+        guard let apiError = error as? APIError else {
+            return false
+        }
+
+        return apiError.statusCode == 404
+    }
+
     private func rollbackLocalChangeIfRejected(
         _ snapshot: [KnittingProject],
         after error: Error
@@ -335,6 +300,19 @@ final class OfflineFirstProjectRepository: ProjectRepository {
 
         try? await local.restoreRollbackSnapshot(snapshot)
         throw error
+    }
+
+    private func handleChildDeleteFailure(
+        _ snapshot: [KnittingProject],
+        projectId: UUID,
+        after error: Error
+    ) async throws {
+        guard !isAlreadyDeleted(error) else {
+            return
+        }
+
+        try await rollbackLocalChangeIfRejected(snapshot, after: error)
+        try await markProjectPendingForRetry(projectId: projectId, after: error)
     }
 
     private func localSaveSyncStatus(for syncStatus: SyncStatus) -> SyncStatus {
@@ -361,7 +339,31 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         }
     }
 
-    private func copyRowCounter(_ rowCounter: RowCounter, syncStatus: SyncStatus) -> RowCounter {
+    private func syncedAggregate(_ project: KnittingProject) -> KnittingProject {
+        let syncedInstructions = project.rowCounter.rowInstructions.map {
+            copyRowInstruction($0, syncStatus: .synced)
+        }
+        let syncedCounter = copyRowCounter(
+            project.rowCounter,
+            rowInstructions: syncedInstructions,
+            syncStatus: .synced
+        )
+        let syncedSessions = project.workSessions.map {
+            copyWorkSession($0, syncStatus: .synced)
+        }
+
+        return project.copy(
+            rowCounter: syncedCounter,
+            workSessions: syncedSessions,
+            syncStatus: .synced
+        )
+    }
+
+    private func copyRowCounter(
+        _ rowCounter: RowCounter,
+        rowInstructions: [RowInstruction]? = nil,
+        syncStatus: SyncStatus
+    ) -> RowCounter {
         RowCounter(
             id: rowCounter.id,
             ownerId: rowCounter.ownerId,
@@ -372,7 +374,7 @@ final class OfflineFirstProjectRepository: ProjectRepository {
             memo: rowCounter.memo,
             currentRow: rowCounter.currentRow,
             targetRow: rowCounter.targetRow,
-            rowInstructions: rowCounter.rowInstructions,
+            rowInstructions: rowInstructions ?? rowCounter.rowInstructions,
             createdAt: rowCounter.createdAt,
             updatedAt: rowCounter.updatedAt,
             deletedAt: rowCounter.deletedAt,
