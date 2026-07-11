@@ -1,0 +1,132 @@
+{
+  "info": {
+    "name": "KnitGether Local API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000/api/v1"
+    },
+    {
+      "key": "token",
+      "value": "dev-token"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Auth Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"yuha@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": "{{baseUrl}}/auth/login"
+      }
+    },
+    {
+      "name": "Projects List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/projects"
+      }
+    },
+    {
+      "name": "Projects Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"QA Cardigan\",\n  \"status\": \"co\",\n  \"memo\": \"Postman smoke project\"\n}"
+        },
+        "url": "{{baseUrl}}/projects"
+      }
+    },
+    {
+      "name": "Patterns List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/patterns"
+      }
+    },
+    {
+      "name": "Library Yarns List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/library/yarns"
+      }
+    },
+    {
+      "name": "Library Needles List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/library/needles"
+      }
+    },
+    {
+      "name": "Library Tools List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/library/tools"
+      }
+    },
+    {
+      "name": "Skills List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/skills"
+      }
+    },
+    {
+      "name": "Dictionary Terms List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/dictionary-terms"
+      }
+    },
+    {
+      "name": "Gauge Records List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/gauge-records"
+      }
+    },
+    {
+      "name": "Gauge Targets List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/gauge-targets"
+      }
+    }
+  ]
+}
