@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHmac, timingSafeEqual } from 'crypto';
 
@@ -95,10 +95,23 @@ export class AccessTokenService {
   }
 
   private secret(): string {
-    return (
-      this.configService.get<string>('AUTH_JWT_SECRET') ??
-      'knitgether-local-development-secret'
-    );
+    const configuredSecret = this.configService
+      .get<string>('AUTH_JWT_SECRET')
+      ?.trim();
+
+    if (configuredSecret) {
+      return configuredSecret;
+    }
+
+    if (this.isProduction()) {
+      throw new InternalServerErrorException({
+        code: 'AUTH_JWT_SECRET_REQUIRED',
+        message: 'AUTH_JWT_SECRET is required in production.',
+        details: {},
+      });
+    }
+
+    return 'knitgether-local-development-secret';
   }
 
   private expiresInSeconds(): number {
@@ -106,5 +119,9 @@ export class AccessTokenService {
     const value = rawValue ? Number(rawValue) : 60 * 60 * 24 * 30;
 
     return Number.isFinite(value) && value > 0 ? value : 60 * 60 * 24 * 30;
+  }
+
+  private isProduction(): boolean {
+    return this.configService.get<string>('NODE_ENV') === 'production';
   }
 }

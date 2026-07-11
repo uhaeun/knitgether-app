@@ -51,13 +51,29 @@ export class ApiAuthGuard implements CanActivate {
       return mappedUserId;
     }
 
-    const devToken = this.configService.get<string>('DEV_AUTH_TOKEN') ?? 'dev-token';
+    const devToken = this.developmentDevToken();
 
-    if (token === devToken) {
-      return this.configService.get<string>('DEV_AUTH_USER_ID') ?? 'dev-user';
+    if (devToken && token === devToken) {
+      return this.developmentDevUserId();
     }
 
     return null;
+  }
+
+  private developmentDevToken(): string | null {
+    if (this.isProduction()) {
+      return null;
+    }
+
+    return this.configService.get<string>('DEV_AUTH_TOKEN') ?? 'dev-token';
+  }
+
+  private developmentDevUserId(): string {
+    return this.configService.get<string>('DEV_AUTH_USER_ID') ?? 'dev-user';
+  }
+
+  private isProduction(): boolean {
+    return this.configService.get<string>('NODE_ENV') === 'production';
   }
 
   private userIdFromConfiguredTokens(
