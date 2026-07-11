@@ -150,6 +150,85 @@ struct LocalRepositoryPersistenceTests {
         #expect(cachedProfile.syncStatus == .synced)
     }
 
+    @Test func gaugeTargetRepositoryCanLoadDiskCacheAfterRecreation() async throws {
+        let tempDirectory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: tempDirectory) }
+        let fileURL = tempDirectory.appendingPathComponent("gauge-targets.json")
+        let target = Self.makeGaugeTarget(name: "Cached Sweater Gauge")
+        let writer = LocalGaugeTargetRepository(
+            targets: [],
+            fileURL: fileURL
+        )
+
+        #expect(try await writer.fetchGaugeTargets().isEmpty)
+
+        _ = try await writer.saveGaugeTarget(target)
+
+        let reader = LocalGaugeTargetRepository(fileURL: fileURL)
+        let targets = try await reader.fetchGaugeTargets()
+
+        #expect(targets.map(\.id) == [target.id])
+        #expect(targets.map(\.name) == ["Cached Sweater Gauge"])
+    }
+
+    @Test func gaugeTargetRepositoryPersistsUpdatesWithoutDuplicatingTargets() async throws {
+        let tempDirectory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: tempDirectory) }
+        let fileURL = tempDirectory.appendingPathComponent("gauge-targets.json")
+        let target = Self.makeGaugeTarget(name: "Original Gauge")
+        let updatedTarget = Self.makeGaugeTarget(
+            id: target.id,
+            name: "Updated Gauge",
+            targetStitches: 24,
+            updatedAt: Date(timeIntervalSince1970: 1_783_735_260)
+        )
+        let writer = LocalGaugeTargetRepository(
+            targets: [],
+            fileURL: fileURL
+        )
+
+        _ = try await writer.saveGaugeTarget(target)
+        _ = try await writer.saveGaugeTarget(updatedTarget)
+
+        let reader = LocalGaugeTargetRepository(fileURL: fileURL)
+        let targets = try await reader.fetchGaugeTargets()
+
+        #expect(targets.count == 1)
+        #expect(targets.first?.id == target.id)
+        #expect(targets.first?.name == "Updated Gauge")
+        #expect(targets.first?.targetStitches == 24)
+    }
+
+    @Test func gaugeTargetRepositoryPersistsDeletesAfterRecreation() async throws {
+        let tempDirectory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: tempDirectory) }
+        let fileURL = tempDirectory.appendingPathComponent("gauge-targets.json")
+        let target = Self.makeGaugeTarget(name: "Deleted Gauge")
+        let writer = LocalGaugeTargetRepository(
+            targets: [],
+            fileURL: fileURL
+        )
+
+        _ = try await writer.saveGaugeTarget(target)
+        try await writer.deleteGaugeTarget(id: target.id)
+
+        let reader = LocalGaugeTargetRepository(fileURL: fileURL)
+        let targets = try await reader.fetchGaugeTargets()
+
+        #expect(targets.isEmpty)
+    }
+
+    @Test func gaugeTargetRepositoryStartsEmptyWhenCacheFileDoesNotExist() async throws {
+        let tempDirectory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: tempDirectory) }
+        let fileURL = tempDirectory.appendingPathComponent("missing-gauge-targets.json")
+        let repository = LocalGaugeTargetRepository(fileURL: fileURL)
+
+        let targets = try await repository.fetchGaugeTargets()
+
+        #expect(targets.isEmpty)
+    }
+
     private static func makeProject(syncStatus: SyncStatus) -> KnittingProject {
         let now = Date(timeIntervalSince1970: 1_783_735_200)
         let projectId = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
@@ -175,6 +254,36 @@ struct LocalRepositoryPersistenceTests {
             workSessions: [],
             createdAt: now,
             updatedAt: now,
+            syncStatus: syncStatus
+        )
+    }
+
+    private static func makeGaugeTarget(
+        id: UUID = UUID(uuidString: "abababab-abab-4aba-8bab-abababababab")!,
+        name: String,
+        targetStitches: Double = 22,
+        targetWidth: Double = 10,
+        targetRows: Double = 30,
+        targetHeight: Double = 10,
+        createdAt: Date = Date(timeIntervalSince1970: 1_783_735_200),
+        updatedAt: Date = Date(timeIntervalSince1970: 1_783_735_200),
+        syncStatus: SyncStatus = .synced
+    ) -> GaugeTarget {
+        GaugeTarget(
+            id: id,
+            ownerId: "user-a",
+            name: name,
+            targetStitches: targetStitches,
+            targetWidth: targetWidth,
+            targetRows: targetRows,
+            targetHeight: targetHeight,
+            isQuickMeasure: false,
+            gaugeAfterWash: false,
+            recommendedNeedle: "4.0 mm",
+            sourcePatternId: nil,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: nil,
             syncStatus: syncStatus
         )
     }
