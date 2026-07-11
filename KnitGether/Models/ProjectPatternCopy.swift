@@ -84,4 +84,31 @@ struct ProjectPatternCopy: Codable, Identifiable, Hashable {
             syncStatus: syncStatus
         )
     }
+
+    func copy(
+        localCopyPath: String? = nil,
+        drawingDataPath: String? = nil,
+        drawingUpdatedAt: Date? = nil,
+        updatedAt: Date? = nil,
+        syncStatus: SyncStatus? = nil
+    ) -> ProjectPatternCopy {
+        ProjectPatternCopy(
+            id: id,
+            ownerId: ownerId,
+            projectId: projectId,
+            sourcePatternDocumentId: sourcePatternDocumentId,
+            titleSnapshot: titleSnapshot,
+            designerSnapshot: designerSnapshot,
+            fileNameSnapshot: fileNameSnapshot,
+            localCopyPath: localCopyPath ?? self.localCopyPath,
+            pageCountSnapshot: pageCountSnapshot,
+            drawingDataPath: drawingDataPath ?? self.drawingDataPath,
+            drawingUpdatedAt: drawingUpdatedAt ?? self.drawingUpdatedAt,
+            copiedAt: copiedAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt ?? self.updatedAt,
+            deletedAt: deletedAt,
+            syncStatus: syncStatus ?? self.syncStatus
+        )
+    }
 }

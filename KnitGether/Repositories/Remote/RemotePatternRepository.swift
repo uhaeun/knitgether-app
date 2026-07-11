@@ -28,6 +28,11 @@ final class RemotePatternRepository: PatternRepository {
     }
 
     func savePattern(_ pattern: PatternDocument) async throws {
+        if pattern.syncStatus == .localOnly {
+            try await uploadLocalPattern(pattern)
+            return
+        }
+
         let body = SavePatternRequest(pattern: pattern)
         let updated: PatternDocument = try await apiClient.send(
             "patterns/\(pattern.id.uuidString.lowercased())",
@@ -208,6 +213,26 @@ final class RemotePatternRepository: PatternRepository {
         return patternCopy.updatingDrawingDataPath(nil)
     }
 
+    private func uploadLocalPattern(_ pattern: PatternDocument) async throws {
+        guard let localURL = fileURL(for: pattern) else {
+            throw APIError.unsupportedOperation("Pattern PDF file is missing.")
+        }
+
+        let fileData = try Data(contentsOf: localURL)
+        let uploaded: PatternDocument = try await apiClient.uploadMultipart(
+            "patterns",
+            fields: uploadFields(for: pattern),
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: pattern.fileName ?? localURL.lastPathComponent,
+                contentType: "application/pdf",
+                data: fileData
+            )
+        )
+
+        cachedPatterns[uploaded.id] = mergeLocalFilePath(from: pattern, into: uploaded)
+    }
+
     private func cacheFileIfNeeded(for pattern: PatternDocument) async throws -> PatternDocument {
         if let localFilePath = pattern.localFilePath,
            fileExists(at: localFilePath) {
@@ -243,6 +268,44 @@ final class RemotePatternRepository: PatternRepository {
         )
         cachedPatterns[pattern.id] = cached
         return cached
+    }
+
+    private func uploadFields(for pattern: PatternDocument) -> [String: String] {
+        var fields = [
+            "id": pattern.id.uuidString.lowercased(),
+            "title": pattern.title,
+            "notes": pattern.notes,
+        ]
+
+        if let designer = pattern.designer {
+            fields["designer"] = designer
+        }
+
+        if let pageCount = pattern.pageCount {
+            fields["pageCount"] = String(pageCount)
+        }
+
+        return fields
+    }
+
+    private func mergeLocalFilePath(
+        from localPattern: PatternDocument,
+        into remotePattern: PatternDocument
+    ) -> PatternDocument {
+        PatternDocument(
+            id: remotePattern.id,
+            ownerId: remotePattern.ownerId,
+            title: remotePattern.title,
+            designer: remotePattern.designer,
+            fileName: remotePattern.fileName ?? localPattern.fileName,
+            localFilePath: localPattern.localFilePath ?? remotePattern.localFilePath,
+            pageCount: remotePattern.pageCount,
+            notes: remotePattern.notes,
+            createdAt: remotePattern.createdAt,
+            updatedAt: remotePattern.updatedAt,
+            deletedAt: remotePattern.deletedAt,
+            syncStatus: remotePattern.syncStatus
+        )
     }
 
     private func mergeCachedPath(into pattern: PatternDocument) -> PatternDocument {

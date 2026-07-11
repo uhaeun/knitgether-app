@@ -17,6 +17,8 @@ struct Skill: Codable, Identifiable, Hashable {
     let difficulty: String?
     let animationName: String?
     let animationType: String?
+    let isSystem: Bool
+    let userLevel: String?
     let createdAt: Date
     let updatedAt: Date
     let deletedAt: Date?
@@ -43,6 +45,8 @@ struct Skill: Codable, Identifiable, Hashable {
         difficulty: String? = nil,
         animationName: String? = nil,
         animationType: String? = nil,
+        isSystem: Bool = false,
+        userLevel: String? = nil,
         createdAt: Date,
         updatedAt: Date,
         deletedAt: Date? = nil,
@@ -59,6 +63,8 @@ struct Skill: Codable, Identifiable, Hashable {
         self.difficulty = difficulty
         self.animationName = animationName
         self.animationType = animationType
+        self.isSystem = isSystem
+        self.userLevel = userLevel
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
@@ -77,6 +83,8 @@ struct Skill: Codable, Identifiable, Hashable {
         case difficulty
         case animationName
         case animationType
+        case isSystem
+        case userLevel
         case createdAt
         case updatedAt
         case deletedAt
@@ -103,6 +111,8 @@ struct Skill: Codable, Identifiable, Hashable {
         difficulty = try container.decodeIfPresent(String.self, forKey: .difficulty)
         animationName = try container.decodeIfPresent(String.self, forKey: .animationName)
         animationType = try container.decodeIfPresent(String.self, forKey: .animationType)
+        isSystem = try container.decodeIfPresent(Bool.self, forKey: .isSystem) ?? false
+        userLevel = try container.decodeIfPresent(String.self, forKey: .userLevel)
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
         updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt) ?? createdAt
         deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
@@ -123,11 +133,65 @@ struct Skill: Codable, Identifiable, Hashable {
         try container.encodeIfPresent(difficulty, forKey: .difficulty)
         try container.encodeIfPresent(animationName, forKey: .animationName)
         try container.encodeIfPresent(animationType, forKey: .animationType)
+        try container.encode(isSystem, forKey: .isSystem)
+        try container.encodeIfPresent(userLevel, forKey: .userLevel)
         try container.encode(createdAt, forKey: .createdAt)
         try container.encode(updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(deletedAt, forKey: .deletedAt)
         try container.encode(syncStatus, forKey: .syncStatus)
         try container.encode(steps, forKey: .steps)
         try container.encode(animationIds, forKey: .animationIds)
+    }
+
+    func updatingDifficulty(
+        _ difficulty: String?,
+        updatedAt: Date,
+        syncStatus: SyncStatus? = nil
+    ) -> Skill {
+        Skill(
+            id: id,
+            ownerId: ownerId,
+            name: name,
+            abbreviation: abbreviation,
+            description: description,
+            category: category,
+            difficulty: difficulty,
+            animationName: animationName,
+            animationType: animationType,
+            isSystem: isSystem,
+            userLevel: userLevel,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            syncStatus: syncStatus ?? (self.syncStatus == .synced ? .pendingUpload : self.syncStatus),
+            steps: steps,
+            animationIds: animationIds
+        )
+    }
+
+    func updatingUserLevel(
+        _ userLevel: String?,
+        updatedAt: Date,
+        syncStatus: SyncStatus? = nil
+    ) -> Skill {
+        Skill(
+            id: id,
+            ownerId: ownerId,
+            name: name,
+            abbreviation: abbreviation,
+            description: description,
+            category: category,
+            difficulty: difficulty,
+            animationName: animationName,
+            animationType: animationType,
+            isSystem: isSystem,
+            userLevel: userLevel,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt,
+            syncStatus: syncStatus ?? self.syncStatus,
+            steps: steps,
+            animationIds: animationIds
+        )
     }
 }

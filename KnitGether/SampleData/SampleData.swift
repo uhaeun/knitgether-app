@@ -154,7 +154,7 @@ enum SampleData {
             category: "기본",
             difficulty: "초급",
             animationName: "겉뜨기 기본 동작",
-            animationType: "placeholder",
+            animationType: "기본 동작",
             createdAt: makeDate(year: 2026, month: 3, day: 1),
             updatedAt: makeDate(year: 2026, month: 3, day: 1),
             deletedAt: nil,
@@ -171,7 +171,7 @@ enum SampleData {
             category: "기본",
             difficulty: "초급",
             animationName: "안뜨기 기본 동작",
-            animationType: "placeholder",
+            animationType: "기본 동작",
             createdAt: makeDate(year: 2026, month: 4, day: 10),
             updatedAt: makeDate(year: 2026, month: 4, day: 10),
             deletedAt: nil,
@@ -187,7 +187,7 @@ enum SampleData {
             category: "시작/마무리",
             difficulty: "초급",
             animationName: "코 만들기 흐름",
-            animationType: "placeholder",
+            animationType: "기본 동작",
             createdAt: makeDate(year: 2026, month: 4, day: 11),
             updatedAt: makeDate(year: 2026, month: 4, day: 11),
             deletedAt: nil,
@@ -203,7 +203,7 @@ enum SampleData {
             category: "시작/마무리",
             difficulty: "초급",
             animationName: "코 막음 흐름",
-            animationType: "placeholder",
+            animationType: "기본 동작",
             createdAt: makeDate(year: 2026, month: 4, day: 12),
             updatedAt: makeDate(year: 2026, month: 4, day: 12),
             deletedAt: nil,
@@ -219,7 +219,7 @@ enum SampleData {
             category: "무늬/늘림",
             difficulty: "초급",
             animationName: "실 감기 동작",
-            animationType: "placeholder",
+            animationType: "기본 동작",
             createdAt: makeDate(year: 2026, month: 4, day: 13),
             updatedAt: makeDate(year: 2026, month: 4, day: 13),
             deletedAt: nil,
@@ -235,12 +235,55 @@ enum SampleData {
             category: "기본/무늬",
             difficulty: "초급",
             animationName: "걸러뜨기 동작",
-            animationType: "placeholder",
+            animationType: "기본 동작",
             createdAt: makeDate(year: 2026, month: 4, day: 14),
             updatedAt: makeDate(year: 2026, month: 4, day: 14),
             deletedAt: nil,
             syncStatus: .localOnly,
             steps: ["도안의 지시대로 knitwise 또는 purlwise 방향을 확인합니다.", "코를 뜨지 않고 오른쪽 바늘로 옮깁니다.", "실 위치가 도안 지시와 맞는지 확인합니다."]
+        )
+    ]
+
+    static let dictionaryTerms: [DictionaryTerm] = [
+        DictionaryTerm(
+            ownerId: ownerId,
+            term: "K",
+            fullName: "Knit",
+            description: "겉뜨기. 오른쪽 바늘을 코의 앞쪽에 넣고 실을 걸어 빼내는 기본 뜨개 방법입니다.",
+            relatedSkillAbbreviations: "K",
+            createdAt: makeDate(year: 2026, month: 3, day: 1),
+            updatedAt: makeDate(year: 2026, month: 3, day: 1),
+            syncStatus: .localOnly
+        ),
+        DictionaryTerm(
+            ownerId: ownerId,
+            term: "P",
+            fullName: "Purl",
+            description: "안뜨기. 실을 앞쪽에 두고 코를 떠서 겉뜨기와 반대 질감을 만드는 기본 기법입니다.",
+            relatedSkillAbbreviations: "P",
+            createdAt: makeDate(year: 2026, month: 3, day: 2),
+            updatedAt: makeDate(year: 2026, month: 3, day: 2),
+            syncStatus: .localOnly
+        ),
+        DictionaryTerm(
+            ownerId: ownerId,
+            term: "YO",
+            fullName: "Yarn over",
+            description: "실 감기. 바늘에 실을 한 번 감아 구멍 무늬를 만들거나 코를 늘릴 때 사용합니다.",
+            relatedSkillAbbreviations: "YO",
+            createdAt: makeDate(year: 2026, month: 3, day: 3),
+            updatedAt: makeDate(year: 2026, month: 3, day: 3),
+            syncStatus: .localOnly
+        ),
+        DictionaryTerm(
+            ownerId: ownerId,
+            term: "게이지",
+            fullName: nil,
+            description: "10cm 안에 들어가는 코와 단 수입니다. 도안 크기와 완성 치수를 맞추는 기준으로 사용합니다.",
+            relatedSkillAbbreviations: "",
+            createdAt: makeDate(year: 2026, month: 3, day: 4),
+            updatedAt: makeDate(year: 2026, month: 3, day: 4),
+            syncStatus: .localOnly
         )
     ]
 

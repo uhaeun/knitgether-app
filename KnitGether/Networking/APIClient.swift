@@ -7,7 +7,7 @@ struct MultipartFile {
     let data: Data
 }
 
-final class APIClient {
+nonisolated final class APIClient {
     private let configuration: APIConfiguration
     private let session: URLSession
     private let decoder: JSONDecoder
@@ -25,11 +25,11 @@ final class APIClient {
             let container = try decoder.singleValueContainer()
             let value = try container.decode(String.self)
 
-            if let date = Self.fractionalISO8601Formatter.date(from: value) {
+            if let date = Self.date(fromISO8601String: value, includesFractionalSeconds: true) {
                 return date
             }
 
-            if let date = Self.iso8601Formatter.date(from: value) {
+            if let date = Self.date(fromISO8601String: value, includesFractionalSeconds: false) {
                 return date
             }
 
@@ -148,6 +148,10 @@ final class APIClient {
         }
 
         guard (200..<300).contains(httpResponse.statusCode) else {
+            if httpResponse.statusCode == 401 {
+                await configuration.authFailureHandler()
+            }
+
             let envelope = try? decoder.decode(APIErrorEnvelope.self, from: data)
             throw APIError.requestFailed(
                 statusCode: httpResponse.statusCode,
@@ -186,20 +190,19 @@ final class APIClient {
         return data
     }
 
-    private static let fractionalISO8601Formatter: ISO8601DateFormatter = {
+    private static func date(
+        fromISO8601String value: String,
+        includesFractionalSeconds: Bool
+    ) -> Date? {
         let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter
-    }()
-
-    private static let iso8601Formatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        return formatter
-    }()
+        formatter.formatOptions = includesFractionalSeconds
+            ? [.withInternetDateTime, .withFractionalSeconds]
+            : [.withInternetDateTime]
+        return formatter.date(from: value)
+    }
 }
 
-private extension Data {
+nonisolated private extension Data {
     mutating func appendString(_ string: String) {
         append(Data(string.utf8))
     }

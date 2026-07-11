@@ -44,10 +44,59 @@ final class RemoteProjectRepository: ProjectRepository {
                 body: body
             )
         }
+
+        try await uploadDirectPatternCopyFileIfNeeded(for: project)
+        try await uploadPatternCopyDrawingIfNeeded(for: project)
     }
 
     func deleteProject(id: UUID) async throws {
         try await apiClient.delete("projects/\(id.uuidString.lowercased())")
+    }
+
+    func saveRowCounter(_ rowCounter: RowCounter, forProjectId projectId: UUID) async throws -> RowCounter {
+        try await apiClient.send(
+            "projects/\(projectId.uuidString.lowercased())/row-counter",
+            method: "PATCH",
+            body: SaveRowCounterRequest(rowCounter: rowCounter)
+        )
+    }
+
+    func saveRowInstruction(_ instruction: RowInstruction, forProjectId projectId: UUID) async throws -> RowInstruction {
+        let method = instruction.syncStatus == .localOnly ? "POST" : "PATCH"
+        let path = instruction.syncStatus == .localOnly
+            ? "projects/\(projectId.uuidString.lowercased())/row-instructions"
+            : "projects/\(projectId.uuidString.lowercased())/row-instructions/\(instruction.id.uuidString.lowercased())"
+
+        return try await apiClient.send(
+            path,
+            method: method,
+            body: SaveRowInstructionRequest(rowInstruction: instruction)
+        )
+    }
+
+    func deleteRowInstruction(id: UUID, forProjectId projectId: UUID) async throws {
+        try await apiClient.delete(
+            "projects/\(projectId.uuidString.lowercased())/row-instructions/\(id.uuidString.lowercased())"
+        )
+    }
+
+    func saveWorkSession(_ session: WorkSession, forProjectId projectId: UUID) async throws -> WorkSession {
+        let method = session.syncStatus == .localOnly ? "POST" : "PATCH"
+        let path = session.syncStatus == .localOnly
+            ? "projects/\(projectId.uuidString.lowercased())/work-sessions"
+            : "projects/\(projectId.uuidString.lowercased())/work-sessions/\(session.id.uuidString.lowercased())"
+
+        return try await apiClient.send(
+            path,
+            method: method,
+            body: SaveWorkSessionRequest(workSession: session)
+        )
+    }
+
+    func deleteWorkSession(id: UUID, forProjectId projectId: UUID) async throws {
+        try await apiClient.delete(
+            "projects/\(projectId.uuidString.lowercased())/work-sessions/\(id.uuidString.lowercased())"
+        )
     }
 
     private func cachePatternCopyFileIfNeeded(for project: KnittingProject) async throws -> KnittingProject {
@@ -151,6 +200,52 @@ final class RemoteProjectRepository: ProjectRepository {
         }
     }
 
+    private func uploadDirectPatternCopyFileIfNeeded(for project: KnittingProject) async throws {
+        guard
+            let patternCopy = project.patternCopy,
+            patternCopy.sourcePatternDocumentId == nil,
+            let localCopyURL = fileStore.fileURL(for: patternCopy.localCopyPath),
+            FileManager.default.fileExists(atPath: localCopyURL.path)
+        else {
+            return
+        }
+
+        let fileData = try Data(contentsOf: localCopyURL)
+        let _: ProjectPatternCopy = try await apiClient.uploadMultipart(
+            "projects/\(project.id.uuidString.lowercased())/pattern-copy/file",
+            fields: [:],
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: patternCopy.fileNameSnapshot ?? localCopyURL.lastPathComponent,
+                contentType: "application/pdf",
+                data: fileData
+            )
+        )
+    }
+
+    private func uploadPatternCopyDrawingIfNeeded(for project: KnittingProject) async throws {
+        guard
+            let patternCopy = project.patternCopy,
+            let drawingDataPath = patternCopy.drawingDataPath,
+            let drawingURL = fileStore.fileURL(for: drawingDataPath),
+            FileManager.default.fileExists(atPath: drawingURL.path)
+        else {
+            return
+        }
+
+        let drawingData = try Data(contentsOf: drawingURL)
+        let _: ProjectPatternCopy = try await apiClient.uploadMultipart(
+            "projects/\(project.id.uuidString.lowercased())/pattern-copy/drawing",
+            fields: [:],
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: "drawing.pkdrawing",
+                contentType: "application/octet-stream",
+                data: drawingData
+            )
+        )
+    }
+
     private func fileExists(at relativePath: String) -> Bool {
         guard let url = fileStore.fileURL(for: relativePath) else {
             return false
@@ -167,7 +262,19 @@ private struct SaveProjectRequest: Encodable {
     let isFavorite: Bool
     let memo: String
     let startDate: Date
+    let targetDate: Date?
+    let finishedAt: Date?
     let lastWorkedAt: Date?
+    let yarnId: String?
+    let yarnNameSnapshot: String?
+    let yarnBrandSnapshot: String?
+    let yarnColorwaySnapshot: String?
+    let yarnWeightSnapshot: String?
+    let needleId: String?
+    let needleNameSnapshot: String?
+    let needleTypeSnapshot: String?
+    let needleSizeSnapshot: String?
+    let needleLengthSnapshot: String?
     let workspaceDisplayMode: String?
     let workspaceSheetPosition: String?
     let relatedSkillIds: [String]
@@ -182,7 +289,19 @@ private struct SaveProjectRequest: Encodable {
         isFavorite = project.isFavorite
         memo = project.memo
         startDate = project.startDate
+        targetDate = project.targetDate
+        finishedAt = project.finishedAt
         lastWorkedAt = project.lastWorkedAt
+        yarnId = project.yarnId?.uuidString.lowercased()
+        yarnNameSnapshot = project.yarnNameSnapshot
+        yarnBrandSnapshot = project.yarnBrandSnapshot
+        yarnColorwaySnapshot = project.yarnColorwaySnapshot
+        yarnWeightSnapshot = project.yarnWeightSnapshot
+        needleId = project.needleId?.uuidString.lowercased()
+        needleNameSnapshot = project.needleNameSnapshot
+        needleTypeSnapshot = project.needleTypeSnapshot
+        needleSizeSnapshot = project.needleSizeSnapshot
+        needleLengthSnapshot = project.needleLengthSnapshot
         workspaceDisplayMode = project.workspaceDisplayMode?.rawValue
         workspaceSheetPosition = project.workspaceSheetPosition?.rawValue
         relatedSkillIds = project.relatedSkillIds.map { $0.uuidString.lowercased() }
@@ -224,15 +343,39 @@ private struct SaveRowCounterRequest: Encodable {
     let id: String
     let projectId: String
     let name: String
+    let mode: String
+    let sectionName: String?
+    let memo: String?
     let currentRow: Int
     let targetRow: Int?
+    let rowInstructions: [SaveRowInstructionRequest]
 
     nonisolated init(rowCounter: RowCounter) {
         id = rowCounter.id.uuidString.lowercased()
         projectId = rowCounter.projectId.uuidString.lowercased()
         name = rowCounter.name
+        mode = rowCounter.mode.rawValue
+        sectionName = rowCounter.sectionName
+        memo = rowCounter.memo
         currentRow = rowCounter.currentRow
         targetRow = rowCounter.targetRow
+        rowInstructions = rowCounter.rowInstructions.map(SaveRowInstructionRequest.init)
+    }
+}
+
+private struct SaveRowInstructionRequest: Encodable {
+    let id: String
+    let rowCounterId: String
+    let rowNumber: Int
+    let instructionText: String
+    let skillTags: String?
+
+    nonisolated init(rowInstruction: RowInstruction) {
+        id = rowInstruction.id.uuidString.lowercased()
+        rowCounterId = rowInstruction.rowCounterId.uuidString.lowercased()
+        rowNumber = rowInstruction.rowNumber
+        instructionText = rowInstruction.instructionText
+        skillTags = rowInstruction.skillTags
     }
 }
 

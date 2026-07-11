@@ -48,4 +48,31 @@ struct PatternDocument: Codable, Identifiable, Hashable {
         self.deletedAt = deletedAt
         self.syncStatus = syncStatus
     }
+
+    func copy(
+        title: String? = nil,
+        designer: String? = nil,
+        fileName: String? = nil,
+        localFilePath: String? = nil,
+        pageCount: Int? = nil,
+        notes: String? = nil,
+        updatedAt: Date? = nil,
+        deletedAt: Date? = nil,
+        syncStatus: SyncStatus? = nil
+    ) -> PatternDocument {
+        PatternDocument(
+            id: id,
+            ownerId: ownerId,
+            title: title ?? self.title,
+            designer: designer ?? self.designer,
+            fileName: fileName ?? self.fileName,
+            localFilePath: localFilePath ?? self.localFilePath,
+            pageCount: pageCount ?? self.pageCount,
+            notes: notes ?? self.notes,
+            createdAt: createdAt,
+            updatedAt: updatedAt ?? self.updatedAt,
+            deletedAt: deletedAt ?? self.deletedAt,
+            syncStatus: syncStatus ?? self.syncStatus
+        )
+    }
 }
