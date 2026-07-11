@@ -17,6 +17,40 @@ describe('Auth configuration security', () => {
     });
   });
 
+  it('rejects the implicit dev token when NODE_ENV is unset', () => {
+    withIsolatedAuthEnv(() => {
+      const { guard } = createAuthTools({});
+
+      expect(() => guard.canActivate(contextWithBearer('dev-token'))).toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+
+  it('rejects the implicit dev token when NODE_ENV is blank', () => {
+    withIsolatedAuthEnv(() => {
+      const { guard } = createAuthTools({
+        NODE_ENV: '',
+      });
+
+      expect(() => guard.canActivate(contextWithBearer('dev-token'))).toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+
+  it('rejects the implicit dev token in staging when DEV_AUTH_TOKEN is unset', () => {
+    withIsolatedAuthEnv(() => {
+      const { guard } = createAuthTools({
+        NODE_ENV: 'staging',
+      });
+
+      expect(() => guard.canActivate(contextWithBearer('dev-token'))).toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+
   it('fails clearly in production when AUTH_JWT_SECRET is unset', () => {
     withIsolatedAuthEnv(() => {
       const { accessTokenService } = createAuthTools({
@@ -29,6 +63,49 @@ describe('Auth configuration security', () => {
           email: 'yuha@example.com',
         }),
       ).toThrow('AUTH_JWT_SECRET is required in production.');
+    });
+  });
+
+  it('fails clearly when NODE_ENV and AUTH_JWT_SECRET are unset', () => {
+    withIsolatedAuthEnv(() => {
+      const { accessTokenService } = createAuthTools({});
+
+      expect(() =>
+        accessTokenService.sign({
+          userId: 'user-a',
+          email: 'yuha@example.com',
+        }),
+      ).toThrow('AUTH_JWT_SECRET is required outside development and test.');
+    });
+  });
+
+  it('fails clearly when NODE_ENV is blank and AUTH_JWT_SECRET is unset', () => {
+    withIsolatedAuthEnv(() => {
+      const { accessTokenService } = createAuthTools({
+        NODE_ENV: '',
+      });
+
+      expect(() =>
+        accessTokenService.sign({
+          userId: 'user-a',
+          email: 'yuha@example.com',
+        }),
+      ).toThrow('AUTH_JWT_SECRET is required outside development and test.');
+    });
+  });
+
+  it('fails clearly in staging when AUTH_JWT_SECRET is unset', () => {
+    withIsolatedAuthEnv(() => {
+      const { accessTokenService } = createAuthTools({
+        NODE_ENV: 'staging',
+      });
+
+      expect(() =>
+        accessTokenService.sign({
+          userId: 'user-a',
+          email: 'yuha@example.com',
+        }),
+      ).toThrow('AUTH_JWT_SECRET is required outside development and test.');
     });
   });
 
@@ -51,7 +128,7 @@ describe('Auth configuration security', () => {
     });
   });
 
-  it('keeps the implicit dev token available outside production', () => {
+  it('keeps the implicit dev token available in development', () => {
     withIsolatedAuthEnv(() => {
       const request = requestWithBearer('dev-token');
       const { guard } = createAuthTools({
@@ -63,7 +140,37 @@ describe('Auth configuration security', () => {
     });
   });
 
-  it('keeps the local JWT secret fallback available outside production', () => {
+  it('keeps the implicit dev token available in test', () => {
+    withIsolatedAuthEnv(() => {
+      const request = requestWithBearer('dev-token');
+      const { guard } = createAuthTools({
+        NODE_ENV: 'test',
+      });
+
+      expect(guard.canActivate(contextWithRequest(request))).toBe(true);
+      expect(request.user).toEqual({ id: 'dev-user' });
+    });
+  });
+
+  it('keeps the local JWT secret fallback available in development', () => {
+    withIsolatedAuthEnv(() => {
+      const { accessTokenService } = createAuthTools({
+        NODE_ENV: 'development',
+      });
+
+      const token = accessTokenService.sign({
+        userId: 'user-a',
+        email: 'yuha@example.com',
+      });
+
+      expect(accessTokenService.verify(token)).toMatchObject({
+        sub: 'user-a',
+        email: 'yuha@example.com',
+      });
+    });
+  });
+
+  it('keeps the local JWT secret fallback available in test', () => {
     withIsolatedAuthEnv(() => {
       const { accessTokenService } = createAuthTools({
         NODE_ENV: 'test',

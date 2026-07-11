@@ -61,7 +61,7 @@ export class ApiAuthGuard implements CanActivate {
   }
 
   private developmentDevToken(): string | null {
-    if (this.isProduction()) {
+    if (!this.allowsDevelopmentDefaults()) {
       return null;
     }
 
@@ -72,8 +72,10 @@ export class ApiAuthGuard implements CanActivate {
     return this.configService.get<string>('DEV_AUTH_USER_ID') ?? 'dev-user';
   }
 
-  private isProduction(): boolean {
-    return this.configService.get<string>('NODE_ENV') === 'production';
+  private allowsDevelopmentDefaults(): boolean {
+    const nodeEnv = this.configService.get<string>('NODE_ENV')?.trim();
+
+    return nodeEnv === 'development' || nodeEnv === 'test';
   }
 
   private userIdFromConfiguredTokens(

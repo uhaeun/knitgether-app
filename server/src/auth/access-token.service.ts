@@ -103,10 +103,10 @@ export class AccessTokenService {
       return configuredSecret;
     }
 
-    if (this.isProduction()) {
+    if (!this.allowsDevelopmentDefaults()) {
       throw new InternalServerErrorException({
         code: 'AUTH_JWT_SECRET_REQUIRED',
-        message: 'AUTH_JWT_SECRET is required in production.',
+        message: this.missingSecretMessage(),
         details: {},
       });
     }
@@ -121,7 +121,19 @@ export class AccessTokenService {
     return Number.isFinite(value) && value > 0 ? value : 60 * 60 * 24 * 30;
   }
 
-  private isProduction(): boolean {
-    return this.configService.get<string>('NODE_ENV') === 'production';
+  private allowsDevelopmentDefaults(): boolean {
+    const nodeEnv = this.nodeEnv();
+
+    return nodeEnv === 'development' || nodeEnv === 'test';
+  }
+
+  private missingSecretMessage(): string {
+    return this.nodeEnv() === 'production'
+      ? 'AUTH_JWT_SECRET is required in production.'
+      : 'AUTH_JWT_SECRET is required outside development and test.';
+  }
+
+  private nodeEnv(): string | undefined {
+    return this.configService.get<string>('NODE_ENV')?.trim();
   }
 }
