@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KnitGether Admin — 운영 대시보드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+/* ============================================================
+   Design tokens — 로고 기반 딥 네이비 톤앤매너
+   ============================================================ */
+:root {
+  --bg:        #F8FAFC;
+  --surface:   #FFFFFF;
+  --border:    #E2E8F0;
+
+  --primary:      #0B4171;
+  --primary-hi:   #0E5391;   /* hover */
+  --primary-soft: #EDF4FA;   /* tinted background */
+
+  --ink:   #0F172A;
+  --ink-2: #475569;
+  --ink-3: #94A3B8;
+
+  --ok:     #10B981;  --ok-bg:     #ECFDF5;  --ok-ink:     #047857;
+  --warn:   #F59E0B;  --warn-bg:   #FFFBEB;  --warn-ink:   #B45309;
+  --danger: #EF4444;  --danger-bg: #FEF2F2;  --danger-ink: #B91C1C;
+
+  /* chart palette — validated (CVD/contrast) */
+  --chart-1: #2E7CC7;
+  --chart-2: #14A38F;
+  --chart-de: #CBD5E1;         /* de-emphasis / sparkline */
+  --meter-track: #DCEAF7;      /* lighter step of chart-1 ramp */
+
+  --shadow: 0 1px 3px 0 rgba(0,0,0,.05);
+  --shadow-lift: 0 4px 12px -2px rgba(11,65,113,.08);
+  --radius: 14px;
+
+  --sidebar-w: 264px;
+  --font: "Pretendard Variable", Pretendard, Inter, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input  { font-family: inherit; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   Layout shell
+   ============================================================ */
+.app { display: flex; min-height: 100vh; }
+
+/* ---------- Sidebar : 딥 네이비 브랜드 영역 ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #0A3B66 0%, var(--primary) 100%);
+  color: rgba(255,255,255,.72);
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+}
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  padding: 26px 24px 22px;
+}
+.brand-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(255,255,255,.12);
+  display: grid; place-items: center;
+  font-size: 18px;
+}
+.brand-name { color: #fff; font-weight: 700; font-size: 16px; letter-spacing: -.01em; }
+.brand-sub  { font-size: 11.5px; color: rgba(255,255,255,.45); margin-top: 1px; }
+
+.nav { flex: 1; padding: 10px 14px 20px; overflow-y: auto; }
+.nav-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.38);
+  padding: 18px 12px 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 9px;
+  color: rgba(255,255,255,.72);
+  font-size: 13.5px; font-weight: 500;
+  text-align: left;
+  transition: background .15s, color .15s;
+}
+.nav-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: .8; }
+.nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
+.nav-item.active { background: rgba(255,255,255,.14); color: #fff; font-weight: 600; }
+.nav-item .count {
+  margin-left: auto;
+  font-size: 11px; font-weight: 600;
+  background: rgba(255,255,255,.16); color: #fff;
+  border-radius: 999px; padding: 1px 8px;
+}
+
+.sidebar-foot {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; gap: 11px;
+}
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.16);
+  display: grid; place-items: center;
+  color: #fff; font-size: 12.5px; font-weight: 700;
+  flex-shrink: 0;
+}
+.foot-name { color: #fff; font-size: 13px; font-weight: 600; }
+.foot-role { font-size: 11.5px; color: rgba(255,255,255,.45); }
+
+/* ---------- Main column ---------- */
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(248,250,252,.85);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 36px;
+}
+.crumb { font-size: 13px; color: var(--ink-3); }
+.crumb strong { color: var(--ink); font-weight: 600; }
+.search {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 300px;
+  box-shadow: var(--shadow);
+  border: 1px solid transparent;
+  transition: border-color .15s;
+}
+.search:focus-within { border-color: var(--primary); }
+.search svg { width: 15px; height: 15px; color: var(--ink-3); flex-shrink: 0; }
+.search input { border: none; outline: none; background: none; flex: 1; font-size: 13px; color: var(--ink); }
+.search input::placeholder { color: var(--ink-3); }
+.search kbd {
+  font-family: inherit; font-size: 11px; color: var(--ink-3);
+  background: var(--bg); border-radius: 5px; padding: 2px 6px;
+}
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: grid; place-items: center;
+  color: var(--ink-2);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: color .15s;
+}
+.icon-btn:hover { color: var(--primary); }
+.icon-btn svg { width: 17px; height: 17px; }
+
+.content {
+  padding: 20px 36px 64px;
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   Page head + 기간 필터 (모든 차트·지표를 스코프)
+   ============================================================ */
+.page-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+  margin: 14px 0 28px;
+}
+.page-title { font-size: 23px; font-weight: 700; letter-spacing: -.02em; }
+.page-desc  { font-size: 13.5px; color: var(--ink-2); margin-top: 5px; }
+
+.range-group {
+  display: flex;
+  background: var(--surface);
+  border-radius: 11px;
+  padding: 4px;
+  box-shadow: var(--shadow);
+  gap: 2px;
+}
+.range-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  color: var(--ink-2);
+  transition: background .15s, color .15s;
+}
+.range-btn:hover { color: var(--ink); }
+.range-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
+
+/* ============================================================
+   Cards / KPI tiles
+   ============================================================ */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+section { scroll-margin-top: 84px; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.kpi {
+  padding: 26px 26px 22px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: box-shadow .2s;
+}
+.kpi:hover { box-shadow: var(--shadow-lift); }
+.kpi-top { display: flex; align-items: center; justify-content: space-between; }
+.kpi-label { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.kpi-ico {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: var(--primary-soft); color: var(--primary);
+  display: grid; place-items: center;
+}
+.kpi-ico svg { width: 16px; height: 16px; }
+.kpi-value { font-size: 29px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.kpi-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.delta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12.5px; font-weight: 600;
+  border-radius: 999px; padding: 3px 9px;
+}
+.delta.up   { color: var(--ok-ink);     background: var(--ok-bg); }
+.delta.down { color: var(--danger-ink); background: var(--danger-bg); }
+.delta svg  { width: 11px; height: 11px; }
+.delta-note { font-size: 12px; color: var(--ink-3); }
+.spark { flex-shrink: 0; }
+
+/* ============================================================
+   Charts
+   ============================================================ */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.chart-card { padding: 26px 28px 22px; }
+.chart-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 14px; margin-bottom: 20px;
+}
+.chart-title { font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; }
+.chart-sub   { font-size: 12.5px; color: var(--ink-3); margin-top: 3px; }
+.ghost-btn {
+  font-size: 12.5px; font-weight: 500; color: var(--ink-2);
+  padding: 6px 12px; border-radius: 8px;
+  background: var(--bg);
+  transition: color .15s, background .15s;
+  white-space: nowrap;
+}
+.ghost-btn:hover { color: var(--primary); background: var(--primary-soft); }
+.chart-body { position: relative; }
+.chart-body svg { display: block; width: 100%; height: auto; }
+.chart-body svg text { font-family: var(--font); }
+
+/* chart data-table twin (접근성: 모든 차트는 표로도 읽을 수 있다) */
+.chart-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.chart-table th {
+  text-align: left; font-weight: 600; color: var(--ink-2);
+  padding: 9px 12px; background: var(--bg);
+}
+.chart-table th:last-child, .chart-table td:last-child { text-align: right; }
+.chart-table td { padding: 9px 12px; border-top: 1px solid var(--border); color: var(--ink); }
+.chart-table-wrap { max-height: 264px; overflow-y: auto; border-radius: 10px; }
+
+/* tooltip (차트 공용) */
+.viz-tip {
+  position: fixed; z-index: 90;
+  pointer-events: none;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 9px;
+  padding: 9px 12px;
+  font-size: 12px;
+  box-shadow: 0 6px 20px -4px rgba(15,23,42,.35);
+  opacity: 0;
+  transition: opacity .1s;
+  max-width: 240px;
+}
+.viz-tip.show { opacity: 1; }
+.viz-tip .tip-date { color: rgba(255,255,255,.6); font-size: 11px; margin-bottom: 3px; }
+.viz-tip .tip-row { display: flex; align-items: center; gap: 7px; }
+.viz-tip .tip-key { width: 12px; height: 2px; border-radius: 1px; background: var(--chart-1); }
+.viz-tip .tip-val { font-weight: 700; font-size: 13px; }
+.viz-tip .tip-name { color: rgba(255,255,255,.75); }
+
+/* ============================================================
+   Data table — 패턴 업로드 검토 큐
+   ============================================================ */
+.table-card { margin-bottom: 24px; overflow: hidden; }
+.table-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  padding: 24px 28px 0;
+}
+.table-tabs { display: flex; gap: 4px; margin-top: 18px; }
+.tab {
+  padding: 9px 16px 13px;
+  font-size: 13.5px; font-weight: 500; color: var(--ink-2);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  display: flex; align-items: center; gap: 7px;
+  transition: color .15s;
+}
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--primary); font-weight: 600; border-bottom-color: var(--primary); }
+.tab .n {
+  font-size: 11px; font-weight: 600;
+  background: var(--bg); color: var(--ink-2);
+  border-radius: 999px; padding: 1px 8px;
+}
+.tab.active .n { background: var(--primary-soft); color: var(--primary); }
+
+.table-wrap { overflow-x: auto; }
+table.data { width: 100%; border-collapse: collapse; min-width: 860px; }
+table.data thead th {
+  text-align: left;
+  font-size: 12px; font-weight: 600; color: var(--ink-3);
+  letter-spacing: .02em;
+  padding: 13px 16px;
+  background: var(--bg);
+  white-space: nowrap;
+  user-select: none;
+}
+table.data thead th:first-child  { padding-left: 28px; }
+table.data thead th:last-child   { padding-right: 28px; }
+th.sortable { cursor: pointer; }
+th.sortable:hover { color: var(--ink); }
+th.sortable .sort-ico { display: inline-block; vertical-align: -2px; margin-left: 4px; opacity: .55; }
+th.sortable.sorted .sort-ico { opacity: 1; color: var(--primary); }
+
+table.data tbody td {
+  padding: 17px 16px;
+  font-size: 13.5px;
+  vertical-align: middle;
+}
+table.data tbody td:first-child { padding-left: 28px; }
+table.data tbody td:last-child  { padding-right: 28px; }
+table.data tbody tr { border-top: 1px solid #EEF2F7; transition: background .12s; }
+table.data tbody tr:hover { background: #FAFCFE; }
+
+.cell-main { font-weight: 600; color: var(--ink); }
+.cell-sub  { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.uploader { display: flex; align-items: center; gap: 10px; }
+.uploader .avatar { width: 30px; height: 30px; font-size: 11px; background: var(--primary-soft); color: var(--primary); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600;
+  border-radius: 999px; padding: 4px 11px;
+  white-space: nowrap;
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+.pill.approved { color: var(--ok-ink);     background: var(--ok-bg); }     .pill.approved .dot { background: var(--ok); }
+.pill.pending  { color: var(--warn-ink);   background: var(--warn-bg); }   .pill.pending  .dot { background: var(--warn); }
+.pill.rejected { color: var(--danger-ink); background: var(--danger-bg); } .pill.rejected .dot { background: var(--danger); }
+
+.row-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.btn {
+  font-size: 12.5px; font-weight: 600;
+  padding: 7px 14px; border-radius: 8px;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.btn-approve { background: var(--primary); color: #fff; }
+.btn-approve:hover { background: var(--primary-hi); }
+.btn-reject { background: var(--bg); color: var(--ink-2); }
+.btn-reject:hover { background: var(--danger-bg); color: var(--danger-ink); }
+.btn-view { background: var(--bg); color: var(--ink-2); }
+.btn-view:hover { color: var(--primary); background: var(--primary-soft); }
+
+.table-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px;
+  border-top: 1px solid #EEF2F7;
+  font-size: 12.5px; color: var(--ink-3);
+}
+.empty {
+  padding: 56px 28px; text-align: center; color: var(--ink-3); font-size: 13.5px;
+}
+
+/* ============================================================
+   시스템 현황 (스토리지 / 헬스)
+   ============================================================ */
+.sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.sys-card { padding: 26px 28px; }
+.meter-row { display: flex; align-items: baseline; justify-content: space-between; margin: 18px 0 10px; }
+.meter-val { font-size: 21px; font-weight: 700; letter-spacing: -.01em; }
+.meter-cap { font-size: 12.5px; color: var(--ink-3); }
+.meter { height: 8px; border-radius: 999px; background: var(--meter-track); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 999px; background: var(--chart-1); }
+.meter-legend { display: flex; gap: 20px; margin-top: 16px; }
+.meter-legend .li { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-2); }
+.meter-legend .sw { width: 9px; height: 9px; border-radius: 3px; }
+
+.health-list { display: flex; flex-direction: column; margin-top: 8px; }
+.health-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 0;
+}
+.health-item + .health-item { border-top: 1px solid #EEF2F7; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.ok { background: var(--ok); box-shadow: 0 0 0 3px var(--ok-bg); }
+.status-dot.warn { background: var(--warn); box-shadow: 0 0 0 3px var(--warn-bg); }
+.health-name { font-size: 13.5px; font-weight: 500; }
+.health-meta { margin-left: auto; font-size: 12.5px; color: var(--ink-3); }
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+  background: var(--ink); color: #fff;
+  border-radius: 11px;
+  padding: 13px 18px;
+  font-size: 13px;
+  box-shadow: 0 8px 24px -6px rgba(15,23,42,.4);
+  display: flex; align-items: center; gap: 10px;
+  animation: toast-in .25s cubic-bezier(.21,1.02,.73,1) both;
+}
+.toast .t-dot { width: 7px; height: 7px; border-radius: 50%; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.toast.out { opacity: 0; transform: translateY(6px); transition: all .25s; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1180px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid, .sys-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .content { padding: 16px 20px 48px; }
+  .topbar { padding: 12px 20px; }
+  .search { width: 200px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════════ Sidebar ══════════════ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🧶</div>
+      <div>
+        <div class="brand-name">KnitGether</div>
+        <div class="brand-sub">Admin Console</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">모니터링</div>
+      <button class="nav-item active" data-target="top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        개요
+      </button>
+      <button class="nav-item" data-target="kpis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        사용자
+      </button>
+      <button class="nav-item" data-target="charts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+        프로젝트
+      </button>
+
+      <div class="nav-label">콘텐츠</div>
+      <button class="nav-item" data-target="review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        패턴 검토
+        <span class="count" id="nav-pending-count">0</span>
+      </button>
+      <button class="nav-item" data-target="system">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        스토리지
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="avatar">유하</div>
+      <div>
+        <div class="foot-name">유하은</div>
+        <div class="foot-role">Platform Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════ Main ══════════════ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">운영 &nbsp;/&nbsp; <strong>개요</strong></div>
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="global-search" type="text" placeholder="패턴·업로더 검색" />
+        <kbd>⌘K</kbd>
+      </label>
+      <button class="icon-btn" title="알림">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+    </header>
+
+    <main class="content" id="top">
+
+      <!-- 페이지 헤드 + 기간 필터 (아래 모든 지표·차트를 스코프) -->
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">운영 개요</h1>
+          <p class="page-desc">KnitGether 서비스의 사용자·프로젝트·콘텐츠 현황을 한눈에 확인합니다.</p>
+        </div>
+        <div class="range-group" role="group" aria-label="기간 선택">
+          <button class="range-btn" data-days="7">최근 7일</button>
+          <button class="range-btn active" data-days="30">최근 30일</button>
+          <button class="range-btn" data-days="90">최근 90일</button>
+        </div>
+      </div>
+
+      <!-- KPI row -->
+      <section class="kpi-grid" id="kpis"></section>
+
+      <!-- Charts -->
+      <section class="chart-grid" id="charts">
+        <div class="card chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">신규 가입 추이</div>
+              <div class="chart-sub" id="signup-chart-sub"></div>
+            </div>
+            <button class="ghost-btn" id="signup-table-toggle">표로 보기</button>
+          </div>
+          <div class="chart-body" id="signup-chart"></div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">프로젝트 상태 분포</div>
+              <div class="chart-sub">전체 활성 프로젝트 기준</div>
+            </div>
+            <button class="ghost-btn" id="status-table-toggle">표로 보기</button>
+          </div>
+          <div class="chart-body" id="status-chart"></div>
+        </div>
+      </section>
+
+      <!-- 패턴 업로드 검토 큐 -->
+      <section class="card table-card" id="review">
+        <div class="table-head">
+          <div>
+            <div class="chart-title">패턴 업로드 검토</div>
+            <div class="chart-sub">사용자가 업로드한 패턴 문서의 저작권·품질 검토 큐</div>
+          </div>
+        </div>
+        <div class="table-tabs" id="review-tabs" style="padding: 0 28px;"></div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead id="review-thead"></thead>
+            <tbody id="review-tbody"></tbody>
+          </table>
+          <div class="empty" id="review-empty" hidden>조건에 맞는 항목이 없습니다.</div>
+        </div>
+        <div class="table-foot">
+          <span id="review-foot-count"></span>
+          <span>최근 업로드 순 · 실시간 동기화</span>
+        </div>
+      </section>
+
+      <!-- 시스템 현황 -->
+      <section class="sys-grid" id="system">
+        <div class="card sys-card">
+          <div class="chart-title">스토리지 사용량</div>
+          <div class="chart-sub">패턴 PDF · 게이지 사진 · 드로잉 원본</div>
+          <div class="meter-row">
+            <span class="meter-val">18.6 GB</span>
+            <span class="meter-cap tnum">/ 50 GB (37%)</span>
+          </div>
+          <div class="meter"><div class="meter-fill" style="width:37%"></div></div>
+          <div class="meter-legend">
+            <span class="li"><span class="sw" style="background:var(--chart-1)"></span>패턴 PDF 12.1 GB</span>
+            <span class="li"><span class="sw" style="background:var(--chart-2)"></span>이미지 5.2 GB</span>
+            <span class="li"><span class="sw" style="background:var(--chart-de)"></span>기타 1.3 GB</span>
+          </div>
+        </div>
+
+        <div class="card sys-card">
+          <div class="chart-title">시스템 상태</div>
+          <div class="chart-sub">/health 기준 · 1분 간격 폴링</div>
+          <div class="health-list">
+            <div class="health-item">
+              <span class="status-dot ok"></span>
+              <span class="health-name">API 서버 (NestJS)</span>
+              <span class="health-meta tnum">p95 142ms · 가동률 99.98%</span>
+            </div>
+            <div class="health-item">
+              <span class="status-dot ok"></span>
+              <span class="health-name">PostgreSQL</span>
+              <span class="health-meta tnum">커넥션 14/50 · 지연 3ms</span>
+            </div>
+            <div class="health-item">
+              <span class="status-dot warn"></span>
+              <span class="health-name">파일 스토리지</span>
+              <span class="health-meta tnum">업로드 지연 상승 (평균 1.8s)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="viz-tip" id="viz-tip"></div>
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ============================================================
+   Mock data — 실서비스에서는 아래 fetch 지점을 어드민 API로 교체
+   (예: GET /admin/metrics?days=30, GET /admin/pattern-reviews)
+   ============================================================ */
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = mulberry32(20260709);
+
+const TODAY = new Date(2026, 6, 9);
+function dateOffset(d) { const t = new Date(TODAY); t.setDate(t.getDate() - d); return t; }
+function fmtDate(d) { return `${d.getMonth() + 1}월 ${d.getDate()}일`; }
+function fmtDateFull(d) { return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; }
+
+/* 180일치 일별 시계열 (기간 필터가 잘라 쓴다) */
+const DAILY = Array.from({ length: 180 }, (_, i) => {
+  const daysAgo = 179 - i;
+  const growth = 1 + (179 - daysAgo) / 179 * 1.6;           // 완만한 성장
+  const weekend = [0, 6].includes(dateOffset(daysAgo).getDay()) ? 1.25 : 1;
+  return {
+    date: dateOffset(daysAgo),
+    signups:  Math.round((8 + rand() * 10) * growth * weekend),
+    sessions: Math.round((140 + rand() * 90) * growth * weekend),
+    uploads:  Math.round((3 + rand() * 5) * growth),
+  };
+});
+
+const PROJECT_STATUS = [
+  { label: "진행 중", value: 1284 },
+  { label: "계획",   value: 512 },
+  { label: "완주",   value: 946 },
+  { label: "휴면",   value: 231 },
+];
+
+const STATUS_META = {
+  pending:  { label: "검토 대기", cls: "pending" },
+  approved: { label: "승인됨",   cls: "approved" },
+  rejected: { label: "반려됨",   cls: "rejected" },
+};
+
+let reviews = [
+  { id: "pr-1041", title: "Sophie Hood 후드 케이프", file: "sophie_hood.pdf", uploader: "김서연", email: "seoyeon.k@example.com", size: 4.2, pages: 12, status: "pending",  at: dateOffset(0) },
+  { id: "pr-1040", title: "탑다운 래글런 스웨터",     file: "topdown_raglan_v2.pdf", uploader: "이건영", email: "gy.lee@example.com", size: 2.8, pages: 8,  status: "pending",  at: dateOffset(0) },
+  { id: "pr-1039", title: "모헤어 발라클라바",       file: "mohair_balaclava.pdf", uploader: "박지우", email: "jiwoo.p@example.com", size: 1.6, pages: 5,  status: "pending",  at: dateOffset(1) },
+  { id: "pr-1038", title: "케이블 목도리 기초",      file: "cable_scarf_basic.pdf", uploader: "최민준", email: "mj.choi@example.com", size: 3.1, pages: 9,  status: "approved", at: dateOffset(1) },
+  { id: "pr-1037", title: "그래니 스퀘어 블랭킷",    file: "granny_square.pdf", uploader: "정하윤", email: "hayoon.j@example.com", size: 5.4, pages: 15, status: "pending",  at: dateOffset(2) },
+  { id: "pr-1036", title: "아란 무늬 카디건",        file: "aran_cardigan.pdf", uploader: "김서연", email: "seoyeon.k@example.com", size: 6.0, pages: 18, status: "approved", at: dateOffset(2) },
+  { id: "pr-1035", title: "브리오슈 비니",           file: "brioche_beanie.pdf", uploader: "오수아", email: "sua.oh@example.com", size: 1.2, pages: 4,  status: "rejected", at: dateOffset(3) },
+  { id: "pr-1034", title: "페어아일 요크 스웨터",    file: "fairisle_yoke.pdf", uploader: "한도윤", email: "doyun.h@example.com", size: 7.3, pages: 22, status: "approved", at: dateOffset(4) },
+  { id: "pr-1033", title: "레이스 숄 차트",          file: "lace_shawl_chart.pdf", uploader: "박지우", email: "jiwoo.p@example.com", size: 2.2, pages: 7,  status: "approved", at: dateOffset(5) },
+  { id: "pr-1032", title: "베이비 부티 세트",        file: "baby_booties.pdf", uploader: "정하윤", email: "hayoon.j@example.com", size: 0.9, pages: 3,  status: "rejected", at: dateOffset(6) },
+  { id: "pr-1031", title: "인타르시아 니트 조끼",    file: "intarsia_vest.pdf", uploader: "이건영", email: "gy.lee@example.com", size: 3.8, pages: 11, status: "approved", at: dateOffset(7) },
+  { id: "pr-1030", title: "양말 힐턴 마스터",        file: "sock_heel_turn.pdf", uploader: "최민준", email: "mj.choi@example.com", size: 1.9, pages: 6,  status: "approved", at: dateOffset(8) },
+];
+
+/* ============================================================
+   공용 유틸
+   ============================================================ */
+const $ = (s, el = document) => el.querySelector(s);
+const num = (n) => n.toLocaleString("ko-KR");
+const SVG_NS = "http://www.w3.org/2000/svg";
+function svgEl(tag, attrs = {}) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+function niceMax(v) {
+  const pow = Math.pow(10, Math.floor(Math.log10(v)));
+  const unit = v / pow;
+  const step = unit <= 2 ? 2 : unit <= 5 ? 5 : 10;
+  return step * pow;
+}
+
+const tip = $("#viz-tip");
+function showTip(html, x, y) {
+  tip.replaceChildren(...html);
+  tip.classList.add("show");
+  const r = tip.getBoundingClientRect();
+  const left = Math.min(x + 14, window.innerWidth - r.width - 12);
+  const top = Math.max(y - r.height - 12, 8);
+  tip.style.left = left + "px";
+  tip.style.top = top + "px";
+}
+function hideTip() { tip.classList.remove("show"); }
+function tipContent(dateStr, name, value) {
+  const d = document.createElement("div");
+  d.className = "tip-date"; d.textContent = dateStr;
+  const row = document.createElement("div");
+  row.className = "tip-row";
+  const key = document.createElement("span"); key.className = "tip-key";
+  const val = document.createElement("span"); val.className = "tip-val"; val.textContent = num(value);
+  const nm = document.createElement("span"); nm.className = "tip-name"; nm.textContent = name;
+  row.append(key, val, nm);
+  return [d, row];
+}
+
+function toast(msg, color) {
+  const wrap = $("#toast-wrap");
+  const t = document.createElement("div");
+  t.className = "toast";
+  const dot = document.createElement("span");
+  dot.className = "t-dot"; dot.style.background = color;
+  const span = document.createElement("span"); span.textContent = msg;
+  t.append(dot, span);
+  wrap.appendChild(t);
+  setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 300); }, 2600);
+}
+
+/* ============================================================
+   KPI row
+   ============================================================ */
+const KPI_DEFS = [
+  { key: "signups",  label: "신규 가입",    icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>' },
+  { key: "sessions", label: "작업 세션",    icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>' },
+  { key: "uploads",  label: "패턴 업로드",  icon: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>' },
+  { key: "active",   label: "활성 프로젝트", icon: '<path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>' },
+];
+
+function sum(rows, key) { return rows.reduce((a, r) => a + r[key], 0); }
+
+function sparkline(points) {
+  const w = 96, h = 30, pad = 3;
+  const min = Math.min(...points), max = Math.max(...points);
+  const x = (i) => pad + (i / (points.length - 1)) * (w - pad * 2);
+  const y = (v) => max === min ? h / 2 : pad + (1 - (v - min) / (max - min)) * (h - pad * 2);
+  const svg = svgEl("svg", { width: w, height: h, viewBox: `0 0 ${w} ${h}`, class: "spark", "aria-hidden": "true" });
+  const d = points.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  svg.appendChild(svgEl("path", { d, fill: "none", stroke: "var(--chart-de)", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+  const li = points.length - 1;
+  svg.appendChild(svgEl("path", { d: `M${x(li - 1).toFixed(1)},${y(points[li - 1]).toFixed(1)} L${x(li).toFixed(1)},${y(points[li]).toFixed(1)}`, fill: "none", stroke: "var(--chart-1)", "stroke-width": 2, "stroke-linecap": "round" }));
+  svg.appendChild(svgEl("circle", { cx: x(li), cy: y(points[li]), r: 4, fill: "var(--chart-1)", stroke: "var(--surface)", "stroke-width": 2 }));
+  return svg;
+}
+
+function renderKPIs(days) {
+  const cur = DAILY.slice(-days);
+  const prev = DAILY.slice(-days * 2, -days);
+  const grid = $("#kpis");
+  grid.replaceChildren();
+
+  KPI_DEFS.forEach((def) => {
+    let value, prevValue, points;
+    if (def.key === "active") {
+      value = PROJECT_STATUS[0].value;
+      prevValue = Math.round(value / (1 + days / 400));
+      points = Array.from({ length: 12 }, (_, i) => prevValue + Math.round((value - prevValue) * (i / 11) + rand() * 18));
+    } else {
+      value = sum(cur, def.key);
+      prevValue = sum(prev, def.key);
+      const chunk = Math.max(1, Math.floor(cur.length / 12));
+      points = Array.from({ length: 12 }, (_, i) => sum(cur.slice(i * chunk, (i + 1) * chunk), def.key));
+    }
+    const diff = prevValue ? ((value - prevValue) / prevValue) * 100 : 0;
+    const up = diff >= 0;
+
+    const card = document.createElement("div");
+    card.className = "card kpi";
+    card.innerHTML = `
+      <div class="kpi-top">
+        <span class="kpi-label">${def.label}</span>
+        <span class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${def.icon}</svg></span>
+      </div>
+      <div class="kpi-value">${num(value)}</div>
+      <div class="kpi-bottom">
+        <div>
+          <span class="delta ${up ? "up" : "down"}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${up ? '<polyline points="18 15 12 9 6 15"/>' : '<polyline points="6 9 12 15 18 9"/>'}</svg>
+            ${Math.abs(diff).toFixed(1)}%
+          </span>
+          <div class="delta-note" style="margin-top:6px">이전 ${days}일 대비</div>
+        </div>
+      </div>`;
+    card.querySelector(".kpi-bottom").appendChild(sparkline(points));
+    grid.appendChild(card);
+  });
+}
+
+/* ============================================================
+   Area chart — 신규 가입 추이 (crosshair + tooltip)
+   ============================================================ */
+let signupShowTable = false;
+
+function renderSignupChart(days) {
+  const rows = DAILY.slice(-days);
+  const host = $("#signup-chart");
+  const start = rows[0].date, end = rows[rows.length - 1].date;
+  $("#signup-chart-sub").textContent = `${fmtDateFull(start)} – ${fmtDateFull(end)} · 일별 신규 가입자`;
+
+  if (signupShowTable) {
+    host.replaceChildren(buildSeriesTable(rows.map(r => [fmtDateFull(r.date), num(r.signups)]), ["날짜", "신규 가입"]));
+    return;
+  }
+
+  const W = 640, H = 260;
+  const m = { top: 14, right: 18, bottom: 30, left: 42 };
+  const iw = W - m.left - m.right, ih = H - m.top - m.bottom;
+  const maxV = niceMax(Math.max(...rows.map(r => r.signups)));
+  const x = (i) => m.left + (i / (rows.length - 1)) * iw;
+  const y = (v) => m.top + (1 - v / maxV) * ih;
+
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "일별 신규 가입 추이 차트" });
+
+  /* 그리드: 헤어라인, 솔리드, 서페이스 한 단계 오프 */
+  const ticks = 4;
+  for (let t = 0; t <= ticks; t++) {
+    const v = (maxV / ticks) * t, ty = y(v);
+    svg.appendChild(svgEl("line", { x1: m.left, x2: W - m.right, y1: ty, y2: ty, stroke: "#EEF2F7", "stroke-width": 1 }));
+    const label = svgEl("text", { x: m.left - 10, y: ty + 4, "text-anchor": "end", "font-size": 11, fill: "#94A3B8", style: "font-variant-numeric: tabular-nums" });
+    label.textContent = num(v);
+    svg.appendChild(label);
+  }
+  /* x 라벨: 듬성하게 */
+  const nLabels = 5;
+  for (let i = 0; i < nLabels; i++) {
+    const idx = Math.round((rows.length - 1) * (i / (nLabels - 1)));
+    const label = svgEl("text", { x: x(idx), y: H - 8, "text-anchor": i === 0 ? "start" : i === nLabels - 1 ? "end" : "middle", "font-size": 11, fill: "#94A3B8" });
+    label.textContent = fmtDate(rows[idx].date);
+    svg.appendChild(label);
+  }
+
+  const lineD = rows.map((r, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(r.signups).toFixed(1)}`).join(" ");
+  svg.appendChild(svgEl("path", { d: `${lineD} L${x(rows.length - 1).toFixed(1)},${y(0)} L${x(0).toFixed(1)},${y(0)} Z`, fill: "var(--chart-1)", opacity: .1 }));
+  svg.appendChild(svgEl("path", { d: lineD, fill: "none", stroke: "var(--chart-1)", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+
+  /* 끝점 마커 + 서페이스 링 + 선택적 직접 라벨(끝값만) */
+  const last = rows.length - 1;
+  svg.appendChild(svgEl("circle", { cx: x(last), cy: y(rows[last].signups), r: 4.5, fill: "var(--chart-1)", stroke: "var(--surface)", "stroke-width": 2 }));
+  const endLabel = svgEl("text", { x: x(last) - 8, y: y(rows[last].signups) - 10, "text-anchor": "end", "font-size": 11.5, "font-weight": 600, fill: "#475569" });
+  endLabel.textContent = num(rows[last].signups);
+  svg.appendChild(endLabel);
+
+  /* crosshair + hover 레이어 */
+  const cross = svgEl("line", { y1: m.top, y2: m.top + ih, stroke: "#CBD5E1", "stroke-width": 1, opacity: 0 });
+  const hoverDot = svgEl("circle", { r: 4.5, fill: "var(--chart-1)", stroke: "var(--surface)", "stroke-width": 2, opacity: 0 });
+  svg.append(cross, hoverDot);
+  const hit = svgEl("rect", { x: m.left, y: m.top, width: iw, height: ih, fill: "transparent" });
+  svg.appendChild(hit);
+
+  hit.addEventListener("pointermove", (e) => {
+    const rect = svg.getBoundingClientRect();
+    const px = ((e.clientX - rect.left) / rect.width) * W;
+    const idx = Math.max(0, Math.min(rows.length - 1, Math.round(((px - m.left) / iw) * (rows.length - 1))));
+    const cx = x(idx), cy = y(rows[idx].signups);
+    cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("opacity", 1);
+    hoverDot.setAttribute("cx", cx); hoverDot.setAttribute("cy", cy); hoverDot.setAttribute("opacity", 1);
+    showTip(tipContent(fmtDateFull(rows[idx].date), "신규 가입", rows[idx].signups), e.clientX, e.clientY);
+  });
+  hit.addEventListener("pointerleave", () => {
+    cross.setAttribute("opacity", 0); hoverDot.setAttribute("opacity", 0); hideTip();
+  });
+
+  host.replaceChildren(svg);
+}
+
+/* ============================================================
+   Bar chart — 프로젝트 상태 분포 (단일 휴, 수평 바)
+   ============================================================ */
+let statusShowTable = false;
+
+function renderStatusChart() {
+  const host = $("#status-chart");
+  if (statusShowTable) {
+    host.replaceChildren(buildSeriesTable(PROJECT_STATUS.map(s => [s.label, num(s.value)]), ["상태", "프로젝트 수"]));
+    return;
+  }
+
+  const W = 360, rowH = 58, m = { left: 64, right: 56, top: 8 };
+  const H = m.top + PROJECT_STATUS.length * rowH;
+  const maxV = niceMax(Math.max(...PROJECT_STATUS.map(s => s.value)));
+  const iw = W - m.left - m.right;
+
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "프로젝트 상태 분포 차트" });
+
+  PROJECT_STATUS.forEach((s, i) => {
+    const cy = m.top + i * rowH + rowH / 2;
+    const bw = Math.max(6, (s.value / maxV) * iw);
+    const bh = 14;
+
+    const cat = svgEl("text", { x: m.left - 12, y: cy + 4, "text-anchor": "end", "font-size": 12.5, "font-weight": 500, fill: "#475569" });
+    cat.textContent = s.label;
+    svg.appendChild(cat);
+
+    /* 베이스라인 쪽 직각, 데이터 끝 4px 라운드 */
+    const r = 4;
+    const bar = svgEl("path", {
+      d: `M${m.left},${cy - bh / 2} h${bw - r} a${r},${r} 0 0 1 ${r},${r} v${bh - r * 2} a${r},${r} 0 0 1 -${r},${r} h-${bw - r} Z`,
+      fill: "var(--chart-1)", tabindex: 0, role: "graphics-symbol",
+      "aria-label": `${s.label} ${num(s.value)}개`,
+      style: "transition: opacity .15s; cursor: default; outline: none;",
+    });
+    const val = svgEl("text", { x: m.left + bw + 10, y: cy + 4, "font-size": 12, "font-weight": 600, fill: "#0F172A", style: "font-variant-numeric: tabular-nums" });
+    val.textContent = num(s.value);
+
+    const onEnter = (e) => {
+      bar.setAttribute("opacity", .82);
+      const p = e.clientX !== undefined ? e : { clientX: bar.getBoundingClientRect().right, clientY: bar.getBoundingClientRect().top };
+      showTip(tipContent("프로젝트 상태", s.label, s.value), p.clientX, p.clientY);
+    };
+    const onLeave = () => { bar.removeAttribute("opacity"); hideTip(); };
+    bar.addEventListener("pointermove", onEnter);
+    bar.addEventListener("pointerleave", onLeave);
+    bar.addEventListener("focus", onEnter);
+    bar.addEventListener("blur", onLeave);
+
+    svg.append(bar, val);
+  });
+
+  host.replaceChildren(svg);
+}
+
+function buildSeriesTable(rows, headers) {
+  const wrap = document.createElement("div");
+  wrap.className = "chart-table-wrap";
+  const table = document.createElement("table");
+  table.className = "chart-table";
+  const thead = document.createElement("thead");
+  const trh = document.createElement("tr");
+  headers.forEach(h => { const th = document.createElement("th"); th.textContent = h; trh.appendChild(th); });
+  thead.appendChild(trh);
+  const tbody = document.createElement("tbody");
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    r.forEach((c, i) => {
+      const td = document.createElement("td");
+      td.textContent = c;
+      if (i === r.length - 1) td.className = "tnum";
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.append(thead, tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+
+/* ============================================================
+   패턴 검토 테이블 — 탭 필터 + 정렬 + 승인/반려 + 검색
+   ============================================================ */
+const TABS = [
+  { key: "all",      label: "전체" },
+  { key: "pending",  label: "검토 대기" },
+  { key: "approved", label: "승인됨" },
+  { key: "rejected", label: "반려됨" },
+];
+const COLS = [
+  { key: "title",    label: "패턴",     sortable: true },
+  { key: "uploader", label: "업로더",   sortable: true },
+  { key: "size",     label: "크기",     sortable: true },
+  { key: "pages",    label: "페이지",   sortable: true },
+  { key: "status",   label: "상태",     sortable: false },
+  { key: "at",       label: "업로드일", sortable: true },
+  { key: "_actions", label: "",        sortable: false },
+];
+let tabState = "all";
+let sortState = { key: "at", dir: -1 };
+let searchQuery = "";
+
+function currentRows() {
+  let rows = reviews.slice();
+  if (tabState !== "all") rows = rows.filter(r => r.status === tabState);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    rows = rows.filter(r => r.title.toLowerCase().includes(q) || r.uploader.toLowerCase().includes(q) || r.file.toLowerCase().includes(q));
+  }
+  rows.sort((a, b) => {
+    const { key, dir } = sortState;
+    const va = a[key], vb = b[key];
+    if (va < vb) return -dir;
+    if (va > vb) return dir;
+    return 0;
+  });
+  return rows;
+}
+
+function renderTabs() {
+  const wrap = $("#review-tabs");
+  wrap.replaceChildren();
+  TABS.forEach(t => {
+    const n = t.key === "all" ? reviews.length : reviews.filter(r => r.status === t.key).length;
+    const btn = document.createElement("button");
+    btn.className = "tab" + (tabState === t.key ? " active" : "");
+    const label = document.createElement("span"); label.textContent = t.label;
+    const count = document.createElement("span"); count.className = "n tnum"; count.textContent = n;
+    btn.append(label, count);
+    btn.addEventListener("click", () => { tabState = t.key; renderTable(); });
+    wrap.appendChild(btn);
+  });
+  $("#nav-pending-count").textContent = reviews.filter(r => r.status === "pending").length;
+}
+
+function sortIcon(active, dir) {
+  if (!active) return '<svg class="sort-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m8 9 4-4 4 4"/><path d="m16 15-4 4-4-4"/></svg>';
+  return dir === 1
+    ? '<svg class="sort-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 6-6 6 6"/></svg>'
+    : '<svg class="sort-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 10 6 6 6-6"/></svg>';
+}
+
+function renderTableHead() {
+  const thead = $("#review-thead");
+  const tr = document.createElement("tr");
+  COLS.forEach(c => {
+    const th = document.createElement("th");
+    if (c.sortable) {
+      th.className = "sortable" + (sortState.key === c.key ? " sorted" : "");
+      th.innerHTML = `${c.label}${sortIcon(sortState.key === c.key, sortState.dir)}`;
+      th.addEventListener("click", () => {
+        sortState = sortState.key === c.key ? { key: c.key, dir: -sortState.dir } : { key: c.key, dir: 1 };
+        renderTable();
+      });
+    } else {
+      th.textContent = c.label;
+    }
+    tr.appendChild(th);
+  });
+  thead.replaceChildren(tr);
+}
+
+function renderTable() {
+  renderTabs();
+  renderTableHead();
+  const tbody = $("#review-tbody");
+  tbody.replaceChildren();
+  const rows = currentRows();
+  $("#review-empty").hidden = rows.length > 0;
+  $("#review-foot-count").textContent = `총 ${rows.length}건 표시 중 · 전체 ${reviews.length}건`;
+
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+
+    /* 패턴 */
+    const tdTitle = document.createElement("td");
+    const t1 = document.createElement("div"); t1.className = "cell-main"; t1.textContent = r.title;
+    const t2 = document.createElement("div"); t2.className = "cell-sub"; t2.textContent = r.file;
+    tdTitle.append(t1, t2);
+
+    /* 업로더 */
+    const tdUp = document.createElement("td");
+    const up = document.createElement("div"); up.className = "uploader";
+    const av = document.createElement("span"); av.className = "avatar"; av.textContent = r.uploader.slice(0, 2);
+    const upInfo = document.createElement("div");
+    const n1 = document.createElement("div"); n1.className = "cell-main"; n1.style.fontWeight = 500; n1.textContent = r.uploader;
+    const n2 = document.createElement("div"); n2.className = "cell-sub"; n2.textContent = r.email;
+    upInfo.append(n1, n2);
+    up.append(av, upInfo);
+    tdUp.appendChild(up);
+
+    /* 크기 / 페이지 */
+    const tdSize = document.createElement("td");
+    tdSize.className = "tnum"; tdSize.style.color = "var(--ink-2)"; tdSize.textContent = r.size.toFixed(1) + " MB";
+    const tdPages = document.createElement("td");
+    tdPages.className = "tnum"; tdPages.style.color = "var(--ink-2)"; tdPages.textContent = r.pages + "p";
+
+    /* 상태 pill */
+    const tdStatus = document.createElement("td");
+    const meta = STATUS_META[r.status];
+    const pill = document.createElement("span");
+    pill.className = "pill " + meta.cls;
+    const dot = document.createElement("span"); dot.className = "dot";
+    pill.append(dot, document.createTextNode(meta.label));
+    tdStatus.appendChild(pill);
+
+    /* 업로드일 */
+    const tdAt = document.createElement("td");
+    tdAt.className = "tnum"; tdAt.style.color = "var(--ink-2)"; tdAt.textContent = fmtDateFull(r.at);
+
+    /* 액션 */
+    const tdAct = document.createElement("td");
+    const actions = document.createElement("div"); actions.className = "row-actions";
+    if (r.status === "pending") {
+      const ok = document.createElement("button");
+      ok.className = "btn btn-approve"; ok.textContent = "승인";
+      ok.addEventListener("click", () => setReviewStatus(r.id, "approved"));
+      const no = document.createElement("button");
+      no.className = "btn btn-reject"; no.textContent = "반려";
+      no.addEventListener("click", () => setReviewStatus(r.id, "rejected"));
+      actions.append(ok, no);
+    } else {
+      const view = document.createElement("button");
+      view.className = "btn btn-view"; view.textContent = "보기";
+      view.addEventListener("click", () => toast(`'${r.title}' 상세는 데모에서 제공하지 않습니다.`, "var(--chart-1)"));
+      actions.appendChild(view);
+    }
+    tdAct.appendChild(actions);
+
+    tr.append(tdTitle, tdUp, tdSize, tdPages, tdStatus, tdAt, tdAct);
+    tbody.appendChild(tr);
+  });
+}
+
+function setReviewStatus(id, status) {
+  const r = reviews.find(x => x.id === id);
+  if (!r) return;
+  r.status = status;
+  renderTable();
+  if (status === "approved") toast(`'${r.title}' 패턴을 승인했습니다.`, "var(--ok)");
+  else toast(`'${r.title}' 패턴을 반려했습니다.`, "var(--danger)");
+}
+
+/* ============================================================
+   글로벌 컨트롤 배선
+   ============================================================ */
+let rangeDays = 30;
+
+document.querySelectorAll(".range-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".range-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    rangeDays = Number(btn.dataset.days);
+    renderKPIs(rangeDays);
+    renderSignupChart(rangeDays);
+  });
+});
+
+$("#signup-table-toggle").addEventListener("click", (e) => {
+  signupShowTable = !signupShowTable;
+  e.target.textContent = signupShowTable ? "차트로 보기" : "표로 보기";
+  renderSignupChart(rangeDays);
+});
+$("#status-table-toggle").addEventListener("click", (e) => {
+  statusShowTable = !statusShowTable;
+  e.target.textContent = statusShowTable ? "차트로 보기" : "표로 보기";
+  renderStatusChart();
+});
+
+$("#global-search").addEventListener("input", (e) => {
+  searchQuery = e.target.value.trim();
+  renderTable();
+  if (searchQuery) $("#review").scrollIntoView({ behavior: "smooth", block: "nearest" });
+});
+document.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+    e.preventDefault();
+    $("#global-search").focus();
+  }
+});
+
+/* 사이드바 내비게이션 → 해당 섹션 스크롤 */
+document.querySelectorAll(".nav-item").forEach(item => {
+  item.addEventListener("click", () => {
+    document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+    item.classList.add("active");
+    const target = document.getElementById(item.dataset.target);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+/* ============================================================
+   초기 렌더
+   ============================================================ */
+renderKPIs(rangeDays);
+renderSignupChart(rangeDays);
+renderStatusChart();
+renderTable();
+</script>
+</body>
+</html>
