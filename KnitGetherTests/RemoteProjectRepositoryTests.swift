@@ -583,6 +583,41 @@ struct RemoteProjectRepositoryTests {
         #expect(savedSession.syncStatus == .synced)
     }
 
+    @Test func saveNewWorkSessionRecordedFromSyncedProjectPostsPartialEndpoint() async throws {
+        let project = Self.project(syncStatus: .synced)
+        let recordedProject = project.recordingWorkSession(
+            startedAt: Self.date("2026-07-03T08:00:00.000Z"),
+            endedAt: Self.date("2026-07-03T09:00:00.000Z")
+        )
+        let workSession = try #require(recordedProject.workSessions.last)
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects/\(project.id.uuidString.lowercased())/work-sessions")
+            #expect(request.httpMethod == "POST")
+
+            let body = try Self.bodyData(from: request)
+            let object = try #require(
+                JSONSerialization.jsonObject(with: body) as? [String: Any]
+            )
+            #expect(object["id"] as? String == workSession.id.uuidString.lowercased())
+            #expect(object["projectId"] as? String == project.id.uuidString.lowercased())
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 201,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.workSessionResponseJSON.utf8))
+        }
+
+        #expect(workSession.syncStatus == .localOnly)
+
+        let repository = Self.makeRepository(session: session)
+        let savedSession = try await repository.saveWorkSession(workSession, forProjectId: project.id)
+
+        #expect(savedSession.syncStatus == .synced)
+    }
+
     @Test func saveSyncedWorkSessionPatchesPartialEndpoint() async throws {
         let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let workSession = Self.workSession(syncStatus: .synced)

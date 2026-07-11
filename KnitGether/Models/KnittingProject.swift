@@ -275,7 +275,7 @@ struct KnittingProject: Codable, Identifiable, Hashable {
             memo: memo,
             createdAt: endedAt,
             updatedAt: endedAt,
-            syncStatus: syncStatus
+            syncStatus: .localOnly
         )
 
         return copy(
