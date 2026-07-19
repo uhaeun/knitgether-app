@@ -141,9 +141,19 @@ nonisolated final class APIClient {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
 
-        let (data, response) = try await session.data(for: request)
+        Self.debugLog("REQUEST \(method) \(url.absoluteString)")
+
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            Self.debugLog("ERROR \(method) \(url.absoluteString) \(error)")
+            throw error
+        }
 
         guard let httpResponse = response as? HTTPURLResponse else {
+            Self.debugLog("ERROR \(method) \(url.absoluteString) invalid response")
             throw APIError.invalidResponse
         }
 
@@ -153,6 +163,9 @@ nonisolated final class APIClient {
             }
 
             let envelope = try? decoder.decode(APIErrorEnvelope.self, from: data)
+            Self.debugLog(
+                "RESPONSE \(method) \(url.absoluteString) status=\(httpResponse.statusCode) code=\(envelope?.code ?? "-") message=\(envelope?.message ?? "-")"
+            )
             throw APIError.requestFailed(
                 statusCode: httpResponse.statusCode,
                 code: envelope?.code,
@@ -160,7 +173,14 @@ nonisolated final class APIClient {
             )
         }
 
+        Self.debugLog("RESPONSE \(method) \(url.absoluteString) status=\(httpResponse.statusCode)")
         return data
+    }
+
+    private static func debugLog(_ message: String) {
+        #if DEBUG
+        print("[KnitGether API] \(message)")
+        #endif
     }
 
     private func multipartBody(

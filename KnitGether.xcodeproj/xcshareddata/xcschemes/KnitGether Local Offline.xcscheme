@@ -75,18 +75,6 @@
             ReferencedContainer = "container:KnitGether.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "KNITGETHER_API_BASE_URL"
-            value = "http://haeun.local:3000/api/v1"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "KNITGETHER_DEV_AUTH_TOKEN"
-            value = "dev-token"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
