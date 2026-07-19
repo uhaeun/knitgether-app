@@ -15,7 +15,7 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
-    func -() throws {
+    func testCoreUserFlowRegistersAndSavesCommonRecords() throws {
         let uniqueSuffix = Int(Date().timeIntervalSince1970)
         let email = "ui-flow-\(uniqueSuffix)@example.com"
         let projectName = "UI Flow Project \(uniqueSuffix)"
