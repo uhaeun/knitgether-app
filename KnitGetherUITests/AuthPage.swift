@@ -8,13 +8,25 @@ import XCTest
 struct AuthPage: UITestPage {
     let app: XCUIApplication
 
-    func signOutIfNeeded() -> AuthPage {
-        let logoutButton = app.buttons["auth.logout"].exists
-            ? app.buttons["auth.logout"]
-            : app.buttons["로그아웃"].firstMatch
+    func expectVisible() {
+        XCTAssertTrue(
+            app.navigationBars["계정"].waitForExistence(timeout: 12),
+            "계정 화면이 보여야 합니다."
+        )
+    }
 
-        if logoutButton.waitForExistence(timeout: 2) {
-            tap(logoutButton)
+    func signOutIfNeeded() -> AuthPage {
+        let identifierButton = app.buttons["auth.logout"].firstMatch
+        if identifierButton.waitForExistence(timeout: 5) {
+            tap(identifierButton)
+            reopenAccountFormIfNeeded()
+            return self
+        }
+
+        let labelButton = app.buttons["로그아웃"].firstMatch
+        if labelButton.waitForExistence(timeout: 2) {
+            tap(labelButton)
+            reopenAccountFormIfNeeded()
         }
 
         return self
@@ -25,6 +37,7 @@ struct AuthPage: UITestPage {
         password: String,
         displayName: String
     ) -> AuthPage {
+        expectVisible()
         tap(app.buttons["회원가입"].firstMatch)
         enterText("auth.email", text: email)
         dismissKeyboard()
@@ -32,20 +45,106 @@ struct AuthPage: UITestPage {
         dismissKeyboard()
         enterText("auth.password", text: password)
         dismissKeyboard()
-        tap(app.buttons["auth.submit"].firstMatch)
+        let submitButton = app.buttons["auth.submit"].firstMatch
+        XCTAssertTrue(
+            submitButton.waitForExistence(timeout: 12) && submitButton.isEnabled,
+            "회원가입 제출 버튼이 활성화되어야 합니다."
+        )
+        tap(submitButton)
         return self
     }
 
-    func expectRegistrationCompleted() {
+    @discardableResult
+    func expectRegistrationCompleted(displayName: String? = nil) -> AuthPage {
+        if let displayName {
+            waitForRegistrationEvidence(displayName: displayName)
+            return self
+        }
+
         XCTAssertTrue(
             app.staticTexts["회원가입이 완료됐어요."].waitForExistence(timeout: 12)
                 || app.buttons["auth.logout"].waitForExistence(timeout: 12),
             "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
         )
+        return self
     }
 
     func returnToOnboarding() -> OnboardingPage {
         tap(app.navigationBars.buttons.element(boundBy: 0))
         return OnboardingPage(app: app)
+    }
+
+    @discardableResult
+    func returnToSettings() -> SettingsPage {
+        tap(app.navigationBars.buttons.element(boundBy: 0))
+        return SettingsPage(app: app)
+    }
+
+    private func reopenAccountFormIfNeeded(
+        timeout: TimeInterval = 12,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if app.buttons["auth.submit"].exists {
+                return
+            }
+
+            if app.buttons["settings.account"].exists {
+                tap(app.buttons["settings.account"].firstMatch)
+                expectVisible()
+                if app.buttons["auth.submit"].waitForExistence(timeout: 4) {
+                    return
+                }
+            }
+
+            if app.tabBars.buttons["설정"].exists {
+                tap(app.tabBars.buttons["설정"].firstMatch)
+            }
+
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+
+        XCTFail(
+            "로그아웃 후 로그인/회원가입 폼이 보여야 합니다.",
+            file: file,
+            line: line
+        )
+    }
+
+    private func waitForRegistrationEvidence(
+        displayName: String,
+        timeout: TimeInterval = 20,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let accountPageDeadline = Date().addingTimeInterval(timeout)
+        while Date() < accountPageDeadline {
+            if app.staticTexts["회원가입이 완료됐어요."].exists
+                || app.buttons["auth.logout"].exists
+                || hasVisibleText(containing: displayName) {
+                return
+            }
+
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+
+        let visibleText = app.staticTexts.allElementsBoundByIndex
+            .map(\.label)
+            .prefix(40)
+            .joined(separator: " | ")
+        XCTFail(
+            "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다. visibleText=\(visibleText)",
+            file: file,
+            line: line
+        )
+    }
+
+    private func hasVisibleText(containing value: String) -> Bool {
+        app.staticTexts.allElementsBoundByIndex.contains {
+            $0.label.contains(value)
+        }
     }
 }

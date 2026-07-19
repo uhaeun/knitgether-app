@@ -21,4 +21,9 @@ struct MainTabBarPage: UITestPage {
         tap(app.tabBars.buttons["도구"].firstMatch)
         return ToolPage(app: app)
     }
+
+    func openSettings() -> SettingsPage {
+        tap(app.tabBars.buttons["설정"].firstMatch)
+        return SettingsPage(app: app)
+    }
 }

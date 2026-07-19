@@ -24,7 +24,8 @@ class KnitGetherUITestCase: XCTestCase {
     @MainActor
     func launchForCoreFlow(
         apiBaseURL: String = "http://127.0.0.1:3000/api/v1",
-        localCacheDirectory: URL? = nil
+        localCacheDirectory: URL? = nil,
+        localCacheRootDirectory: URL? = nil
     ) -> OnboardingPage {
         app.launchArguments = [
             "-ApplePersistenceIgnoreState",
@@ -33,7 +34,8 @@ class KnitGetherUITestCase: XCTestCase {
         app.launchEnvironment = launchEnvironment(
             apiBaseURL: apiBaseURL,
             resetOnboarding: true,
-            localCacheDirectory: localCacheDirectory
+            localCacheDirectory: localCacheDirectory,
+            localCacheRootDirectory: localCacheRootDirectory
         )
         app.launch()
 
@@ -44,7 +46,8 @@ class KnitGetherUITestCase: XCTestCase {
     @MainActor
     func relaunchForExistingSession(
         apiBaseURL: String = "http://127.0.0.1:3000/api/v1",
-        localCacheDirectory: URL? = nil
+        localCacheDirectory: URL? = nil,
+        localCacheRootDirectory: URL? = nil
     ) -> MainTabBarPage {
         if app.state != .notRunning {
             app.terminate()
@@ -57,7 +60,8 @@ class KnitGetherUITestCase: XCTestCase {
         app.launchEnvironment = launchEnvironment(
             apiBaseURL: apiBaseURL,
             resetOnboarding: false,
-            localCacheDirectory: localCacheDirectory
+            localCacheDirectory: localCacheDirectory,
+            localCacheRootDirectory: localCacheRootDirectory
         )
         app.launch()
 
@@ -77,7 +81,8 @@ class KnitGetherUITestCase: XCTestCase {
     private func launchEnvironment(
         apiBaseURL: String,
         resetOnboarding: Bool,
-        localCacheDirectory: URL?
+        localCacheDirectory: URL?,
+        localCacheRootDirectory: URL?
     ) -> [String: String] {
         var environment = [
             "KNITGETHER_API_BASE_URL": apiBaseURL,
@@ -90,6 +95,10 @@ class KnitGetherUITestCase: XCTestCase {
 
         if let localCacheDirectory {
             environment["KNITGETHER_LOCAL_CACHE_DIRECTORY"] = localCacheDirectory.path
+        }
+
+        if let localCacheRootDirectory {
+            environment["KNITGETHER_LOCAL_CACHE_ROOT_DIRECTORY"] = localCacheRootDirectory.path
         }
 
         return environment

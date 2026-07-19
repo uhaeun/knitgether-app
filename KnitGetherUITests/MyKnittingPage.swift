@@ -34,4 +34,11 @@ struct MyKnittingPage: UITestPage {
             "저장된 프로젝트가 목록에 보여야 합니다: \(projectName)"
         )
     }
+
+    func expectProjectNotVisible(named projectName: String) {
+        XCTAssertFalse(
+            app.staticTexts[projectName].waitForExistence(timeout: 5),
+            "다른 계정의 프로젝트가 목록에 보이면 안 됩니다: \(projectName)"
+        )
+    }
 }

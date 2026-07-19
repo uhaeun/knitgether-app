@@ -162,6 +162,52 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testAccountSwitchKeepsProjectCacheSeparatedByUser() throws {
+        let cacheRootDirectory = try makeLocalCacheDirectory(prefix: "account-scope")
+        defer { try? FileManager.default.removeItem(at: cacheRootDirectory) }
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let firstEmail = "ui-account-a-\(uniqueSuffix)@example.com"
+        let secondEmail = "ui-account-b-\(uniqueSuffix)@example.com"
+        let firstProjectName = "Account A Project \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding(
+            email: firstEmail,
+            displayName: "UI Account A",
+            localCacheRootDirectory: cacheRootDirectory
+        )
+
+        mainTabs.openMyKnitting()
+            .openAddProject()
+            .saveProject(named: firstProjectName)
+            .expectProjectSaved(named: firstProjectName)
+
+        _ = mainTabs.openSettings()
+            .openAccount()
+            .signOutIfNeeded()
+
+        if app.state != .notRunning {
+            app.terminate()
+        }
+        let secondAuth = launchForCoreFlow(localCacheRootDirectory: cacheRootDirectory)
+            .goToAuth()
+            .signOutIfNeeded()
+            .register(
+                email: secondEmail,
+                password: "password-1234",
+                displayName: "UI Account B"
+            )
+        secondAuth.expectRegistrationCompleted(displayName: "UI Account B")
+
+        let secondMainTabs = secondAuth
+            .returnToOnboarding()
+            .advanceToSkillTestStep()
+            .finishOnboarding()
+
+        secondMainTabs.openMyKnitting()
+            .expectProjectNotVisible(named: firstProjectName)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
@@ -189,17 +235,23 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     @MainActor
     @discardableResult
     private func registerAndFinishOnboarding(
-        localCacheDirectory: URL? = nil
+        email: String? = nil,
+        displayName: String = "UI Workspace Tester",
+        localCacheDirectory: URL? = nil,
+        localCacheRootDirectory: URL? = nil
     ) -> MainTabBarPage {
         let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
-        let email = "ui-offline-\(uniqueSuffix)@example.com"
+        let email = email ?? "ui-offline-\(uniqueSuffix)@example.com"
 
-        let onboarding = launchForCoreFlow(localCacheDirectory: localCacheDirectory)
+        let onboarding = launchForCoreFlow(
+            localCacheDirectory: localCacheDirectory,
+            localCacheRootDirectory: localCacheRootDirectory
+        )
         let auth = onboarding.goToAuth().signOutIfNeeded()
         let signedInAuth = auth.register(
             email: email,
             password: "password-1234",
-            displayName: "UI Workspace Tester"
+            displayName: displayName
         )
         signedInAuth.expectRegistrationCompleted()
 
