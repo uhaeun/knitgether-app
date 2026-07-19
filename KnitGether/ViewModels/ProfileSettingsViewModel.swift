@@ -41,9 +41,23 @@ final class ProfileSettingsViewModel: ObservableObject {
     @Published var formData = ProfileFormData()
 
     private let profileRepository: any ProfileRepository
+    private let authSessionStore: AuthSessionStore
+    private let requiresAuthenticatedProfile: Bool
 
     init(profileRepository: any ProfileRepository) {
         self.profileRepository = profileRepository
+        self.authSessionStore = .shared
+        self.requiresAuthenticatedProfile = false
+    }
+
+    init(
+        profileRepository: any ProfileRepository,
+        authSessionStore: AuthSessionStore,
+        requiresAuthenticatedProfile: Bool
+    ) {
+        self.profileRepository = profileRepository
+        self.authSessionStore = authSessionStore
+        self.requiresAuthenticatedProfile = requiresAuthenticatedProfile
     }
 
     var hasProfileNeedingSync: Bool {
@@ -51,6 +65,11 @@ final class ProfileSettingsViewModel: ObservableObject {
     }
 
     func loadProfile() async {
+        guard canLoadProfile else {
+            resetToSignedOutDefaults()
+            return
+        }
+
         do {
             let profile = try await profileRepository.fetchCurrentProfile()
             self.profile = profile
@@ -63,6 +82,16 @@ final class ProfileSettingsViewModel: ObservableObject {
         } catch {
             errorMessage = "프로필을 불러오지 못했어요."
         }
+    }
+
+    private var canLoadProfile: Bool {
+        !requiresAuthenticatedProfile || authSessionStore.currentSession != nil
+    }
+
+    private func resetToSignedOutDefaults() {
+        profile = nil
+        formData = ProfileFormData()
+        errorMessage = nil
     }
 
     func retrySync() async {

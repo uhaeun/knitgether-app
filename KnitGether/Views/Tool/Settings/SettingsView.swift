@@ -57,7 +57,11 @@ struct SettingsView: View {
                             ),
                             showsSeparator: false
                         ) {
-                            ProfileSettingsView(profileRepository: repositories.profileRepository)
+                            ProfileSettingsView(
+                                profileRepository: repositories.profileRepository,
+                                authSessionStore: repositories.authSessionStore,
+                                requiresAuthenticatedProfile: repositories.profileRequiresAuthentication
+                            )
                         }
                         .accessibilityIdentifier(AppAccessibilityID.Settings.profileCard)
                     }
@@ -190,7 +194,11 @@ struct SettingsView: View {
 
     private var profileCard: some View {
         NavigationLink {
-            ProfileSettingsView(profileRepository: repositories.profileRepository)
+            ProfileSettingsView(
+                profileRepository: repositories.profileRepository,
+                authSessionStore: repositories.authSessionStore,
+                requiresAuthenticatedProfile: repositories.profileRequiresAuthentication
+            )
         } label: {
             HStack(spacing: 14) {
                 Image(systemName: "heart.text.square.fill")

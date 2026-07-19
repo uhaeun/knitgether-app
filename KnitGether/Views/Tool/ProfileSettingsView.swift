@@ -5,15 +5,34 @@
 //  Created by Codex on 7/9/26.
 //
 
+import Combine
 import SwiftUI
 
 struct ProfileSettingsView: View {
     @StateObject private var viewModel: ProfileSettingsViewModel
+    @ObservedObject private var authSessionStore: AuthSessionStore
     @State private var isSaving = false
 
     init(profileRepository: any ProfileRepository) {
+        self.init(
+            profileRepository: profileRepository,
+            authSessionStore: .shared,
+            requiresAuthenticatedProfile: false
+        )
+    }
+
+    init(
+        profileRepository: any ProfileRepository,
+        authSessionStore: AuthSessionStore,
+        requiresAuthenticatedProfile: Bool
+    ) {
+        self.authSessionStore = authSessionStore
         _viewModel = StateObject(
-            wrappedValue: ProfileSettingsViewModel(profileRepository: profileRepository)
+            wrappedValue: ProfileSettingsViewModel(
+                profileRepository: profileRepository,
+                authSessionStore: authSessionStore,
+                requiresAuthenticatedProfile: requiresAuthenticatedProfile
+            )
         )
     }
 
@@ -155,6 +174,11 @@ struct ProfileSettingsView: View {
         }
         .refreshable {
             await viewModel.loadProfile()
+        }
+        .onReceive(authSessionStore.$currentSession.dropFirst()) { _ in
+            Task {
+                await viewModel.loadProfile()
+            }
         }
     }
 

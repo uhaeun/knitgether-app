@@ -262,6 +262,18 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testLogoutDoesNotShowProfileLoadError() throws {
+        let mainTabs = registerAndFinishOnboarding()
+        let settings = mainTabs.openSettings()
+
+        settings.openAccount()
+            .signOutIfNeeded()
+            .returnToSettings()
+            .openProfile()
+            .expectProfileLoadErrorNotVisible()
+    }
+
+    @MainActor
     func testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch() throws {
         let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
         let originalProjectName = "Editable Project \(uniqueSuffix)"

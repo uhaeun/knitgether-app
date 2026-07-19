@@ -28,6 +28,36 @@ struct ProfileSettingsViewModelTests {
         #expect(viewModel.errorMessage == nil)
     }
 
+    @Test func authenticatedProfileLoadAfterSignOutKeepsEditableDefaultsWithoutError() async throws {
+        let repository = FakeProfileRepository(profile: Self.makeProfile())
+        let store = AuthSessionStore(
+            userDefaults: Self.makeDefaults(),
+            tokenStorage: InMemoryAuthTokenStorage()
+        )
+        try store.save(Self.makeSession())
+        let viewModel = ProfileSettingsViewModel(
+            profileRepository: repository,
+            authSessionStore: store,
+            requiresAuthenticatedProfile: true
+        )
+
+        await viewModel.loadProfile()
+        repository.fetchProfileError = APIError.requestFailed(
+            statusCode: 401,
+            code: "UNAUTHENTICATED",
+            message: "Missing token."
+        )
+        try store.clear()
+
+        await viewModel.loadProfile()
+
+        #expect(repository.fetchProfileCallCount == 1)
+        #expect(viewModel.profile == nil)
+        #expect(viewModel.formData.displayName == "")
+        #expect(viewModel.formData.preferredUnits == "Metric")
+        #expect(viewModel.errorMessage == nil)
+    }
+
     @Test func saveProfilePersistsTrimmedProfileAndReloads() async throws {
         let repository = FakeProfileRepository(profile: Self.makeProfile())
         let viewModel = ProfileSettingsViewModel(profileRepository: repository)
@@ -91,6 +121,21 @@ struct ProfileSettingsViewModelTests {
             deletedAt: nil,
             syncStatus: syncStatus
         )
+    }
+
+    private static func makeSession() -> AuthSession {
+        AuthSession(
+            accessToken: "jwt-token",
+            tokenType: "Bearer",
+            profile: makeProfile()
+        )
+    }
+
+    private static func makeDefaults() -> UserDefaults {
+        let suiteName = "ProfileSettingsViewModelTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.removePersistentDomain(forName: suiteName)
+        return defaults
     }
 }
 

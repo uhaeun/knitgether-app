@@ -25,6 +25,7 @@ final class AppRepositoryContainer {
     let skillRepository: any SkillRepository
     let dictionaryRepository: any DictionaryRepository
     let profileRepository: any ProfileRepository
+    let profileRequiresAuthentication: Bool
 
     init(
         authRepository: any AuthRepository,
@@ -37,7 +38,8 @@ final class AppRepositoryContainer {
         libraryRepository: any LibraryRepository,
         skillRepository: any SkillRepository,
         dictionaryRepository: any DictionaryRepository,
-        profileRepository: any ProfileRepository
+        profileRepository: any ProfileRepository,
+        profileRequiresAuthentication: Bool = false
     ) {
         self.authRepository = authRepository
         self.authSessionStore = authSessionStore
@@ -50,6 +52,7 @@ final class AppRepositoryContainer {
         self.skillRepository = skillRepository
         self.dictionaryRepository = dictionaryRepository
         self.profileRepository = profileRepository
+        self.profileRequiresAuthentication = profileRequiresAuthentication
     }
 
     static func makeDefault(
@@ -89,10 +92,12 @@ final class AppRepositoryContainer {
         let skillRepository: any SkillRepository
         let dictionaryRepository: any DictionaryRepository
         let profileRepository: any ProfileRepository
+        let profileRequiresAuthentication: Bool
 
         if let baseURL = apiBaseURL(from: environment) {
             let apiToken = apiAuthToken(from: environment)
             let devToken = devAuthToken(from: environment)
+            let hasStaticAuthToken = apiToken != nil || devToken != nil
             let cacheDirectoryURL = remoteCacheDirectoryURL(
                 from: environment,
                 baseURL: baseURL,
@@ -191,13 +196,15 @@ final class AppRepositoryContainer {
                 seedSample: false,
                 fileURL: cacheFileURL("profile.json", in: cacheDirectoryURL)
             )
-            if apiToken != nil || devToken != nil || authSessionStore.currentSession != nil {
+            if hasStaticAuthToken || authSessionStore.currentSession != nil {
                 profileRepository = OfflineFirstProfileRepository(
                     local: localProfileRepository,
                     remote: RemoteProfileRepository(apiClient: apiClient)
                 )
+                profileRequiresAuthentication = !hasStaticAuthToken
             } else {
                 profileRepository = localProfileRepository
+                profileRequiresAuthentication = false
             }
         } else {
             authRepository = LocalAuthRepository()
@@ -210,6 +217,7 @@ final class AppRepositoryContainer {
             skillRepository = LocalSkillRepository()
             dictionaryRepository = LocalDictionaryRepository()
             profileRepository = LocalProfileRepository()
+            profileRequiresAuthentication = false
         }
 
         return AppRepositoryContainer(
@@ -223,7 +231,8 @@ final class AppRepositoryContainer {
             libraryRepository: libraryRepository,
             skillRepository: skillRepository,
             dictionaryRepository: dictionaryRepository,
-            profileRepository: profileRepository
+            profileRepository: profileRepository,
+            profileRequiresAuthentication: profileRequiresAuthentication
         )
     }
 
