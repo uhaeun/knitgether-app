@@ -1,0 +1,25 @@
+DEF-001 증거 — UI 테스트 실패 요소 트리 (2026-07-19)
+테스트: KnitGetherUITests.testCoreUserFlowRegistersAndSavesCommonRecords()
+환경: iPhone 16 Pro 시뮬레이터 (iOS 18.5), 로컬 서버 127.0.0.1:3000, 미커밋 작업본 (베이스라인 커밋 전)
+전체 로그: xcodebuild-test.log / xcresult: Test-KnitGether-2026.07.19_17-27-56-+0900.xcresult
+
+--- 실패 메시지 ---
+Failed to synthesize event: Neither element nor any descendant has keyboard focus.
+Event dispatch snapshot: Image, {{45.0, 372.3}, {18.3, 13.3}}, identifier: 'auth.email', label: 'Get Mail'
+
+--- 요소 트리 (핵심) ---
+identifier 'auth.email'로 매칭된 요소가 TextField가 아니라 Image(봉투 아이콘, label 'Get Mail'):
+
+Application, pid: 69752, label: 'KnitGether'
+ ↳Window (Main), {{0.0, 0.0}, {402.0, 874.0}}
+  ↳ScrollView
+   ↳Other, {{0.0, 100.3}, {402.0, 545.7}}
+    ↳Image, {{45.0, 372.3}, {18.3, 13.3}}, identifier: 'auth.email', label: 'Get Mail'   ← 입력 불가 요소
+
+--- 원인 코드 위치 ---
+KnitGether/Views/Tool/AuthAccountView.swift:229
+  .accessibilityIdentifier(AppAccessibilityID.Auth.emailField)  ← authField 행 컨테이너에 부착
+같은 패턴: :239 (auth.password)
+
+--- 테스트 결과 요약 ---
+전체 329 passed / 1 failed (이 테스트)
