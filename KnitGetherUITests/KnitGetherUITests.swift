@@ -7,35 +7,56 @@
 
 import XCTest
 
-final class KnitGetherUITests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+final class KnitGetherUITests: KnitGetherUITestCase {
 
     @MainActor
     func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
+        launchDefault()
+    }
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // XCUIAutomation Documentation
-        // https://developer.apple.com/documentation/xcuiautomation
+    @MainActor
+    func -() throws {
+        let uniqueSuffix = Int(Date().timeIntervalSince1970)
+        let email = "ui-flow-\(uniqueSuffix)@example.com"
+        let projectName = "UI Flow Project \(uniqueSuffix)"
+
+        let onboarding = launchForCoreFlow()
+        let auth = onboarding.goToAuth().signOutIfNeeded()
+        let signedInAuth = auth.register(
+            email: email,
+            password: "password-1234",
+            displayName: "UI Flow Tester"
+        )
+        signedInAuth.expectRegistrationCompleted()
+
+        let mainTabs = signedInAuth
+            .returnToOnboarding()
+            .advanceToSkillTestStep()
+            .openSkillTest()
+            .markFirstSkillKnownAndSave()
+            .finishOnboarding()
+
+        let myKnitting = mainTabs.openMyKnitting()
+        myKnitting.openAddProject()
+            .saveProject(named: projectName)
+            .expectProjectSaved(named: projectName)
+
+        let gaugeCalculator = mainTabs
+            .openTools()
+            .openGaugeCalculator()
+        gaugeCalculator.saveBeforeWashGauge(
+            sampleWidth: "10",
+            sampleHeight: "10",
+            sampleStitches: "22",
+            sampleRows: "30",
+            targetWidth: "40",
+            targetHeight: "50"
+        )
+        gaugeCalculator.expectBeforeWashGaugeSaved()
     }
 
     @MainActor
     func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }
