@@ -4,7 +4,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 앱 코드 기준 | SMK-004/005/006/008/009/010, 프로젝트 수정/삭제, 서버 OFF cache 없음, RowInstruction UI 자동화 포함 |
+| 앱 코드 기준 | SMK-004/005/006/008/009/010/011, 프로젝트 수정/삭제, 서버 OFF cache 없음, RowInstruction UI 자동화 포함 |
 | 브랜치 | `main` |
 | 서버 | local API `http://127.0.0.1:3000/api/v1` |
 | 시뮬레이터 | iPhone 16 Pro Simulator, iOS 18.5 |
@@ -19,10 +19,10 @@
 | 서버 e2e | PASS | 12 suites / 104 tests |
 | iOS generic Simulator build | PASS | `KnitGether Local Simulator` scheme |
 | iOS unit | PASS | 326 tests |
-| iOS UI | PASS | UI test 13개, launch matrix 포함 16 passed runs |
+| iOS UI | PASS | UI test function 14개, xcresult testsCount 17, failures/errors/warnings 0 |
 | 공백 검사 | PASS | `git diff --check` |
 
-## Smoke 10 실행 상태
+## Smoke 실행 상태
 
 | TC ID | 상태 | 근거 |
 |---|---|---|
@@ -36,6 +36,7 @@
 | SMK-008 서버 OFF + cache 있음 | PASS | `testServerOffWithCachedProjectShowsCachedProject`에서 서버 OFF URL 재실행 후 cached 프로젝트 표시 확인 |
 | SMK-009 서버 OFF pending write 후 복구 | PASS | `testServerOffPendingProjectSyncsAfterServerRecovers`에서 offline 저장, 서버 복구, 빈 cache 원격 재조회 확인 |
 | SMK-010 계정 전환 cache 분리 | PASS | `testAccountSwitchKeepsProjectCacheSeparatedByUser`에서 A 계정 프로젝트 생성 후 B 계정에서 미노출 확인 |
+| SMK-011 기존 계정 로그인 재진입 | PASS | `testExistingAccountCanLogInAndReachMainTabs`에서 로그아웃 후 같은 계정 로그인과 메인 탭 진입 확인 |
 | 프로젝트 수정/삭제 | PASS | `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`에서 이름 수정, 재실행 유지, 삭제, 재실행 후 미노출 확인 |
 | 서버 OFF cache 없음 안내 | PASS | `testServerOffWithoutProjectCacheShowsOfflineNotice`에서 빈 cache + 서버 OFF 재실행 시 서버 연결 안내 확인 |
 | RowInstruction 저장/수정/삭제 | PASS | `testWorkspaceRowInstructionCanBeSavedEditedDeletedAndStayDeletedAfterRelaunch`에서 행안내 추가, 수정, 재실행 유지, 삭제, 재실행 후 미노출 확인 |
@@ -52,17 +53,17 @@
 |---|---|
 | 신규 사용자가 가입 후 주요 저장 흐름을 사용할 수 있는가 | PASS |
 | 저장한 프로젝트가 앱 재실행 후 유지되는가 | PASS |
-| Smoke 10 기준 P0가 실행됐는가 | YES |
-| 앱 사용 가능성 | 제한적 PASS. 회원가입/스킬 테스트/프로젝트 생성/수정/삭제/재실행 유지/작업공간 단수/작업시간/행안내/게이지 기본 흐름, 오프라인 cache/pending 복구/cache 없음 안내, 계정 cache 분리는 자동화로 통과 |
-| 릴리즈 판정 | 아직 No-Go. 기존 계정 로그인 재진입과 로그아웃 후 프로필 오류 미노출 확인이 남음 |
+| Smoke 11 기준 P0가 실행됐는가 | YES |
+| 앱 사용 가능성 | 제한적 PASS. 회원가입/기존 계정 로그인/스킬 테스트/프로젝트 생성/수정/삭제/재실행 유지/작업공간 단수/작업시간/행안내/게이지 기본 흐름, 오프라인 cache/pending 복구/cache 없음 안내, 계정 cache 분리는 자동화로 통과 |
+| 릴리즈 판정 | 아직 No-Go. 로그아웃 후 프로필 오류 미노출과 WorkSession 삭제 확인이 남음 |
 
 ## 다음 실행 우선순위
 
 | 순서 | 대상 | 이유 |
 |---|---|---|
-| 1 | 기존 계정 로그인 재진입 | 재방문 사용자의 진입 흐름 확인 필요 |
-| 2 | 로그아웃 후 프로필 오류 미노출 | 최근 수동 사용 중 관찰된 사용자 혼란 포인트 |
-| 3 | WorkSession 삭제 | 기록 삭제 후 부활/재실행 유지 확인 필요 |
+| 1 | 로그아웃 후 프로필 오류 미노출 | 최근 수동 사용 중 관찰된 사용자 혼란 포인트 |
+| 2 | WorkSession 삭제 | 기록 삭제 후 부활/재실행 유지 확인 필요 |
+| 3 | GaugeTarget 수정/삭제 UI | 앞선 repository 결함 수정의 화면 레벨 회귀 보강 |
 
 ## Evidence 규칙
 

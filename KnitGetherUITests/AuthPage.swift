@@ -54,10 +54,33 @@ struct AuthPage: UITestPage {
         return self
     }
 
+    func login(
+        email: String,
+        password: String
+    ) -> AuthPage {
+        expectVisible()
+        tap(app.buttons["로그인"].firstMatch)
+        enterText("auth.email", text: email)
+        dismissKeyboard()
+        enterText("auth.password", text: password)
+        dismissKeyboard()
+        let submitButton = app.buttons["auth.submit"].firstMatch
+        XCTAssertTrue(
+            submitButton.waitForExistence(timeout: 12) && submitButton.isEnabled,
+            "로그인 제출 버튼이 활성화되어야 합니다."
+        )
+        tap(submitButton)
+        return self
+    }
+
     @discardableResult
     func expectRegistrationCompleted(displayName: String? = nil) -> AuthPage {
         if let displayName {
-            waitForRegistrationEvidence(displayName: displayName)
+            waitForAuthenticationEvidence(
+                displayName: displayName,
+                successMessage: "회원가입이 완료됐어요.",
+                failureMessage: "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
+            )
             return self
         }
 
@@ -65,6 +88,25 @@ struct AuthPage: UITestPage {
             app.staticTexts["회원가입이 완료됐어요."].waitForExistence(timeout: 12)
                 || app.buttons["auth.logout"].waitForExistence(timeout: 12),
             "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
+        )
+        return self
+    }
+
+    @discardableResult
+    func expectLoginCompleted(displayName: String? = nil) -> AuthPage {
+        if let displayName {
+            waitForAuthenticationEvidence(
+                displayName: displayName,
+                successMessage: "로그인했어요.",
+                failureMessage: "로그인 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
+            )
+            return self
+        }
+
+        XCTAssertTrue(
+            app.staticTexts["로그인했어요."].waitForExistence(timeout: 12)
+                || app.buttons["auth.logout"].waitForExistence(timeout: 12),
+            "로그인 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
         )
         return self
     }
@@ -114,15 +156,17 @@ struct AuthPage: UITestPage {
         )
     }
 
-    private func waitForRegistrationEvidence(
+    private func waitForAuthenticationEvidence(
         displayName: String,
+        successMessage: String,
+        failureMessage: String,
         timeout: TimeInterval = 20,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
         let accountPageDeadline = Date().addingTimeInterval(timeout)
         while Date() < accountPageDeadline {
-            if app.staticTexts["회원가입이 완료됐어요."].exists
+            if app.staticTexts[successMessage].exists
                 || app.buttons["auth.logout"].exists
                 || hasVisibleText(containing: displayName) {
                 return
@@ -136,7 +180,7 @@ struct AuthPage: UITestPage {
             .prefix(40)
             .joined(separator: " | ")
         XCTFail(
-            "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다. visibleText=\(visibleText)",
+            "\(failureMessage) visibleText=\(visibleText)",
             file: file,
             line: line
         )

@@ -9,7 +9,7 @@
 | 설계 기법 태그 | Happy Path, Negative, Boundary, State Transition, Persistence, Offline, API-DB |
 | 결과 값 | PASS / FAIL / NEED_SPEC_CONFIRM / ENV_ISSUE / RETRY_REQUIRED / NOT_A_BUG |
 
-## Smoke 10
+## Smoke 11
 
 | TC ID | 우선순위 | 시나리오 | 사전조건 | 절차 | 기대 UI 결과 | API/DB 확인 | 설계 태그 | 자동화 |
 |---|---|---|---|---|---|---|---|---|
@@ -23,12 +23,14 @@
 | SMK-008 | P1 | 서버 OFF + cache 있음 | 서버 ON에서 프로젝트 조회 완료 | 서버 OFF URL로 앱 재실행/목록 조회 | 기존 프로젝트가 cache로 보임 | remote 실패 후 local cache read | Offline, Persistence | XCUITest |
 | SMK-009 | P1 | 서버 OFF pending write 후 복구 | 로그인 완료 | 서버 OFF URL로 프로젝트 생성 -> 서버 ON URL 복구 -> 빈 cache 재조회 | pending 프로젝트가 서버 복구 후 새 cache에서도 보임 | pending Project 재시도, `Project` 원격 반영 | Offline, Retry, API-DB | XCUITest |
 | SMK-010 | P1 | 계정 전환 cache 분리 | 서버 ON, 신규 A/B email | A에서 프로젝트 생성 -> 로그아웃 -> B 가입/온보딩 | B 계정에서 A 프로젝트가 보이지 않음 | ownerId별 데이터 분리 | Security, Persistence | XCUITest |
+| SMK-011 | P0 | 기존 계정 로그인 재진입 | 서버 ON, 가입된 email/password | 기존 계정 생성 -> 로그아웃 -> 앱 재실행 -> 같은 계정으로 로그인 -> 온보딩 완료 | `로그인했어요.` 또는 로그인 상태, 이후 메인 탭 진입 | `POST /auth/login`, session/profile 조회 | Happy Path, State Transition, API-DB | XCUITest |
 
 ## 화면별 상세 TC 후보
 
 | 영역 | TC 후보 | 우선순위 | 확인 포인트 |
 |---|---|---|---|
 | 인증 | 중복 이메일 회원가입 | P0 | 사용자에게 중복/실패 메시지가 표시되고 앱이 멈추지 않는다. |
+| 인증 | 기존 계정 로그인 | P0 | `POST /auth/login` 성공 후 세션이 저장되고 메인 탭으로 진입한다. XCUITest `testExistingAccountCanLogInAndReachMainTabs`로 확인. |
 | 인증 | 잘못된 비밀번호 로그인 | P0 | 세션이 저장되지 않고 실패 메시지가 표시된다. |
 | 온보딩 | 완료 후 재실행 | P0 | 다시 온보딩 첫 화면으로 돌아가지 않는다. |
 | 프로젝트 | 이름 없는 프로젝트 저장 | P0 | validation 메시지 또는 저장 비활성 정책이 동작한다. |
@@ -56,6 +58,7 @@
 | SMK-008 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-009 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-010 | `KnitGetherUITestCase`, `MainTabBarPage`, `SettingsPage`, `AuthPage`, `MyKnittingPage` |
+| SMK-011 | `KnitGetherUITestCase`, `OnboardingPage`, `AuthPage`, `MainTabBarPage`, `MyKnittingPage` |
 | 프로젝트 수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage`, `ProjectFormPage` |
 | 서버 OFF cache 없음 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
 | RowInstruction 저장/수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage` |

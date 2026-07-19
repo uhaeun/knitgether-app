@@ -8,6 +8,16 @@ import XCTest
 struct MyKnittingPage: UITestPage {
     let app: XCUIApplication
 
+    @discardableResult
+    func expectVisible() -> MyKnittingPage {
+        XCTAssertTrue(
+            app.navigationBars["나의 뜨개"].waitForExistence(timeout: 12)
+                || app.buttons["project.add"].waitForExistence(timeout: 12),
+            "나의 뜨개 화면이 보여야 합니다."
+        )
+        return self
+    }
+
     func openAddProject() -> ProjectFormPage {
         tap(app.buttons["project.add"].firstMatch)
         return ProjectFormPage(app: app)

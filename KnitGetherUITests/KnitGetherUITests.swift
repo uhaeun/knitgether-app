@@ -227,6 +227,41 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testExistingAccountCanLogInAndReachMainTabs() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let email = "ui-login-\(uniqueSuffix)@example.com"
+        let password = "password-1234"
+        let displayName = "UI Login Tester"
+
+        let initialMainTabs = registerAndFinishOnboarding(
+            email: email,
+            displayName: displayName
+        )
+
+        _ = initialMainTabs.openSettings()
+            .openAccount()
+            .signOutIfNeeded()
+
+        if app.state != .notRunning {
+            app.terminate()
+        }
+
+        let loggedInAuth = launchForCoreFlow()
+            .goToAuth()
+            .signOutIfNeeded()
+            .login(email: email, password: password)
+
+        loggedInAuth.expectLoginCompleted(displayName: displayName)
+
+        loggedInAuth
+            .returnToOnboarding()
+            .advanceToSkillTestStep()
+            .finishOnboarding()
+            .openMyKnitting()
+            .expectVisible()
+    }
+
+    @MainActor
     func testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch() throws {
         let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
         let originalProjectName = "Editable Project \(uniqueSuffix)"
