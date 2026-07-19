@@ -17,6 +17,7 @@
 8. **API·네트워크·Offline 테스트** — Postman(+DB 상태 검증), Charles 로그, 오프라인/동기화/장애 복구
 9. **UI 자동화** — XCUITest POM(핵심 5흐름) + **Appium 동일 흐름 2개 구현·도구 비교표**
    - 비교 축: 셋업 난이도, 실행 속도, 접근성 ID 재사용, CI 연동성 → 도구 선정 근거
+   - 시작 문서: `04_pom_screen_success_failure_criteria.md`
 10. **CI 품질 게이트** — GitHub Actions: 서버 test, iOS build/unit, (여유 시 Newman) + 실패 artifact
 11. **성능 Smoke** — JMeter로 핵심 API 1~2개 (DB QA 시절 JMeter 경력과 연결, 리포트 1장)
 12. **대표 결함과 원인 분석** — 재현 절차 + 원인 추적 + 수정 후 재검증 (GitHub Issues 생명주기)
