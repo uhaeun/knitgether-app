@@ -32,6 +32,95 @@ struct WorkspacePage: UITestPage {
         return self
     }
 
+    @discardableResult
+    func enableRowGuideMode() -> WorkspacePage {
+        if app.buttons["workspace.row_instruction.add"].exists {
+            return self
+        }
+
+        tap(app.buttons["행안내 모드"].firstMatch)
+        XCTAssertTrue(
+            app.buttons["workspace.row_instruction.add"].waitForExistence(timeout: 12),
+            "행안내 모드 전환 후 행안내 추가 버튼이 보여야 합니다."
+        )
+        return self
+    }
+
+    @discardableResult
+    func addRowInstruction(row: Int, text: String, skillTags: String = "") -> WorkspacePage {
+        enableRowGuideMode()
+        tap(app.buttons["workspace.row_instruction.add"].firstMatch)
+        XCTAssertTrue(
+            app.navigationBars["행안내 추가"].waitForExistence(timeout: 12),
+            "행안내 추가 화면이 보여야 합니다."
+        )
+        replaceText("workspace.row_instruction.form.number", text: "\(row)")
+        enterText("workspace.row_instruction.form.text", text: text)
+        dismissKeyboard()
+        if !skillTags.isEmpty {
+            enterText("workspace.row_instruction.form.skill_tags", text: skillTags)
+            dismissKeyboard()
+        }
+        tap(app.buttons["workspace.row_instruction.form.save"].firstMatch)
+        XCTAssertTrue(
+            app.navigationBars["작업 공간"].waitForExistence(timeout: 12),
+            "행안내 저장 후 작업공간으로 돌아와야 합니다."
+        )
+        return self
+    }
+
+    @discardableResult
+    func editFirstRowInstruction(row: Int, text: String, skillTags: String = "") -> WorkspacePage {
+        tap(app.buttons["행안내 수정"].firstMatch)
+        XCTAssertTrue(
+            app.navigationBars["행안내 수정"].waitForExistence(timeout: 12),
+            "행안내 수정 화면이 보여야 합니다."
+        )
+        replaceText("workspace.row_instruction.form.number", text: "\(row)")
+        replaceText("workspace.row_instruction.form.text", text: text)
+        dismissKeyboard()
+        if !skillTags.isEmpty {
+            replaceText("workspace.row_instruction.form.skill_tags", text: skillTags)
+            dismissKeyboard()
+        }
+        tap(app.buttons["workspace.row_instruction.form.save"].firstMatch)
+        XCTAssertTrue(
+            app.navigationBars["작업 공간"].waitForExistence(timeout: 12),
+            "행안내 수정 후 작업공간으로 돌아와야 합니다."
+        )
+        return self
+    }
+
+    @discardableResult
+    func deleteFirstRowInstruction() -> WorkspacePage {
+        tap(app.buttons["행안내 삭제"].firstMatch)
+        let alert = app.alerts["행안내를 삭제할까요?"].firstMatch
+        XCTAssertTrue(
+            alert.waitForExistence(timeout: 12),
+            "행안내 삭제 확인 alert가 보여야 합니다."
+        )
+        tap(alert.buttons["삭제"].firstMatch)
+        return self
+    }
+
+    @discardableResult
+    func expectRowInstruction(text: String) -> WorkspacePage {
+        XCTAssertTrue(
+            waitForStaticText(text),
+            "행안내가 보여야 합니다: \(text)"
+        )
+        return self
+    }
+
+    @discardableResult
+    func expectRowInstructionNotVisible(text: String) -> WorkspacePage {
+        XCTAssertFalse(
+            app.staticTexts[text].waitForExistence(timeout: 5),
+            "삭제되거나 수정된 행안내가 보이면 안 됩니다: \(text)"
+        )
+        return self
+    }
+
     func openEditProject() -> ProjectFormPage {
         tap(app.buttons["workspace.project.edit"].firstMatch)
         XCTAssertTrue(
@@ -95,5 +184,21 @@ struct WorkspacePage: UITestPage {
         }
 
         XCTFail("작업 세션 내역 버튼이 활성화되어야 합니다.", file: file, line: line)
+    }
+
+    private func waitForStaticText(_ text: String, timeout: TimeInterval = 12) -> Bool {
+        let element = app.staticTexts[text].firstMatch
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if element.exists {
+                return true
+            }
+
+            app.swipeUp()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+
+        return false
     }
 }

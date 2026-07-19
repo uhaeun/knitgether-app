@@ -264,6 +264,35 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testWorkspaceRowInstructionCanBeSavedEditedDeletedAndStayDeletedAfterRelaunch() throws {
+        let projectName = registerAndCreateProject(prefix: "Row Instruction")
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let originalInstruction = "Knit across \(uniqueSuffix)"
+        let editedInstruction = "Purl back \(uniqueSuffix)"
+
+        MainTabBarPage(app: app)
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .addRowInstruction(row: 1, text: originalInstruction)
+            .expectRowInstruction(text: originalInstruction)
+            .editFirstRowInstruction(row: 1, text: editedInstruction)
+            .expectRowInstruction(text: editedInstruction)
+            .expectRowInstructionNotVisible(text: originalInstruction)
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .expectRowInstruction(text: editedInstruction)
+            .deleteFirstRowInstruction()
+            .expectRowInstructionNotVisible(text: editedInstruction)
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .expectRowInstructionNotVisible(text: editedInstruction)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
