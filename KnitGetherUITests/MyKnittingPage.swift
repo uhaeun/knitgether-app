@@ -13,6 +13,13 @@ struct MyKnittingPage: UITestPage {
         return ProjectFormPage(app: app)
     }
 
+    func openProject(named projectName: String) -> WorkspacePage {
+        tap(app.staticTexts[projectName].firstMatch)
+        let workspace = WorkspacePage(app: app)
+        workspace.expectVisible()
+        return workspace
+    }
+
     func expectProjectSaved(named projectName: String) {
         XCTAssertTrue(
             app.staticTexts["프로젝트를 추가했어요."].waitForExistence(timeout: 12)

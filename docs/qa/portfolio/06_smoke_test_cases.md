@@ -17,8 +17,8 @@
 | SMK-002 | P0 | 스킬 테스트 결과 저장 | 로그인 상태 | 온보딩 스킬 테스트 -> 첫 스킬 레벨 선택 -> 저장 | 스킬 테스트 단계로 복귀, 403 미노출 | `PATCH /skills/:id/level`, `UserSkillLevel` 저장 | Regression, API-DB | XCUITest 일부 |
 | SMK-003 | P0 | 프로젝트 생성 | 로그인 상태 | 내 뜨개 -> 추가 -> 프로젝트명 입력 -> 저장 | 성공 메시지 또는 프로젝트명 표시 | `POST /projects`, `Project` 생성 | Happy Path, API-DB | XCUITest 일부 |
 | SMK-004 | P0 | 프로젝트 재실행 유지 | SMK-003 완료 | 앱 종료/재실행 -> 내 뜨개 확인 | 생성한 프로젝트가 다시 보임 | `GET /projects`, cache fallback 가능 | Persistence | XCUITest |
-| SMK-005 | P0 | 작업공간 단수 저장 | 프로젝트 있음 | 프로젝트 진입 -> current row 변경 -> 저장/반영 | 현재 단수가 변경값으로 표시 | `PATCH /projects/:id/row-counter`, `RowCounter` 갱신 | State Transition, API-DB | 수동 |
-| SMK-006 | P0 | 작업시간 기록 | 프로젝트 있음 | 작업 시작 -> 10초 이상 경과 -> 종료 | 작업시간 기록이 목록/통계에 표시 | `POST /projects/:id/work-sessions`, `WorkSession` 생성 | Boundary, API-DB | 수동 |
+| SMK-005 | P0 | 작업공간 단수 저장 | 프로젝트 있음 | 프로젝트 진입 -> current row 변경 -> 저장/반영 | 현재 단수가 변경값으로 표시 | `PATCH /projects/:id/row-counter`, `RowCounter` 갱신 | State Transition, API-DB | XCUITest |
+| SMK-006 | P0 | 작업시간 기록 | 프로젝트 있음 | 작업공간 진입 -> 10초 이상 경과 -> 종료 | 작업시간 기록이 세션 내역으로 접근 가능 | `POST /projects/:id/work-sessions`, `WorkSession` 생성 | Boundary, API-DB | XCUITest |
 | SMK-007 | P1 | 게이지 기록 저장 | 로그인 상태 | 도구 -> 게이지 계산기 -> 필수 수치 입력 -> 세탁 전 저장 | `세탁 전 게이지를 저장했어요.` | `POST /gauge-records`, `GaugeRecord` 생성 | Happy Path, API-DB | XCUITest 일부 |
 | SMK-008 | P1 | 서버 OFF + cache 있음 | 서버 ON에서 프로젝트 조회 완료 | 서버 중단 -> 앱 재실행/목록 조회 | 기존 프로젝트가 cache로 보이거나 오프라인 안내가 정책대로 표시 | remote 실패 후 local cache read | Offline, Persistence | 수동 |
 | SMK-009 | P1 | 서버 OFF pending write 후 복구 | 로그인+프로젝트 있음 | 서버 중단 -> 프로젝트/자식 데이터 변경 -> 서버 복구 -> sync | pending 표시 후 복구 시 동기화 완료 | pending Project 재시도, 관련 모델 반영 | Offline, Retry, API-DB | 수동 |
@@ -50,7 +50,9 @@
 | SMK-003 | `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-007 | `MainTabBarPage`, `ToolPage`, `GaugeCalculatorPage` |
 | SMK-004 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
-| SMK-005/006/008/009/010 | 신규 POM 필요 |
+| SMK-005 | `MyKnittingPage`, `WorkspacePage` |
+| SMK-006 | `MyKnittingPage`, `WorkspacePage` |
+| SMK-008/009/010 | 신규 POM 또는 수동 네트워크 조작 필요 |
 
 ## 데이터 정합성 확인 컬럼 정의
 

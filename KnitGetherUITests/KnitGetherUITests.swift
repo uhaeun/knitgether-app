@@ -86,9 +86,65 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testWorkspaceRowCounterPersistsAfterAppRelaunch() throws {
+        let projectName = registerAndCreateProject(prefix: "Row Counter")
+
+        MainTabBarPage(app: app)
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .advanceRow()
+            .expectCurrentRow(1)
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .expectCurrentRow(1)
+    }
+
+    @MainActor
+    func testWorkspaceWorkSessionCanBeRecorded() throws {
+        let projectName = registerAndCreateProject(prefix: "Work Session")
+
+        MainTabBarPage(app: app)
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .expectWorkTimerRunning()
+            .finishCurrentWorkSessionAfterMinimumDuration()
+            .expectWorkSessionRecorded()
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }
+    }
+
+    @MainActor
+    private func registerAndCreateProject(prefix: String) -> String {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let email = "ui-workspace-\(uniqueSuffix)@example.com"
+        let projectName = "\(prefix) \(uniqueSuffix)"
+
+        let onboarding = launchForCoreFlow()
+        let auth = onboarding.goToAuth().signOutIfNeeded()
+        let signedInAuth = auth.register(
+            email: email,
+            password: "password-1234",
+            displayName: "UI Workspace Tester"
+        )
+        signedInAuth.expectRegistrationCompleted()
+
+        let mainTabs = signedInAuth
+            .returnToOnboarding()
+            .advanceToSkillTestStep()
+            .finishOnboarding()
+
+        mainTabs.openMyKnitting()
+            .openAddProject()
+            .saveProject(named: projectName)
+            .expectProjectSaved(named: projectName)
+
+        return projectName
     }
 }
