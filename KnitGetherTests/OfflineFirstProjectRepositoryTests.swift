@@ -16,6 +16,22 @@ struct OfflineFirstProjectRepositoryTests {
         #expect(projects.map(\.id) == [localProject.id])
     }
 
+    @Test func fetchProjectsThrowsWhenRemoteIsOfflineAndLocalCacheIsMissing() async throws {
+        let fileURL = Self.tempProjectFileURL()
+        defer { try? FileManager.default.removeItem(at: fileURL.deletingLastPathComponent()) }
+        let local = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
+        let remote = ProjectRepositoryFake()
+        remote.fetchProjectsError = URLError(.notConnectedToInternet)
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        do {
+            _ = try await repository.fetchProjects()
+            Issue.record("Expected offline fetch without local cache to throw")
+        } catch let error as URLError {
+            #expect(error.code == .notConnectedToInternet)
+        }
+    }
+
     @Test func saveNewProjectKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() async throws {
         let local = LocalProjectRepository(projects: [])
         let remote = ProjectRepositoryFake()

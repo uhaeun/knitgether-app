@@ -22,6 +22,10 @@ final class MyKnittingViewModel: ObservableObject {
     private let patternRepository: (any PatternRepository)?
     private let libraryRepository: (any LibraryRepository)?
 
+    private static let projectLoadErrorMessage = "프로젝트를 불러오지 못했어요."
+    private static let patternLoadErrorMessage = "프로젝트 도안 목록을 불러오지 못했어요."
+    private static let materialLoadErrorMessage = "프로젝트 재료를 불러오지 못했어요."
+
     init(
         projectRepository: any ProjectRepository,
         patternRepository: (any PatternRepository)? = nil,
@@ -39,9 +43,9 @@ final class MyKnittingViewModel: ObservableObject {
     func loadProjects() async {
         do {
             projects = try await projectRepository.fetchProjects()
-            errorMessage = nil
+            clearErrorMessage(matching: Self.projectLoadErrorMessage)
         } catch {
-            errorMessage = "프로젝트를 불러오지 못했어요."
+            errorMessage = Self.projectLoadErrorMessage
             statusMessage = nil
         }
     }
@@ -65,9 +69,9 @@ final class MyKnittingViewModel: ObservableObject {
 
         do {
             availablePatterns = try await patternRepository.fetchPatterns()
-            errorMessage = nil
+            clearErrorMessage(matching: Self.patternLoadErrorMessage)
         } catch {
-            errorMessage = "프로젝트 도안 목록을 불러오지 못했어요."
+            errorMessage = Self.patternLoadErrorMessage
             statusMessage = nil
         }
     }
@@ -80,9 +84,9 @@ final class MyKnittingViewModel: ObservableObject {
         do {
             availableYarns = try await libraryRepository.fetchYarns()
             availableNeedles = try await libraryRepository.fetchNeedles()
-            errorMessage = nil
+            clearErrorMessage(matching: Self.materialLoadErrorMessage)
         } catch {
-            errorMessage = "프로젝트 재료를 불러오지 못했어요."
+            errorMessage = Self.materialLoadErrorMessage
             statusMessage = nil
         }
     }
@@ -158,6 +162,12 @@ final class MyKnittingViewModel: ObservableObject {
 
     func clearStatusMessage() {
         statusMessage = nil
+    }
+
+    private func clearErrorMessage(matching message: String) {
+        if errorMessage == message {
+            errorMessage = nil
+        }
     }
 
     private func makeProject(from formData: ProjectFormData) -> KnittingProject {

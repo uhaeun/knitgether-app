@@ -131,6 +131,25 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testServerOffWithoutProjectCacheShowsOfflineNotice() throws {
+        let sessionCacheDirectory = try makeLocalCacheDirectory(prefix: "server-off-session")
+        let emptyCacheDirectory = try makeLocalCacheDirectory(prefix: "server-off-empty-cache")
+        defer {
+            try? FileManager.default.removeItem(at: sessionCacheDirectory)
+            try? FileManager.default.removeItem(at: emptyCacheDirectory)
+        }
+
+        registerAndFinishOnboarding(localCacheDirectory: sessionCacheDirectory)
+
+        relaunchForExistingSession(
+            apiBaseURL: "http://127.0.0.1:1/api/v1",
+            localCacheDirectory: emptyCacheDirectory
+        )
+        .openMyKnitting()
+        .expectOfflineNotice()
+    }
+
+    @MainActor
     func testServerOffPendingProjectSyncsAfterServerRecovers() throws {
         let cacheDirectory = try makeLocalCacheDirectory(prefix: "pending-retry")
         let verificationCacheDirectory = try makeLocalCacheDirectory(prefix: "pending-retry-verify")

@@ -47,4 +47,19 @@ struct MyKnittingPage: UITestPage {
         )
         return self
     }
+
+    @discardableResult
+    func expectOfflineNotice() -> MyKnittingPage {
+        XCTAssertTrue(
+            app.staticTexts["서버에 연결하지 못했어요."].waitForExistence(timeout: 12),
+            "캐시가 없는 오프라인 상태에서는 서버 연결 안내가 보여야 합니다."
+        )
+        XCTAssertTrue(
+            app.staticTexts["프로젝트를 불러오지 못했어요."].waitForExistence(timeout: 12)
+                || app.staticTexts["프로젝트 도안 목록을 불러오지 못했어요."].waitForExistence(timeout: 12)
+                || app.staticTexts["프로젝트 재료를 불러오지 못했어요."].waitForExistence(timeout: 12),
+            "오프라인 안내에는 실패한 데이터 영역이 보여야 합니다."
+        )
+        return self
+    }
 }

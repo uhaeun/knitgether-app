@@ -239,7 +239,7 @@ struct AppRepositoryContainerTests {
         #expect(try Self.cachedProjects(in: cacheDirectory).map(\.syncStatus) == [.synced])
     }
 
-    @Test func apiModeProjectFetchWithoutServerAndWithoutCacheReturnsEmptyLocalCache() async throws {
+    @Test func apiModeProjectFetchWithoutServerAndWithoutCacheThrowsOfflineError() async throws {
         let cacheDirectory = try Self.makeTempCacheDirectory()
         defer { try? FileManager.default.removeItem(at: cacheDirectory) }
         let session = MockURLProtocol.makeSession { _ in
@@ -251,9 +251,12 @@ struct AppRepositoryContainerTests {
             authSessionStore: Self.makeEmptySessionStore()
         )
 
-        let projects = try await container.projectRepository.fetchProjects()
-
-        #expect(projects.isEmpty)
+        do {
+            _ = try await container.projectRepository.fetchProjects()
+            Issue.record("Expected offline project fetch without local cache to throw")
+        } catch let error as URLError {
+            #expect(error.code == .notConnectedToInternet)
+        }
     }
 
     @Test func makeDefaultUsesAPIAuthTokenWhenConfigured() async throws {

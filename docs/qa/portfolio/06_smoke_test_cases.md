@@ -40,6 +40,7 @@
 | 라이브러리 | 실/바늘/도구 CRUD | P1 | 프로젝트 연결 후 수정/삭제 영향 확인. |
 | 도안 | PDF 업로드/프로젝트 연결 | P1 | 파일 cache와 project copy 유지. |
 | 설정 | 로그아웃 | P1 | 로그아웃 후 프로필 로드 실패 toast가 뜨지 않는다. |
+| 서버 OFF | cache 없음 프로젝트 목록 | P1 | 빈 cache에서 remote 조회 실패 시 빈 프로젝트 목록이 아니라 서버 연결 안내가 표시된다. XCUITest `testServerOffWithoutProjectCacheShowsOfflineNotice`로 확인. |
 
 ## XCUITest POM 매핑
 
@@ -56,6 +57,7 @@
 | SMK-009 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-010 | `KnitGetherUITestCase`, `MainTabBarPage`, `SettingsPage`, `AuthPage`, `MyKnittingPage` |
 | 프로젝트 수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage`, `ProjectFormPage` |
+| 서버 OFF cache 없음 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
 
 ## 데이터 정합성 확인 컬럼 정의
 

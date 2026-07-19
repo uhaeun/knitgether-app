@@ -42,6 +42,10 @@ final class LocalProjectRepository: ProjectRepository {
         }
     }
 
+    var hasLocalProjectState: Bool {
+        !projects.isEmpty || fileManager.fileExists(atPath: fileURL.path)
+    }
+
     func fetchProject(id: UUID) async throws -> KnittingProject? {
         projects.first { $0.id == id && $0.deletedAt == nil }
     }

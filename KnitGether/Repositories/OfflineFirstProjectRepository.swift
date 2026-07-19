@@ -15,6 +15,7 @@ final class OfflineFirstProjectRepository: ProjectRepository {
 
     func fetchProjects() async throws -> [KnittingProject] {
         await syncPendingChanges()
+        var deferredRemoteError: Error?
 
         do {
             let remoteProjects = try await remote.fetchProjects()
@@ -23,9 +24,15 @@ final class OfflineFirstProjectRepository: ProjectRepository {
             guard shouldDefer(error) else {
                 throw error
             }
+            deferredRemoteError = error
         }
 
-        return try await local.fetchProjects()
+        let localProjects = try await local.fetchProjects()
+        if let deferredRemoteError, localProjects.isEmpty, !local.hasLocalProjectState {
+            throw deferredRemoteError
+        }
+
+        return localProjects
     }
 
     func fetchProject(id: UUID) async throws -> KnittingProject? {
