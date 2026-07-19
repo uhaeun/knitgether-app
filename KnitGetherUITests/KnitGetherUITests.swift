@@ -56,6 +56,36 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testProjectPersistsAfterAppRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let email = "ui-relaunch-\(uniqueSuffix)@example.com"
+        let projectName = "Relaunch Project \(uniqueSuffix)"
+
+        let onboarding = launchForCoreFlow()
+        let auth = onboarding.goToAuth().signOutIfNeeded()
+        let signedInAuth = auth.register(
+            email: email,
+            password: "password-1234",
+            displayName: "UI Relaunch Tester"
+        )
+        signedInAuth.expectRegistrationCompleted()
+
+        let mainTabs = signedInAuth
+            .returnToOnboarding()
+            .advanceToSkillTestStep()
+            .finishOnboarding()
+
+        mainTabs.openMyKnitting()
+            .openAddProject()
+            .saveProject(named: projectName)
+            .expectProjectSaved(named: projectName)
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .expectProjectVisible(named: projectName)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()

@@ -41,6 +41,30 @@ class KnitGetherUITestCase: XCTestCase {
     }
 
     @MainActor
+    func relaunchForExistingSession(
+        apiBaseURL: String = "http://127.0.0.1:3000/api/v1"
+    ) -> MainTabBarPage {
+        if app.state != .notRunning {
+            app.terminate()
+        }
+
+        app.launchArguments = [
+            "-ApplePersistenceIgnoreState",
+            "YES"
+        ]
+        app.launchEnvironment = [
+            "KNITGETHER_API_BASE_URL": apiBaseURL,
+            "KNITGETHER_DEV_AUTH_TOKEN": ""
+        ]
+        app.launch()
+
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        let mainTabs = MainTabBarPage(app: app)
+        mainTabs.expectVisible()
+        return mainTabs
+    }
+
+    @MainActor
     func launchDefault() {
         app.launch()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))

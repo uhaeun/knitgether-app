@@ -16,7 +16,7 @@
 | SMK-001 | P0 | 신규 회원가입 | 서버 ON, 신규 email | 온보딩 -> 로그인/회원가입 -> email/name/password 입력 -> 회원가입 | `회원가입이 완료됐어요.` 또는 로그인 상태 | `POST /auth/register`, `UserAccount`, `UserProfile` 생성 | Happy Path, API-DB | XCUITest 일부 |
 | SMK-002 | P0 | 스킬 테스트 결과 저장 | 로그인 상태 | 온보딩 스킬 테스트 -> 첫 스킬 레벨 선택 -> 저장 | 스킬 테스트 단계로 복귀, 403 미노출 | `PATCH /skills/:id/level`, `UserSkillLevel` 저장 | Regression, API-DB | XCUITest 일부 |
 | SMK-003 | P0 | 프로젝트 생성 | 로그인 상태 | 내 뜨개 -> 추가 -> 프로젝트명 입력 -> 저장 | 성공 메시지 또는 프로젝트명 표시 | `POST /projects`, `Project` 생성 | Happy Path, API-DB | XCUITest 일부 |
-| SMK-004 | P0 | 프로젝트 재실행 유지 | SMK-003 완료 | 앱 종료/재실행 -> 내 뜨개 확인 | 생성한 프로젝트가 다시 보임 | `GET /projects`, cache fallback 가능 | Persistence | 수동 |
+| SMK-004 | P0 | 프로젝트 재실행 유지 | SMK-003 완료 | 앱 종료/재실행 -> 내 뜨개 확인 | 생성한 프로젝트가 다시 보임 | `GET /projects`, cache fallback 가능 | Persistence | XCUITest |
 | SMK-005 | P0 | 작업공간 단수 저장 | 프로젝트 있음 | 프로젝트 진입 -> current row 변경 -> 저장/반영 | 현재 단수가 변경값으로 표시 | `PATCH /projects/:id/row-counter`, `RowCounter` 갱신 | State Transition, API-DB | 수동 |
 | SMK-006 | P0 | 작업시간 기록 | 프로젝트 있음 | 작업 시작 -> 10초 이상 경과 -> 종료 | 작업시간 기록이 목록/통계에 표시 | `POST /projects/:id/work-sessions`, `WorkSession` 생성 | Boundary, API-DB | 수동 |
 | SMK-007 | P1 | 게이지 기록 저장 | 로그인 상태 | 도구 -> 게이지 계산기 -> 필수 수치 입력 -> 세탁 전 저장 | `세탁 전 게이지를 저장했어요.` | `POST /gauge-records`, `GaugeRecord` 생성 | Happy Path, API-DB | XCUITest 일부 |
@@ -49,7 +49,8 @@
 | SMK-002 | `OnboardingPage`, `SkillTestPage` |
 | SMK-003 | `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-007 | `MainTabBarPage`, `ToolPage`, `GaugeCalculatorPage` |
-| SMK-004/005/006/008/009/010 | 신규 POM 필요 |
+| SMK-004 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
+| SMK-005/006/008/009/010 | 신규 POM 필요 |
 
 ## 데이터 정합성 확인 컬럼 정의
 

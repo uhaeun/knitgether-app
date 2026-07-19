@@ -20,4 +20,11 @@ struct MyKnittingPage: UITestPage {
             "프로젝트 저장 후 성공 메시지 또는 프로젝트 이름이 보여야 합니다."
         )
     }
+
+    func expectProjectVisible(named projectName: String) {
+        XCTAssertTrue(
+            app.staticTexts[projectName].waitForExistence(timeout: 12),
+            "저장된 프로젝트가 목록에 보여야 합니다: \(projectName)"
+        )
+    }
 }
