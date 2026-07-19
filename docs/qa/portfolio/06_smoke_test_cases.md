@@ -20,8 +20,8 @@
 | SMK-005 | P0 | 작업공간 단수 저장 | 프로젝트 있음 | 프로젝트 진입 -> current row 변경 -> 저장/반영 | 현재 단수가 변경값으로 표시 | `PATCH /projects/:id/row-counter`, `RowCounter` 갱신 | State Transition, API-DB | XCUITest |
 | SMK-006 | P0 | 작업시간 기록 | 프로젝트 있음 | 작업공간 진입 -> 10초 이상 경과 -> 종료 | 작업시간 기록이 세션 내역으로 접근 가능 | `POST /projects/:id/work-sessions`, `WorkSession` 생성 | Boundary, API-DB | XCUITest |
 | SMK-007 | P1 | 게이지 기록 저장 | 로그인 상태 | 도구 -> 게이지 계산기 -> 필수 수치 입력 -> 세탁 전 저장 | `세탁 전 게이지를 저장했어요.` | `POST /gauge-records`, `GaugeRecord` 생성 | Happy Path, API-DB | XCUITest 일부 |
-| SMK-008 | P1 | 서버 OFF + cache 있음 | 서버 ON에서 프로젝트 조회 완료 | 서버 중단 -> 앱 재실행/목록 조회 | 기존 프로젝트가 cache로 보이거나 오프라인 안내가 정책대로 표시 | remote 실패 후 local cache read | Offline, Persistence | 수동 |
-| SMK-009 | P1 | 서버 OFF pending write 후 복구 | 로그인+프로젝트 있음 | 서버 중단 -> 프로젝트/자식 데이터 변경 -> 서버 복구 -> sync | pending 표시 후 복구 시 동기화 완료 | pending Project 재시도, 관련 모델 반영 | Offline, Retry, API-DB | 수동 |
+| SMK-008 | P1 | 서버 OFF + cache 있음 | 서버 ON에서 프로젝트 조회 완료 | 서버 OFF URL로 앱 재실행/목록 조회 | 기존 프로젝트가 cache로 보임 | remote 실패 후 local cache read | Offline, Persistence | XCUITest |
+| SMK-009 | P1 | 서버 OFF pending write 후 복구 | 로그인 완료 | 서버 OFF URL로 프로젝트 생성 -> 서버 ON URL 복구 -> 빈 cache 재조회 | pending 프로젝트가 서버 복구 후 새 cache에서도 보임 | pending Project 재시도, `Project` 원격 반영 | Offline, Retry, API-DB | XCUITest |
 | SMK-010 | P1 | 계정 전환 cache 분리 | A/B 계정 준비 | A에서 프로젝트 생성 -> 로그아웃 -> B 로그인 | B 계정에서 A 프로젝트가 보이지 않음 | ownerId별 데이터 분리 | Security, Persistence | 수동 |
 
 ## 화면별 상세 TC 후보
@@ -52,7 +52,9 @@
 | SMK-004 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
 | SMK-005 | `MyKnittingPage`, `WorkspacePage` |
 | SMK-006 | `MyKnittingPage`, `WorkspacePage` |
-| SMK-008/009/010 | 신규 POM 또는 수동 네트워크 조작 필요 |
+| SMK-008 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
+| SMK-009 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
+| SMK-010 | 신규 auth/account POM 또는 수동 계정 전환 필요 |
 
 ## 데이터 정합성 확인 컬럼 정의
 

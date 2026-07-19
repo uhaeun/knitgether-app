@@ -16,11 +16,13 @@ struct WorkspacePage: UITestPage {
         )
     }
 
+    @discardableResult
     func advanceRow() -> WorkspacePage {
         tap(app.buttons["workspace.counter.next"].firstMatch)
         return self
     }
 
+    @discardableResult
     func expectCurrentRow(_ row: Int) -> WorkspacePage {
         XCTAssertTrue(
             app.staticTexts["현재 \(row)단"].waitForExistence(timeout: 12)
@@ -30,6 +32,7 @@ struct WorkspacePage: UITestPage {
         return self
     }
 
+    @discardableResult
     func expectWorkTimerRunning() -> WorkspacePage {
         XCTAssertTrue(
             app.buttons["workspace.work_time.finish"].waitForExistence(timeout: 12)
@@ -39,6 +42,7 @@ struct WorkspacePage: UITestPage {
         return self
     }
 
+    @discardableResult
     func finishCurrentWorkSessionAfterMinimumDuration() -> WorkspacePage {
         Thread.sleep(forTimeInterval: 11)
         tap(app.buttons["workspace.work_time.finish"].firstMatch)
@@ -46,6 +50,7 @@ struct WorkspacePage: UITestPage {
         return self
     }
 
+    @discardableResult
     func expectWorkSessionRecorded() -> WorkspacePage {
         let sessionsButton = app.buttons["workspace.work_time.sessions"].firstMatch
         waitUntilWorkSessionsButtonIsEnabled()

@@ -114,6 +114,54 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testServerOffWithCachedProjectShowsCachedProject() throws {
+        let cacheDirectory = try makeLocalCacheDirectory(prefix: "server-off-cache")
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+        let projectName = registerAndCreateProject(
+            prefix: "Cached Offline",
+            localCacheDirectory: cacheDirectory
+        )
+
+        relaunchForExistingSession(
+            apiBaseURL: "http://127.0.0.1:1/api/v1",
+            localCacheDirectory: cacheDirectory
+        )
+        .openMyKnitting()
+        .expectProjectVisible(named: projectName)
+    }
+
+    @MainActor
+    func testServerOffPendingProjectSyncsAfterServerRecovers() throws {
+        let cacheDirectory = try makeLocalCacheDirectory(prefix: "pending-retry")
+        let verificationCacheDirectory = try makeLocalCacheDirectory(prefix: "pending-retry-verify")
+        defer {
+            try? FileManager.default.removeItem(at: cacheDirectory)
+            try? FileManager.default.removeItem(at: verificationCacheDirectory)
+        }
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let projectName = "Pending Offline \(uniqueSuffix)"
+
+        registerAndFinishOnboarding(localCacheDirectory: cacheDirectory)
+
+        relaunchForExistingSession(
+            apiBaseURL: "http://127.0.0.1:1/api/v1",
+            localCacheDirectory: cacheDirectory
+        )
+        .openMyKnitting()
+        .openAddProject()
+        .saveProject(named: projectName)
+        .expectProjectSaved(named: projectName)
+
+        relaunchForExistingSession(localCacheDirectory: cacheDirectory)
+            .openMyKnitting()
+            .expectProjectVisible(named: projectName)
+
+        relaunchForExistingSession(localCacheDirectory: verificationCacheDirectory)
+            .openMyKnitting()
+            .expectProjectVisible(named: projectName)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
@@ -121,12 +169,32 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
-    private func registerAndCreateProject(prefix: String) -> String {
+    private func registerAndCreateProject(
+        prefix: String,
+        localCacheDirectory: URL? = nil
+    ) -> String {
         let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
-        let email = "ui-workspace-\(uniqueSuffix)@example.com"
         let projectName = "\(prefix) \(uniqueSuffix)"
 
-        let onboarding = launchForCoreFlow()
+        let mainTabs = registerAndFinishOnboarding(localCacheDirectory: localCacheDirectory)
+
+        mainTabs.openMyKnitting()
+            .openAddProject()
+            .saveProject(named: projectName)
+            .expectProjectSaved(named: projectName)
+
+        return projectName
+    }
+
+    @MainActor
+    @discardableResult
+    private func registerAndFinishOnboarding(
+        localCacheDirectory: URL? = nil
+    ) -> MainTabBarPage {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let email = "ui-offline-\(uniqueSuffix)@example.com"
+
+        let onboarding = launchForCoreFlow(localCacheDirectory: localCacheDirectory)
         let auth = onboarding.goToAuth().signOutIfNeeded()
         let signedInAuth = auth.register(
             email: email,
@@ -140,11 +208,6 @@ final class KnitGetherUITests: KnitGetherUITestCase {
             .advanceToSkillTestStep()
             .finishOnboarding()
 
-        mainTabs.openMyKnitting()
-            .openAddProject()
-            .saveProject(named: projectName)
-            .expectProjectSaved(named: projectName)
-
-        return projectName
+        return mainTabs
     }
 }

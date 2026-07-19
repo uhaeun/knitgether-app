@@ -23,17 +23,18 @@ class KnitGetherUITestCase: XCTestCase {
 
     @MainActor
     func launchForCoreFlow(
-        apiBaseURL: String = "http://127.0.0.1:3000/api/v1"
+        apiBaseURL: String = "http://127.0.0.1:3000/api/v1",
+        localCacheDirectory: URL? = nil
     ) -> OnboardingPage {
         app.launchArguments = [
             "-ApplePersistenceIgnoreState",
             "YES"
         ]
-        app.launchEnvironment = [
-            "KNITGETHER_API_BASE_URL": apiBaseURL,
-            "KNITGETHER_DEV_AUTH_TOKEN": "",
-            "KNITGETHER_UI_TEST_RESET_ONBOARDING": "1"
-        ]
+        app.launchEnvironment = launchEnvironment(
+            apiBaseURL: apiBaseURL,
+            resetOnboarding: true,
+            localCacheDirectory: localCacheDirectory
+        )
         app.launch()
 
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
@@ -42,7 +43,8 @@ class KnitGetherUITestCase: XCTestCase {
 
     @MainActor
     func relaunchForExistingSession(
-        apiBaseURL: String = "http://127.0.0.1:3000/api/v1"
+        apiBaseURL: String = "http://127.0.0.1:3000/api/v1",
+        localCacheDirectory: URL? = nil
     ) -> MainTabBarPage {
         if app.state != .notRunning {
             app.terminate()
@@ -52,16 +54,45 @@ class KnitGetherUITestCase: XCTestCase {
             "-ApplePersistenceIgnoreState",
             "YES"
         ]
-        app.launchEnvironment = [
-            "KNITGETHER_API_BASE_URL": apiBaseURL,
-            "KNITGETHER_DEV_AUTH_TOKEN": ""
-        ]
+        app.launchEnvironment = launchEnvironment(
+            apiBaseURL: apiBaseURL,
+            resetOnboarding: false,
+            localCacheDirectory: localCacheDirectory
+        )
         app.launch()
 
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
         let mainTabs = MainTabBarPage(app: app)
         mainTabs.expectVisible()
         return mainTabs
+    }
+
+    func makeLocalCacheDirectory(prefix: String) throws -> URL {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("KnitGetherUITests-\(prefix)-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        return directory
+    }
+
+    private func launchEnvironment(
+        apiBaseURL: String,
+        resetOnboarding: Bool,
+        localCacheDirectory: URL?
+    ) -> [String: String] {
+        var environment = [
+            "KNITGETHER_API_BASE_URL": apiBaseURL,
+            "KNITGETHER_DEV_AUTH_TOKEN": ""
+        ]
+
+        if resetOnboarding {
+            environment["KNITGETHER_UI_TEST_RESET_ONBOARDING"] = "1"
+        }
+
+        if let localCacheDirectory {
+            environment["KNITGETHER_LOCAL_CACHE_DIRECTORY"] = localCacheDirectory.path
+        }
+
+        return environment
     }
 
     @MainActor

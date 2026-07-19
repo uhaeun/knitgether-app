@@ -45,11 +45,25 @@
 | 실행 기준 | 로컬 API 서버가 `http://127.0.0.1:3000/api/v1`에서 응답해야 한다. |
 | 목적 | 10초 이상 작업 세션이 저장되어 세션 내역으로 접근 가능한지 확인한다. |
 
+| 항목 | 내용 |
+|---|---|
+| 테스트 | `testServerOffWithCachedProjectShowsCachedProject` |
+| 자동화 범위 | 서버 ON 회원가입/프로젝트 생성 -> 같은 cache로 서버 OFF URL 재실행 -> 프로젝트 목록 확인 |
+| 실행 기준 | 첫 실행 시 로컬 API 서버가 `http://127.0.0.1:3000/api/v1`에서 응답해야 한다. |
+| 목적 | API 모드에서 remote 조회 실패 시 local cache fallback으로 사용자가 기존 프로젝트를 볼 수 있는지 확인한다. |
+
+| 항목 | 내용 |
+|---|---|
+| 테스트 | `testServerOffPendingProjectSyncsAfterServerRecovers` |
+| 자동화 범위 | 서버 ON 회원가입 -> 서버 OFF URL로 프로젝트 생성 -> 서버 ON URL 복구 -> 빈 cache 재조회 |
+| 실행 기준 | 로컬 API 서버가 복구 단계에서 `http://127.0.0.1:3000/api/v1`에서 응답해야 한다. |
+| 목적 | 서버 OFF 중 저장한 pending 프로젝트가 서버 복구 후 원격에 반영되는지 확인한다. |
+
 ## POM 화면 목록
 
 | POM | 화면/역할 | 성공 기준 | 실패 기준 |
 |---|---|---|---|
-| `KnitGetherUITestCase` | 테스트 실행 공통 설정 | 앱이 foreground 상태로 실행되고, 실패 시 스크린샷이 첨부된다. | 앱 실행 실패, 서버 URL 주입 실패, 실패 증거 미수집. |
+| `KnitGetherUITestCase` | 테스트 실행 공통 설정 | 앱이 foreground 상태로 실행되고, cache 디렉터리와 서버 URL을 시나리오별로 주입하며, 실패 시 스크린샷이 첨부된다. | 앱 실행 실패, 서버 URL/cache 주입 실패, 실패 증거 미수집. |
 | `OnboardingPage` | 온보딩 시작/스킬 테스트 진입 | `다음`, `스킬 테스트 시작`, `시작` 버튼을 통해 메인 탭으로 이동한다. | 다음 단계 버튼이 없거나 메인 탭 진입 전 멈춘다. |
 | `AuthPage` | 회원가입/로그아웃 | 회원가입 후 `회원가입이 완료됐어요.` 또는 로그인 상태가 보인다. | 회원가입 버튼/입력칸이 없거나 저장 후 로그인 상태가 아니다. |
 | `SkillTestPage` | 온보딩 스킬 테스트 | 스킬 선택 후 저장하면 온보딩의 스킬 테스트 단계로 돌아온다. | 403 `SYSTEM_SKILL_READ_ONLY`, 저장 실패 문구, 또는 이전 화면 복귀 실패. |
@@ -72,7 +86,7 @@
 | 작업공간 | P0 | RowCounter 저장과 WorkSession 기록은 자동화 완료. RowInstruction 저장/삭제와 WorkSession 삭제는 추가 확인한다. |
 | 게이지 | P1 | GaugeRecord/GaugeTarget 생성, 수정, 삭제, 앱 재실행 후 유지 여부를 확인한다. |
 | 계정 전환 | P1 | A 계정 데이터가 B 계정에서 보이지 않는지 확인한다. |
-| 서버 OFF | P1 | cache 있음/없음에 따라 fallback 또는 오프라인 안내가 맞게 보이는지 확인한다. |
+| 서버 OFF | P1 | cache fallback과 pending 프로젝트 복구는 자동화 완료. cache 없음 오프라인 안내 문구는 추가 확인한다. |
 
 ## 다음 자동화 후보
 
@@ -81,7 +95,6 @@
 | 기존 계정 로그인 | 재방문 사용자의 P0 진입 흐름 | `AuthPage`, `MainTabBarPage` |
 | 프로젝트 수정/삭제 | 데이터 변경과 삭제는 결함 영향이 크다. | `MyKnittingPage`, `ProjectFormPage` |
 | 작업공간 RowInstruction 저장/삭제 | RowInstruction은 동기화 결함 이력이 있고 아직 자동화되지 않았다. | `WorkspacePage` 확장 |
-| 오프라인 cache fallback | API 모드 Offline-first 핵심 요구사항이다. | 신규 `OfflineScenarioPage` 또는 테스트 헬퍼 |
 | 계정 전환 | cache scope 분리 검증이 필요하다. | `AuthPage`, `MainTabBarPage` |
 
 ## 증거 기록 규칙
