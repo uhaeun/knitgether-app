@@ -9,7 +9,7 @@
 | 설계 기법 태그 | Happy Path, Negative, Boundary, State Transition, Persistence, Offline, API-DB |
 | 결과 값 | PASS / FAIL / NEED_SPEC_CONFIRM / ENV_ISSUE / RETRY_REQUIRED / NOT_A_BUG |
 
-## Smoke 13
+## Smoke 14
 
 | TC ID | 우선순위 | 시나리오 | 사전조건 | 절차 | 기대 UI 결과 | API/DB 확인 | 설계 태그 | 자동화 |
 |---|---|---|---|---|---|---|---|---|
@@ -26,6 +26,7 @@
 | SMK-011 | P0 | 기존 계정 로그인 재진입 | 서버 ON, 가입된 email/password | 기존 계정 생성 -> 로그아웃 -> 앱 재실행 -> 같은 계정으로 로그인 -> 온보딩 완료 | `로그인했어요.` 또는 로그인 상태, 이후 메인 탭 진입 | `POST /auth/login`, session/profile 조회 | Happy Path, State Transition, API-DB | XCUITest |
 | SMK-012 | P0 | 로그아웃 후 프로필 오류 미노출 | 로그인 상태 | 설정 -> 계정 연동 -> 로그아웃 -> 프로필 편집 진입 | `프로필을 불러오지 못했어요.` 미노출 | session clear 후 인증 필요 profile fetch 미수행 | Regression, State Transition | XCUITest + Unit |
 | SMK-013 | P0 | WorkSession 삭제 후 미복구 | 프로젝트 있음, 10초 이상 작업 세션 기록 | 작업공간 -> 세션 내역 -> 첫 세션 삭제 -> 앱 재실행 -> 작업공간 확인 | 세션 기록이 없고, 재실행 후 세션 내역 버튼이 비활성 | `DELETE /projects/:id/work-sessions/:sessionId`, `WorkSession` 삭제 유지 | Persistence, State Transition, API-DB | XCUITest |
+| SMK-014 | P1 | GaugeTarget 수정/삭제 후 미복구 | 로그인 상태, GaugeTarget 생성 완료 | 도구 -> 게이지 계산기 -> 목표 게이지 목록 -> 기존 목표 수정 -> 앱 재실행 -> 삭제 -> 앱 재실행 | 수정값이 유지되고 삭제한 목표 게이지가 다시 보이지 않음 | `PATCH /gauge-targets/:id`, `DELETE /gauge-targets/:id`, local cache 삭제 유지 | Persistence, State Transition, API-DB | XCUITest |
 
 ## 화면별 상세 TC 후보
 
@@ -42,7 +43,8 @@
 | 작업공간 | RowInstruction 추가/수정/삭제 | P0 | child pending retry와 삭제 재시도 유지. XCUITest `testWorkspaceRowInstructionCanBeSavedEditedDeletedAndStayDeletedAfterRelaunch`로 UI/재실행 확인. |
 | 작업공간 | 10초 미만 WorkSession | P0 | 저장하지 않는 정책 유지. |
 | 작업공간 | WorkSession 삭제 | P0 | 삭제 후 앱 재실행 시 부활하지 않는다. XCUITest `testWorkspaceWorkSessionCanBeDeletedAndStaysDeletedAfterRelaunch`로 확인. |
-| 게이지 | 기존 GaugeTarget 수정 | P1 | 기존 ID 수정은 POST가 아니라 PATCH. |
+| 게이지 | 기존 GaugeTarget 수정 | P1 | 기존 ID 수정은 POST가 아니라 PATCH. XCUITest `testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch`로 UI/재실행 확인. |
+| 게이지 | GaugeTarget 삭제 | P1 | 삭제 후 앱 재실행 시 부활하지 않는다. XCUITest `testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch`로 확인. |
 | 라이브러리 | 실/바늘/도구 CRUD | P1 | 프로젝트 연결 후 수정/삭제 영향 확인. |
 | 도안 | PDF 업로드/프로젝트 연결 | P1 | 파일 cache와 project copy 유지. |
 | 설정 | 로그아웃 | P1 | 로그아웃 후 프로필 로드 실패 toast가 뜨지 않는다. |
@@ -65,6 +67,7 @@
 | SMK-011 | `KnitGetherUITestCase`, `OnboardingPage`, `AuthPage`, `MainTabBarPage`, `MyKnittingPage` |
 | SMK-012 | `KnitGetherUITestCase`, `MainTabBarPage`, `SettingsPage`, `AuthPage` |
 | SMK-013 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage` |
+| SMK-014 | `KnitGetherUITestCase`, `MainTabBarPage`, `ToolPage`, `GaugeCalculatorPage` |
 | 프로젝트 수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage`, `ProjectFormPage` |
 | 서버 OFF cache 없음 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
 | RowInstruction 저장/수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage` |

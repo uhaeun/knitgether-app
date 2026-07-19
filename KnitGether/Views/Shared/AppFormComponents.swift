@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct AppFormSection<Content: View>: View {
     let title: String
@@ -226,6 +227,20 @@ struct AppFormDecimalRow: View {
                 .font(.body.monospacedDigit())
                 .foregroundStyle(AppTheme.Color.primaryText)
                 .frame(maxWidth: 120)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+
+                        Button("완료") {
+                            UIApplication.shared.sendAction(
+                                #selector(UIResponder.resignFirstResponder),
+                                to: nil,
+                                from: nil,
+                                for: nil
+                            )
+                        }
+                    }
+                }
         }
         .padding(.vertical, 12)
     }

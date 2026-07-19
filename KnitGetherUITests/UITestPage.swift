@@ -141,6 +141,10 @@ extension UITestPage {
             app.keyboards.buttons["return"].tap()
         } else if app.keyboards.buttons["Done"].exists {
             app.keyboards.buttons["Done"].tap()
+        } else if app.keyboards.buttons["완료"].exists {
+            app.keyboards.buttons["완료"].firstMatch.tap()
+        } else if app.buttons["완료"].exists {
+            app.buttons["완료"].firstMatch.tap()
         } else {
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.14)).tap()
         }

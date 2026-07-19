@@ -359,6 +359,65 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let originalTargetName = "Gauge Target \(uniqueSuffix)"
+        let editedTargetName = "Edited Gauge \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding()
+
+        mainTabs.openTools()
+            .openGaugeCalculator()
+            .openMeasureHub()
+            .openGaugeTargetList()
+            .addGaugeTarget(
+                name: originalTargetName,
+                needle: "4.0mm",
+                width: "10",
+                height: "10",
+                stitches: "22",
+                rows: "30"
+            )
+            .expectGaugeTargetVisible(named: originalTargetName)
+
+        relaunchForExistingSession()
+            .openTools()
+            .openGaugeCalculator()
+            .openMeasureHub()
+            .openGaugeTargetList()
+            .expectGaugeTargetVisible(named: originalTargetName)
+            .openGaugeTarget(named: originalTargetName)
+            .editGaugeTarget(
+                name: editedTargetName,
+                needle: "4.5mm",
+                width: "10",
+                height: "10",
+                stitches: "24",
+                rows: "32"
+            )
+            .expectGaugeTargetDetail(named: editedTargetName)
+            .returnToGaugeTargetList()
+            .expectGaugeTargetVisible(named: editedTargetName)
+            .expectGaugeTargetNotVisible(named: originalTargetName)
+
+        relaunchForExistingSession()
+            .openTools()
+            .openGaugeCalculator()
+            .openMeasureHub()
+            .openGaugeTargetList()
+            .expectGaugeTargetVisible(named: editedTargetName)
+            .deleteGaugeTarget(named: editedTargetName)
+            .expectGaugeTargetNotVisible(named: editedTargetName)
+
+        relaunchForExistingSession()
+            .openTools()
+            .openGaugeCalculator()
+            .openMeasureHub()
+            .openGaugeTargetList()
+            .expectGaugeTargetNotVisible(named: editedTargetName)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()

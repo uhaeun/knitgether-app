@@ -81,6 +81,7 @@ struct GaugeTargetFormView: View {
             .padding(.top, 18)
             .padding(.bottom, 96)
         }
+        .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom) {
             AppFormSubmitBar(
                 isDisabled: viewModel.isSaving,

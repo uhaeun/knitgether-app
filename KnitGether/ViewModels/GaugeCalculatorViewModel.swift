@@ -112,12 +112,20 @@ final class GaugeCalculatorViewModel: ObservableObject {
 
         let stitchesPerCm = stitches / sampleWidth
         let rowsPerCm = rows / sampleHeight
+        let targetStitches = (stitchesPerCm * targetWidth).rounded()
+        let targetRows = (rowsPerCm * targetHeight).rounded()
+
+        guard let targetStitches = safeInt(from: targetStitches),
+              let targetRows = safeInt(from: targetRows)
+        else {
+            return nil
+        }
 
         return GaugeCalculationResult(
             stitchesPer10Cm: stitchesPerCm * 10,
             rowsPer10Cm: rowsPerCm * 10,
-            targetStitches: Int((stitchesPerCm * targetWidth).rounded()),
-            targetRows: Int((rowsPerCm * targetHeight).rounded())
+            targetStitches: targetStitches,
+            targetRows: targetRows
         )
     }
 
@@ -593,6 +601,17 @@ final class GaugeCalculatorViewModel: ObservableObject {
         }
 
         return Double(normalizedText)
+    }
+
+    private func safeInt(from value: Double) -> Int? {
+        guard value.isFinite,
+              value >= Double(Int.min),
+              value <= Double(Int.max)
+        else {
+            return nil
+        }
+
+        return Int(value)
     }
 
     private func inputText(from value: Double) -> String {

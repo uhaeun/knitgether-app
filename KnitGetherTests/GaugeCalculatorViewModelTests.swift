@@ -52,6 +52,22 @@ struct GaugeCalculatorViewModelTests {
         #expect(viewModel.availablePatterns.map(\.title) == ["Cable Vest"])
     }
 
+    @Test func oversizedGaugeInputsDoNotCrashCalculation() {
+        let viewModel = GaugeCalculatorViewModel(
+            gaugeRecordRepository: GaugeRecordRepositorySpy(),
+            projectRepository: ProjectRepositoryStub(projects: []),
+            userDefaults: Self.makeUserDefaults()
+        )
+        viewModel.sampleWidthCm = "1"
+        viewModel.sampleHeightCm = "1"
+        viewModel.stitchCount = "100000000000000000000"
+        viewModel.rowCount = "100000000000000000000"
+        viewModel.targetWidthCm = "100000000000000000000"
+        viewModel.targetHeightCm = "100000000000000000000"
+
+        #expect(viewModel.result == nil)
+    }
+
     @Test func saveCurrentGaugeRecordUsesSelectedPatternSnapshot() async throws {
         let repository = GaugeRecordRepositorySpy()
         let pattern = Self.makePattern(title: "Cable Vest")
