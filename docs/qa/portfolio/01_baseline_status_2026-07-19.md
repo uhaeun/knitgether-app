@@ -6,18 +6,19 @@
 - 구 리포 `knitgether-mvp`(마지막 커밋 6/30 스냅샷)는 포트폴리오 대상 **아님** — 혼동 주의
 - 앱/테스트 베이스라인 커밋: `2fe2c82` 2026-07-19 `test(ios): restore core user flow test name`
 - 문서 베이스라인 커밋: `8070209` 2026-07-19 `docs(qa): start portfolio baseline`
-- 원격 대비 상태: `main...origin/main [ahead 6]` — 아직 push 전
+- 원격 대비 상태: `main...origin/main [ahead 7]` — 아직 push 전
 
 ## 베이스라인 확정 상태
 
 - 2026-07-19 기준 미커밋 변경사항 없음.
-- 아래 6개 커밋을 QA 베이스라인으로 사용한다.
+- 아래 7개 커밋을 QA 베이스라인으로 사용한다.
   - `b096e5b` `chore(dev): support local API device testing`
   - `d02f55f` `fix(ios): improve save feedback and skill sync`
   - `b8c73b0` `test(ios): add POM core user flow UI tests`
   - `8070209` `docs(qa): start portfolio baseline`
   - `2fe2c82` `test(ios): restore core user flow test name`
-  - POM 화면별 성공/실패 기준 문서 추가 커밋
+  - `d3907be` `docs(qa): document POM screen criteria`
+  - 테스트 계획서, 스모크 TC, 1회차 실행 리포트 추가 커밋
 - 테스트 수치와 결함 기록은 이 베이스라인 위에서만 갱신한다.
 
 ## 프로젝트 구조
