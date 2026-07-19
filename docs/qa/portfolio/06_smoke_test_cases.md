@@ -9,7 +9,7 @@
 | 설계 기법 태그 | Happy Path, Negative, Boundary, State Transition, Persistence, Offline, API-DB |
 | 결과 값 | PASS / FAIL / NEED_SPEC_CONFIRM / ENV_ISSUE / RETRY_REQUIRED / NOT_A_BUG |
 
-## Smoke 14
+## Smoke 15
 
 | TC ID | 우선순위 | 시나리오 | 사전조건 | 절차 | 기대 UI 결과 | API/DB 확인 | 설계 태그 | 자동화 |
 |---|---|---|---|---|---|---|---|---|
@@ -27,6 +27,7 @@
 | SMK-012 | P0 | 로그아웃 후 프로필 오류 미노출 | 로그인 상태 | 설정 -> 계정 연동 -> 로그아웃 -> 프로필 편집 진입 | `프로필을 불러오지 못했어요.` 미노출 | session clear 후 인증 필요 profile fetch 미수행 | Regression, State Transition | XCUITest + Unit |
 | SMK-013 | P0 | WorkSession 삭제 후 미복구 | 프로젝트 있음, 10초 이상 작업 세션 기록 | 작업공간 -> 세션 내역 -> 첫 세션 삭제 -> 앱 재실행 -> 작업공간 확인 | 세션 기록이 없고, 재실행 후 세션 내역 버튼이 비활성 | `DELETE /projects/:id/work-sessions/:sessionId`, `WorkSession` 삭제 유지 | Persistence, State Transition, API-DB | XCUITest |
 | SMK-014 | P1 | GaugeTarget 수정/삭제 후 미복구 | 로그인 상태, GaugeTarget 생성 완료 | 도구 -> 게이지 계산기 -> 목표 게이지 목록 -> 기존 목표 수정 -> 앱 재실행 -> 삭제 -> 앱 재실행 | 수정값이 유지되고 삭제한 목표 게이지가 다시 보이지 않음 | `PATCH /gauge-targets/:id`, `DELETE /gauge-targets/:id`, local cache 삭제 유지 | Persistence, State Transition, API-DB | XCUITest |
+| SMK-015 | P0 | 잘못된 비밀번호 로그인 | 서버 ON, 가입된 email/password, 로그아웃 상태 | 기존 email + 틀린 password 입력 -> 로그인 -> 앱 재실행 | `이메일 또는 비밀번호가 맞지 않아요.` 표시, 재실행 후 signed-out 상태 유지 | `POST /auth/login` 401 `INVALID_CREDENTIALS`, auth session 미저장 | Negative, Security, State Transition | XCUITest |
 
 ## 화면별 상세 TC 후보
 
@@ -35,7 +36,7 @@
 | 인증 | 중복 이메일 회원가입 | P0 | 사용자에게 중복/실패 메시지가 표시되고 앱이 멈추지 않는다. |
 | 인증 | 기존 계정 로그인 | P0 | `POST /auth/login` 성공 후 세션이 저장되고 메인 탭으로 진입한다. XCUITest `testExistingAccountCanLogInAndReachMainTabs`로 확인. |
 | 인증 | 로그아웃 후 프로필 오류 미노출 | P0 | 로그아웃 상태를 프로필 로드 실패로 표시하지 않는다. XCUITest `testLogoutDoesNotShowProfileLoadError`와 unit `authenticatedProfileLoadAfterSignOutKeepsEditableDefaultsWithoutError`로 확인. |
-| 인증 | 잘못된 비밀번호 로그인 | P0 | 세션이 저장되지 않고 실패 메시지가 표시된다. |
+| 인증 | 잘못된 비밀번호 로그인 | P0 | 세션이 저장되지 않고 실패 메시지가 표시된다. XCUITest `testWrongPasswordLoginShowsErrorAndDoesNotPersistSession`으로 확인. |
 | 온보딩 | 완료 후 재실행 | P0 | 다시 온보딩 첫 화면으로 돌아가지 않는다. |
 | 프로젝트 | 이름 없는 프로젝트 저장 | P0 | validation 메시지 또는 저장 비활성 정책이 동작한다. |
 | 프로젝트 | 프로젝트 수정 | P0 | `PATCH /projects/:id`, 수정값 유지. XCUITest `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`로 UI/재실행 확인. |
@@ -68,6 +69,7 @@
 | SMK-012 | `KnitGetherUITestCase`, `MainTabBarPage`, `SettingsPage`, `AuthPage` |
 | SMK-013 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage` |
 | SMK-014 | `KnitGetherUITestCase`, `MainTabBarPage`, `ToolPage`, `GaugeCalculatorPage` |
+| SMK-015 | `KnitGetherUITestCase`, `OnboardingPage`, `AuthPage`, `MainTabBarPage`, `SettingsPage` |
 | 프로젝트 수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage`, `ProjectFormPage` |
 | 서버 OFF cache 없음 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage` |
 | RowInstruction 저장/수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage` |

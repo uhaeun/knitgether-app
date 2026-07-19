@@ -111,6 +111,29 @@ struct AuthPage: UITestPage {
         return self
     }
 
+    @discardableResult
+    func expectInvalidCredentialsMessage() -> AuthPage {
+        XCTAssertTrue(
+            app.staticTexts["이메일 또는 비밀번호가 맞지 않아요."].waitForExistence(timeout: 12),
+            "잘못된 비밀번호 로그인 시 인증 실패 메시지가 표시되어야 합니다."
+        )
+        expectSignedOut()
+        return self
+    }
+
+    @discardableResult
+    func expectSignedOut() -> AuthPage {
+        XCTAssertTrue(
+            app.buttons["auth.submit"].waitForExistence(timeout: 12),
+            "로그인/회원가입 제출 버튼이 보여야 합니다."
+        )
+        XCTAssertFalse(
+            app.buttons["auth.logout"].waitForExistence(timeout: 2),
+            "로그인 실패 후 세션이 저장되면 안 됩니다."
+        )
+        return self
+    }
+
     func returnToOnboarding() -> OnboardingPage {
         tap(app.navigationBars.buttons.element(boundBy: 0))
         return OnboardingPage(app: app)

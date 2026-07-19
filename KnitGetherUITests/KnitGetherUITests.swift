@@ -281,6 +281,40 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testWrongPasswordLoginShowsErrorAndDoesNotPersistSession() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let email = "ui-login-fail-\(uniqueSuffix)@example.com"
+        let displayName = "UI Login Failure Tester"
+
+        let initialMainTabs = registerAndFinishOnboarding(
+            email: email,
+            displayName: displayName
+        )
+
+        _ = initialMainTabs.openSettings()
+            .openAccount()
+            .signOutIfNeeded()
+
+        if app.state != .notRunning {
+            app.terminate()
+        }
+
+        launchForCoreFlow()
+            .goToAuth()
+            .signOutIfNeeded()
+            .login(email: email, password: "wrong-password")
+            .expectInvalidCredentialsMessage()
+
+        if app.state != .notRunning {
+            app.terminate()
+        }
+
+        launchForCoreFlow()
+            .goToAuth()
+            .expectSignedOut()
+    }
+
+    @MainActor
     func testLogoutDoesNotShowProfileLoadError() throws {
         let mainTabs = registerAndFinishOnboarding()
         let settings = mainTabs.openSettings()

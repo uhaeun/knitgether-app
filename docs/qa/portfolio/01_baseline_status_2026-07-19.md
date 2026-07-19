@@ -6,12 +6,12 @@
 - 구 리포 `knitgether-mvp`(마지막 커밋 6/30 스냅샷)는 포트폴리오 대상 **아님** — 혼동 주의
 - 앱/테스트 베이스라인: `main` 최신 로컬 커밋 기준
 - 문서 베이스라인 커밋: `8070209` 2026-07-19 `docs(qa): start portfolio baseline`
-- 원격 대비 상태: `main...origin/main [ahead 18]` — 아직 push 전
+- 원격 대비 상태: `main...origin/main [ahead 19]` — 아직 push 전
 
 ## 베이스라인 확정 상태
 
 - 2026-07-19 기준 미커밋 변경사항 없음.
-- 아래 18개 커밋을 QA 베이스라인으로 사용한다.
+- 아래 19개 커밋을 QA 베이스라인으로 사용한다.
   - `b096e5b` `chore(dev): support local API device testing`
   - `d02f55f` `fix(ios): improve save feedback and skill sync`
   - `b8c73b0` `test(ios): add POM core user flow UI tests`
@@ -30,6 +30,7 @@
   - 로그아웃 후 프로필 로드 오류 미노출 수정/자동화 추가 커밋
   - WorkSession 삭제/재실행 유지 자동화 추가 커밋
   - GaugeTarget 수정/삭제/재실행 유지 자동화 및 게이지 계산 overflow 방어 추가 커밋
+  - 잘못된 비밀번호 로그인 오류/세션 미저장 자동화 추가 커밋
 - 테스트 수치와 결함 기록은 이 베이스라인 위에서만 갱신한다.
 
 ## 프로젝트 구조
@@ -49,7 +50,7 @@
 | 서버 build | `cd server && npm run build` | PASS |
 | 서버 E2E | `cd server && npm test` | PASS, 12 suites / 104 tests |
 | iOS Unit | `xcodebuild test ... -only-testing:KnitGetherTests` | PASS, 328 tests |
-| iOS UI | `xcodebuild test ... -only-testing:KnitGetherUITests` | PASS, 16 UI test functions / xcresult testsCount 20 |
+| iOS UI | `xcodebuild test ... -only-testing:KnitGetherUITests` | PASS, 17 UI test functions / xcresult testsCount 21 |
 | 공백 검사 | `git diff --check` | PASS |
 
 ## 자동화 베이스라인
@@ -67,7 +68,8 @@
 - 자동화된 로그아웃 오류 처리 흐름: 로그아웃 → 프로필 화면 진입 → `프로필을 불러오지 못했어요.` 미노출 확인.
 - 자동화된 GaugeTarget 흐름: 목표 게이지 추가 → 재실행 유지 → 편집 → 재실행 유지 → 삭제 → 재실행 후 미노출 확인.
 - 자동화된 게이지 계산 방어 흐름: 지나치게 큰 숫자 입력 시 앱 crash 없이 결과 없음 처리.
-- 아직 자동화되지 않은 후보: 잘못된 비밀번호 로그인.
+- 자동화된 잘못된 비밀번호 흐름: 기존 계정 로그아웃 → 틀린 비밀번호 로그인 → 오류 메시지 확인 → 앱 재실행 후 세션 미저장 확인.
+- 아직 자동화되지 않은 후보: 스와치/측정 상세 흐름.
 
 ## 재사용 가능한 기존 QA 자산
 
