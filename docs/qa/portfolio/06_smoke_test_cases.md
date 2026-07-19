@@ -32,8 +32,8 @@
 | 인증 | 잘못된 비밀번호 로그인 | P0 | 세션이 저장되지 않고 실패 메시지가 표시된다. |
 | 온보딩 | 완료 후 재실행 | P0 | 다시 온보딩 첫 화면으로 돌아가지 않는다. |
 | 프로젝트 | 이름 없는 프로젝트 저장 | P0 | validation 메시지 또는 저장 비활성 정책이 동작한다. |
-| 프로젝트 | 프로젝트 수정 | P0 | `PATCH /projects/:id`, 수정값 유지. |
-| 프로젝트 | 프로젝트 삭제 | P0 | `DELETE /projects/:id`, 목록에서 제거, 재실행 후 부활하지 않음. |
+| 프로젝트 | 프로젝트 수정 | P0 | `PATCH /projects/:id`, 수정값 유지. XCUITest `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`로 UI/재실행 확인. |
+| 프로젝트 | 프로젝트 삭제 | P0 | `DELETE /projects/:id`, 목록에서 제거, 재실행 후 부활하지 않음. XCUITest `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`로 UI/재실행 확인. |
 | 작업공간 | RowInstruction 추가/수정/삭제 | P0 | child pending retry와 삭제 재시도 유지. |
 | 작업공간 | 10초 미만 WorkSession | P0 | 저장하지 않는 정책 유지. |
 | 게이지 | 기존 GaugeTarget 수정 | P1 | 기존 ID 수정은 POST가 아니라 PATCH. |
@@ -55,6 +55,7 @@
 | SMK-008 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-009 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `ProjectFormPage` |
 | SMK-010 | `KnitGetherUITestCase`, `MainTabBarPage`, `SettingsPage`, `AuthPage`, `MyKnittingPage` |
+| 프로젝트 수정/삭제 | `KnitGetherUITestCase`, `MainTabBarPage`, `MyKnittingPage`, `WorkspacePage`, `ProjectFormPage` |
 
 ## 데이터 정합성 확인 컬럼 정의
 

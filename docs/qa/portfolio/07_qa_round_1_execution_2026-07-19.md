@@ -4,7 +4,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 앱 코드 기준 | SMK-004/005/006/008/009/010 UI 자동화 포함 |
+| 앱 코드 기준 | SMK-004/005/006/008/009/010 및 프로젝트 수정/삭제 UI 자동화 포함 |
 | 브랜치 | `main` |
 | 서버 | local API `http://127.0.0.1:3000/api/v1` |
 | 시뮬레이터 | iPhone 16 Pro Simulator, iOS 18.5 |
@@ -19,7 +19,7 @@
 | 서버 e2e | PASS | 12 suites / 104 tests |
 | iOS generic Simulator build | PASS | `KnitGether Local Simulator` scheme |
 | iOS unit | PASS | 325 tests |
-| iOS UI | PASS | UI test 10개, launch matrix 포함 13 passed runs |
+| iOS UI | PASS | UI test 11개, launch matrix 포함 14 passed runs |
 | 공백 검사 | PASS | `git diff --check` |
 
 ## Smoke 10 실행 상태
@@ -36,6 +36,7 @@
 | SMK-008 서버 OFF + cache 있음 | PASS | `testServerOffWithCachedProjectShowsCachedProject`에서 서버 OFF URL 재실행 후 cached 프로젝트 표시 확인 |
 | SMK-009 서버 OFF pending write 후 복구 | PASS | `testServerOffPendingProjectSyncsAfterServerRecovers`에서 offline 저장, 서버 복구, 빈 cache 원격 재조회 확인 |
 | SMK-010 계정 전환 cache 분리 | PASS | `testAccountSwitchKeepsProjectCacheSeparatedByUser`에서 A 계정 프로젝트 생성 후 B 계정에서 미노출 확인 |
+| 프로젝트 수정/삭제 | PASS | `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`에서 이름 수정, 재실행 유지, 삭제, 재실행 후 미노출 확인 |
 
 ## 발견/재검증 결함
 
@@ -50,16 +51,16 @@
 | 신규 사용자가 가입 후 주요 저장 흐름을 사용할 수 있는가 | PASS |
 | 저장한 프로젝트가 앱 재실행 후 유지되는가 | PASS |
 | Smoke 10 기준 P0가 실행됐는가 | YES |
-| 앱 사용 가능성 | 제한적 PASS. 회원가입/스킬 테스트/프로젝트 생성/프로젝트 재실행 유지/작업공간 단수/작업시간/게이지 기본 흐름, 오프라인 cache/pending 복구, 계정 cache 분리는 자동화로 통과 |
-| 릴리즈 판정 | 아직 No-Go. 프로젝트 수정/삭제, cache 없음 오프라인 UX 수동 QA가 남음 |
+| 앱 사용 가능성 | 제한적 PASS. 회원가입/스킬 테스트/프로젝트 생성/수정/삭제/재실행 유지/작업공간 단수/작업시간/게이지 기본 흐름, 오프라인 cache/pending 복구, 계정 cache 분리는 자동화로 통과 |
+| 릴리즈 판정 | 아직 No-Go. cache 없음 오프라인 UX 수동 QA가 남음 |
 
 ## 다음 실행 우선순위
 
 | 순서 | 대상 | 이유 |
 |---|---|---|
-| 1 | 프로젝트 수정/삭제 | 데이터 변경과 삭제는 결함 영향이 큼 |
-| 2 | cache 없음 오프라인 UX | 서버 OFF 최초 진입 안내 문구와 복구 경로 확인 필요 |
-| 3 | RowInstruction 저장/삭제 | child pending retry와 삭제 재시도 결함 이력 확인 필요 |
+| 1 | cache 없음 오프라인 UX | 서버 OFF 최초 진입 안내 문구와 복구 경로 확인 필요 |
+| 2 | RowInstruction 저장/삭제 | child pending retry와 삭제 재시도 결함 이력 확인 필요 |
+| 3 | 기존 계정 로그인 재진입 | 재방문 사용자의 진입 흐름 확인 필요 |
 
 ## Evidence 규칙
 

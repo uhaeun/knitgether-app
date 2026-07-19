@@ -208,6 +208,43 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let originalProjectName = "Editable Project \(uniqueSuffix)"
+        let editedProjectName = "Edited Project \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding()
+
+        mainTabs.openMyKnitting()
+            .openAddProject()
+            .saveProject(named: originalProjectName)
+            .expectProjectSaved(named: originalProjectName)
+
+        let workspace = mainTabs.openMyKnitting()
+            .openProject(named: originalProjectName)
+
+        workspace.openEditProject()
+            .renameProject(to: editedProjectName)
+            .expectProjectUpdated(named: editedProjectName)
+
+        workspace.returnToMyKnitting()
+            .expectProjectVisible(named: editedProjectName)
+            .expectProjectNotVisible(named: originalProjectName)
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .expectProjectVisible(named: editedProjectName)
+            .openProject(named: editedProjectName)
+            .openEditProject()
+            .deleteProject()
+            .expectProjectNotVisible(named: editedProjectName)
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .expectProjectNotVisible(named: editedProjectName)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()

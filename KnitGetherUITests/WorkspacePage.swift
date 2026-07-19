@@ -32,6 +32,25 @@ struct WorkspacePage: UITestPage {
         return self
     }
 
+    func openEditProject() -> ProjectFormPage {
+        tap(app.buttons["workspace.project.edit"].firstMatch)
+        XCTAssertTrue(
+            app.navigationBars["프로젝트 수정"].waitForExistence(timeout: 12),
+            "프로젝트 수정 화면이 보여야 합니다."
+        )
+        return ProjectFormPage(app: app)
+    }
+
+    func returnToMyKnitting() -> MyKnittingPage {
+        tap(app.navigationBars.buttons.element(boundBy: 0))
+        XCTAssertTrue(
+            app.navigationBars["나의 뜨개"].waitForExistence(timeout: 12)
+                || app.tabBars.buttons["내 뜨개"].waitForExistence(timeout: 12),
+            "내 뜨개 목록으로 돌아와야 합니다."
+        )
+        return MyKnittingPage(app: app)
+    }
+
     @discardableResult
     func expectWorkTimerRunning() -> WorkspacePage {
         XCTAssertTrue(

@@ -62,6 +62,23 @@ extension UITestPage {
         element.typeText(text)
     }
 
+    func replaceText(
+        _ identifier: String,
+        text: String,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let element = inputElement(identifier)
+        tap(element, file: file, line: line)
+        element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+
+        if let currentValue = element.value as? String, !currentValue.isEmpty {
+            element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count))
+        }
+
+        element.typeText(text)
+    }
+
     private func inputElement(_ identifier: String) -> XCUIElement {
         let textField = app.textFields[identifier].firstMatch
         if textField.waitForExistence(timeout: 1) {
