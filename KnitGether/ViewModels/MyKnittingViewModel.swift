@@ -16,6 +16,7 @@ final class MyKnittingViewModel: ObservableObject {
     @Published private(set) var availablePatterns: [PatternDocument] = []
     @Published private(set) var isRetryingSync = false
     @Published private(set) var errorMessage: String?
+    @Published private(set) var statusMessage: String?
 
     private let projectRepository: any ProjectRepository
     private let patternRepository: (any PatternRepository)?
@@ -41,6 +42,7 @@ final class MyKnittingViewModel: ObservableObject {
             errorMessage = nil
         } catch {
             errorMessage = "프로젝트를 불러오지 못했어요."
+            statusMessage = nil
         }
     }
 
@@ -50,6 +52,7 @@ final class MyKnittingViewModel: ObservableObject {
         availableYarns = []
         availableNeedles = []
         errorMessage = nil
+        statusMessage = nil
         await loadProjects()
         await loadProjectPatterns()
         await loadProjectMaterials()
@@ -65,6 +68,7 @@ final class MyKnittingViewModel: ObservableObject {
             errorMessage = nil
         } catch {
             errorMessage = "프로젝트 도안 목록을 불러오지 못했어요."
+            statusMessage = nil
         }
     }
 
@@ -79,6 +83,7 @@ final class MyKnittingViewModel: ObservableObject {
             errorMessage = nil
         } catch {
             errorMessage = "프로젝트 재료를 불러오지 못했어요."
+            statusMessage = nil
         }
     }
 
@@ -96,6 +101,7 @@ final class MyKnittingViewModel: ObservableObject {
     func addProject(from formData: ProjectFormData) async -> Bool {
         guard formData.canSave else {
             errorMessage = "프로젝트 이름을 입력해 주세요."
+            statusMessage = nil
             return false
         }
 
@@ -104,9 +110,11 @@ final class MyKnittingViewModel: ObservableObject {
             try await projectRepository.saveProject(project)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
+            statusMessage = "프로젝트를 추가했어요."
             return true
         } catch {
             errorMessage = "프로젝트를 추가하지 못했어요."
+            statusMessage = nil
             return false
         }
     }
@@ -115,6 +123,7 @@ final class MyKnittingViewModel: ObservableObject {
     func updateProject(_ project: KnittingProject, with formData: ProjectFormData) async -> Bool {
         guard formData.canSave else {
             errorMessage = "프로젝트 이름을 입력해 주세요."
+            statusMessage = nil
             return false
         }
 
@@ -123,9 +132,11 @@ final class MyKnittingViewModel: ObservableObject {
             try await projectRepository.saveProject(updatedProject)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
+            statusMessage = "프로젝트를 수정했어요."
             return true
         } catch {
             errorMessage = "프로젝트를 수정하지 못했어요."
+            statusMessage = nil
             return false
         }
     }
@@ -136,11 +147,17 @@ final class MyKnittingViewModel: ObservableObject {
             try await projectRepository.deleteProject(id: project.id)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
+            statusMessage = "프로젝트를 삭제했어요."
             return true
         } catch {
             errorMessage = "프로젝트를 삭제하지 못했어요."
+            statusMessage = nil
             return false
         }
+    }
+
+    func clearStatusMessage() {
+        statusMessage = nil
     }
 
     private func makeProject(from formData: ProjectFormData) -> KnittingProject {

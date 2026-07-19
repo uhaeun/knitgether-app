@@ -56,6 +56,10 @@ final class ProfileSettingsViewModel: ObservableObject {
             self.profile = profile
             formData = ProfileFormData(profile: profile)
             errorMessage = nil
+        } catch LocalProfileRepositoryError.profileNotFound {
+            profile = nil
+            formData = ProfileFormData()
+            errorMessage = nil
         } catch {
             errorMessage = "프로필을 불러오지 못했어요."
         }

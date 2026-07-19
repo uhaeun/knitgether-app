@@ -143,6 +143,10 @@ struct MyKnittingView: View {
         List {
             headerRow
 
+            if let statusMessage = viewModel.statusMessage {
+                statusRow(message: statusMessage)
+            }
+
             if let errorMessage = viewModel.errorMessage {
                 errorRow(message: errorMessage)
             }
@@ -297,6 +301,13 @@ struct MyKnittingView: View {
         .listRowBackground(Color.clear)
     }
 
+    private func statusRow(message: String) -> some View {
+        AppFormStatusBanner(message: message)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+            .listRowBackground(Color.clear)
+    }
+
     private func errorRow(message: String) -> some View {
         HStack(alignment: .center, spacing: 12) {
             Text(message)
@@ -322,6 +333,11 @@ struct MyKnittingView: View {
 
     private var emptyState: some View {
         VStack(spacing: 16) {
+            if let statusMessage = viewModel.statusMessage {
+                AppFormStatusBanner(message: statusMessage)
+                    .padding(.horizontal, 24)
+            }
+
             if let errorMessage = viewModel.errorMessage {
                 OfflineFirstNoticeView(
                     title: "서버에 연결하지 못했어요.",

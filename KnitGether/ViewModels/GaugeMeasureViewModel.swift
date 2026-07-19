@@ -164,6 +164,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             errorMessage = nil
         } catch {
             errorMessage = "게이지 측정 목록을 불러오지 못했어요."
+            statusMessage = nil
         }
     }
 
@@ -197,6 +198,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             rows: targetForm.rows
         ).validated else {
             errorMessage = "목표 게이지 값을 올바르게 입력해 주세요."
+            statusMessage = nil
             return false
         }
 
@@ -238,6 +240,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             return true
         } catch {
             errorMessage = "목표 게이지를 저장하지 못했어요."
+            statusMessage = nil
             return false
         }
     }
@@ -246,6 +249,7 @@ final class GaugeMeasureViewModel: ObservableObject {
     func saveSwatch(targetID: UUID, existingSwatchID: UUID? = nil) async -> Bool {
         guard let existingTarget = target(id: targetID) else {
             errorMessage = "목표 게이지를 찾지 못했어요."
+            statusMessage = nil
             return false
         }
 
@@ -296,6 +300,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             return true
         } catch {
             errorMessage = "목표 게이지를 삭제하지 못했어요."
+            statusMessage = nil
             return false
         }
     }
@@ -317,6 +322,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             let rawStitches = decimalValue(from: input.stitches)
         else {
             errorMessage = "측정 값을 올바르게 입력해 주세요."
+            statusMessage = nil
             return false
         }
 
@@ -364,6 +370,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             let existingSwatch = swatch(id: swatchID, in: existingTarget)
         else {
             errorMessage = "사진 측정 값을 올바르게 입력해 주세요."
+            statusMessage = nil
             return false
         }
 
@@ -497,6 +504,7 @@ final class GaugeMeasureViewModel: ObservableObject {
             return true
         } catch {
             errorMessage = failureMessage
+            statusMessage = nil
             return false
         }
     }

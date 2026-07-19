@@ -56,6 +56,7 @@ struct OnboardingView: View {
                 }
             }
         }
+        .tint(AppTheme.Color.accent)
     }
 
     private var progressDots: some View {

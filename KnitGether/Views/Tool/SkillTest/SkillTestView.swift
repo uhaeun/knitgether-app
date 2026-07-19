@@ -19,7 +19,8 @@ struct SkillTestView: View {
             if viewModel.isCompleted, let summary = viewModel.resultSummary {
                 SkillTestResultView(
                     summary: summary,
-                    skillRepository: skillRepository
+                    skillRepository: skillRepository,
+                    statusMessage: viewModel.statusMessage
                 ) {
                     dismiss()
                 }
@@ -87,6 +88,10 @@ struct SkillTestView: View {
                     ) { level in
                         viewModel.selectLevel(level, for: currentSkill)
                     }
+                }
+
+                if let statusMessage = viewModel.statusMessage {
+                    AppFormStatusBanner(message: statusMessage)
                 }
 
                 navigationControls

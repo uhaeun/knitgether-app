@@ -29,6 +29,8 @@ struct MyKnittingViewModelTests {
         #expect(savedProject.needleTypeSnapshot == "Circular")
         #expect(savedProject.needleSizeSnapshot == "5.0 mm")
         #expect(savedProject.needleLengthSnapshot == "80 cm")
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "프로젝트를 추가했어요.")
     }
 
     @Test func addProjectReturnsFalseAndKeepsErrorWhenSaveFails() async throws {
@@ -41,6 +43,7 @@ struct MyKnittingViewModelTests {
         #expect(!didSave)
         #expect(repository.savedProjects.isEmpty)
         #expect(viewModel.errorMessage == "프로젝트를 추가하지 못했어요.")
+        #expect(viewModel.statusMessage == nil)
     }
 
     @Test func updateProjectReturnsFalseAndKeepsExistingListWhenSaveFails() async throws {
@@ -58,6 +61,7 @@ struct MyKnittingViewModelTests {
         #expect(!didSave)
         #expect(viewModel.projects.map(\.name) == ["Existing"])
         #expect(viewModel.errorMessage == "프로젝트를 수정하지 못했어요.")
+        #expect(viewModel.statusMessage == nil)
     }
 
     @Test func deleteProjectReturnsFalseAndKeepsExistingListWhenDeleteFails() async throws {
@@ -72,6 +76,43 @@ struct MyKnittingViewModelTests {
         #expect(!didDelete)
         #expect(viewModel.projects.map(\.name) == ["Existing"])
         #expect(viewModel.errorMessage == "프로젝트를 삭제하지 못했어요.")
+        #expect(viewModel.statusMessage == nil)
+    }
+
+    @Test func updateProjectSetsSuccessStatusMessage() async throws {
+        let project = Self.makeProject(name: "Existing", ownerId: "user-a")
+        let updatedProject = project.copy(name: "Updated")
+        let repository = ProjectRepositoryStub(fetchResults: [
+            .success([project]),
+            .success([updatedProject]),
+        ])
+        let viewModel = MyKnittingViewModel(projectRepository: repository)
+        await viewModel.loadProjects()
+
+        var formData = ProjectFormData(project: project)
+        formData.name = "Updated"
+        let didSave = await viewModel.updateProject(project, with: formData)
+
+        #expect(didSave)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "프로젝트를 수정했어요.")
+    }
+
+    @Test func deleteProjectSetsSuccessStatusMessage() async throws {
+        let project = Self.makeProject(name: "Existing", ownerId: "user-a")
+        let repository = ProjectRepositoryStub(fetchResults: [
+            .success([project]),
+            .success([]),
+        ])
+        let viewModel = MyKnittingViewModel(projectRepository: repository)
+        await viewModel.loadProjects()
+
+        let didDelete = await viewModel.deleteProject(project)
+
+        #expect(didDelete)
+        #expect(viewModel.projects.isEmpty)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "프로젝트를 삭제했어요.")
     }
 
     @Test func addProjectSavesSelectedPatternDocumentAsProjectPatternCopy() async throws {

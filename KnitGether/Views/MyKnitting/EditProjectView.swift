@@ -13,6 +13,7 @@ struct EditProjectView: View {
     @State private var isShowingDeleteConfirmation = false
     @State private var isSaving = false
     @State private var isDeleting = false
+    @State private var submissionErrorMessage: String?
 
     let project: KnittingProject
     let availableYarns: [Yarn]
@@ -38,12 +39,18 @@ struct EditProjectView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                ProjectFormView(
-                    formData: $formData,
-                    includesPatternName: false,
-                    availableYarns: availableYarns,
-                    availableNeedles: availableNeedles
-                )
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                    ProjectFormView(
+                        formData: $formData,
+                        includesPatternName: false,
+                        availableYarns: availableYarns,
+                        availableNeedles: availableNeedles
+                    )
+
+                    if let submissionErrorMessage {
+                        AppFormErrorBanner(message: submissionErrorMessage)
+                    }
+                }
                 .padding(.horizontal, AppTheme.Spacing.md)
                 .padding(.top, AppTheme.Spacing.md)
 
@@ -79,7 +86,10 @@ struct EditProjectView: View {
                     isSaving = false
 
                     if didSave {
+                        submissionErrorMessage = nil
                         dismiss()
+                    } else {
+                        submissionErrorMessage = "프로젝트 변경사항을 저장하지 못했어요. 입력값과 서버 연결을 확인해 주세요."
                     }
                 }
             } label: {
@@ -148,7 +158,10 @@ struct EditProjectView: View {
                         isDeleting = false
 
                         if didDelete {
+                            submissionErrorMessage = nil
                             dismiss()
+                        } else {
+                            submissionErrorMessage = "프로젝트를 삭제하지 못했어요. 서버 연결을 확인해 주세요."
                         }
                     }
                 }

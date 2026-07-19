@@ -3,11 +3,16 @@ import SwiftUI
 struct SkillTestResultView: View {
     let summary: SkillTestResultSummary
     let skillRepository: any SkillRepository
+    var statusMessage: String?
     let doneAction: () -> Void
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
+                if let statusMessage {
+                    AppFormStatusBanner(message: statusMessage)
+                }
+
                 VStack(alignment: .leading, spacing: 10) {
                     Text("스킬 테스트 완료")
                         .font(.largeTitle.bold())

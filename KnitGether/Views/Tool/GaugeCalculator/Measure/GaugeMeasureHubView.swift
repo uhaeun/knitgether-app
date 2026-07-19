@@ -29,8 +29,7 @@ struct GaugeMeasureHubView: View {
 
             if let statusMessage = viewModel.statusMessage {
                 Section {
-                    Label(statusMessage, systemImage: "checkmark.circle")
-                        .foregroundStyle(.secondary)
+                    AppFormStatusBanner(message: statusMessage)
                 }
                 .listRowStyle()
             }
@@ -101,6 +100,11 @@ struct GaugeTargetListView: View {
 
     var body: some View {
         List {
+            if let statusMessage = viewModel.statusMessage {
+                AppFormStatusBanner(message: statusMessage)
+                    .listRowStyle()
+            }
+
             if viewModel.targets.isEmpty {
                 EmptyStateView(
                     title: "목표 게이지가 없어요.",
@@ -198,6 +202,10 @@ struct GaugeTargetDetailView: View {
             if let target = viewModel.target(id: targetID) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
+                        if let statusMessage = viewModel.statusMessage {
+                            AppFormStatusBanner(message: statusMessage)
+                        }
+
                         AppDetailHeaderView(
                             title: target.name,
                             subtitle: target.recommendedNeedle,

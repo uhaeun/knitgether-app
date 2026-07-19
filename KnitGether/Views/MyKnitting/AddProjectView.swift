@@ -11,6 +11,7 @@ struct AddProjectView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var formData = ProjectFormData()
     @State private var isSaving = false
+    @State private var submissionErrorMessage: String?
 
     let availablePatterns: [PatternDocument]
     let availableYarns: [Yarn]
@@ -32,13 +33,19 @@ struct AddProjectView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                ProjectFormView(
-                    formData: $formData,
-                    includesPatternName: true,
-                    availablePatterns: availablePatterns,
-                    availableYarns: availableYarns,
-                    availableNeedles: availableNeedles
-                )
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                    ProjectFormView(
+                        formData: $formData,
+                        includesPatternName: true,
+                        availablePatterns: availablePatterns,
+                        availableYarns: availableYarns,
+                        availableNeedles: availableNeedles
+                    )
+
+                    if let submissionErrorMessage {
+                        AppFormErrorBanner(message: submissionErrorMessage)
+                    }
+                }
                 .padding(.horizontal, AppTheme.Spacing.md)
                 .padding(.top, AppTheme.Spacing.md)
                 .padding(.bottom, 96)
@@ -68,7 +75,10 @@ struct AddProjectView: View {
                     isSaving = false
 
                     if didSave {
+                        submissionErrorMessage = nil
                         dismiss()
+                    } else {
+                        submissionErrorMessage = "프로젝트를 저장하지 못했어요. 입력값과 서버 연결을 확인해 주세요."
                     }
                 }
             } label: {

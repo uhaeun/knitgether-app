@@ -26,6 +26,8 @@ struct GaugeMeasureViewModelTests {
         #expect(target.targetRows == 30)
         #expect(target.recommendedNeedle == "4.0 mm")
         #expect(viewModel.targets.map(\.id) == [target.id])
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "목표 게이지를 저장했어요.")
     }
 
     @Test func saveExistingTargetUpdatesRepositoryTarget() async throws {
@@ -52,6 +54,8 @@ struct GaugeMeasureViewModelTests {
         #expect(updatedTarget.name == "Updated Cable Vest")
         #expect(updatedTarget.targetStitches == 24)
         #expect(updatedTarget.recommendedNeedle == "4.5 mm")
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "목표 게이지를 저장했어요.")
     }
 
     @Test func saveSwatchAddsSwatchToExistingTarget() async throws {
@@ -80,6 +84,8 @@ struct GaugeMeasureViewModelTests {
         #expect(savedTarget.swatches[0].needleSize == "4.0 mm")
         #expect(savedTarget.swatches[0].yarnName == "Merino")
         #expect(savedTarget.swatches[0].notes == "first sample")
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "스와치를 저장했어요.")
     }
 
     @Test func saveManualMeasurementAddsMeasurementToSwatch() async throws {
@@ -110,6 +116,8 @@ struct GaugeMeasureViewModelTests {
         #expect(measurement.washState == .before)
         #expect(abs(measurement.normalizedStitches - 22.1052) < 0.001)
         #expect(measurement.finalRows == 28)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "측정값을 저장했어요.")
     }
 
     @Test func savePhotoMeasurementStoresUserCorrectedCounts() async throws {

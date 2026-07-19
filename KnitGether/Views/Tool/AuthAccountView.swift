@@ -34,6 +34,10 @@ struct AuthAccountView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
+                if let statusMessage = viewModel.statusMessage {
+                    AppFormStatusBanner(message: statusMessage)
+                }
+
                 if let errorMessage = viewModel.errorMessage {
                     errorBanner(message: errorMessage)
                 }

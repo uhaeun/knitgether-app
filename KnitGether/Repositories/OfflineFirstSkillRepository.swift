@@ -65,6 +65,32 @@ final class OfflineFirstSkillRepository: SkillRepository {
         }
     }
 
+    func saveSkillLevel(skillId: UUID, level: String) async throws -> Skill {
+        let rollbackSnapshot = await local.makeRollbackSnapshot()
+
+        guard let existingSkill = try await local.fetchSkill(id: skillId) else {
+            let remoteSkill = try await remote.saveSkillLevel(skillId: skillId, level: level)
+            try await local.cacheSyncedSkills([remoteSkill])
+            return remoteSkill
+        }
+
+        let localSkill = copySkill(
+            existingSkill,
+            userLevel: level,
+            syncStatus: localSaveSyncStatus(for: existingSkill.syncStatus)
+        )
+        try await local.saveSkill(localSkill)
+
+        do {
+            let remoteSkill = try await remote.saveSkillLevel(skillId: skillId, level: level)
+            try await local.markSkillSynced(remoteSkill)
+            return remoteSkill
+        } catch {
+            try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+            return localSkill
+        }
+    }
+
     func deleteSkill(id: UUID) async throws {
         let existingSkill = try await local.fetchSkill(id: id)
         let rollbackSnapshot = await local.makeRollbackSnapshot()
@@ -111,8 +137,22 @@ final class OfflineFirstSkillRepository: SkillRepository {
                         skill,
                         syncStatus: skill.syncStatus == .pendingUpload ? .synced : .localOnly
                     )
-                    try await remote.saveSkill(uploadSkill)
-                    try await cacheServerSkillIfAvailable(fallback: uploadSkill)
+                    if skill.isSystem {
+                        let syncedSkill = try await remote.saveSkillLevel(
+                            skillId: skill.id,
+                            level: persistedSkillLevel(for: skill)
+                        )
+                        try await local.markSkillSynced(syncedSkill)
+                    } else {
+                        try await remote.saveSkill(uploadSkill)
+                        if let userLevel = skill.userLevel {
+                            _ = try await remote.saveSkillLevel(
+                                skillId: skill.id,
+                                level: userLevel
+                            )
+                        }
+                        try await cacheServerSkillIfAvailable(fallback: uploadSkill)
+                    }
                 }
             } catch {
                 await resolveRejectedPendingChange(skill, after: error)
@@ -195,8 +235,17 @@ final class OfflineFirstSkillRepository: SkillRepository {
         syncStatus == .pendingUpload ? .synced : syncStatus
     }
 
+    private func persistedSkillLevel(for skill: Skill) -> String {
+        guard let userLevel = skill.userLevel, !userLevel.isEmpty else {
+            return "몰라요"
+        }
+
+        return userLevel == "애매해요" ? "헷갈려요" : userLevel
+    }
+
     private func copySkill(
         _ skill: Skill,
+        userLevel: String? = nil,
         syncStatus: SyncStatus
     ) -> Skill {
         Skill(
@@ -210,7 +259,7 @@ final class OfflineFirstSkillRepository: SkillRepository {
             animationName: skill.animationName,
             animationType: skill.animationType,
             isSystem: skill.isSystem,
-            userLevel: skill.userLevel,
+            userLevel: userLevel ?? skill.userLevel,
             createdAt: skill.createdAt,
             updatedAt: skill.updatedAt,
             deletedAt: skill.deletedAt,

@@ -231,13 +231,46 @@ struct AppFormDecimalRow: View {
     }
 }
 
-struct AppFormErrorBanner: View {
+struct AppFormStatusBanner: View {
+    enum Kind {
+        case success
+        case error
+
+        var systemImage: String {
+            switch self {
+            case .success:
+                return "checkmark.circle.fill"
+            case .error:
+                return "exclamationmark.triangle.fill"
+            }
+        }
+
+        var foregroundColor: Color {
+            switch self {
+            case .success:
+                return AppTheme.Color.sage
+            case .error:
+                return AppTheme.Color.amber
+            }
+        }
+
+        var backgroundColor: Color {
+            switch self {
+            case .success:
+                return AppTheme.Color.sageSoft
+            case .error:
+                return AppTheme.Color.amberSoft
+            }
+        }
+    }
+
     let message: String
+    var kind: Kind = .success
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(AppTheme.Color.amber)
+            Image(systemName: kind.systemImage)
+                .foregroundStyle(kind.foregroundColor)
 
             Text(message)
                 .font(.subheadline)
@@ -247,7 +280,15 @@ struct AppFormErrorBanner: View {
             Spacer(minLength: 0)
         }
         .padding(14)
-        .background(AppTheme.Color.amberSoft, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(kind.backgroundColor, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+struct AppFormErrorBanner: View {
+    let message: String
+
+    var body: some View {
+        AppFormStatusBanner(message: message, kind: .error)
     }
 }
 

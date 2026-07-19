@@ -72,6 +72,8 @@ struct SkillTestViewModelTests {
         #expect(viewModel.resultSummary?.unknownCount == 1)
         #expect(viewModel.resultSummary?.unsureCount == 1)
         #expect(viewModel.resultSummary?.knownCount == 1)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "스킬 테스트 결과를 저장했어요.")
     }
 
     @Test func savePartialAndExitPersistsOnlyAnsweredSkills() async throws {
@@ -99,6 +101,8 @@ struct SkillTestViewModelTests {
         #expect(repository.savedLevels.map(\.skillId) == [secondSkill.id])
         #expect(repository.savedLevels.map(\.level) == ["잘 알아요"])
         #expect(!viewModel.isCompleted)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.statusMessage == "선택한 스킬 상태를 저장했어요.")
     }
 
     @Test func navigationClampsToValidSkillRange() async throws {

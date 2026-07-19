@@ -221,9 +221,7 @@ struct GaugeCalculatorView: View {
                     if let statusMessage = viewModel.statusMessage {
                         AppFormDivider()
 
-                        Text(statusMessage)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+                        AppFormStatusBanner(message: statusMessage)
                             .padding(.vertical, 12)
                     }
                 }

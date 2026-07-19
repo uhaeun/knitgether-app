@@ -187,13 +187,18 @@ final class AppRepositoryContainer {
                 ),
                 remote: RemoteDictionaryRepository(apiClient: apiClient)
             )
-            profileRepository = OfflineFirstProfileRepository(
-                local: LocalProfileRepository(
-                    seedSample: false,
-                    fileURL: cacheFileURL("profile.json", in: cacheDirectoryURL)
-                ),
-                remote: RemoteProfileRepository(apiClient: apiClient)
+            let localProfileRepository = LocalProfileRepository(
+                seedSample: false,
+                fileURL: cacheFileURL("profile.json", in: cacheDirectoryURL)
             )
+            if apiToken != nil || devToken != nil || authSessionStore.currentSession != nil {
+                profileRepository = OfflineFirstProfileRepository(
+                    local: localProfileRepository,
+                    remote: RemoteProfileRepository(apiClient: apiClient)
+                )
+            } else {
+                profileRepository = localProfileRepository
+            }
         } else {
             authRepository = LocalAuthRepository()
             projectRepository = LocalProjectRepository()

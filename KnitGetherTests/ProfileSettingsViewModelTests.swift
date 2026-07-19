@@ -15,6 +15,19 @@ struct ProfileSettingsViewModelTests {
         #expect(viewModel.formData.preferredUnits == "Metric")
     }
 
+    @Test func loadProfileWithoutSavedLocalProfileKeepsEditableDefaults() async throws {
+        let repository = FakeProfileRepository(profile: Self.makeProfile())
+        repository.fetchProfileError = LocalProfileRepositoryError.profileNotFound
+        let viewModel = ProfileSettingsViewModel(profileRepository: repository)
+
+        await viewModel.loadProfile()
+
+        #expect(viewModel.profile == nil)
+        #expect(viewModel.formData.displayName == "")
+        #expect(viewModel.formData.preferredUnits == "Metric")
+        #expect(viewModel.errorMessage == nil)
+    }
+
     @Test func saveProfilePersistsTrimmedProfileAndReloads() async throws {
         let repository = FakeProfileRepository(profile: Self.makeProfile())
         let viewModel = ProfileSettingsViewModel(profileRepository: repository)
@@ -86,6 +99,7 @@ private final class FakeProfileRepository: ProfileRepository {
     var profile: UserProfile
     var profileFetchResults: [UserProfile] = []
     var fetchProfileCallCount = 0
+    var fetchProfileError: Error?
     var savedProfiles: [UserProfile] = []
 
     init(profile: UserProfile) {
@@ -94,6 +108,10 @@ private final class FakeProfileRepository: ProfileRepository {
 
     func fetchCurrentProfile() async throws -> UserProfile {
         fetchProfileCallCount += 1
+
+        if let fetchProfileError {
+            throw fetchProfileError
+        }
 
         if !profileFetchResults.isEmpty {
             profile = profileFetchResults.removeFirst()

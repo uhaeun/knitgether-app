@@ -97,6 +97,50 @@ struct AppRepositoryContainerTests {
         #expect(profile.id == "user-a")
     }
 
+    @Test func apiModeSignedOutProfileRepositoryUsesAnonymousLocalCache() async throws {
+        let cacheDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+        var remoteRequestCount = 0
+        let session = MockURLProtocol.makeSession { request in
+            if request.url?.absoluteString == "https://api.knitgether.test/api/v1/profile" {
+                remoteRequestCount += 1
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 401,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (
+                response,
+                Data(#"{"code":"UNAUTHENTICATED","message":"Missing token."}"#.utf8)
+            )
+        }
+
+        let container = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(cacheDirectory: cacheDirectory),
+            session: session,
+            authSessionStore: Self.makeEmptySessionStore()
+        )
+
+        #expect(container.profileRepository is LocalProfileRepository)
+
+        let profile = Self.makeUserProfile(syncStatus: .localOnly)
+        try await container.profileRepository.saveCurrentProfile(profile)
+
+        let restoredContainer = AppRepositoryContainer.makeDefault(
+            environment: Self.apiEnvironment(cacheDirectory: cacheDirectory),
+            session: session,
+            authSessionStore: Self.makeEmptySessionStore()
+        )
+        let restoredProfile = try await restoredContainer.profileRepository.fetchCurrentProfile()
+
+        #expect(restoredProfile.displayName == "Local Knitter")
+        #expect(restoredProfile.syncStatus == .localOnly)
+        #expect(remoteRequestCount == 0)
+    }
+
     @Test func apiModeProjectRepositoryCachesRemoteProjectsAndFallsBackToCacheWhenServerFails() async throws {
         let cacheDirectory = try Self.makeTempCacheDirectory()
         defer { try? FileManager.default.removeItem(at: cacheDirectory) }
@@ -574,6 +618,20 @@ struct AppRepositoryContainerTests {
                 syncStatus: syncStatus
             ),
             workSessions: [],
+            createdAt: now,
+            updatedAt: now,
+            deletedAt: nil,
+            syncStatus: syncStatus
+        )
+    }
+
+    private static func makeUserProfile(syncStatus: SyncStatus) -> UserProfile {
+        let now = Date(timeIntervalSince1970: 1_783_735_200)
+        return UserProfile(
+            id: "user-a",
+            ownerId: "user-a",
+            displayName: "Local Knitter",
+            preferredUnits: "Metric",
             createdAt: now,
             updatedAt: now,
             deletedAt: nil,
