@@ -154,36 +154,132 @@ struct WorkspacePage: UITestPage {
     func finishCurrentWorkSessionAfterMinimumDuration() -> WorkspacePage {
         Thread.sleep(forTimeInterval: 11)
         tap(app.buttons["workspace.work_time.finish"].firstMatch)
-        waitUntilWorkSessionsButtonIsEnabled()
+        _ = waitUntilWorkSessionsButtonIsReady()
+        return self
+    }
+
+    @discardableResult
+    func openWorkSessions() -> WorkspacePage {
+        let sessionsButton = waitUntilWorkSessionsButtonIsReady()
+        sessionsButton.tap()
+
+        if !app.navigationBars["세션 내역"].waitForExistence(timeout: 4) {
+            sessionsButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        }
+
+        XCTAssertTrue(
+            app.navigationBars["세션 내역"].waitForExistence(timeout: 12),
+            "세션 내역 화면으로 이동해야 합니다. visibleElements=\(visibleElementSummary())"
+        )
         return self
     }
 
     @discardableResult
     func expectWorkSessionRecorded() -> WorkspacePage {
-        let sessionsButton = app.buttons["workspace.work_time.sessions"].firstMatch
-        waitUntilWorkSessionsButtonIsEnabled()
-        tap(sessionsButton)
-        expectText("세션 내역")
+        openWorkSessions()
+    }
+
+    @discardableResult
+    func deleteFirstWorkSession() -> WorkspacePage {
+        let sessionRow = firstWorkSessionRow()
+        XCTAssertNotNil(
+            sessionRow,
+            "삭제할 작업 세션 행이 보여야 합니다. visibleElements=\(visibleElementSummary())"
+        )
+        sessionRow?.press(forDuration: 1.0)
+
+        let deleteButton = app.buttons["삭제"].firstMatch
+        XCTAssertTrue(
+            deleteButton.waitForExistence(timeout: 12),
+            "작업 세션 context menu의 삭제 버튼이 보여야 합니다."
+        )
+        tap(deleteButton)
+
+        let alert = app.alerts["세션을 삭제할까요?"].firstMatch
+        XCTAssertTrue(
+            alert.waitForExistence(timeout: 12),
+            "작업 세션 삭제 확인 alert가 보여야 합니다."
+        )
+        tap(alert.buttons["삭제"].firstMatch)
         return self
     }
 
-    private func waitUntilWorkSessionsButtonIsEnabled(
+    @discardableResult
+    func expectNoWorkSessions() -> WorkspacePage {
+        XCTAssertTrue(
+            app.staticTexts["세션 기록이 없어요"].waitForExistence(timeout: 12),
+            "세션 삭제 후 빈 세션 상태가 보여야 합니다."
+        )
+        return self
+    }
+
+    @discardableResult
+    func expectWorkSessionsUnavailable() -> WorkspacePage {
+        let sessionsButton = app.buttons["workspace.work_time.sessions"].firstMatch
+        XCTAssertTrue(
+            sessionsButton.waitForExistence(timeout: 12),
+            "작업 세션 내역 버튼이 보여야 합니다."
+        )
+        XCTAssertFalse(
+            sessionsButton.isEnabled,
+            "저장된 작업 세션이 없으면 세션 내역 버튼이 비활성화되어야 합니다."
+        )
+        return self
+    }
+
+    private func waitUntilWorkSessionsButtonIsReady(
         timeout: TimeInterval = 12,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) {
+    ) -> XCUIElement {
         let button = app.buttons["workspace.work_time.sessions"].firstMatch
         let deadline = Date().addingTimeInterval(timeout)
 
         while Date() < deadline {
-            if button.exists && button.isEnabled {
-                return
+            if button.exists
+                && button.isEnabled
+                && button.isHittable
+                && (button.label.contains("1회") || app.staticTexts["1회"].exists) {
+                return button
             }
 
+            app.swipeUp()
             RunLoop.current.run(until: Date().addingTimeInterval(0.25))
         }
 
         XCTFail("작업 세션 내역 버튼이 활성화되어야 합니다.", file: file, line: line)
+        return button
+    }
+
+    private func firstWorkSessionRow(timeout: TimeInterval = 12) -> XCUIElement? {
+        let prefix = "workspace.work_session.row."
+        let deadline = Date().addingTimeInterval(timeout)
+
+        while Date() < deadline {
+            if let row = app.descendants(matching: .any).allElementsBoundByIndex.first(where: {
+                $0.identifier.hasPrefix(prefix) && $0.exists
+            }) {
+                return row
+            }
+
+            if let cell = app.cells.allElementsBoundByIndex.last(where: { $0.exists }) {
+                return cell
+            }
+
+            app.swipeUp()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        }
+
+        return nil
+    }
+
+    private func visibleElementSummary(limit: Int = 80) -> String {
+        app.descendants(matching: .any).allElementsBoundByIndex
+            .prefix(limit)
+            .map { element in
+                "type=\(element.elementType.rawValue), id=\(element.identifier), label=\(element.label)"
+            }
+            .joined(separator: " | ")
     }
 
     private func waitForStaticText(_ text: String, timeout: TimeInterval = 12) -> Bool {

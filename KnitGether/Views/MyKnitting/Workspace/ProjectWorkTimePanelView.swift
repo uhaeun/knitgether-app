@@ -67,11 +67,12 @@ struct ProjectWorkTimePanelView: View {
                             .font(.caption)
                             .foregroundStyle(.tertiary)
                     }
+                    .contentShape(Rectangle())
                 }
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.workSessionsButton)
                 .buttonStyle(.plain)
                 .font(.subheadline)
                 .disabled(viewModel.project.workSessions.isEmpty)
-                .accessibilityIdentifier(AppAccessibilityID.Workspace.workSessionsButton)
                 .padding(12)
                 .background(AppTheme.Color.warmBackground, in: RoundedRectangle(cornerRadius: 8))
                 .overlay {

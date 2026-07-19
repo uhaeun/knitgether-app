@@ -114,6 +114,25 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testWorkspaceWorkSessionCanBeDeletedAndStaysDeletedAfterRelaunch() throws {
+        let projectName = registerAndCreateProject(prefix: "Session Delete")
+
+        MainTabBarPage(app: app)
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .expectWorkTimerRunning()
+            .finishCurrentWorkSessionAfterMinimumDuration()
+            .openWorkSessions()
+            .deleteFirstWorkSession()
+            .expectNoWorkSessions()
+
+        relaunchForExistingSession()
+            .openMyKnitting()
+            .openProject(named: projectName)
+            .expectWorkSessionsUnavailable()
+    }
+
+    @MainActor
     func testServerOffWithCachedProjectShowsCachedProject() throws {
         let cacheDirectory = try makeLocalCacheDirectory(prefix: "server-off-cache")
         defer { try? FileManager.default.removeItem(at: cacheDirectory) }
