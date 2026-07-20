@@ -260,6 +260,10 @@ final class AppRepositoryContainer {
     }
 
     private static func devAuthToken(from environment: [String: String]) -> String? {
+        if environment["KNITGETHER_DISABLE_DEV_AUTH_TOKEN"] == "1" {
+            return nil
+        }
+
         let token = environment["KNITGETHER_DEV_AUTH_TOKEN"]?
             .trimmingCharacters(in: .whitespacesAndNewlines)
 

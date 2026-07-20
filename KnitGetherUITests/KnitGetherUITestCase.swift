@@ -106,7 +106,7 @@ class KnitGetherUITestCase: XCTestCase {
     ) -> [String: String] {
         var environment = [
             "KNITGETHER_API_BASE_URL": apiBaseURL,
-            "KNITGETHER_DEV_AUTH_TOKEN": ""
+            "KNITGETHER_DISABLE_DEV_AUTH_TOKEN": "1"
         ]
 
         if resetOnboarding {

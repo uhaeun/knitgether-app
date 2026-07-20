@@ -551,6 +551,41 @@ struct AppRepositoryContainerTests {
         #expect(authSessionStore.accessToken() == "jwt-token")
     }
 
+    @Test func apiModeCanDisableSchemeDevTokenForAuthenticatedUITestSessions() async throws {
+        let cacheDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+        let authSessionStore = Self.makeEmptySessionStore()
+        try authSessionStore.save(Self.makeAuthSession())
+
+        let session = MockURLProtocol.makeSession { request in
+            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer jwt-token")
+            #expect(request.value(forHTTPHeaderField: "Authorization") != "Bearer dev-token")
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.profileJSON.utf8))
+        }
+
+        let container = AppRepositoryContainer.makeDefault(
+            environment: [
+                "KNITGETHER_API_BASE_URL": "https://api.knitgether.test/api/v1",
+                "KNITGETHER_DEV_AUTH_TOKEN": "dev-token",
+                "KNITGETHER_DISABLE_DEV_AUTH_TOKEN": "1",
+                "KNITGETHER_LOCAL_CACHE_DIRECTORY": cacheDirectory.path,
+            ],
+            session: session,
+            authSessionStore: authSessionStore
+        )
+
+        #expect(container.profileRepository is OfflineFirstProfileRepository)
+        let profile = try await container.profileRepository.fetchCurrentProfile()
+        #expect(profile.id == "user-a")
+    }
+
     private static func makeEmptySessionStore() -> AuthSessionStore {
         let suiteName = "AppRepositoryContainerTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
