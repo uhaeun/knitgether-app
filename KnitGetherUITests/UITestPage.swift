@@ -150,6 +150,27 @@ extension UITestPage {
         }
     }
 
+    func dismissSystemPasswordPromptIfNeeded(timeout: TimeInterval = 4) {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let candidates = [
+            springboard.buttons["Not Now"].firstMatch,
+            springboard.buttons["나중에"].firstMatch,
+            app.buttons["Not Now"].firstMatch,
+            app.buttons["나중에"].firstMatch
+        ]
+
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if let button = candidates.first(where: { $0.exists }) {
+                button.tap()
+                _ = button.waitForNonExistence(timeout: 2)
+                return
+            }
+
+            RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+        }
+    }
+
     func expectText(
         _ text: String,
         timeout: TimeInterval = 12,

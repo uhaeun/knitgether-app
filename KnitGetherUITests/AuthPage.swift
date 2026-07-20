@@ -81,6 +81,7 @@ struct AuthPage: UITestPage {
                 successMessage: "회원가입이 완료됐어요.",
                 failureMessage: "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
             )
+            dismissSystemPasswordPromptIfNeeded()
             return self
         }
 
@@ -89,6 +90,7 @@ struct AuthPage: UITestPage {
                 || app.buttons["auth.logout"].waitForExistence(timeout: 12),
             "회원가입 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
         )
+        dismissSystemPasswordPromptIfNeeded()
         return self
     }
 
@@ -100,6 +102,7 @@ struct AuthPage: UITestPage {
                 successMessage: "로그인했어요.",
                 failureMessage: "로그인 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
             )
+            dismissSystemPasswordPromptIfNeeded()
             return self
         }
 
@@ -108,6 +111,7 @@ struct AuthPage: UITestPage {
                 || app.buttons["auth.logout"].waitForExistence(timeout: 12),
             "로그인 후 성공 메시지 또는 로그인 상태가 표시되어야 합니다."
         )
+        dismissSystemPasswordPromptIfNeeded()
         return self
     }
 
