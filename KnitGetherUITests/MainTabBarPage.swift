@@ -13,8 +13,28 @@ struct MainTabBarPage: UITestPage {
     }
 
     func openMyKnitting() -> MyKnittingPage {
-        tap(app.tabBars.buttons["내 뜨개"].firstMatch)
-        return MyKnittingPage(app: app)
+        let page = MyKnittingPage(app: app)
+
+        for _ in 0..<3 {
+            if app.navigationBars["나의 뜨개"].exists || app.buttons["project.add"].exists {
+                return page
+            }
+
+            let tabButton = app.tabBars.buttons["내 뜨개"].firstMatch
+            if tabButton.waitForExistence(timeout: 4) {
+                tap(tabButton)
+            } else {
+                tap(app.buttons["heart.text.square.fill"].firstMatch)
+            }
+
+            if app.navigationBars["나의 뜨개"].waitForExistence(timeout: 4)
+                || app.buttons["project.add"].waitForExistence(timeout: 4) {
+                return page
+            }
+        }
+
+        page.expectVisible()
+        return page
     }
 
     func openTools() -> ToolPage {

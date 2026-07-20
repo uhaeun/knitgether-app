@@ -139,12 +139,14 @@ struct AuthPage: UITestPage {
     }
 
     func returnToOnboarding() -> OnboardingPage {
+        dismissSystemPasswordPromptIfNeeded()
         tap(app.navigationBars.buttons.element(boundBy: 0))
         return OnboardingPage(app: app)
     }
 
     @discardableResult
     func returnToSettings() -> SettingsPage {
+        dismissSystemPasswordPromptIfNeeded()
         tap(app.navigationBars.buttons.element(boundBy: 0))
         return SettingsPage(app: app)
     }
