@@ -1,0 +1,215 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  AUTH_JWT_EXPIRES_IN_SECONDS: "2592000"
+  AUTH_JWT_SECRET: ci-jwt-secret-at-least-32-characters
+  DATABASE_URL: postgresql://knitgether:knitgether@localhost:5432/knitgether_ci?schema=public
+  DEV_AUTH_TOKEN: dev-token
+  DEV_AUTH_USER_ID: dev-user
+  FILE_STORAGE_ROOT: ./storage
+  KNITGETHER_API_TOKENS: dev-user:dev-token
+
+jobs:
+  server:
+    name: Server Build And Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: knitgether_ci
+          POSTGRES_PASSWORD: knitgether
+          POSTGRES_USER: knitgether
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U knitgether -d knitgether_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: server
+        run: npm run prisma:generate
+
+      - name: Apply database migrations
+        working-directory: server
+        run: npx prisma migrate deploy
+
+      - name: Build server
+        working-directory: server
+        run: npm run build
+
+      - name: Run server tests
+        working-directory: server
+        run: npm test
+
+  ios:
+    name: iOS Build, Unit, And UI Smoke
+    runs-on: macos-latest
+    needs: server
+    timeout-minutes: 75
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install PostgreSQL
+        run: |
+          brew install postgresql@16
+          POSTGRES_BIN="$(brew --prefix postgresql@16)/bin"
+          echo "$POSTGRES_BIN" >> "$GITHUB_PATH"
+          export PATH="$POSTGRES_BIN:$PATH"
+          brew services start postgresql@16
+
+          for attempt in {1..30}; do
+            if pg_isready -h localhost -p 5432; then
+              exit 0
+            fi
+            sleep 2
+          done
+
+          pg_isready -h localhost -p 5432
+
+      - name: Prepare iOS test database
+        run: |
+          createuser -h localhost -p 5432 knitgether || true
+          psql -h localhost -p 5432 -d postgres -c "ALTER USER knitgether WITH PASSWORD 'knitgether';"
+          createdb -h localhost -p 5432 -O knitgether knitgether_ci || true
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: server
+        run: npm run prisma:generate
+
+      - name: Apply database migrations
+        working-directory: server
+        run: npx prisma migrate deploy
+
+      - name: Build server
+        working-directory: server
+        run: npm run build
+
+      - name: Start API server
+        working-directory: server
+        env:
+          NODE_ENV: development
+          PORT: "3000"
+        run: |
+          node dist/main.js > ../server-ci.log 2>&1 &
+          echo "$!" > ../server.pid
+
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:3000/api/v1/health; then
+              exit 0
+            fi
+            sleep 2
+          done
+
+          cat ../server-ci.log
+          exit 1
+
+      - name: Select iPhone simulator
+        run: |
+          SIMULATOR_NAME="$(
+            xcrun simctl list devices available |
+              awk -F '[()]' '/iPhone/ && /Shutdown|Booted/ { name=$1; sub(/^[[:space:]]*/, "", name); sub(/[[:space:]]*$/, "", name); print name; exit }'
+          )"
+
+          if [ -z "$SIMULATOR_NAME" ]; then
+            xcrun simctl list devices available
+            exit 1
+          fi
+
+          echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> "$GITHUB_ENV"
+          echo "Using simulator: $SIMULATOR_NAME"
+
+      - name: Build iOS app
+        run: |
+          xcodebuild build \
+            -project KnitGether.xcodeproj \
+            -scheme "KnitGether Local Simulator" \
+            -destination "generic/platform=iOS Simulator"
+
+      - name: Run iOS unit tests
+        run: |
+          mkdir -p TestResults
+          xcodebuild test \
+            -project KnitGether.xcodeproj \
+            -scheme "KnitGether Local Simulator" \
+            -destination "platform=iOS Simulator,name=${SIMULATOR_NAME}" \
+            -only-testing:KnitGetherTests \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults/KnitGetherTests.xcresult
+
+      - name: Run iOS UI smoke tests
+        run: |
+          mkdir -p TestResults
+          xcodebuild test \
+            -project KnitGether.xcodeproj \
+            -scheme "KnitGether Local Simulator" \
+            -destination "platform=iOS Simulator,name=${SIMULATOR_NAME}" \
+            -only-testing:KnitGetherUITests/KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords \
+            -only-testing:KnitGetherUITests/KnitGetherUITests/testServerOffWithCachedProjectShowsCachedProject \
+            -only-testing:KnitGetherUITests/KnitGetherUITests/testServerOffPendingProjectSyncsAfterServerRecovers \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults/KnitGetherUITests.xcresult
+
+      - name: Upload iOS diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-diagnostics
+          path: |
+            TestResults/*.xcresult
+            server-ci.log
+          if-no-files-found: ignore
+
+      - name: Stop API server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill "$(cat server.pid)" || true
+          fi
