@@ -31,6 +31,7 @@
   - WorkSession 삭제/재실행 유지 자동화 추가 커밋
   - GaugeTarget 수정/삭제/재실행 유지 자동화 및 게이지 계산 overflow 방어 추가 커밋
   - 잘못된 비밀번호 로그인 오류/세션 미저장 자동화 추가 커밋
+  - 스와치/수동 측정 저장/수정/재실행 유지 자동화 및 GaugeTarget PATCH 저장 보정 추가 커밋
 - 테스트 수치와 결함 기록은 이 베이스라인 위에서만 갱신한다.
 
 ## 프로젝트 구조
@@ -48,9 +49,9 @@
 | 검증 | 명령/대상 | 결과 |
 |---|---|---|
 | 서버 build | `cd server && npm run build` | PASS |
-| 서버 E2E | `cd server && npm test` | PASS, 12 suites / 104 tests |
+| 서버 E2E | `cd server && npm test` | PASS, 12 suites / 105 tests |
 | iOS Unit | `xcodebuild test ... -only-testing:KnitGetherTests` | PASS, 328 tests |
-| iOS UI | `xcodebuild test ... -only-testing:KnitGetherUITests` | PASS, 17 UI test functions / xcresult testsCount 21 |
+| iOS UI | `xcodebuild test ... -only-testing:KnitGetherUITests` | PASS, 19 UI test functions / xcresult totalTestCount 19 / device passed 22 |
 | 공백 검사 | `git diff --check` | PASS |
 
 ## 자동화 베이스라인
@@ -67,9 +68,10 @@
 - 자동화된 기존 로그인 흐름: 기존 계정 생성 → 로그아웃 → 앱 재실행 → 로그인 → 메인 탭 진입 확인.
 - 자동화된 로그아웃 오류 처리 흐름: 로그아웃 → 프로필 화면 진입 → `프로필을 불러오지 못했어요.` 미노출 확인.
 - 자동화된 GaugeTarget 흐름: 목표 게이지 추가 → 재실행 유지 → 편집 → 재실행 유지 → 삭제 → 재실행 후 미노출 확인.
+- 자동화된 스와치/수동 측정 흐름: 목표 게이지 하위 스와치 추가 → 수동 측정 저장 → 측정 수정 → 앱 재실행 후 수정값 유지 확인.
 - 자동화된 게이지 계산 방어 흐름: 지나치게 큰 숫자 입력 시 앱 crash 없이 결과 없음 처리.
 - 자동화된 잘못된 비밀번호 흐름: 기존 계정 로그아웃 → 틀린 비밀번호 로그인 → 오류 메시지 확인 → 앱 재실행 후 세션 미저장 확인.
-- 아직 자동화되지 않은 후보: 스와치/측정 상세 흐름.
+- 다음 자동화 후보: 라이브러리 실/바늘/도구 CRUD.
 
 ## 재사용 가능한 기존 QA 자산
 

@@ -17,10 +17,12 @@ type MockPrismaService = {
   };
   gaugeSwatch: {
     create: jest.Mock;
+    upsert: jest.Mock;
     updateMany: jest.Mock;
   };
   gaugeMeasurement: {
     createMany: jest.Mock;
+    upsert: jest.Mock;
     updateMany: jest.Mock;
   };
   $transaction: jest.Mock;
@@ -169,10 +171,12 @@ describe('Gauge targets route', () => {
       },
       gaugeSwatch: {
         create: jest.fn(),
+        upsert: jest.fn(),
         updateMany: jest.fn(),
       },
       gaugeMeasurement: {
         createMany: jest.fn(),
+        upsert: jest.fn(),
         updateMany: jest.fn(),
       },
       $transaction: jest.fn(async (callback) => callback(prisma)),
@@ -197,8 +201,10 @@ describe('Gauge targets route', () => {
     prisma.gaugeTarget.create.mockReset();
     prisma.gaugeTarget.update.mockReset();
     prisma.gaugeSwatch.create.mockReset();
+    prisma.gaugeSwatch.upsert.mockReset();
     prisma.gaugeSwatch.updateMany.mockReset();
     prisma.gaugeMeasurement.createMany.mockReset();
+    prisma.gaugeMeasurement.upsert.mockReset();
     prisma.gaugeMeasurement.updateMany.mockReset();
     prisma.$transaction.mockReset();
     prisma.$transaction.mockImplementation(async (callback) => callback(prisma));
@@ -209,8 +215,10 @@ describe('Gauge targets route', () => {
     prisma.gaugeTarget.create.mockResolvedValue(activeGaugeTarget);
     prisma.gaugeTarget.update.mockResolvedValue(activeGaugeTarget);
     prisma.gaugeSwatch.create.mockResolvedValue(activeGaugeSwatch);
+    prisma.gaugeSwatch.upsert.mockResolvedValue(activeGaugeSwatch);
     prisma.gaugeSwatch.updateMany.mockResolvedValue({ count: 1 });
     prisma.gaugeMeasurement.createMany.mockResolvedValue({ count: 1 });
+    prisma.gaugeMeasurement.upsert.mockResolvedValue(activeGaugeMeasurement);
     prisma.gaugeMeasurement.updateMany.mockResolvedValue({ count: 1 });
   });
 
@@ -318,6 +326,68 @@ describe('Gauge targets route', () => {
       .expect(({ body }) => {
         expect(body.code).toBe('VALIDATION_FAILED');
       });
+  });
+
+  it('updates existing swatches and measurements within the owner scope without duplicate creates', async () => {
+    const response = await request(app.getHttpServer())
+      .patch(`/api/v1/gauge-targets/${targetId}`)
+      .set('Authorization', 'Bearer dev-token')
+      .send(saveGaugeTargetBody)
+      .expect(200);
+
+    expect(prisma.gaugeMeasurement.updateMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        gaugeTargetId: targetId,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: expect.any(Date),
+      },
+    });
+    expect(prisma.gaugeSwatch.updateMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        gaugeTargetId: targetId,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: expect.any(Date),
+      },
+    });
+    expect(prisma.gaugeSwatch.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: swatchId,
+        ownerId: 'user-a',
+        gaugeTargetId: targetId,
+      },
+      data: expect.objectContaining({
+        isSelected: true,
+        needleSize: '4.0 mm',
+        yarnName: 'Soft Merino DK',
+        deletedAt: null,
+      }),
+    });
+    expect(prisma.gaugeMeasurement.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: measurementId,
+        ownerId: 'user-a',
+        gaugeTargetId: targetId,
+        gaugeSwatchId: swatchId,
+      },
+      data: expect.objectContaining({
+        method: 'manual',
+        washState: 'before',
+        finalStitches: 22,
+        finalRows: 30,
+        deletedAt: null,
+      }),
+    });
+    expect(prisma.gaugeSwatch.upsert).not.toHaveBeenCalled();
+    expect(prisma.gaugeMeasurement.upsert).not.toHaveBeenCalled();
+    expect(prisma.gaugeSwatch.create).not.toHaveBeenCalled();
+    expect(prisma.gaugeMeasurement.createMany).not.toHaveBeenCalled();
+    expect(response.body).toEqual(expectedGaugeTargetResponse());
   });
 
   it('soft deletes an owned gauge target and its nested data', async () => {

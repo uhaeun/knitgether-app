@@ -166,6 +166,135 @@ struct GaugeCalculatorPage: UITestPage {
         return self
     }
 
+    @discardableResult
+    func addGaugeSwatch(
+        needleSize: String,
+        yarnName: String,
+        stitchPattern: String = "",
+        notes: String = ""
+    ) -> GaugeCalculatorPage {
+        tap(materializedElement("tool.gauge.swatch.add"))
+        XCTAssertTrue(
+            app.navigationBars["스와치 추가"].waitForExistence(timeout: 12),
+            "스와치 추가 화면이 보여야 합니다."
+        )
+        fillGaugeSwatchForm(
+            needleSize: needleSize,
+            yarnName: yarnName,
+            stitchPattern: stitchPattern,
+            notes: notes
+        )
+        tap(materializedElement("tool.gauge.swatch.save"))
+        XCTAssertTrue(
+            app.staticTexts[needleSize].waitForExistence(timeout: 12),
+            "추가한 스와치가 목표 상세에 보여야 합니다: \(needleSize)"
+        )
+        return self
+    }
+
+    @discardableResult
+    func expectGaugeSwatchVisible(
+        needleSize: String,
+        yarnName: String
+    ) -> GaugeCalculatorPage {
+        XCTAssertTrue(
+            app.staticTexts[needleSize].waitForExistence(timeout: 12),
+            "스와치 바늘 호수가 보여야 합니다: \(needleSize)"
+        )
+        XCTAssertTrue(
+            app.staticTexts[yarnName].waitForExistence(timeout: 12)
+                || hasVisibleText(containing: yarnName),
+            "스와치 실 이름이 보여야 합니다: \(yarnName)"
+        )
+        return self
+    }
+
+    @discardableResult
+    func openGaugeSwatch(needleSize: String) -> GaugeCalculatorPage {
+        tap(gaugeSwatchElement(needleSize: needleSize))
+        XCTAssertTrue(
+            app.navigationBars["스와치 상세"].waitForExistence(timeout: 12),
+            "스와치 상세 화면이 보여야 합니다: \(needleSize)"
+        )
+        return self
+    }
+
+    @discardableResult
+    func addManualMeasurement(
+        width: String,
+        height: String,
+        stitches: String,
+        rows: String
+    ) -> GaugeCalculatorPage {
+        tap(app.buttons["측정 추가"].firstMatch)
+        XCTAssertTrue(
+            app.navigationBars["측정 방법"].waitForExistence(timeout: 12),
+            "측정 방법 화면이 보여야 합니다."
+        )
+        tap(materializedElement("tool.gauge.measure.manual_method"))
+        XCTAssertTrue(
+            app.navigationBars["수동 측정"].waitForExistence(timeout: 12),
+            "수동 측정 화면이 보여야 합니다."
+        )
+        fillManualMeasurementForm(
+            width: width,
+            height: height,
+            stitches: stitches,
+            rows: rows
+        )
+        tap(materializedElement("tool.gauge.measure.save"))
+        if app.navigationBars["측정 방법"].waitForExistence(timeout: 12) {
+            tap(app.navigationBars.buttons["스와치 상세"].firstMatch)
+        }
+        XCTAssertTrue(
+            app.navigationBars["스와치 상세"].waitForExistence(timeout: 12),
+            "측정 저장 후 스와치 상세로 돌아와야 합니다."
+        )
+        return self
+    }
+
+    @discardableResult
+    func expectManualMeasurement(
+        stitches: String,
+        rows: String
+    ) -> GaugeCalculatorPage {
+        XCTAssertTrue(
+            hasVisibleText(containing: "\(stitches)코"),
+            "측정 코 수가 보여야 합니다: \(stitches)코"
+        )
+        XCTAssertTrue(
+            hasVisibleText(containing: "\(rows)단"),
+            "측정 단 수가 보여야 합니다: \(rows)단"
+        )
+        return self
+    }
+
+    @discardableResult
+    func editFirstManualMeasurement(
+        width: String,
+        height: String,
+        stitches: String,
+        rows: String
+    ) -> GaugeCalculatorPage {
+        tap(firstGaugeMeasurementElement())
+        XCTAssertTrue(
+            app.navigationBars["측정 수정"].waitForExistence(timeout: 12),
+            "측정 수정 화면이 보여야 합니다."
+        )
+        fillManualMeasurementForm(
+            width: width,
+            height: height,
+            stitches: stitches,
+            rows: rows
+        )
+        tap(materializedElement("tool.gauge.measure.save"))
+        XCTAssertTrue(
+            app.navigationBars["스와치 상세"].waitForExistence(timeout: 12),
+            "측정 수정 후 스와치 상세로 돌아와야 합니다."
+        )
+        return self
+    }
+
     private func fillGaugeTargetForm(
         name: String,
         needle: String,
@@ -188,12 +317,49 @@ struct GaugeCalculatorPage: UITestPage {
         dismissKeyboard()
     }
 
+    private func fillGaugeSwatchForm(
+        needleSize: String,
+        yarnName: String,
+        stitchPattern: String,
+        notes: String
+    ) {
+        replaceGaugeText("tool.gauge.swatch.form.needle_size", text: needleSize)
+        dismissKeyboard()
+        replaceGaugeText("tool.gauge.swatch.form.yarn_name", text: yarnName)
+        dismissKeyboard()
+        if !stitchPattern.isEmpty {
+            replaceGaugeText("tool.gauge.swatch.form.pattern", text: stitchPattern)
+            dismissKeyboard()
+        }
+        if !notes.isEmpty {
+            replaceGaugeText("tool.gauge.swatch.form.notes", text: notes)
+            dismissKeyboard()
+        }
+    }
+
+    private func fillManualMeasurementForm(
+        width: String,
+        height: String,
+        stitches: String,
+        rows: String
+    ) {
+        replaceGaugeText("tool.gauge.measure.width", text: width)
+        dismissKeyboard()
+        replaceGaugeText("tool.gauge.measure.height", text: height)
+        dismissKeyboard()
+        replaceGaugeText("tool.gauge.measure.stitches", text: stitches)
+        dismissKeyboard()
+        replaceGaugeText("tool.gauge.measure.rows", text: rows)
+        dismissKeyboard()
+    }
+
     private func replaceGaugeText(_ identifier: String, text: String) {
         let element = materializedInputElement(identifier)
         tap(element)
         element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
 
-        if let currentValue = element.value as? String, !currentValue.isEmpty {
+        if let currentValue = element.value as? String,
+           shouldClearTextValue(currentValue) {
             element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count))
         }
 
@@ -207,26 +373,24 @@ struct GaugeCalculatorPage: UITestPage {
         let deadline = Date().addingTimeInterval(timeout)
 
         while Date() < deadline {
-            let textField = app.textFields[identifier].firstMatch
-            if textField.exists {
-                return textField
+            let query = app.descendants(matching: .any).matching(identifier: identifier)
+            let matches = query.allElementsBoundByIndex
+            if let inputIndex = matches.firstIndex(where: {
+                $0.elementType == .textField
+                    || $0.elementType == .secureTextField
+                    || $0.elementType == .textView
+            }) {
+                return query.element(boundBy: inputIndex)
             }
-
-            let secureField = app.secureTextFields[identifier].firstMatch
-            if secureField.exists {
-                return secureField
-            }
-
-            let textView = app.textViews[identifier].firstMatch
-            if textView.exists {
-                return textView
+            if let hittableIndex = matches.firstIndex(where: \.isHittable) {
+                return query.element(boundBy: hittableIndex)
             }
 
             app.swipeUp()
             RunLoop.current.run(until: Date().addingTimeInterval(0.25))
         }
 
-        return app.textFields[identifier].firstMatch
+        return anyElement(identifier)
     }
 
     private func materializedElement(
@@ -262,5 +426,57 @@ struct GaugeCalculatorPage: UITestPage {
         }
 
         return app.staticTexts[name].firstMatch
+    }
+
+    private func gaugeSwatchElement(needleSize: String) -> XCUIElement {
+        let buttons = app.buttons.allElementsBoundByIndex
+        if let button = buttons.first(where: { button in
+            button.label.contains(needleSize)
+                && button.label.contains("측정")
+        }) {
+            return button
+        }
+
+        let rowPrefix = "tool.gauge.swatch.row."
+        let rows = app.descendants(matching: .any).allElementsBoundByIndex.filter { element in
+            element.identifier.hasPrefix(rowPrefix)
+        }
+
+        if let row = rows.first(where: { row in
+            row.label.contains(needleSize)
+                || row.descendants(matching: .staticText)[needleSize].exists
+        }) {
+            return row
+        }
+
+        return app.staticTexts[needleSize].firstMatch
+    }
+
+    private func firstGaugeMeasurementElement() -> XCUIElement {
+        let rowPrefix = "tool.gauge.measure.row."
+        let rows = app.descendants(matching: .any).allElementsBoundByIndex.filter { element in
+            element.identifier.hasPrefix(rowPrefix)
+        }
+
+        if let row = rows.first {
+            return row
+        }
+
+        return app.staticTexts["세탁 전 · 수동 측정"].firstMatch
+    }
+
+    private func hasVisibleText(containing value: String) -> Bool {
+        app.staticTexts.allElementsBoundByIndex.contains {
+            $0.label.contains(value)
+        }
+    }
+
+    private func shouldClearTextValue(_ value: String) -> Bool {
+        let trimmedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedValue.isEmpty else {
+            return false
+        }
+
+        return !trimmedValue.hasPrefix("예:")
     }
 }

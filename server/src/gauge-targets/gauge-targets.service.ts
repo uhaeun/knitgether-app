@@ -107,7 +107,7 @@ export class GaugeTargetsService {
       });
 
       for (const swatchBody of body.swatches ?? []) {
-        await this.createSwatchWithMeasurements(
+        await this.saveSwatchWithMeasurements(
           transaction,
           ownerId,
           id,
@@ -178,6 +178,67 @@ export class GaugeTargetsService {
       await transaction.gaugeMeasurement.createMany({
         data: measurements,
       });
+    }
+  }
+
+  private async saveSwatchWithMeasurements(
+    transaction: any,
+    ownerId: string,
+    targetId: string,
+    swatchBody: SaveGaugeSwatchDto,
+  ): Promise<void> {
+    const swatchId = swatchBody.id ?? randomUUID();
+
+    for (const measurementBody of swatchBody.measurements ?? []) {
+      this.assertValidMeasurement(measurementBody);
+    }
+
+    const swatchUpdate = await transaction.gaugeSwatch.updateMany({
+      where: {
+        id: swatchId,
+        ownerId,
+        gaugeTargetId: targetId,
+      },
+      data: this.gaugeSwatchUpdateData(ownerId, targetId, swatchBody),
+    });
+    if (swatchUpdate.count === 0) {
+      await transaction.gaugeSwatch.create({
+        data: this.gaugeSwatchCreateData(
+          ownerId,
+          targetId,
+          swatchId,
+          swatchBody,
+        ),
+      });
+    }
+
+    for (const measurementBody of swatchBody.measurements ?? []) {
+      const measurementCreateData = this.gaugeMeasurementCreateData(
+        ownerId,
+        targetId,
+        swatchId,
+        measurementBody,
+      );
+
+      const measurementUpdate = await transaction.gaugeMeasurement.updateMany({
+        where: {
+          id: measurementCreateData.id,
+          ownerId,
+          gaugeTargetId: targetId,
+          gaugeSwatchId: swatchId,
+        },
+        data: this.gaugeMeasurementUpdateData(
+          ownerId,
+          targetId,
+          swatchId,
+          measurementBody,
+        ),
+      });
+      if (measurementUpdate.count === 0) {
+        await transaction.gaugeMeasurement.createMany({
+          data: [measurementCreateData],
+        });
+      }
     }
   }
 
@@ -307,6 +368,29 @@ export class GaugeTargetsService {
     };
   }
 
+  private gaugeSwatchUpdateData(
+    ownerId: string,
+    targetId: string,
+    body: SaveGaugeSwatchDto,
+  ) {
+    return {
+      ownerId,
+      gaugeTargetId: targetId,
+      isSelected: body.isSelected ?? false,
+      knittedAt: body.knittedAt ?? null,
+      needleMaterial: this.nullableTrimmed(body.needleMaterial),
+      needleSize: this.nullableTrimmed(body.needleSize),
+      needleType: this.nullableTrimmed(body.needleType),
+      notes: this.nullableTrimmed(body.notes),
+      stitchPattern: this.nullableTrimmed(body.stitchPattern),
+      yarnBrand: this.nullableTrimmed(body.yarnBrand),
+      yarnColor: this.nullableTrimmed(body.yarnColor),
+      yarnLot: this.nullableTrimmed(body.yarnLot),
+      yarnName: this.nullableTrimmed(body.yarnName),
+      deletedAt: null,
+    };
+  }
+
   private gaugeMeasurementCreateData(
     ownerId: string,
     targetId: string,
@@ -335,6 +419,36 @@ export class GaugeTargetsService {
       photoPath: this.nullableTrimmed(body.photoPath),
       cornerCoordinates: this.nullableTrimmed(body.cornerCoordinates),
       createdAt: body.createdAt,
+      deletedAt: null,
+    };
+  }
+
+  private gaugeMeasurementUpdateData(
+    ownerId: string,
+    targetId: string,
+    swatchId: string,
+    body: SaveGaugeMeasurementDto,
+  ) {
+    return {
+      ownerId,
+      gaugeTargetId: targetId,
+      gaugeSwatchId: swatchId,
+      method: body.method,
+      washState: body.washState,
+      measuredWidth: body.measuredWidth,
+      measuredHeight: body.measuredHeight,
+      rawStitches: body.rawStitches,
+      rawRows: body.rawRows,
+      normalizedStitches: body.normalizedStitches,
+      normalizedRows: body.normalizedRows,
+      finalStitches: body.finalStitches,
+      finalRows: body.finalRows,
+      autoStitches: body.autoStitches ?? 0,
+      autoRows: body.autoRows ?? 0,
+      autoConfidence: this.nullableTrimmed(body.autoConfidence),
+      userModified: body.userModified ?? false,
+      photoPath: this.nullableTrimmed(body.photoPath),
+      cornerCoordinates: this.nullableTrimmed(body.cornerCoordinates),
       deletedAt: null,
     };
   }

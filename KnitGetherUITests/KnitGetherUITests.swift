@@ -452,6 +452,50 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testGaugeSwatchAndManualMeasurementPersistAfterRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let targetName = "Swatch Target \(uniqueSuffix)"
+        let swatchNeedle = "5.0mm"
+        let swatchYarn = "QA Yarn \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding()
+
+        mainTabs.openTools()
+            .openGaugeCalculator()
+            .openMeasureHub()
+            .openGaugeTargetList()
+            .addGaugeTarget(
+                name: targetName,
+                needle: "5.0mm",
+                width: "10",
+                height: "10",
+                stitches: "22",
+                rows: "30"
+            )
+            .openGaugeTarget(named: targetName)
+            .addGaugeSwatch(
+                needleSize: swatchNeedle,
+                yarnName: swatchYarn
+            )
+            .expectGaugeSwatchVisible(needleSize: swatchNeedle, yarnName: swatchYarn)
+            .openGaugeSwatch(needleSize: swatchNeedle)
+            .addManualMeasurement(width: "10", height: "10", stitches: "22", rows: "30")
+            .expectManualMeasurement(stitches: "22", rows: "30")
+            .editFirstManualMeasurement(width: "10", height: "10", stitches: "24", rows: "32")
+            .expectManualMeasurement(stitches: "24", rows: "32")
+
+        relaunchForExistingSession()
+            .openTools()
+            .openGaugeCalculator()
+            .openMeasureHub()
+            .openGaugeTargetList()
+            .openGaugeTarget(named: targetName)
+            .expectGaugeSwatchVisible(needleSize: swatchNeedle, yarnName: swatchYarn)
+            .openGaugeSwatch(needleSize: swatchNeedle)
+            .expectManualMeasurement(stitches: "24", rows: "32")
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
