@@ -10,6 +10,26 @@ class KnitGetherUITestCase: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+        addUIInterruptionMonitor(withDescription: "System password prompt") { alert in
+            let dismissButtonTitles = [
+                "Not Now",
+                "나중에",
+                "Don't Save",
+                "저장 안 함",
+                "Cancel",
+                "취소"
+            ]
+
+            for title in dismissButtonTitles {
+                let button = alert.buttons[title].firstMatch
+                if button.exists {
+                    button.tap()
+                    return true
+                }
+            }
+
+            return false
+        }
     }
 
     override func tearDownWithError() throws {

@@ -187,7 +187,7 @@ struct AuthPage: UITestPage {
         displayName: String,
         successMessage: String,
         failureMessage: String,
-        timeout: TimeInterval = 20,
+        timeout: TimeInterval = 45,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {

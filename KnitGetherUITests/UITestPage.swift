@@ -150,21 +150,36 @@ extension UITestPage {
         }
     }
 
-    func dismissSystemPasswordPromptIfNeeded(timeout: TimeInterval = 4) {
+    func dismissSystemPasswordPromptIfNeeded(timeout: TimeInterval = 6) {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let candidates = [
             springboard.buttons["Not Now"].firstMatch,
             springboard.buttons["나중에"].firstMatch,
+            springboard.buttons["Don't Save"].firstMatch,
+            springboard.buttons["저장 안 함"].firstMatch,
             app.buttons["Not Now"].firstMatch,
-            app.buttons["나중에"].firstMatch
+            app.buttons["나중에"].firstMatch,
+            app.buttons["Don't Save"].firstMatch,
+            app.buttons["저장 안 함"].firstMatch
         ]
 
         let deadline = Date().addingTimeInterval(timeout)
+        var didTriggerInterruptionMonitor = false
+        var didTryCoordinateFallback = false
+
         while Date() < deadline {
             if let button = candidates.first(where: { $0.exists }) {
                 button.tap()
                 _ = button.waitForNonExistence(timeout: 2)
                 return
+            }
+
+            if !didTriggerInterruptionMonitor {
+                app.tap()
+                didTriggerInterruptionMonitor = true
+            } else if !didTryCoordinateFallback {
+                app.coordinate(withNormalizedOffset: CGVector(dx: 0.31, dy: 0.74)).tap()
+                didTryCoordinateFallback = true
             }
 
             RunLoop.current.run(until: Date().addingTimeInterval(0.2))

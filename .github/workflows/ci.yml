@@ -153,18 +153,29 @@ jobs:
 
       - name: Select iPhone simulator
         run: |
-          SIMULATOR_NAME="$(
+          SIMULATOR_LINE="$(
             xcrun simctl list devices available |
-              awk -F '[()]' '/iPhone/ && /Shutdown|Booted/ { name=$1; sub(/^[[:space:]]*/, "", name); sub(/[[:space:]]*$/, "", name); print name; exit }'
+              awk '/iPhone/ && /Pro/ && /Shutdown|Booted/ { print; exit }'
           )"
 
-          if [ -z "$SIMULATOR_NAME" ]; then
+          if [ -z "$SIMULATOR_LINE" ]; then
+            SIMULATOR_LINE="$(
+              xcrun simctl list devices available |
+                awk '/iPhone/ && /Shutdown|Booted/ { print; exit }'
+            )"
+          fi
+
+          if [ -z "$SIMULATOR_LINE" ]; then
             xcrun simctl list devices available
             exit 1
           fi
 
+          SIMULATOR_NAME="$(echo "$SIMULATOR_LINE" | sed -E 's/^[[:space:]]*//; s/[[:space:]]*\([0-9A-Fa-f-]{36}\).*//')"
+          SIMULATOR_UDID="$(echo "$SIMULATOR_LINE" | sed -E 's/.*\(([0-9A-Fa-f-]{36})\).*/\1/')"
+
           echo "SIMULATOR_NAME=$SIMULATOR_NAME" >> "$GITHUB_ENV"
-          echo "Using simulator: $SIMULATOR_NAME"
+          echo "SIMULATOR_UDID=$SIMULATOR_UDID" >> "$GITHUB_ENV"
+          echo "Using simulator: $SIMULATOR_NAME ($SIMULATOR_UDID)"
 
       - name: Build iOS app
         run: |
@@ -179,10 +190,15 @@ jobs:
           xcodebuild test \
             -project KnitGether.xcodeproj \
             -scheme "KnitGether Local Simulator" \
-            -destination "platform=iOS Simulator,name=${SIMULATOR_NAME}" \
+            -destination "id=${SIMULATOR_UDID}" \
             -only-testing:KnitGetherTests \
             -parallel-testing-enabled NO \
             -resultBundlePath TestResults/KnitGetherTests.xcresult
+
+      - name: Reset simulator before UI smoke
+        run: |
+          xcrun simctl shutdown "$SIMULATOR_UDID" || true
+          xcrun simctl erase "$SIMULATOR_UDID"
 
       - name: Run iOS UI smoke tests
         run: |
@@ -190,7 +206,7 @@ jobs:
           xcodebuild test \
             -project KnitGether.xcodeproj \
             -scheme "KnitGether Local Simulator" \
-            -destination "platform=iOS Simulator,name=${SIMULATOR_NAME}" \
+            -destination "id=${SIMULATOR_UDID}" \
             -only-testing:KnitGetherUITests/KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords \
             -only-testing:KnitGetherUITests/KnitGetherUITests/testServerOffWithCachedProjectShowsCachedProject \
             -only-testing:KnitGetherUITests/KnitGetherUITests/testServerOffPendingProjectSyncsAfterServerRecovers \
