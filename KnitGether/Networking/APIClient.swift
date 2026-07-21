@@ -139,9 +139,10 @@ nonisolated final class APIClient {
 
         if let token = try await configuration.authTokenProvider() {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            Self.debugLog("REQUEST \(method) \(url.absoluteString) auth=present(\(token.prefix(12))...)")
+        } else {
+            Self.debugLog("REQUEST \(method) \(url.absoluteString) auth=MISSING")
         }
-
-        Self.debugLog("REQUEST \(method) \(url.absoluteString)")
 
         let data: Data
         let response: URLResponse
