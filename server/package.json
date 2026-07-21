@@ -13,7 +13,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "db:reset-test": "ts-node --transpile-only scripts/reset-test-data.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
