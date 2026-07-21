@@ -42,6 +42,11 @@ struct MainTabBarPage: UITestPage {
         return ToolPage(app: app)
     }
 
+    func openLibrary() -> LibraryPage {
+        tap(app.tabBars.buttons["창고"].firstMatch)
+        return LibraryPage(app: app)
+    }
+
     func openSettings() -> SettingsPage {
         tap(app.tabBars.buttons["설정"].firstMatch)
         return SettingsPage(app: app)

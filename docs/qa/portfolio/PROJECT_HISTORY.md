@@ -267,13 +267,34 @@ MainActor.assumeIsolated { self?.rebuildIfSessionScopeChanged(session) }
 
 `MainActor.assumeIsolated`는 "지금 반드시 메인 액터 위에 있다"는 가정이 틀리면 **크래시**하는 API라, 문제를 완전히 고치지도 못한 상태로 이 위험을 감수할 이유가 없다고 판단해 **원래의 안전한 `Task { @MainActor in ... }` 코드로 되돌렸다.** (검증되지 않은 "개선처럼 보이는 변경"을 남기지 않는 것 — 이번 세션에서 반복해서 지킨 원칙.)
 
-### 7.6 최종 상태 (DEF-006)
+### 7.6 추가 검증 라운드 — 모든 환경적 가설을 하나씩 소거함
 
-- **확정**: 클라이언트 버그, 서버 아님. 회원가입 직후 프로필/프로젝트 등 인증이 필요한 API 호출에서 세션 토큰이 유실/누락되는 타이밍 이슈.
-- **부분 확인**: 세션→컨테이너 재구성의 비동기 지연이 원인의 일부.
-- **미해결**: 전체 메커니즘. 실제 기기 디버거(LLDB) 없이 CLI만으로는 완전한 확정이 어려웠다.
-- **조치**: 코드는 안전한 원상태로 유지. 이 결함은 포트폴리오에 **"발견했지만 이번 세션엔 완전히 못 고친 결함"** 으로 정직하게 남긴다 — 오히려 좋은 QA 사례: 모든 버그가 그 자리에서 다 고쳐지는 건 아니며, 무엇을 시도했고 왜 되돌렸는지 기록하는 것 자체가 성숙한 엔지니어링 판단이다.
-- **다음 세션 제안**: Xcode에서 직접 LLDB로 `AppRepositoryContainer.apiAuthToken`/`authTokenProvider` 클로저에 브레이크포인트를 걸고 실제 실행 순간의 값을 확인하는 것이 가장 빠른 다음 단계.
+라이브러리 POM 테스트를 새로 작성한 뒤 실행하자 **3개 전부**가 동일하게 `MainTabBarPage.swift:12`(재실행/등록 직후 메인 탭바 대기)에서 실패했다. 이번엔 의심 가능한 환경 변수를 하나씩 통제하며 재현을 반복했다:
+
+| 시도 | 조건 | 결과 |
+|---|---|---|
+| 1 | 서버 완전 재시작(좀비 프로세스 정리 후 새 프로세스) | 여전히 실패 |
+| 2 | curl로 서버만 직접 재검증 | 서버는 정상 (재확인) |
+| 3 | 실패하는 테스트 1개만 완전 격리 실행 | 여전히 동일 지점에서 실패 |
+| 4 | 시뮬레이터에서 앱 완전 삭제(Keychain/UserDefaults 초기화) 후 격리 실행 | 여전히 실패 |
+| 5 | 시뮬레이터 전체 초기화(`simctl erase`) + DerivedData 완전 삭제 후 클린 빌드 | 여전히 실패 |
+| 6 | `AuthAccountView.swift`의 접근성 ID 리팩터 diff 재검토 | 순수 코스메틱 변경만 확인, 로직 변경 없음 — 원인 아님 |
+
+**결론**: 이 버그는 세션 누적 상태, 서버 노후화, 시뮬레이터 오염, 내가 만든 접근성 ID 변경 중 **어느 것도 원인이 아니다.** 클린룸 조건에서도 100% 결정적으로 재현되는, 회원가입 직후 온보딩 완료(프로필 저장) 플로우 자체에 내재한 실제 앱 버그다.
+
+### 7.7 마지막 시도 — 파일 기반 로깅으로 직접 계측
+
+`xcrun simctl log stream`이 xcodebuild가 생성하는 시뮬레이터 클론을 제대로 못 잡는 문제를 우회하기 위해, `APIClient.debugLog`가 콘솔 출력 대신 **앱 컨테이너 내부 파일에 직접 기록**하도록 임시로 바꾸고, 테스트 실행 후 `~/Library/Developer/CoreSimulator/Devices/` 전체에서 그 파일을 찾아보았다. 49개 디바이스 전체를 뒤졌지만 파일 자체가 발견되지 않음 — 이는 로깅 코드가 실행되지 않았거나(가능성 낮음, 매 요청마다 호출되는 경로), 파일 쓰기 자체가 샌드박스 문제로 조용히 실패했거나, 컨테이너 검색 경로가 실제 실행 인스턴스와 어긋났을 가능성이 있다. 이 접근도 결론에 이르지 못해 **원상 복구**했다.
+
+### 7.8 최종 상태 (DEF-006)
+
+- **확정 (매우 높은 확신도)**: 클라이언트 버그, 서버 아님(curl로 2회 독립 검증). 회원가입 직후 온보딩 완료(프로필 저장) 흐름에서 인증 토큰이 유실/누락되어 100% 결정적으로 재현됨.
+- **소거 완료**: 세션 누적 상태, 서버 프로세스 노후화, 시뮬레이터/DerivedData 오염, 접근성 ID 리팩터 — 전부 원인이 아님을 개별적으로 확인.
+- **부분 확인**: 세션→컨테이너 재구성의 비동기 지연(`Task { @MainActor in }`)이 원인의 일부일 가능성은 있으나(수정 시 실패 지점이 온보딩에서 프로젝트 저장으로 이동), 이 지연을 동기화하는 시도(`MainActor.assumeIsolated`)는 문제를 완전히 없애지 못했고 크래시 위험이 있는 API라 되돌림.
+- **미해결**: 정확한 트리거 메커니즘. `xcodebuild`의 UI 테스트가 매 실행마다 시뮬레이터 클론을 새로 만들어, CLI 기반 콘솔/파일 로그 캡처가 계속 빗나갔다 — Xcode GUI에서 LLDB를 직접 붙여 `AppRepositoryContainer.authTokenProvider` 클로저와 `AuthSessionStore.accessToken()`에 브레이크포인트를 걸어야 확정 가능하다.
+- **조치**: 진단용 임시 코드(파일 로깅) 전부 원상 복구. `AppRepositoryContainer.swift`, `APIClient.swift`는 최종적으로 세션 시작 시점과 동일한 커밋 상태로 유지됨 — 이번 세션에서 만든 유일한 영구 변경은 접근성 ID 리팩터(정상 동작 확인됨)와 테스트 데이터 리셋 스크립트뿐.
+- **의미**: 이 결함은 DEF-001과 마찬가지로 **XCUITest 자동화가 없었다면 절대 발견하지 못했을 문제**다. 유닛 테스트(Fake Repository 기반)는 전부 통과하고, 수동으로 앱을 한 번 켜서 가입만 하고 끝내는 정도로는 걸리지 않는다. "왜 UI 자동화가 유닛 테스트만으로는 부족한가"를 보여주는 최고의 실증 사례이자, 6시간 넘게 다각도로 재현·소거법을 적용한 것 자체가 QA 방법론(가설 수립 → 통제 변수로 하나씩 소거 → 확정 못 하면 정직하게 보류)의 좋은 사례다.
+- **다음 세션 제안**: Xcode GUI + LLDB로 `AppRepositoryContainer.authTokenProvider`와 `AuthSessionStore.accessToken()`에 브레이크포인트를 걸고 실제 실행 순간의 값을 확인하는 것이 유일하게 남은, 확실한 다음 단계.
 
 ---
 
@@ -333,9 +354,23 @@ MainActor.assumeIsolated { self?.rebuildIfSessionScopeChanged(session) }
 
 - [x] DEF-001 근본 수정
 - [x] 접근성 ID 전수 점검 (16개 파일, 커밋 `a44c5d5`)
-- [ ] 라이브러리/도안/사전 영역 회귀 테스트 추가 + 발견한 버그 목록 — **진행 예정** (지금까지는 읽기 전용 코드 리뷰만 했고, 실제 회귀 테스트 코드 추가는 아직 안 함)
+- [진행 중] 라이브러리/도안/사전 영역 회귀 테스트 추가 + 발견한 버그 목록
 - [x] 테스트 데이터 리셋 스크립트 (커밋 `156d1ff`)
-- [ ] 서버/iOS 전체 테스트 여전히 통과 — **DEF-006 미해결로 현재 불통과 상태**, 원인 규명 및 수정 필요
-- [ ] 이 히스토리 문서 최신화 (DEF-006 결론 나는 대로 갱신)
+- [부분] 서버/iOS 전체 테스트 여전히 통과 — 서버 105/105, iOS 유닛 전체 통과. **DEF-006(재실행 직후 프로필/데이터 API 401)은 미해결로 남겨둠** (7.6절 참고, 원인은 좁혔으나 완전 해결 못 함, 위험한 미검증 수정은 되돌림)
+- [x] 이 히스토리 문서 최신화
 
-이어서 DEF-006 원인 규명 → 수정 → 라이브러리/도안/사전 영역 회귀 테스트 작업을 계속 진행한다.
+## 11. 라이브러리 XCUITest POM 추가 (진행 중)
+
+기존 QA 문서(`04_pom_screen_success_failure_criteria.md`)에 "P1, 자동화 아직 안 됨"으로 남아있던 영역 — 실/바늘/도구 창고 CRUD — 에 대해 XCUITest POM을 새로 작성함.
+
+**중요한 실수 하나와 교훈**: 처음에 `AppAccessibilityID.Library.yarnAddButton`처럼 앱 타겟의 enum을 POM에서 직접 참조하도록 작성했다가 컴파일 에러(`cannot find 'AppAccessibilityID' in scope`)를 만남. **UI 테스트 타겟은 앱-대상 프로세스와 별도 프로세스로 실행되기 때문에 앱의 Swift 타입을 직접 import할 수 없고, 오직 문자열 기반 접근성 식별자만 프로세스 경계를 넘어 작동한다** — 기존 POM 파일(AuthPage, GaugeCalculatorPage 등)이 전부 문자열 리터럴(`"tool.gauge.swatch.add"` 등)을 쓰고 있었던 이유를 뒤늦게 이해함. 전부 문자열 리터럴로 고쳐서 해결.
+
+추가한 파일:
+- `KnitGetherUITests/LibraryPage.swift` — 창고 탭 진입점 (실/바늘/도구 창고로 분기)
+- `KnitGetherUITests/YarnLibraryPage.swift` — 실 추가/수정/삭제 + 재실행 후 유지 확인
+- `KnitGetherUITests/NeedleLibraryPage.swift` — 바늘 추가/수정/삭제 + 재실행 후 유지 확인
+- `KnitGetherUITests/ToolLibraryPage.swift` — 도구 추가/수정/삭제 + 재실행 후 유지 확인
+- `MainTabBarPage.openLibrary()` 메서드 추가
+- `KnitGetherUITests.swift`에 테스트 3개 추가: `testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch`, `testNeedleLibrary...`, `testToolLibrary...` (기존 `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`와 동일한 구조: 추가→수정 확인→재실행→유지 확인→삭제→재실행→미노출 확인)
+
+빌드는 정상 성공(컴파일 에러 없음). 실행 검증 결과: 3개 전부 `registerAndFinishOnboarding()` 단계, 즉 **DEF-006과 정확히 동일한 지점**에서 실패 — 새로 작성한 POM/테스트 코드 자체의 문제가 아니라, 이 세션 전체에서 발견된 DEF-006(7.6~7.8절)이 모든 신규 테스트의 셋업 단계를 막고 있는 것으로 확정됨. 코드는 기존에 이미 통과 이력이 있는 `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch` 등과 동일한 구조·컨벤션을 따르므로, DEF-006이 해결되면 별도 수정 없이 통과할 것으로 예상한다. **"작성 완료, DEF-006 해결 전까지 실행 검증 불가"** 로 정직하게 표시하여 커밋한다 — 검증 안 된 것을 통과했다고 주장하지 않는다.

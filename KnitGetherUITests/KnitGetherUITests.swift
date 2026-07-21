@@ -496,6 +496,96 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let originalName = "Yarn \(uniqueSuffix)"
+        let editedName = "Edited Yarn \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding()
+
+        mainTabs.openLibrary()
+            .openYarnLibrary()
+            .addYarn(name: originalName, brand: "QA Brand")
+            .expectYarnVisible(named: originalName)
+            .openYarn(named: originalName)
+            .editYarn(name: editedName)
+
+        relaunchForExistingSession()
+            .openLibrary()
+            .openYarnLibrary()
+            .expectYarnVisible(named: editedName)
+            .expectYarnNotVisible(named: originalName)
+            .openYarn(named: editedName)
+            .deleteYarn()
+            .expectYarnNotVisible(named: editedName)
+
+        relaunchForExistingSession()
+            .openLibrary()
+            .openYarnLibrary()
+            .expectYarnNotVisible(named: editedName)
+    }
+
+    @MainActor
+    func testNeedleLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let originalName = "Needle \(uniqueSuffix)"
+        let editedName = "Edited Needle \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding()
+
+        mainTabs.openLibrary()
+            .openNeedleLibrary()
+            .addNeedle(name: originalName, size: "4.0mm")
+            .expectNeedleVisible(named: originalName)
+            .openNeedle(named: originalName)
+            .editNeedle(name: editedName)
+
+        relaunchForExistingSession()
+            .openLibrary()
+            .openNeedleLibrary()
+            .expectNeedleVisible(named: editedName)
+            .expectNeedleNotVisible(named: originalName)
+            .openNeedle(named: editedName)
+            .deleteNeedle()
+            .expectNeedleNotVisible(named: editedName)
+
+        relaunchForExistingSession()
+            .openLibrary()
+            .openNeedleLibrary()
+            .expectNeedleNotVisible(named: editedName)
+    }
+
+    @MainActor
+    func testToolLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch() throws {
+        let uniqueSuffix = UUID().uuidString.prefix(8).lowercased()
+        let originalName = "Tool \(uniqueSuffix)"
+        let editedName = "Edited Tool \(uniqueSuffix)"
+
+        let mainTabs = registerAndFinishOnboarding()
+
+        mainTabs.openLibrary()
+            .openToolLibrary()
+            .addTool(name: originalName, type: "코마커")
+            .expectToolVisible(named: originalName)
+            .openTool(named: originalName)
+            .editTool(name: editedName)
+
+        relaunchForExistingSession()
+            .openLibrary()
+            .openToolLibrary()
+            .expectToolVisible(named: editedName)
+            .expectToolNotVisible(named: originalName)
+            .openTool(named: editedName)
+            .deleteTool()
+            .expectToolNotVisible(named: editedName)
+
+        relaunchForExistingSession()
+            .openLibrary()
+            .openToolLibrary()
+            .expectToolNotVisible(named: editedName)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
