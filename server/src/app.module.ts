@@ -16,6 +16,11 @@ import { SkillsModule } from './skills/skills.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      // e2e specs stub auth via direct process.env mutation (e.g. DEV_AUTH_USER_ID).
+      // If a local .env file exists, @nestjs/config's file-sourced snapshot takes
+      // precedence over those runtime mutations for the same key, silently breaking
+      // test isolation. Tests should only ever see their own explicit env stubs.
+      ignoreEnvFile: process.env.NODE_ENV === 'test',
     }),
     AuthModule,
     DatabaseModule,
