@@ -80,9 +80,9 @@ struct GaugeCalculatorView: View {
                         title: "수동 도안명",
                         placeholder: "도안명 직접 입력",
                         systemImage: "textformat",
-                        text: manualPatternNameBinding
+                        text: manualPatternNameBinding,
+                        identifier: AppAccessibilityID.Tool.gaugeManualPatternField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeManualPatternField)
 
                     AppFormDivider()
 
@@ -98,17 +98,13 @@ struct GaugeCalculatorView: View {
                     systemImage: "ruler",
                     tint: AppTheme.Color.accent
                 ) {
-                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $viewModel.sampleWidthCm)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSampleWidthField)
+                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $viewModel.sampleWidthCm, identifier: AppAccessibilityID.Tool.gaugeSampleWidthField)
                     AppFormDivider()
-                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $viewModel.sampleHeightCm)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSampleHeightField)
+                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $viewModel.sampleHeightCm, identifier: AppAccessibilityID.Tool.gaugeSampleHeightField)
                     AppFormDivider()
-                    AppFormDecimalRow(title: "코 수", systemImage: "circle.grid.cross", text: $viewModel.stitchCount)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSampleStitchesField)
+                    AppFormDecimalRow(title: "코 수", systemImage: "circle.grid.cross", text: $viewModel.stitchCount, identifier: AppAccessibilityID.Tool.gaugeSampleStitchesField)
                     AppFormDivider()
-                    AppFormDecimalRow(title: "단 수", systemImage: "line.3.horizontal", text: $viewModel.rowCount)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSampleRowsField)
+                    AppFormDecimalRow(title: "단 수", systemImage: "line.3.horizontal", text: $viewModel.rowCount, identifier: AppAccessibilityID.Tool.gaugeSampleRowsField)
                 }
 
                 AppFormSection(
@@ -117,11 +113,9 @@ struct GaugeCalculatorView: View {
                     systemImage: "scope",
                     tint: AppTheme.Color.softAccent
                 ) {
-                    AppFormDecimalRow(title: "목표 가로(cm)", systemImage: "arrow.left.and.right", text: $viewModel.targetWidthCm)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetWidthField)
+                    AppFormDecimalRow(title: "목표 가로(cm)", systemImage: "arrow.left.and.right", text: $viewModel.targetWidthCm, identifier: AppAccessibilityID.Tool.gaugeTargetWidthField)
                     AppFormDivider()
-                    AppFormDecimalRow(title: "목표 세로(cm)", systemImage: "arrow.up.and.down", text: $viewModel.targetHeightCm)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetHeightField)
+                    AppFormDecimalRow(title: "목표 세로(cm)", systemImage: "arrow.up.and.down", text: $viewModel.targetHeightCm, identifier: AppAccessibilityID.Tool.gaugeTargetHeightField)
                 }
 
                 AppFormSection(
@@ -134,9 +128,9 @@ struct GaugeCalculatorView: View {
                         title: "사용 바늘",
                         placeholder: "예: 4.0mm 대바늘",
                         systemImage: "ruler",
-                        text: $viewModel.needle
+                        text: $viewModel.needle,
+                        identifier: AppAccessibilityID.Tool.gaugeNeedleField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeNeedleField)
 
                     AppFormDivider()
 
@@ -145,9 +139,9 @@ struct GaugeCalculatorView: View {
                         placeholder: "메모",
                         systemImage: "note.text",
                         text: $viewModel.memo,
-                        minHeight: 96
+                        minHeight: 96,
+                        identifier: AppAccessibilityID.Tool.gaugeMemoField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMemoField)
                 }
 
                 AppFormSection(

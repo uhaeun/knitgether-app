@@ -241,9 +241,9 @@ private struct WorkSessionMemoEditSheet: View {
                             systemImage: "pencil.line",
                             text: $memo,
                             axis: .vertical,
-                            minHeight: 120
+                            minHeight: 120,
+                            identifier: AppAccessibilityID.Workspace.workSessionMemoField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.workSessionMemoField)
                     }
                 }
                 .padding(.horizontal, 20)

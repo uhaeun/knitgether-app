@@ -74,6 +74,7 @@ struct AppFormTextFieldRow: View {
     @Binding var text: String
     var axis: Axis = .horizontal
     var minHeight: CGFloat? = nil
+    var identifier: String? = nil
 
     var body: some View {
         HStack(alignment: axis == .vertical ? .top : .center, spacing: 12) {
@@ -88,14 +89,25 @@ struct AppFormTextFieldRow: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
 
-                TextField(placeholder, text: $text, axis: axis)
-                    .font(.body)
-                    .foregroundStyle(AppTheme.Color.primaryText)
-                    .lineLimit(axis == .vertical ? 4...10 : 1...1)
-                    .frame(minHeight: minHeight)
+                textField
             }
         }
         .padding(.vertical, 12)
+    }
+
+    @ViewBuilder
+    private var textField: some View {
+        let base = TextField(placeholder, text: $text, axis: axis)
+            .font(.body)
+            .foregroundStyle(AppTheme.Color.primaryText)
+            .lineLimit(axis == .vertical ? 4...10 : 1...1)
+            .frame(minHeight: minHeight)
+
+        if let identifier {
+            base.accessibilityIdentifier(identifier)
+        } else {
+            base
+        }
     }
 }
 
@@ -105,6 +117,7 @@ struct AppFormTextEditorRow: View {
     let systemImage: String
     @Binding var text: String
     var minHeight: CGFloat = 120
+    var identifier: String? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -128,15 +141,26 @@ struct AppFormTextEditorRow: View {
                         .padding(.vertical, 8)
                 }
 
-                TextEditor(text: $text)
-                    .frame(minHeight: minHeight)
-                    .scrollContentBackground(.hidden)
-                    .foregroundStyle(AppTheme.Color.primaryText)
+                textEditor
             }
             .padding(8)
             .background(AppTheme.Color.accentSoft.opacity(0.45), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .padding(.vertical, 12)
+    }
+
+    @ViewBuilder
+    private var textEditor: some View {
+        let base = TextEditor(text: $text)
+            .frame(minHeight: minHeight)
+            .scrollContentBackground(.hidden)
+            .foregroundStyle(AppTheme.Color.primaryText)
+
+        if let identifier {
+            base.accessibilityIdentifier(identifier)
+        } else {
+            base
+        }
     }
 }
 
@@ -207,6 +231,7 @@ struct AppFormDecimalRow: View {
     let systemImage: String
     @Binding var text: String
     var placeholder = "0"
+    var identifier: String? = nil
 
     var body: some View {
         HStack(spacing: 12) {
@@ -221,28 +246,39 @@ struct AppFormDecimalRow: View {
 
             Spacer()
 
-            TextField(placeholder, text: $text)
-                .keyboardType(.decimalPad)
-                .multilineTextAlignment(.trailing)
-                .font(.body.monospacedDigit())
-                .foregroundStyle(AppTheme.Color.primaryText)
-                .frame(maxWidth: 120)
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-
-                        Button("완료") {
-                            UIApplication.shared.sendAction(
-                                #selector(UIResponder.resignFirstResponder),
-                                to: nil,
-                                from: nil,
-                                for: nil
-                            )
-                        }
-                    }
-                }
+            decimalField
         }
         .padding(.vertical, 12)
+    }
+
+    @ViewBuilder
+    private var decimalField: some View {
+        let base = TextField(placeholder, text: $text)
+            .keyboardType(.decimalPad)
+            .multilineTextAlignment(.trailing)
+            .font(.body.monospacedDigit())
+            .foregroundStyle(AppTheme.Color.primaryText)
+            .frame(maxWidth: 120)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+
+                    Button("완료") {
+                        UIApplication.shared.sendAction(
+                            #selector(UIResponder.resignFirstResponder),
+                            to: nil,
+                            from: nil,
+                            for: nil
+                        )
+                    }
+                }
+            }
+
+        if let identifier {
+            base.accessibilityIdentifier(identifier)
+        } else {
+            base
+        }
     }
 }
 

@@ -438,9 +438,9 @@ private struct PatternFormView: View {
                             title: "도안 제목",
                             placeholder: "예: 여름 가디건",
                             systemImage: "textformat",
-                            text: $formData.title
+                            text: $formData.title,
+                            identifier: AppAccessibilityID.Library.patternTitleField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.patternTitleField)
 
                         AppFormDivider()
 
@@ -448,9 +448,9 @@ private struct PatternFormView: View {
                             title: "디자이너",
                             placeholder: "디자이너 또는 브랜드",
                             systemImage: "person",
-                            text: $formData.designer
+                            text: $formData.designer,
+                            identifier: AppAccessibilityID.Library.patternDesignerField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.patternDesignerField)
 
                         AppFormDivider()
 
@@ -458,10 +458,10 @@ private struct PatternFormView: View {
                             title: "페이지 수",
                             placeholder: "0",
                             systemImage: "number",
-                            text: $formData.pageCountText
+                            text: $formData.pageCountText,
+                            identifier: AppAccessibilityID.Library.patternPageCountField
                         )
                         .keyboardType(.numberPad)
-                        .accessibilityIdentifier(AppAccessibilityID.Library.patternPageCountField)
                     }
 
                     AppFormSection(
@@ -476,9 +476,9 @@ private struct PatternFormView: View {
                             systemImage: "pencil.line",
                             text: $formData.notes,
                             axis: .vertical,
-                            minHeight: 92
+                            minHeight: 92,
+                            identifier: AppAccessibilityID.Library.patternNotesField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.patternNotesField)
                     }
                 }
                 .padding(.horizontal, 20)

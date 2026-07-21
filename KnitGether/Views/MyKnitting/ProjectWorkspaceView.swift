@@ -892,9 +892,9 @@ private struct ManualPatternSheet: View {
                             title: "도안 이름",
                             placeholder: "예: 직접 입력한 도안",
                             systemImage: "textformat",
-                            text: $title
+                            text: $title,
+                            identifier: AppAccessibilityID.Workspace.patternManualTitleField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.patternManualTitleField)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -964,10 +964,10 @@ private struct NumberEditSheet: View {
                             title: title,
                             placeholder: "0",
                             systemImage: "textformat.123",
-                            text: $valueText
+                            text: $valueText,
+                            identifier: AppAccessibilityID.Workspace.counterNumberField
                         )
                         .keyboardType(.numberPad)
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNumberField)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -1018,9 +1018,9 @@ private struct CounterMemoEditSheet: View {
                             placeholder: "예: 다음 단에서 감아뜨기 시작",
                             systemImage: "pencil.line",
                             text: $memo,
-                            minHeight: 150
+                            minHeight: 150,
+                            identifier: AppAccessibilityID.Workspace.counterMemoField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.counterMemoField)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -1139,10 +1139,10 @@ private struct RowInstructionFormSheet: View {
                             title: "행 번호",
                             placeholder: "1",
                             systemImage: "textformat.123",
-                            text: $rowNumberText
+                            text: $rowNumberText,
+                            identifier: AppAccessibilityID.Workspace.rowInstructionNumberField
                         )
                         .keyboardType(.numberPad)
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.rowInstructionNumberField)
                     }
 
                     AppFormSection(
@@ -1156,9 +1156,9 @@ private struct RowInstructionFormSheet: View {
                             placeholder: "예: 12코 겉뜨기, 마커 전 2코 모아뜨기",
                             systemImage: "text.alignleft",
                             text: $instructionText,
-                            minHeight: 130
+                            minHeight: 130,
+                            identifier: AppAccessibilityID.Workspace.rowInstructionTextField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.rowInstructionTextField)
                     }
 
                     AppFormSection(
@@ -1171,10 +1171,10 @@ private struct RowInstructionFormSheet: View {
                             title: "약어",
                             placeholder: "예: K, P, YO",
                             systemImage: "textformat.abc",
-                            text: $skillTags
+                            text: $skillTags,
+                            identifier: AppAccessibilityID.Workspace.rowInstructionSkillTagsField
                         )
                         .textInputAutocapitalization(.characters)
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.rowInstructionSkillTagsField)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -1243,10 +1243,10 @@ private struct BulkRowInstructionSheet: View {
                             title: "시작 행 번호",
                             placeholder: "1",
                             systemImage: "textformat.123",
-                            text: $startRowNumberText
+                            text: $startRowNumberText,
+                            identifier: AppAccessibilityID.Workspace.bulkRowInstructionStartField
                         )
                         .keyboardType(.numberPad)
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.bulkRowInstructionStartField)
                     }
 
                     AppFormSection(
@@ -1260,9 +1260,9 @@ private struct BulkRowInstructionSheet: View {
                             placeholder: "1행 안내\n2행 안내\n3행 안내",
                             systemImage: "text.alignleft",
                             text: $lines,
-                            minHeight: 200
+                            minHeight: 200,
+                            identifier: AppAccessibilityID.Workspace.bulkRowInstructionLinesField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.bulkRowInstructionLinesField)
                     }
                 }
                 .padding(.horizontal, 20)

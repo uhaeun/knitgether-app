@@ -537,9 +537,9 @@ private struct YarnFormView: View {
                             title: "실 이름",
                             placeholder: "예: Cotton DK",
                             systemImage: "textformat",
-                            text: $formData.name
+                            text: $formData.name,
+                            identifier: AppAccessibilityID.Library.yarnNameField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.yarnNameField)
 
                         AppFormDivider()
 
@@ -547,9 +547,9 @@ private struct YarnFormView: View {
                             title: "브랜드",
                             placeholder: "브랜드",
                             systemImage: "tag",
-                            text: $formData.brand
+                            text: $formData.brand,
+                            identifier: AppAccessibilityID.Library.yarnBrandField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.yarnBrandField)
 
                         AppFormDivider()
 
@@ -557,9 +557,9 @@ private struct YarnFormView: View {
                             title: "색상",
                             placeholder: "색상 이름 또는 번호",
                             systemImage: "paintpalette",
-                            text: $formData.colorway
+                            text: $formData.colorway,
+                            identifier: AppAccessibilityID.Library.yarnColorwayField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.yarnColorwayField)
 
                         AppFormDivider()
 
@@ -567,9 +567,9 @@ private struct YarnFormView: View {
                             title: "굵기",
                             placeholder: "DK, Worsted 등",
                             systemImage: "scalemass",
-                            text: $formData.weight
+                            text: $formData.weight,
+                            identifier: AppAccessibilityID.Library.yarnWeightField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.yarnWeightField)
 
                         AppFormDivider()
 
@@ -595,9 +595,9 @@ private struct YarnFormView: View {
                             systemImage: "pencil.line",
                             text: $formData.notes,
                             axis: .vertical,
-                            minHeight: 92
+                            minHeight: 92,
+                            identifier: AppAccessibilityID.Library.yarnNotesField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.yarnNotesField)
                     }
                 }
                 .padding(.horizontal, 20)

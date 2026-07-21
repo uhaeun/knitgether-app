@@ -126,23 +126,19 @@ struct ManualMeasurementView: View {
                     systemImage: "ruler",
                     tint: AppTheme.Color.sage
                 ) {
-                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $width)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementWidthField)
+                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $width, identifier: AppAccessibilityID.Tool.gaugeMeasurementWidthField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $height)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementHeightField)
+                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $height, identifier: AppAccessibilityID.Tool.gaugeMeasurementHeightField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "코 수", systemImage: "number", text: $stitches)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementStitchesField)
+                    AppFormDecimalRow(title: "코 수", systemImage: "number", text: $stitches, identifier: AppAccessibilityID.Tool.gaugeMeasurementStitchesField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "단 수", systemImage: "number", text: $rows)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementRowsField)
+                    AppFormDecimalRow(title: "단 수", systemImage: "number", text: $rows, identifier: AppAccessibilityID.Tool.gaugeMeasurementRowsField)
                 }
 
                 if let normalized {
@@ -356,11 +352,9 @@ struct Photo4ptMeasurementView: View {
                     systemImage: "ruler",
                     tint: AppTheme.Color.accent
                 ) {
-                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $measuredWidth)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementWidthField)
+                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $measuredWidth, identifier: AppAccessibilityID.Tool.gaugeMeasurementWidthField)
                     AppFormDivider()
-                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $measuredHeight)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementHeightField)
+                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $measuredHeight, identifier: AppAccessibilityID.Tool.gaugeMeasurementHeightField)
                 }
 
                 Button {
@@ -419,11 +413,9 @@ struct Photo4ptMeasurementView: View {
                         systemImage: "checklist",
                         tint: AppTheme.Color.slate
                     ) {
-                        AppFormDecimalRow(title: "코 수", systemImage: "circle.grid.cross", text: $correctedStitches)
-                            .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementStitchesField)
+                        AppFormDecimalRow(title: "코 수", systemImage: "circle.grid.cross", text: $correctedStitches, identifier: AppAccessibilityID.Tool.gaugeMeasurementStitchesField)
                         AppFormDivider()
-                        AppFormDecimalRow(title: "단 수", systemImage: "line.3.horizontal", text: $correctedRows)
-                            .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementRowsField)
+                        AppFormDecimalRow(title: "단 수", systemImage: "line.3.horizontal", text: $correctedRows, identifier: AppAccessibilityID.Tool.gaugeMeasurementRowsField)
                     }
 
                     MeasurementResultView(
@@ -909,23 +901,19 @@ struct MeasurementEditView: View {
                     systemImage: "ruler",
                     tint: AppTheme.Color.sage
                 ) {
-                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $viewModel.measurementForm.width)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementWidthField)
+                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $viewModel.measurementForm.width, identifier: AppAccessibilityID.Tool.gaugeMeasurementWidthField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $viewModel.measurementForm.height)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementHeightField)
+                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $viewModel.measurementForm.height, identifier: AppAccessibilityID.Tool.gaugeMeasurementHeightField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "코 수", systemImage: "number", text: $viewModel.measurementForm.stitches)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementStitchesField)
+                    AppFormDecimalRow(title: "코 수", systemImage: "number", text: $viewModel.measurementForm.stitches, identifier: AppAccessibilityID.Tool.gaugeMeasurementStitchesField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "단 수", systemImage: "number", text: $viewModel.measurementForm.rows)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeMeasurementRowsField)
+                    AppFormDecimalRow(title: "단 수", systemImage: "number", text: $viewModel.measurementForm.rows, identifier: AppAccessibilityID.Tool.gaugeMeasurementRowsField)
                 }
 
                 if let normalized = viewModel.measurementForm.input.normalized {

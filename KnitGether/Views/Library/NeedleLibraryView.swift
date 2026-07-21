@@ -437,9 +437,9 @@ private struct NeedleFormView: View {
                             title: "바늘 이름",
                             placeholder: "예: 치아오구 레드",
                             systemImage: "textformat",
-                            text: $formData.name
+                            text: $formData.name,
+                            identifier: AppAccessibilityID.Library.needleNameField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.needleNameField)
 
                         AppFormDivider()
 
@@ -447,9 +447,9 @@ private struct NeedleFormView: View {
                             title: "종류",
                             placeholder: "대바늘, 코바늘, 줄바늘",
                             systemImage: "tag",
-                            text: $formData.needleType
+                            text: $formData.needleType,
+                            identifier: AppAccessibilityID.Library.needleTypeField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.needleTypeField)
 
                         AppFormDivider()
 
@@ -457,9 +457,9 @@ private struct NeedleFormView: View {
                             title: "사이즈",
                             placeholder: "예: 4.0mm",
                             systemImage: "ruler",
-                            text: $formData.size
+                            text: $formData.size,
+                            identifier: AppAccessibilityID.Library.needleSizeField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.needleSizeField)
 
                         AppFormDivider()
 
@@ -467,9 +467,9 @@ private struct NeedleFormView: View {
                             title: "길이",
                             placeholder: "예: 80cm",
                             systemImage: "arrow.left.and.right",
-                            text: $formData.length
+                            text: $formData.length,
+                            identifier: AppAccessibilityID.Library.needleLengthField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.needleLengthField)
                     }
 
                     AppFormSection(
@@ -484,9 +484,9 @@ private struct NeedleFormView: View {
                             systemImage: "pencil.line",
                             text: $formData.notes,
                             axis: .vertical,
-                            minHeight: 92
+                            minHeight: 92,
+                            identifier: AppAccessibilityID.Library.needleNotesField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.needleNotesField)
                     }
                 }
                 .padding(.horizontal, 20)

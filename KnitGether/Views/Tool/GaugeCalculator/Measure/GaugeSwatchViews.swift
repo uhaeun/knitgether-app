@@ -107,9 +107,9 @@ struct GaugeSwatchFormView: View {
                         title: "바늘 호수",
                         placeholder: "예: 4.0mm",
                         systemImage: "ruler",
-                        text: $viewModel.swatchForm.needleSize
+                        text: $viewModel.swatchForm.needleSize,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchNeedleSizeField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchNeedleSizeField)
 
                     AppFormDivider()
 
@@ -117,9 +117,9 @@ struct GaugeSwatchFormView: View {
                         title: "바늘 종류",
                         placeholder: "줄바늘, 대바늘 등",
                         systemImage: "tag",
-                        text: $viewModel.swatchForm.needleType
+                        text: $viewModel.swatchForm.needleType,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchNeedleTypeField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchNeedleTypeField)
 
                     AppFormDivider()
 
@@ -127,9 +127,9 @@ struct GaugeSwatchFormView: View {
                         title: "바늘 소재",
                         placeholder: "금속, 나무 등",
                         systemImage: "sparkles",
-                        text: $viewModel.swatchForm.needleMaterial
+                        text: $viewModel.swatchForm.needleMaterial,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchNeedleMaterialField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchNeedleMaterialField)
                 }
 
                 AppFormSection(
@@ -142,9 +142,9 @@ struct GaugeSwatchFormView: View {
                         title: "실 이름",
                         placeholder: "실 이름",
                         systemImage: "textformat",
-                        text: $viewModel.swatchForm.yarnName
+                        text: $viewModel.swatchForm.yarnName,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchYarnNameField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchYarnNameField)
 
                     AppFormDivider()
 
@@ -152,9 +152,9 @@ struct GaugeSwatchFormView: View {
                         title: "브랜드",
                         placeholder: "브랜드",
                         systemImage: "tag",
-                        text: $viewModel.swatchForm.yarnBrand
+                        text: $viewModel.swatchForm.yarnBrand,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchYarnBrandField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchYarnBrandField)
 
                     AppFormDivider()
 
@@ -162,9 +162,9 @@ struct GaugeSwatchFormView: View {
                         title: "색상",
                         placeholder: "색상 이름 또는 번호",
                         systemImage: "paintpalette",
-                        text: $viewModel.swatchForm.yarnColor
+                        text: $viewModel.swatchForm.yarnColor,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchYarnColorField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchYarnColorField)
 
                     AppFormDivider()
 
@@ -172,9 +172,9 @@ struct GaugeSwatchFormView: View {
                         title: "로트",
                         placeholder: "로트 번호",
                         systemImage: "number",
-                        text: $viewModel.swatchForm.yarnLot
+                        text: $viewModel.swatchForm.yarnLot,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchYarnLotField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchYarnLotField)
                 }
 
                 AppFormSection(
@@ -187,9 +187,9 @@ struct GaugeSwatchFormView: View {
                         title: "무늬",
                         placeholder: "메리야스, 가터 등",
                         systemImage: "square.grid.3x3",
-                        text: $viewModel.swatchForm.stitchPattern
+                        text: $viewModel.swatchForm.stitchPattern,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchPatternField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchPatternField)
 
                     AppFormDivider()
 
@@ -199,9 +199,9 @@ struct GaugeSwatchFormView: View {
                         systemImage: "pencil.line",
                         text: $viewModel.swatchForm.notes,
                         axis: .vertical,
-                        minHeight: 90
+                        minHeight: 90,
+                        identifier: AppAccessibilityID.Tool.gaugeSwatchNotesField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeSwatchNotesField)
                 }
 
                 if let errorMessage = viewModel.errorMessage {

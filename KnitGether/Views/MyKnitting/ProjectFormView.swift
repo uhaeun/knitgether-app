@@ -56,9 +56,9 @@ struct ProjectFormView: View {
                     title: "프로젝트 이름",
                     placeholder: "예: 여름 가디건",
                     systemImage: "text.cursor",
-                    text: $formData.name
+                    text: $formData.name,
+                    identifier: AppAccessibilityID.Project.nameField
                 )
-                .accessibilityIdentifier(AppAccessibilityID.Project.nameField)
 
                 ProjectDivider()
 
@@ -420,6 +420,7 @@ private struct ProjectTextInput: View {
     let placeholder: String
     let systemImage: String
     @Binding var text: String
+    var identifier: String? = nil
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -430,14 +431,25 @@ private struct ProjectTextInput: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
 
-                TextField(placeholder, text: $text)
-                    .font(.body.weight(.semibold))
-                    .textInputAutocapitalization(.sentences)
-                    .submitLabel(.done)
+                textField
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 2)
+    }
+
+    @ViewBuilder
+    private var textField: some View {
+        let base = TextField(placeholder, text: $text)
+            .font(.body.weight(.semibold))
+            .textInputAutocapitalization(.sentences)
+            .submitLabel(.done)
+
+        if let identifier {
+            base.accessibilityIdentifier(identifier)
+        } else {
+            base
+        }
     }
 }
 

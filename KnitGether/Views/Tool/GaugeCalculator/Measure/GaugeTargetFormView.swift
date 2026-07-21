@@ -23,9 +23,9 @@ struct GaugeTargetFormView: View {
                         title: "목표 이름",
                         placeholder: "예: 도안 게이지",
                         systemImage: "textformat",
-                        text: $viewModel.targetForm.name
+                        text: $viewModel.targetForm.name,
+                        identifier: AppAccessibilityID.Tool.gaugeTargetNameField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetNameField)
 
                     AppFormDivider()
 
@@ -33,9 +33,9 @@ struct GaugeTargetFormView: View {
                         title: "추천 바늘",
                         placeholder: "예: 4.0mm",
                         systemImage: "ruler",
-                        text: $viewModel.targetForm.recommendedNeedle
+                        text: $viewModel.targetForm.recommendedNeedle,
+                        identifier: AppAccessibilityID.Tool.gaugeTargetNeedleField
                     )
-                    .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetNeedleField)
 
                     AppFormDivider()
 
@@ -54,23 +54,19 @@ struct GaugeTargetFormView: View {
                     systemImage: "function",
                     tint: AppTheme.Color.sage
                 ) {
-                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $viewModel.targetForm.width)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetFormWidthField)
+                    AppFormDecimalRow(title: "가로 길이(cm)", systemImage: "arrow.left.and.right", text: $viewModel.targetForm.width, identifier: AppAccessibilityID.Tool.gaugeTargetFormWidthField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $viewModel.targetForm.height)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetFormHeightField)
+                    AppFormDecimalRow(title: "세로 길이(cm)", systemImage: "arrow.up.and.down", text: $viewModel.targetForm.height, identifier: AppAccessibilityID.Tool.gaugeTargetFormHeightField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "코 수", systemImage: "number", text: $viewModel.targetForm.stitches)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetFormStitchesField)
+                    AppFormDecimalRow(title: "코 수", systemImage: "number", text: $viewModel.targetForm.stitches, identifier: AppAccessibilityID.Tool.gaugeTargetFormStitchesField)
 
                     AppFormDivider()
 
-                    AppFormDecimalRow(title: "단 수", systemImage: "number", text: $viewModel.targetForm.rows)
-                        .accessibilityIdentifier(AppAccessibilityID.Tool.gaugeTargetFormRowsField)
+                    AppFormDecimalRow(title: "단 수", systemImage: "number", text: $viewModel.targetForm.rows, identifier: AppAccessibilityID.Tool.gaugeTargetFormRowsField)
                 }
 
                 if let errorMessage = viewModel.errorMessage {

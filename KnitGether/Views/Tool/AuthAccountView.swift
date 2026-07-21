@@ -221,12 +221,12 @@ struct AuthAccountView: View {
                 title: "이메일",
                 systemImage: "envelope",
                 text: $viewModel.formData.email,
-                isSecure: false
+                isSecure: false,
+                identifier: AppAccessibilityID.Auth.emailField
             )
             .keyboardType(.emailAddress)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-            .accessibilityIdentifier(AppAccessibilityID.Auth.emailField)
 
             fieldDivider
 
@@ -234,9 +234,9 @@ struct AuthAccountView: View {
                 title: "비밀번호",
                 systemImage: "lock",
                 text: $viewModel.formData.password,
-                isSecure: true
+                isSecure: true,
+                identifier: AppAccessibilityID.Auth.passwordField
             )
-            .accessibilityIdentifier(AppAccessibilityID.Auth.passwordField)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 6)
@@ -249,10 +249,10 @@ struct AuthAccountView: View {
                 title: "표시 이름",
                 systemImage: "person",
                 text: $viewModel.formData.displayName,
-                isSecure: false
+                isSecure: false,
+                identifier: AppAccessibilityID.Auth.displayNameField
             )
             .textInputAutocapitalization(.words)
-            .accessibilityIdentifier(AppAccessibilityID.Auth.displayNameField)
 
             fieldDivider
 
@@ -279,7 +279,8 @@ struct AuthAccountView: View {
         title: String,
         systemImage: String,
         text: Binding<String>,
-        isSecure: Bool
+        isSecure: Bool,
+        identifier: String
     ) -> some View {
         HStack(spacing: 12) {
             Image(systemName: systemImage)
@@ -296,6 +297,7 @@ struct AuthAccountView: View {
             }
             .font(.body)
             .foregroundStyle(AppTheme.Color.primaryText)
+            .accessibilityIdentifier(identifier)
         }
         .padding(.vertical, 16)
     }

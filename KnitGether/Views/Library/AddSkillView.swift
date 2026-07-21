@@ -37,9 +37,9 @@ struct AddSkillView: View {
                             title: "스킬 이름",
                             placeholder: "예: 겉뜨기",
                             systemImage: "textformat",
-                            text: $formData.name
+                            text: $formData.name,
+                            identifier: AppAccessibilityID.Library.skillNameField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillNameField)
 
                         AppFormDivider()
 
@@ -47,10 +47,10 @@ struct AddSkillView: View {
                             title: "약어",
                             placeholder: "예: K",
                             systemImage: "textformat.abc",
-                            text: $formData.abbreviation
+                            text: $formData.abbreviation,
+                            identifier: AppAccessibilityID.Library.skillAbbreviationField
                         )
                         .textInputAutocapitalization(.characters)
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillAbbreviationField)
 
                         AppFormDivider()
 
@@ -58,9 +58,9 @@ struct AddSkillView: View {
                             title: "카테고리",
                             placeholder: "기초, 무늬, 마무리 등",
                             systemImage: "folder",
-                            text: $formData.category
+                            text: $formData.category,
+                            identifier: AppAccessibilityID.Library.skillCategoryField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillCategoryField)
 
                         AppFormDivider()
 
@@ -68,9 +68,9 @@ struct AddSkillView: View {
                             title: "난이도",
                             placeholder: "초급, 중급, 고급",
                             systemImage: "chart.bar",
-                            text: $formData.difficulty
+                            text: $formData.difficulty,
+                            identifier: AppAccessibilityID.Library.skillDifficultyField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillDifficultyField)
                     }
 
                     AppFormSection(
@@ -83,9 +83,9 @@ struct AddSkillView: View {
                             title: "설명",
                             placeholder: "스킬 설명",
                             systemImage: "pencil.line",
-                            text: $formData.description
+                            text: $formData.description,
+                            identifier: AppAccessibilityID.Library.skillDescriptionField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillDescriptionField)
                     }
 
                     AppFormSection(
@@ -100,9 +100,9 @@ struct AddSkillView: View {
                             systemImage: "line.3.horizontal",
                             text: $formData.stepsText,
                             axis: .vertical,
-                            minHeight: 110
+                            minHeight: 110,
+                            identifier: AppAccessibilityID.Library.skillStepsField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillStepsField)
                     }
 
                     AppFormSection(
@@ -115,9 +115,9 @@ struct AddSkillView: View {
                             title: "애니메이션 이름",
                             placeholder: "예: knit-basic",
                             systemImage: "play",
-                            text: $formData.animationName
+                            text: $formData.animationName,
+                            identifier: AppAccessibilityID.Library.skillAnimationNameField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillAnimationNameField)
 
                         AppFormDivider()
 
@@ -125,9 +125,9 @@ struct AddSkillView: View {
                             title: "애니메이션 종류",
                             placeholder: "gif, lottie, step 등",
                             systemImage: "rectangle.stack",
-                            text: $formData.animationType
+                            text: $formData.animationType,
+                            identifier: AppAccessibilityID.Library.skillAnimationTypeField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.skillAnimationTypeField)
                     }
                 }
                 .padding(.horizontal, 20)

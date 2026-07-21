@@ -240,9 +240,9 @@ private struct ProgressPhotoDetailSheet: View {
                             systemImage: "text.alignleft",
                             text: $caption,
                             axis: .vertical,
-                            minHeight: 86
+                            minHeight: 86,
+                            identifier: AppAccessibilityID.Workspace.progressPhotoCaptionField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.progressPhotoCaptionField)
                     }
 
                     Button(role: .destructive) {

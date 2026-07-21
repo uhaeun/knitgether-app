@@ -483,9 +483,9 @@ private struct ToolFormView: View {
                             title: "도구 이름",
                             placeholder: "예: 코마커 세트",
                             systemImage: "textformat",
-                            text: $formData.name
+                            text: $formData.name,
+                            identifier: AppAccessibilityID.Library.toolNameField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.toolNameField)
 
                         AppFormDivider()
 
@@ -493,9 +493,9 @@ private struct ToolFormView: View {
                             title: "종류",
                             placeholder: "마커, 줄자, 돗바늘 등",
                             systemImage: "tag",
-                            text: $formData.type
+                            text: $formData.type,
+                            identifier: AppAccessibilityID.Library.toolTypeField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.toolTypeField)
 
                         AppFormDivider()
 
@@ -503,11 +503,11 @@ private struct ToolFormView: View {
                             title: "링크",
                             placeholder: "구매 링크 또는 참고 링크",
                             systemImage: "link",
-                            text: $formData.link
+                            text: $formData.link,
+                            identifier: AppAccessibilityID.Library.toolLinkField
                         )
                         .textInputAutocapitalization(.never)
                         .keyboardType(.URL)
-                        .accessibilityIdentifier(AppAccessibilityID.Library.toolLinkField)
                     }
 
                     AppFormSection(
@@ -522,9 +522,9 @@ private struct ToolFormView: View {
                             systemImage: "pencil.line",
                             text: $formData.memo,
                             axis: .vertical,
-                            minHeight: 92
+                            minHeight: 92,
+                            identifier: AppAccessibilityID.Library.toolMemoField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Library.toolMemoField)
                     }
                 }
                 .padding(.horizontal, 20)

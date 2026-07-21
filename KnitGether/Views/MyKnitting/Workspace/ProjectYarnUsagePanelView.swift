@@ -168,9 +168,9 @@ struct YarnUsageRecordSheet: View {
                             systemImage: "pencil.line",
                             text: $memo,
                             axis: .vertical,
-                            minHeight: 72
+                            minHeight: 72,
+                            identifier: AppAccessibilityID.Workspace.yarnUsageMemoField
                         )
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.yarnUsageMemoField)
                     }
                 }
                 .padding(.horizontal, 20)
