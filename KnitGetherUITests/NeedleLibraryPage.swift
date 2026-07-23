@@ -18,7 +18,7 @@ struct NeedleLibraryPage: UITestPage {
     }
 
     @discardableResult
-    func addNeedle(name: String, size: String = "") -> NeedleLibraryPage {
+    func addNeedle(name: String, type: String = "대바늘", size: String = "4.0mm") -> NeedleLibraryPage {
         tap(app.buttons["library.needle.add"].firstMatch)
         XCTAssertTrue(
             app.navigationBars["바늘 추가"].waitForExistence(timeout: 12),
@@ -28,10 +28,12 @@ struct NeedleLibraryPage: UITestPage {
         enterText("library.needle.form.name", text: name)
         dismissKeyboard()
 
-        if !size.isEmpty {
-            enterText("library.needle.form.size", text: size)
-            dismissKeyboard()
-        }
+        // 종류와 사이즈는 저장 버튼 활성화(canSave)의 필수 조건이라 반드시 채운다.
+        enterText("library.needle.form.type", text: type)
+        dismissKeyboard()
+
+        enterText("library.needle.form.size", text: size)
+        dismissKeyboard()
 
         tap(app.buttons["library.needle.save"])
         return self
