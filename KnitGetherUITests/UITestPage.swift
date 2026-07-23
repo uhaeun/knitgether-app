@@ -174,6 +174,15 @@ extension UITestPage {
             RunLoop.current.run(until: Date().addingTimeInterval(0.2))
         }
 
+        // Only fall back to a blind coordinate tap when a springboard modal is
+        // actually on screen. Otherwise the tap lands on the app underneath — the
+        // signed-in account screen puts its destructive "로그아웃" button right around
+        // (0.31, 0.74), so a stray tap silently signs the freshly-registered user out
+        // and breaks onboarding. (DEF-006)
+        guard springboard.alerts.firstMatch.exists || springboard.sheets.firstMatch.exists else {
+            return
+        }
+
         springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.31, dy: 0.74)).tap()
         RunLoop.current.run(until: Date().addingTimeInterval(0.5))
 
