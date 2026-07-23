@@ -326,13 +326,9 @@ private struct YarnDetailView: View {
                     title: "실 수정",
                     initialFormData: YarnFormData(yarn: yarn)
                 ) { formData in
-                    let didSave = await onUpdate(formData)
-
-                    if didSave {
-                        dismiss()
-                    }
-
-                    return didSave
+                    // The form sheet dismisses itself on success; the detail screen
+                    // must stay put so the user lands back on it, not the list.
+                    await onUpdate(formData)
                 }
             }
             .alert("실을 삭제할까요?", isPresented: $isShowingDeleteConfirmation) {

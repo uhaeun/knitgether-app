@@ -299,13 +299,9 @@ private struct NeedleDetailView: View {
                     title: "바늘 수정",
                     initialFormData: NeedleFormData(needle: needle)
                 ) { formData in
-                    let didSave = await onUpdate(formData)
-
-                    if didSave {
-                        dismiss()
-                    }
-
-                    return didSave
+                    // The form sheet dismisses itself on success; the detail screen
+                    // must stay put so the user lands back on it, not the list.
+                    await onUpdate(formData)
                 }
             }
             .alert("바늘을 삭제할까요?", isPresented: $isShowingDeleteConfirmation) {

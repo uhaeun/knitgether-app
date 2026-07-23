@@ -310,13 +310,9 @@ private struct ToolDetailView: View {
                     title: "도구 수정",
                     initialFormData: ToolFormData(tool: tool)
                 ) { formData in
-                    let didSave = await onUpdate(formData)
-
-                    if didSave {
-                        dismiss()
-                    }
-
-                    return didSave
+                    // The form sheet dismisses itself on success; the detail screen
+                    // must stay put so the user lands back on it, not the list.
+                    await onUpdate(formData)
                 }
             }
             .alert("도구를 삭제할까요?", isPresented: $isShowingDeleteConfirmation) {
