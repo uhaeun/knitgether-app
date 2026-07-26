@@ -51,6 +51,7 @@ struct KnitDictionaryView: View {
                             DictionaryTermCardView(term: term, viewModel: viewModel)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier(AppAccessibilityID.Tool.dictionaryTermRow(term.term))
                         .listRowStyle()
                     }
                 }
@@ -93,6 +94,7 @@ struct KnitDictionaryView: View {
             Text("전체 \(viewModel.terms.count)개 · 표시 \(viewModel.displayedTerms.count)개")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .accessibilityIdentifier(AppAccessibilityID.Tool.dictionaryCountLabel)
         }
     }
 

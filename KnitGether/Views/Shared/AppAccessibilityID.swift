@@ -185,6 +185,10 @@ enum AppAccessibilityID {
         static let skillTestCard = "tool.skill_test"
         static let navigationCard = "tool.navigation"
         static let dictionaryCard = "tool.dictionary"
+        static let dictionaryCountLabel = "tool.dictionary.count"
+        static func dictionaryTermRow(_ term: String) -> String {
+            "tool.dictionary.term.\(term)"
+        }
         static let animationCard = "tool.animation"
         static let gaugeProjectPicker = "tool.gauge.project"
         static let gaugePatternPicker = "tool.gauge.pattern"
