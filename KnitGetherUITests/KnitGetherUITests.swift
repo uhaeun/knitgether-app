@@ -586,6 +586,34 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testDictionaryTermsSeededViaAPIDisplaySearchAndDetail() throws {
+        let suffix = String(UUID().uuidString.prefix(6)).uppercased()
+        let email = "ui-dict-\(suffix.lowercased())@example.com"
+        let termA = "TERMA\(suffix)"
+        let termB = "TERMB\(suffix)"
+        let descriptionA = "Through the back loop \(suffix)"
+
+        // Create the user and reach the main tabs via the proven onboarding flow.
+        let mainTabs = registerAndFinishOnboarding(email: email)
+
+        // The dictionary is read-only (no create UI), so seed terms for this user
+        // over the API using the same credentials the app just registered with.
+        let api = KnitGetherAPIClient()
+        let token = try api.login(email: email, password: "password-1234")
+        try api.createDictionaryTerm(token: token, term: termA, fullName: "Term A", description: descriptionA)
+        try api.createDictionaryTerm(token: token, term: termB, description: "Second term \(suffix)")
+
+        mainTabs.openTools()
+            .openDictionary()
+            .expectTermVisible(termA)
+            .expectTermVisible(termB)
+            .openTerm(termA)
+            .expectDetailShows(term: termA, description: descriptionA)
+            .returnToList()
+            .expectTermVisible(termA)
+    }
+
+    @MainActor
     func testLaunchPerformance() throws {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
