@@ -258,6 +258,8 @@ enum AppAccessibilityID {
     enum Settings {
         static let accountCard = "settings.account"
         static let profileCard = "settings.profile"
+        static let profileNameField = "settings.profile.name"
+        static let profileSaveButton = "settings.profile.save"
         static let backupCard = "settings.backup"
         static let dataManagementCard = "settings.data_management"
         static let statisticsCard = "settings.statistics"

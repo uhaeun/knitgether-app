@@ -53,7 +53,8 @@ struct ProfileSettingsView: View {
                         title: "표시 이름",
                         placeholder: "이름",
                         systemImage: "person",
-                        text: $viewModel.formData.displayName
+                        text: $viewModel.formData.displayName,
+                        identifier: AppAccessibilityID.Settings.profileNameField
                     )
                     .textInputAutocapitalization(.words)
                 }
@@ -137,7 +138,8 @@ struct ProfileSettingsView: View {
         }
         .safeAreaInset(edge: .bottom) {
             AppFormSubmitBar(
-                isDisabled: isSaving || !viewModel.formData.canSave
+                isDisabled: isSaving || !viewModel.formData.canSave,
+                accessibilityIdentifier: AppAccessibilityID.Settings.profileSaveButton
             ) {
                 Task {
                     isSaving = true
