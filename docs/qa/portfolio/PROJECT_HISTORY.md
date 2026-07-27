@@ -392,7 +392,11 @@ DEF-006이 온보딩을 막고 있던 탓에 라이브러리 POM 3개가 한 번
 | DEF-003 (가칭) | 캐시 없이 서버 연결 실패 시 빈 목록으로 오인 (오프라인 안내 미표시) | Codex (1차 라운드) | ✅ 수정됨 (`ebef0c6`) | |
 | DEF-004 (가칭, 대표 결함 후보) | 게이지 스와치/측정값 PATCH 시 매번 새 레코드 생성 (수정이 아니라 중복 생성) | Codex (2차 라운드) | ✅ 수정됨 (`5cb7283`) | DB QA 경력과 가장 잘 맞는 소재 |
 | DEF-005 (환경 버그, 앱 코드 버그 아님) | 로컬 개발 서버가 `.env` 부재로 DB에 전혀 연결되지 않고 있었음 | Claude (7/21, 리셋 스크립트 작업 중) | ✅ 수정됨 (`.env` 생성) | 앱 버그는 아니지만 QA 관점에서 "환경 문제(ENV_ISSUE)"로 분류할 가치 있는 사례 |
-| DEF-006 (조사 중) | 앱 재실행 후 메인 탭바가 12초 내에 나타나지 않음 (`relaunchForExistingSession` 경로) | Claude (7/22, 순차 재검증 중) | ⏳ 원인 조사 중 | 병렬/순차 양쪽에서 재현되어 환경 플레이키니스가 아닌 실제 이슈로 추정 |
+| DEF-006 | 앱 재실행 후 메인 탭바가 12초 내에 나타나지 않음 (`relaunchForExistingSession` 경로) | Claude (7/22, 순차 재검증 중) | ✅ 해결 (`7b4eae3`) — **앱 버그가 아니라 테스트 인프라 버그**였음 (7.10 참고) | 병렬/순차 양쪽에서 재현되어 실제 이슈로 추정했으나, 원인은 POM의 무조건 좌표 탭이 로그아웃 버튼을 누른 것 |
+| DEF-007 | `server/.env` 존재 시 e2e의 `DEV_AUTH_USER_ID` 스텁이 무시됨 (7개 스펙, 34개 테스트) | Claude (7/22, DEF-006 조사 중 전체 회귀에서) | ✅ 근본 수정 (`65027d6`) | 7.9 참고. 내가 만든 수정의 부작용으로 뒤늦게 발견된 회귀 |
+| DEF-008 | 실/바늘/도구 상세에서 수정 저장 시 상세가 아니라 목록으로 튕김 | Claude (7/23, DEF-006 해제 직후) | ✅ 근본 수정 (`df13aef`) | 프로덕션에도 존재하던 진짜 앱 UX 버그 |
+| DEF-009 | 바늘 추가 POM이 필수값(종류)을 안 채워 저장 버튼이 비활성 | Claude (7/23) | ✅ POM 수정 (`3b2bc52`) | 앱 정상, 테스트 미완성 |
+| DEF-010 | XCUITest 헬퍼 `replaceText`가 기존 텍스트를 한 번에 지우려다 일부만 지워, 수정(edit) 계열 테스트가 **간헐 실패** | Claude (7/28, 워크스페이스 2탭 분리 회귀 검증 중) | ✅ 헬퍼 수정 (12절) | 앱 정상. severity 판단은 하은님 몫. 증거: `evidence/0728_DEF-010_workspace-row-instruction_FAIL.png` |
 
 ---
 
@@ -420,3 +424,90 @@ DEF-006이 온보딩을 막고 있던 탓에 라이브러리 POM 3개가 한 번
 - `KnitGetherUITests.swift`에 테스트 3개 추가: `testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch`, `testNeedleLibrary...`, `testToolLibrary...` (기존 `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch`와 동일한 구조: 추가→수정 확인→재실행→유지 확인→삭제→재실행→미노출 확인)
 
 빌드는 정상 성공(컴파일 에러 없음). 실행 검증 결과: 3개 전부 `registerAndFinishOnboarding()` 단계, 즉 **DEF-006과 정확히 동일한 지점**에서 실패 — 새로 작성한 POM/테스트 코드 자체의 문제가 아니라, 이 세션 전체에서 발견된 DEF-006(7.6~7.8절)이 모든 신규 테스트의 셋업 단계를 막고 있는 것으로 확정됨. 코드는 기존에 이미 통과 이력이 있는 `testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch` 등과 동일한 구조·컨벤션을 따르므로, DEF-006이 해결되면 별도 수정 없이 통과할 것으로 예상한다. **"작성 완료, DEF-006 해결 전까지 실행 검증 불가"** 로 정직하게 표시하여 커밋한다 — 검증 안 된 것을 통과했다고 주장하지 않는다.
+
+---
+
+## 12. 워크스페이스 2탭 분리 회귀 검증 → DEF-010 발견 (2026-07-28)
+
+### 12.1 배경 — 무엇을 검증했는가
+
+`2026-07-27-workspace-two-tab-design.md` 스펙에 따라 작업 공간이 **뜨는 중 / 프로젝트 정보** 2탭으로 분리됐다(`cedd35d`). 스펙은 검증 방법까지 지정해 뒀다: "기존 워크스페이스 UI 테스트가 다루는 섹션은 전부 기본 탭(뜨는 중)에 있으므로 그대로 통과 예상 → 구현 후 `testWorkspaceRowCounter*` · `testWorkspaceRowInstruction*` · `testWorkspaceWorkSession*` 3계열 재실행으로 확인."
+
+커밋 메시지에는 이미 "Existing workspace UI tests ... still pass unchanged"라고 적혀 있었다. **그 주장을 실제로 돌려서 확인하는 것**이 이번 작업이었다.
+
+### 12.2 결과 — 4개 중 3개 통과, 1개 실패
+
+| 테스트 | 1차 | 재실행 |
+|---|---|---|
+| `testWorkspaceRowCounterPersistsAfterAppRelaunch` | PASS (140초) | — |
+| `testWorkspaceWorkSessionCanBeRecorded` | PASS (92초) | — |
+| `testWorkspaceWorkSessionCanBeDeletedAndStaysDeletedAfterRelaunch` | PASS (147초) | — |
+| `testWorkspaceRowInstructionCanBeSavedEditedDeletedAndStayDeletedAfterRelaunch` | **FAIL** (154초) | PASS (194초) |
+
+즉 커밋 메시지의 "still pass unchanged"는 **4개 중 3개까지만 사실**이었다. 검증 없이 쓰인 통과 주장을 실행으로 반증한 사례 — DEF-001에서 Codex의 "Retest Passed"가 실제로는 테스트 우회였던 것과 같은 계열이다.
+
+### 12.3 실패 지점 특정 — 로그가 아니라 xcresult 액티비티로
+
+실패 메시지는 `WorkspacePage.swift:108: XCTAssertTrue failed - 행안내가 보여야 합니다: Purl back a037e971`였다. 그런데 이 테스트는 `expectRowInstruction(editedInstruction)`을 **재실행 전과 후 두 번** 호출하므로, 메시지만으로는 어느 쪽인지 알 수 없었다.
+
+xcresult 액티비티에서 `Launch com.uhaeun.KnitGether`가 **단 1회**뿐임을 확인 → 실패는 `relaunchForExistingSession()` **이전**, 즉 수정 직후 검증 단계에서 났다. 재실행/영속성 문제가 아니라 **수정 자체가 반영되지 않은 것**으로 범위가 좁혀졌다.
+
+### 12.4 근본 원인 — 실패 스크린샷이 결정적 증거
+
+액티비티 로그상 폼에 `Purl back a037e971`을 정확히 입력하고 저장했는데도 화면에서 그 텍스트를 못 찾고 8회 스크롤 후 실패했다. 실패 스크린샷을 열자 화면의 행안내는:
+
+```
+Knit Purl back a037e971
+```
+
+**기존 텍스트가 완전히 지워지지 않고 새 텍스트가 이어붙어 있었다.** 원본 `Knit across a037e971`(20자)에서 15자만 지워지고 `"Knit "`가 남은 것.
+
+원인은 `UITestPage.replaceText`:
+
+```swift
+if let currentValue = element.value as? String, !currentValue.isEmpty {
+    element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count))
+}
+element.typeText(text)
+```
+
+delete 키를 **한 번에 몰아 보내고, 실제로 다 지워졌는지 검증하지 않는다.** 긴 텍스트일수록, 특히 여러 줄 입력(TextView)에서 일부 키가 유실된다. 유실 개수가 실행마다 달라지므로 **간헐 실패(flaky)** 로 나타난다.
+
+**앱은 정상이다.** 화면에 보이는 문자열을 그대로 저장했을 뿐이고, 잘못 만든 것은 테스트 헬퍼다.
+
+### 12.5 수정
+
+지운 뒤 값을 다시 읽어 줄어들 때까지 라운드를 반복하도록 바꿨다:
+
+```swift
+var previousValue: String?
+
+for _ in 0..<10 {
+    guard let currentValue = element.value as? String,
+          !currentValue.isEmpty,
+          currentValue != previousValue
+    else { break }
+
+    previousValue = currentValue
+    element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count))
+}
+```
+
+빈 필드는 placeholder를 `value`로 돌려주는 XCUITest 특성이 있어 `!currentValue.isEmpty`만으로는 루프가 안 끝난다. **"직전 라운드와 값이 같으면 중단"** 조건이 그 경우를 처리한다.
+
+**검증**: 수정 후 `xcodebuild test -test-iterations 3`으로 동일 테스트를 3회 반복 실행 → **3회 전부 통과**(203초 / 192초 / 197초).
+
+다만 이것이 절대적 증명은 아니다. 원래 간헐 실패였고 수정 전에도 재실행 1회는 통과했으므로, 3회 연속 통과는 **재발 확률을 크게 낮춘 근거이지 무결성 증명이 아니다.** 정직하게 "3회 연속 통과로 확인"까지만 주장한다. 수정 계열 테스트(프로젝트/게이지/라이브러리 수정 등)가 `replaceText`를 공유하므로, 이후 라운드에서 동일 증상이 다시 보이면 이 절을 먼저 의심할 것.
+
+### 12.6 교훈 (포트폴리오 가치)
+
+1. **간헐 실패를 "flaky니까 재실행"으로 넘기지 않았다.** 재실행하면 통과하는 실패였지만, 실패 스크린샷까지 파고들어 `"Knit Purl back a037e971"`이라는 물증으로 원인을 특정했다. 넘겼다면 이 결함은 계속 남아 다른 수정 계열 테스트를 무작위로 오염시켰을 것이다.
+2. **테스트 실패 = 앱 버그가 아니다.** DEF-006(좌표 맹목 탭), DEF-009(POM 필수값 누락)에 이어 세 번째로, 원인이 테스트 하네스 자신이었던 사례.
+3. **검증 없이 쓰인 통과 주장은 검증해야 한다.** 커밋 메시지의 "still pass unchanged"는 실제로 돌려보니 4개 중 3개였다.
+4. **입력 필드를 지우는 헬퍼는 "지웠다고 가정"하면 안 된다** — 지운 결과를 다시 읽어 확인해야 한다. 이것이 이번 작업으로 확립된 규칙이다.
+
+### 12.7 부수적으로 확인/추가한 것
+
+- 새 세그먼트 컨트롤(`workspaceTabPicker`)에 접근성 ID가 없어 탭 전환을 POM으로 잡을 수 없었다 → `AppAccessibilityID.Workspace.tabPicker = "workspace.tab"` 추가(`01f1303`). POM에서는 `app.segmentedControls["workspace.tab"].buttons["프로젝트 정보"]`로 잡힌다.
+- **탭 분리로 인한 회귀는 없다** — 4개 테스트 전부 최종 통과. 행안내 패널은 `counterPanel` → `mainWorkspaceArea` 안에 있어 기본 탭(뜨는 중)에 그대로 남아 있음을 코드로도 확인했다.
+- 시뮬레이터 destination 함정: `name=iPhone 16 Pro`에 `OS:latest`가 붙으면 최신 런타임(26.5)에서 그 기기를 찾아 실패한다. 이 기기는 18.5 런타임에만 존재하므로 **device id로 고정**해야 한다.
