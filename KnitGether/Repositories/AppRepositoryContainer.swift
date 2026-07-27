@@ -237,9 +237,18 @@ final class AppRepositoryContainer {
     }
 
     private static func apiBaseURL(from environment: [String: String]) -> URL? {
+        let envValue = environment["KNITGETHER_API_BASE_URL"]?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let candidate: String?
+        if let envValue, !envValue.isEmpty {
+            candidate = envValue
+        } else {
+            candidate = standaloneDeviceAPIBaseURL()
+        }
+
         guard
-            let value = environment["KNITGETHER_API_BASE_URL"]?
-                .trimmingCharacters(in: .whitespacesAndNewlines),
+            let value = candidate,
             !value.isEmpty,
             let url = URL(string: value),
             let scheme = url.scheme?.lowercased(),
@@ -250,6 +259,19 @@ final class AppRepositoryContainer {
         }
 
         return url
+    }
+
+    /// Scheme environment variables are only injected when Xcode launches the app.
+    /// A physical device is normally opened by tapping the app icon, which carries
+    /// no scheme env, so fall back to the local dev server there. The simulator keeps
+    /// its env-only behavior so UI tests and the Local Simulator/Offline schemes are
+    /// unaffected.
+    private static func standaloneDeviceAPIBaseURL() -> String? {
+        #if targetEnvironment(simulator)
+        return nil
+        #else
+        return "http://haeun.local:3000/api/v1"
+        #endif
     }
 
     private static func apiAuthToken(from environment: [String: String]) -> String? {
