@@ -34,19 +34,8 @@ struct SkillRowView: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
 
-                HStack(spacing: 8) {
-                    SkillLevelBadgeView(level: skill.userLevel)
-
-                    if let category = skill.category {
-                        Text(category)
-                    }
-
-                    if let difficulty = skill.difficulty {
-                        Text(difficulty)
-                    }
-                }
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+                // 분류·난이도는 카드에서 빼고 상세 화면에서만 보여 카드 밀도를 낮춘다.
+                SkillLevelBadgeView(level: skill.userLevel)
             }
         }
         .padding(.vertical, 6)
