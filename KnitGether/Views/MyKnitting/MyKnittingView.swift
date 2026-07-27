@@ -310,25 +310,15 @@ struct MyKnittingView: View {
     }
 
     private var syncRetryRow: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Label("계정 저장 확인이 필요한 프로젝트가 있어요.", systemImage: "arrow.triangle.2.circlepath")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            Spacer()
-
-            Button {
+        SyncRetryBanner(
+            message: "계정 저장 확인이 필요한 프로젝트가 있어요.",
+            isRetrying: viewModel.isRetryingSync,
+            retryAction: {
                 Task {
                     await viewModel.retrySync()
                 }
-            } label: {
-                Label("다시 시도", systemImage: "arrow.clockwise")
             }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-            .disabled(viewModel.isRetryingSync)
-        }
-        .padding(.vertical, 6)
+        )
         .listRowSeparator(.hidden)
         .listRowBackground(Color.clear)
     }

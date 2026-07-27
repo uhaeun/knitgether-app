@@ -32,29 +32,15 @@ struct ProjectWorkspaceHeaderView: View {
             metadata(title: "최근 작업", value: formattedDate(viewModel.project.lastWorkedAt))
 
             if viewModel.project.syncStatus.needsSync {
-                HStack(alignment: .center, spacing: 12) {
-                    Label(viewModel.project.syncStatus.detailText, systemImage: "info.circle")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    Spacer()
-
-                    Button {
+                SyncRetryBanner(
+                    message: viewModel.project.syncStatus.detailText,
+                    isRetrying: viewModel.isRetryingSync,
+                    retryAction: {
                         Task {
                             await viewModel.retrySync()
                         }
-                    } label: {
-                        if viewModel.isRetryingSync {
-                            ProgressView()
-                                .controlSize(.small)
-                        } else {
-                            Label("다시 시도", systemImage: "arrow.clockwise")
-                        }
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .disabled(viewModel.isRetryingSync)
-                }
+                )
             }
         }
         .padding(18)

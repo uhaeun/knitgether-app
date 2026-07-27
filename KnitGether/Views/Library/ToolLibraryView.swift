@@ -154,25 +154,15 @@ struct ToolLibraryView: View {
     }
 
     private var syncRetryRow: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Label("계정 저장 확인이 필요한 도구가 있어요.", systemImage: "arrow.triangle.2.circlepath")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            Spacer()
-
-            Button {
+        SyncRetryBanner(
+            message: "계정 저장 확인이 필요한 도구가 있어요.",
+            isRetrying: viewModel.isRetryingSync,
+            retryAction: {
                 Task {
                     await viewModel.retrySync()
                 }
-            } label: {
-                Label("다시 시도", systemImage: "arrow.clockwise")
             }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-            .disabled(viewModel.isRetryingSync)
-        }
-        .padding(.vertical, 6)
+        )
     }
 
     private func errorRow(message: String) -> some View {
