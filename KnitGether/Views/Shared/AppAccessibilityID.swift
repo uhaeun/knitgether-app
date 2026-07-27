@@ -29,6 +29,7 @@ enum AppAccessibilityID {
 
     enum Workspace {
         static let editProjectButton = "workspace.project.edit"
+        static let tabPicker = "workspace.tab"
         static let displayModePicker = "workspace.display_mode"
         static let patternDirectImportButton = "workspace.pattern.direct_import"
         static let patternScanButton = "workspace.pattern.scan"

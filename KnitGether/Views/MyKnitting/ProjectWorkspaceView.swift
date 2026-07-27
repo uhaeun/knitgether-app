@@ -404,6 +404,7 @@ struct ProjectWorkspaceView: View {
             Text("프로젝트 정보").tag(WorkspaceTab.info)
         }
         .pickerStyle(.segmented)
+        .accessibilityIdentifier(AppAccessibilityID.Workspace.tabPicker)
     }
 
     @ViewBuilder
