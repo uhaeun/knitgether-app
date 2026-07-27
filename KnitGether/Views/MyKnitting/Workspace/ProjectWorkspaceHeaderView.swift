@@ -28,18 +28,8 @@ struct ProjectWorkspaceHeaderView: View {
                     .accessibilityLabel(viewModel.project.isFavorite ? "즐겨찾기" : "즐겨찾기 아님")
             }
 
-            HStack(spacing: 14) {
-                metadata(title: "시작일", value: formattedDate(viewModel.project.startDate))
-                metadata(title: "최근 작업", value: formattedDate(viewModel.project.lastWorkedAt))
-                metadata(title: "총 작업 시간", value: formattedDuration(viewModel.project.totalWorkTime))
-            }
-
-            if viewModel.project.targetDate != nil || viewModel.project.finishedAt != nil {
-                Label(scheduleStatusText, systemImage: "calendar.badge.clock")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(scheduleColor)
-            }
+            // 시작일·총 작업시간·일정은 프로젝트 정보 탭의 요약으로 옮겨 헤더를 간결하게 유지한다.
+            metadata(title: "최근 작업", value: formattedDate(viewModel.project.lastWorkedAt))
 
             if viewModel.project.syncStatus.needsSync {
                 HStack(alignment: .center, spacing: 12) {
@@ -94,55 +84,5 @@ struct ProjectWorkspaceHeaderView: View {
         }
 
         return date.formatted(.dateTime.month().day())
-    }
-
-    private var scheduleStatusText: String {
-        if let finishedAt = viewModel.project.finishedAt {
-            return "완료일 \(formattedDate(finishedAt))"
-        }
-
-        guard let days = viewModel.project.daysUntilTarget() else {
-            return "목표일 없음"
-        }
-
-        if days > 0 {
-            return "목표일까지 D-\(days)"
-        }
-
-        if days == 0 {
-            return "목표일 D-Day"
-        }
-
-        return "목표일 D+\(-days)"
-    }
-
-    private var scheduleColor: Color {
-        if viewModel.project.finishedAt != nil {
-            return .green
-        }
-
-        guard let days = viewModel.project.daysUntilTarget() else {
-            return .secondary
-        }
-
-        return days < 0 ? .red : .secondary
-    }
-
-    private func formattedDuration(_ duration: TimeInterval) -> String {
-        let totalSeconds = max(0, Int(duration.rounded()))
-        let totalMinutes = totalSeconds / 60
-        let hours = totalMinutes / 60
-        let minutes = totalMinutes % 60
-        let seconds = totalSeconds % 60
-
-        if hours > 0 {
-            return "\(hours)시간 \(minutes)분"
-        }
-
-        if minutes > 0 {
-            return "\(minutes)분 \(seconds)초"
-        }
-
-        return "\(seconds)초"
     }
 }

@@ -4,30 +4,16 @@ struct ProjectWorkspaceSummaryView: View {
     @ObservedObject var viewModel: ProjectWorkspaceViewModel
 
     var body: some View {
+        // 도안·재료·실사용·행안내·서버저장은 정보 탭의 개별 패널/헤더 배지와 중복이라 제외하고,
+        // 한눈에 볼 지표(진행·일정)와 헤더에서 옮겨온 참고값(시작일·총 작업시간)만 남긴다.
         WorkspaceSectionView(title: "프로젝트 요약", systemImage: "list.bullet.rectangle") {
             VStack(spacing: 10) {
-                summaryRow(title: "화면 구성", value: viewModel.displayMode.title)
-                summaryRow(title: "도안", value: patternStatusText)
-                summaryRow(title: "재료", value: viewModel.project.materialSummaryText)
-                summaryRow(title: "실 사용", value: viewModel.yarnUsageSummaryText)
-                summaryRow(title: "카운터", value: counterStatusText)
-                summaryRow(title: "행안내", value: rowGuideStatusText)
+                summaryRow(title: "진행", value: counterStatusText)
                 summaryRow(title: "일정", value: scheduleStatusText)
-                summaryRow(title: "서버 저장", value: viewModel.project.syncStatus.displayTitle)
+                summaryRow(title: "시작일", value: startDateText)
+                summaryRow(title: "총 작업시간", value: totalWorkTimeText)
             }
         }
-    }
-
-    private var patternStatusText: String {
-        guard let patternCopy = viewModel.project.patternCopy else {
-            return "연결 없음"
-        }
-
-        if patternCopy.fileNameSnapshot == nil {
-            return "\(patternCopy.titleSnapshot) · 수동"
-        }
-
-        return patternCopy.titleSnapshot
     }
 
     private var counterStatusText: String {
@@ -38,13 +24,26 @@ struct ProjectWorkspaceSummaryView: View {
         return "\(viewModel.currentRow)단 · 총 단수 미설정"
     }
 
-    private var rowGuideStatusText: String {
-        guard viewModel.rowCounter.mode == .rowGuide else {
-            return "간편 모드"
+    private var startDateText: String {
+        formattedDate(viewModel.project.startDate)
+    }
+
+    private var totalWorkTimeText: String {
+        let totalSeconds = max(0, Int(viewModel.project.totalWorkTime.rounded()))
+        let totalMinutes = totalSeconds / 60
+        let hours = totalMinutes / 60
+        let minutes = totalMinutes % 60
+        let seconds = totalSeconds % 60
+
+        if hours > 0 {
+            return "\(hours)시간 \(minutes)분"
         }
 
-        let count = viewModel.rowCounter.rowInstructions.count
-        return count == 0 ? "행안내 없음" : "\(count)개 등록"
+        if minutes > 0 {
+            return "\(minutes)분 \(seconds)초"
+        }
+
+        return "\(seconds)초"
     }
 
     private var scheduleStatusText: String {

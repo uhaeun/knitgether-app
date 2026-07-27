@@ -20,6 +20,7 @@ enum AppAccessibilityID {
         static let needlePicker = "project.form.needle"
         static let patternPicker = "project.form.pattern"
         static let memoField = "project.form.memo"
+        static let showInfoButton = "project.show_info"
 
         static func row(_ id: UUID) -> String {
             "project.row.\(id.uuidString.lowercased())"

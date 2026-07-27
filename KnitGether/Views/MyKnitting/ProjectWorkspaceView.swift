@@ -9,8 +9,14 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct ProjectWorkspaceView: View {
+    enum WorkspaceTab: Hashable {
+        case working
+        case info
+    }
+
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: ProjectWorkspaceViewModel
+    @State private var selectedTab: WorkspaceTab
     @State private var isShowingEditProject = false
     @State private var isShowingDirectPatternImporter = false
     @State private var isShowingPatternDocumentScanner = false
@@ -44,10 +50,12 @@ struct ProjectWorkspaceView: View {
 
     init(
         viewModel: ProjectWorkspaceViewModel,
+        initialTab: WorkspaceTab = .working,
         dictionaryRepository: (any DictionaryRepository)? = nil,
         skillRepository: (any SkillRepository)? = nil
     ) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        _selectedTab = State(initialValue: initialTab)
         self.dictionaryRepository = dictionaryRepository
         self.skillRepository = skillRepository
     }
@@ -56,55 +64,14 @@ struct ProjectWorkspaceView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                 ProjectWorkspaceHeaderView(viewModel: viewModel)
-                ProjectWorkspaceSummaryView(viewModel: viewModel)
-                displayModePicker
-                mainWorkspaceArea
-                ProjectProgressPhotoPanelView(viewModel: viewModel)
-                ProjectWorkTimePanelView(
-                    viewModel: viewModel,
-                    startAction: {
-                        viewModel.startWorkSession()
-                    },
-                    finishAction: {
-                        Task {
-                            await viewModel.finishWorkSession()
-                        }
-                    },
-                    showSessionsAction: {
-                        isShowingWorkSessionList = true
-                    }
-                )
-                ProjectYarnUsagePanelView(
-                    viewModel: viewModel,
-                    recordAction: {
-                        editingYarnUsage = nil
-                        yarnUsageQuantity = 1
-                        yarnUsageMemo = ""
-                        isShowingYarnUsageSheet = true
-                    },
-                    editAction: { usage in
-                        editingYarnUsage = usage
-                        yarnUsageQuantity = usage.quantityUsed
-                        yarnUsageMemo = usage.memo
-                        isShowingYarnUsageSheet = true
-                    },
-                    deleteAction: { usage in
-                        yarnUsagePendingDeletion = usage
-                    }
-                )
-                ProjectNeedlePanelView(viewModel: viewModel)
-                ProjectToolPanelView(viewModel: viewModel)
-                ProjectGaugeRecordPanelView(viewModel: viewModel)
-                ProjectMemoPanelView(
-                    memoText: $viewModel.memoText,
-                    hasUnsavedChanges: viewModel.hasUnsavedMemoChanges,
-                    saveAction: {
-                        Task {
-                            await viewModel.saveMemo()
-                        }
-                    }
-                )
-                relatedSkillsSection
+                workspaceTabPicker
+
+                switch selectedTab {
+                case .working:
+                    workingTabSections
+                case .info:
+                    infoTabSections
+                }
             }
             .padding(.horizontal, 20)
             .padding(.top, 14)
@@ -429,6 +396,71 @@ struct ProjectWorkspaceView: View {
                 await viewModel.finishWorkSession()
             }
         }
+    }
+
+    private var workspaceTabPicker: some View {
+        Picker("작업 공간 보기", selection: $selectedTab) {
+            Text("뜨는 중").tag(WorkspaceTab.working)
+            Text("프로젝트 정보").tag(WorkspaceTab.info)
+        }
+        .pickerStyle(.segmented)
+    }
+
+    @ViewBuilder
+    private var workingTabSections: some View {
+        displayModePicker
+        mainWorkspaceArea
+        ProjectWorkTimePanelView(
+            viewModel: viewModel,
+            startAction: {
+                viewModel.startWorkSession()
+            },
+            finishAction: {
+                Task {
+                    await viewModel.finishWorkSession()
+                }
+            },
+            showSessionsAction: {
+                isShowingWorkSessionList = true
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var infoTabSections: some View {
+        ProjectWorkspaceSummaryView(viewModel: viewModel)
+        ProjectProgressPhotoPanelView(viewModel: viewModel)
+        ProjectYarnUsagePanelView(
+            viewModel: viewModel,
+            recordAction: {
+                editingYarnUsage = nil
+                yarnUsageQuantity = 1
+                yarnUsageMemo = ""
+                isShowingYarnUsageSheet = true
+            },
+            editAction: { usage in
+                editingYarnUsage = usage
+                yarnUsageQuantity = usage.quantityUsed
+                yarnUsageMemo = usage.memo
+                isShowingYarnUsageSheet = true
+            },
+            deleteAction: { usage in
+                yarnUsagePendingDeletion = usage
+            }
+        )
+        ProjectNeedlePanelView(viewModel: viewModel)
+        ProjectToolPanelView(viewModel: viewModel)
+        ProjectGaugeRecordPanelView(viewModel: viewModel)
+        ProjectMemoPanelView(
+            memoText: $viewModel.memoText,
+            hasUnsavedChanges: viewModel.hasUnsavedMemoChanges,
+            saveAction: {
+                Task {
+                    await viewModel.saveMemo()
+                }
+            }
+        )
+        relatedSkillsSection
     }
 
     private var displayModePicker: some View {

@@ -16,6 +16,7 @@ struct MyKnittingView: View {
     @State private var projectPendingDeletion: KnittingProject?
     @State private var isShowingDeleteConfirmation = false
     @State private var selectedStatusFilter: ProjectStatus?
+    @State private var infoProject: KnittingProject?
 
     private let projectRepository: any ProjectRepository
     private let patternRepository: any PatternRepository
@@ -157,19 +158,7 @@ struct MyKnittingView: View {
 
             ForEach(filteredProjects) { project in
                 NavigationLink {
-                    ProjectWorkspaceView(
-                        viewModel: ProjectWorkspaceViewModel(
-                            project: project,
-                            projectRepository: projectRepository,
-                            patternRepository: patternRepository,
-                            skillRepository: skillRepository,
-                            libraryRepository: libraryRepository,
-                            gaugeRecordRepository: gaugeRecordRepository,
-                            progressPhotoRepository: progressPhotoRepository
-                        ),
-                        dictionaryRepository: dictionaryRepository,
-                        skillRepository: skillRepository
-                    )
+                    workspaceView(for: project, initialTab: .working)
                 } label: {
                     ProjectCardView(project: project)
                 }
@@ -203,6 +192,14 @@ struct MyKnittingView: View {
                         Label("수정", systemImage: "pencil")
                     }
                     .tint(.blue)
+
+                    Button {
+                        infoProject = project
+                    } label: {
+                        Label("정보 보기", systemImage: "info.circle")
+                    }
+                    .tint(AppTheme.Color.accent)
+                    .accessibilityIdentifier(AppAccessibilityID.Project.showInfoButton)
                 }
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 8, leading: 18, bottom: 8, trailing: 18))
@@ -212,6 +209,41 @@ struct MyKnittingView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .warmScreenBackground()
+        .navigationDestination(
+            isPresented: Binding(
+                get: { infoProject != nil },
+                set: { isPresented in
+                    if !isPresented {
+                        infoProject = nil
+                    }
+                }
+            )
+        ) {
+            if let infoProject {
+                workspaceView(for: infoProject, initialTab: .info)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func workspaceView(
+        for project: KnittingProject,
+        initialTab: ProjectWorkspaceView.WorkspaceTab
+    ) -> some View {
+        ProjectWorkspaceView(
+            viewModel: ProjectWorkspaceViewModel(
+                project: project,
+                projectRepository: projectRepository,
+                patternRepository: patternRepository,
+                skillRepository: skillRepository,
+                libraryRepository: libraryRepository,
+                gaugeRecordRepository: gaugeRecordRepository,
+                progressPhotoRepository: progressPhotoRepository
+            ),
+            initialTab: initialTab,
+            dictionaryRepository: dictionaryRepository,
+            skillRepository: skillRepository
+        )
     }
 
     private var headerRow: some View {
