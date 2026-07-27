@@ -72,7 +72,22 @@ extension UITestPage {
         tap(element, file: file, line: line)
         element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
 
-        if let currentValue = element.value as? String, !currentValue.isEmpty {
+        // A single burst of delete keys is not reliable — long values (and TextViews
+        // especially) silently drop some, leaving a prefix behind that the new text
+        // then gets appended to. Delete in rounds and re-read the value until it stops
+        // shrinking. An empty field reports its placeholder as `value`, so the
+        // "unchanged since last round" check is what terminates the loop there.
+        var previousValue: String?
+
+        for _ in 0..<10 {
+            guard let currentValue = element.value as? String,
+                  !currentValue.isEmpty,
+                  currentValue != previousValue
+            else {
+                break
+            }
+
+            previousValue = currentValue
             element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count))
         }
 
