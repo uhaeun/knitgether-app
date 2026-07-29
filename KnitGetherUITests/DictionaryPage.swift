@@ -19,8 +19,17 @@ struct DictionaryPage: UITestPage {
 
     @discardableResult
     func expectTermVisible(_ term: String) -> DictionaryPage {
+        let element = app.staticTexts[term]
+        // 시스템 사전(§23 seed)이 모든 사용자 목록에 병합되면서 목록이 길어져,
+        // 대상 용어가 초기 화면 밖에 있을 수 있다. SwiftUI 지연 리스트는 화면 밖 행을
+        // 접근성 트리에 올리지 않으므로, 나타날 때까지 아래로 스크롤하며 찾는다.
+        if !element.waitForExistence(timeout: 6) {
+            for _ in 0..<12 where !element.exists {
+                app.swipeUp()
+            }
+        }
         XCTAssertTrue(
-            app.staticTexts[term].waitForExistence(timeout: 12),
+            element.exists,
             "사전 목록에 용어가 보여야 합니다: \(term)"
         )
         return self
