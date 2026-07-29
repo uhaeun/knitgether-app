@@ -14,7 +14,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "db:reset-test": "ts-node --transpile-only scripts/reset-test-data.ts"
+    "db:reset-test": "ts-node --transpile-only scripts/reset-test-data.ts",
+    "seed": "ts-node --transpile-only scripts/seed-system-content.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

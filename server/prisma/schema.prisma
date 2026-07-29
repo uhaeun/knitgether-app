@@ -428,6 +428,7 @@ model DictionaryTerm {
   fullName                  String?
   description               String
   relatedSkillAbbreviations String    @default("")
+  isSystem                  Boolean   @default(false)
   createdAt                 DateTime  @default(now())
   updatedAt                 DateTime  @updatedAt
   deletedAt                 DateTime?
@@ -436,6 +437,7 @@ model DictionaryTerm {
 
   @@index([ownerId, deletedAt])
   @@index([ownerId, term, deletedAt])
+  @@index([isSystem, deletedAt])
 }
 
 model Yarn {

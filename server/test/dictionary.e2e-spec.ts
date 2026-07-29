@@ -30,6 +30,7 @@ describe('Dictionary terms route', () => {
     fullName: 'Knit two together',
     description: 'Two stitches are knit together as one decrease.',
     relatedSkillAbbreviations: 'K,K2TOG',
+    isSystem: false,
     createdAt: new Date('2026-07-09T00:00:00.000Z'),
     updatedAt: new Date('2026-07-09T00:05:00.000Z'),
     deletedAt: null,
@@ -109,8 +110,11 @@ describe('Dictionary terms route', () => {
 
     expect(prisma.dictionaryTerm.findMany).toHaveBeenCalledWith({
       where: {
-        ownerId: 'user-a',
         deletedAt: null,
+        OR: [
+          { isSystem: true },
+          { ownerId: 'user-a' },
+        ],
       },
       orderBy: [
         { term: 'asc' },
@@ -128,8 +132,11 @@ describe('Dictionary terms route', () => {
     expect(prisma.dictionaryTerm.findFirst).toHaveBeenCalledWith({
       where: {
         id: termId,
-        ownerId: 'user-a',
         deletedAt: null,
+        OR: [
+          { isSystem: true },
+          { ownerId: 'user-a' },
+        ],
       },
     });
     expect(response.body).toEqual(expectedTermResponse());
@@ -177,8 +184,11 @@ describe('Dictionary terms route', () => {
     expect(prisma.dictionaryTerm.findFirst).toHaveBeenCalledWith({
       where: {
         id: termId,
-        ownerId: 'user-a',
         deletedAt: null,
+        OR: [
+          { isSystem: true },
+          { ownerId: 'user-a' },
+        ],
       },
     });
     expect(prisma.dictionaryTerm.update).toHaveBeenCalledWith({
@@ -203,8 +213,11 @@ describe('Dictionary terms route', () => {
     expect(prisma.dictionaryTerm.findFirst).toHaveBeenCalledWith({
       where: {
         id: termId,
-        ownerId: 'user-a',
         deletedAt: null,
+        OR: [
+          { isSystem: true },
+          { ownerId: 'user-a' },
+        ],
       },
     });
     expect(prisma.dictionaryTerm.update).toHaveBeenCalledWith({
