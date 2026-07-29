@@ -33,7 +33,7 @@
 | SMK-014 | P1 | GaugeTarget 수정/삭제 후 미복구 | 로그인 상태, GaugeTarget 생성 완료 | 도구 -> 게이지 계산기 -> 목표 게이지 목록 -> 기존 목표 수정 -> 앱 재실행 -> 삭제 -> 앱 재실행 | 수정값이 유지되고 삭제한 목표 게이지가 다시 보이지 않음 | `PATCH /gauge-targets/:id`, `DELETE /gauge-targets/:id`, local cache 삭제 유지 | Persistence, State Transition, API-DB | §C-7 | XCUITest |
 | SMK-015 | P0 | 잘못된 비밀번호 로그인 | 서버 ON, 가입된 email/password, 로그아웃 상태 | 기존 email + 틀린 password 입력 -> 로그인 -> 앱 재실행 | `이메일 또는 비밀번호가 맞지 않아요.` 표시, 재실행 후 signed-out 상태 유지 | `POST /auth/login` 401 `INVALID_CREDENTIALS`, auth session 미저장 | Negative, Security, State Transition | §C-2 | XCUITest |
 | SMK-016 | P1 | GaugeTarget 스와치/수동 측정 재실행 유지 | 로그인 상태, GaugeTarget 생성 완료 | 목표 게이지 상세 -> 스와치 추가 -> 수동 측정 저장 -> 측정 수정 -> 앱 재실행 | 스와치와 수정된 측정값이 다시 보임 | `PATCH /gauge-targets/:id`, `GaugeSwatch`, `GaugeMeasurement` upsert 및 cache 유지 | Persistence, State Transition, API-DB | §C-7 | XCUITest |
-| SMK-017 | P1 | syncStatus conflict 상태 진입 확인 | 서버 ON, 동일 레코드 로컬/원격 불일치 유발 시도 | 로컬 수정 후 원격에서 동일 레코드가 다르게 변경된 상황 재현 -> 목록/배지 확인 | **(NEED_SPEC_CONFIRM)** 현 구현에서 `.conflict` 진입 경로 부재 확인 — 어떤 리포지토리도 `.conflict`를 대입하지 않으며 배지는 렌더 케이스만 존재. 스모크에서는 재현 불가로 판정, 충돌 주입 심층 검증은 산출물 3(API 정합성)로 이관 | 코드상 `.conflict` 대입 지점 없음(§C-1 5상태 중 미도달 상태) | State Transition, Offline | §C-1(conflict 상태) | 미자동화 후보 |
+| SMK-017 | P1 | syncStatus conflict 상태 진입 확인 | 서버 ON, 동일 레코드 로컬/원격 불일치 유발 시도 | 로컬 수정 후 원격에서 동일 레코드가 다르게 변경된 상황 재현 -> 목록/배지 확인 | **BLOCKED — 구현 부재.** `.conflict`는 정의만 존재하고 클라이언트·서버 모두 전이 로직 미구현이라 재현 불가. 서버측 공백은 last-write-wins 결함([Issue #14](https://github.com/uhaeun/knitgether-app/issues/14), severity/high)로 발행. 본 스모크는 실행 대상에서 제외(Blocked), 대신 산출물 3이 last-write-wins를 negative test로 감시 | 코드상 `.conflict` 대입 지점 없음, 서버 `version` 필드 없음(§C-1) | State Transition, Offline | §C-1(conflict 미구현), Issue #14 | Blocked(실행 제외) |
 | SMK-018 | P2 | 홈 대시보드 표시 | 로그인 + 프로젝트 1개 이상 | 홈 탭 진입 | 프로젝트 통계·이어서 뜨기·최근 작업이 표시됨 | `GET /projects` 집계 표시 | Happy Path | §A-2(홈 대시보드) | 미자동화 후보 |
 | SMK-019 | P2 | 뜨개 사전 조회/검색 | 로그인 상태 | 도구 -> 뜨개 사전 -> 용어 검색 -> 상세 진입 | 용어 목록·검색 결과·상세(읽기 전용)가 표시됨 | `GET /dictionary-terms` | Happy Path | §B(사전) | 미자동화 후보 |
 | SMK-020 | P1 | 창고 실/바늘/도구 CRUD | 로그인 상태 | 창고 -> 실 추가 -> 수정 -> 삭제 -> 앱 재실행 | 생성·수정·삭제가 반영되고 재실행 후 삭제가 유지됨 | `POST/PATCH/DELETE /library/*`, `Yarn`/`Needle`/`ToolItem` | Happy Path, Persistence, API-DB | §B(창고) | 미자동화 후보 |
@@ -53,7 +53,7 @@
 
 **핵심 발견 (상태전이 분석)**: `.conflict`는 `SyncStatus` enum에 정의되고 `SyncStatusBadgeView`에서 표시 케이스로 렌더되지만, **어떤 리포지토리·동기화 경로도 `.conflict`를 대입하지 않는다** — 즉 현 구현에서 도달 불가능한(dead) 상태다. 서버의 `ConflictException`도 sync 충돌이 아니라 회원가입 중복 이메일(409)용. 따라서:
 - 스모크(SMK-017)는 "충돌 배지 노출"을 단정하지 않고 **진입 경로 부재를 확인**하는 형태로 설계한다.
-- 충돌 감지 조건·양측 데이터 보존·해소 후 상태 복귀의 **심층 검증은 산출물 3(API 정합성 테스트)** 에서 데이터 계층에 충돌을 주입해 수행한다(스모크 계층에서는 자연 발생하지 않으므로).
+- 서버 역시 `version`/`syncStatus` 필드가 없고 `updateProject`는 last-write-wins이므로 **충돌을 주입할 API 경로조차 없다**. 이 서버측 공백은 **[Issue #14](https://github.com/uhaeun/knitgether-app/issues/14)**(severity/high)로 발행. 산출물 3(API 정합성)은 충돌을 재현하는 대신 **last-write-wins가 실제로 일어남을 통과하는 negative test**로 상시 감시한다.
 
 ## 화면별 상세 TC 후보
 
@@ -137,7 +137,7 @@
 | §B (사전) | 용어 조회·검색 | SMK-019 | 스모크 커버 |
 | §B (스킬) | 스킬 레벨 저장 | SMK-002 | 커버 |
 | §C-1 (동기화) | 오프라인·pending·격리 | SMK-004, 008, 009, 010 | 커버 |
-| §C-1 (conflict 상태) | 충돌 상태 | SMK-017(진입 부재 확인) | **미도달 상태 — 심층은 산출물 3** |
+| §C-1 (conflict 상태) | 충돌 상태 | SMK-017(Blocked — 구현 부재) | **미구현 — Issue #14(서버 last-write-wins), 산출물 3이 negative test로 감시** |
 | §C-2 (인증) | 회원가입·로그인·세션 | SMK-001, 011, 012, 015 | 커버 |
 | §C-3 (데이터 백업) | JSON 내보내기/가져오기 | SMK-021 | 스모크 커버(실기기 수동) |
 | §C-4 (작업시간 통계) | 집계 화면 | — | P2 제외(사유 기재) |

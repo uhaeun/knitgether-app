@@ -87,11 +87,12 @@
   | `pendingUpload` | 업로드 대기 | 원격 반영 대기 중 |
   | `synced` | (배지 숨김) | 서버 저장 완료 |
   | `pendingDelete` | 삭제 대기 | 삭제가 원격 미반영 |
-  | `conflict` | 충돌 | 로컬/원격 불일치 |
+  | `conflict` | 충돌 | 로컬/원격 불일치 (⚠️ **정의만 존재 — 미구현**, 아래 참조) |
+- **⚠️ conflict 상태는 정의만 존재하고 전이 로직이 없다 (2026-07-29 검증)**: `SyncStatus` enum과 `SyncStatusBadgeView` 렌더 케이스에만 있고, **클라이언트(어느 OfflineFirst 리포지토리도 `.conflict`를 대입하지 않음)·서버(스키마에 `version`/`syncStatus` 없음, `updateProject`는 last-write-wins) 모두 충돌 감지·전이 로직 미구현**이다. 즉 현 구현에서 도달 불가능한 상태다. 서버측 공백은 **[Issue #14](../../issues/14)**(동시 수정 충돌 감지 없음, `severity/high`)로 이관.
 - **오프라인 우선**: 서버 OFF 상태에서도 로컬 캐시로 조회·생성 가능, 서버 복구 시 pending 항목 동기화.
 - **유저 격리**: 모든 도메인 데이터는 `ownerId` 스코프. 계정 전환 시 캐시 분리.
 - **완료 기준**: 서버 OFF→생성→서버 ON 복구 후 재조회 시 pending 데이터가 원격 반영되어야 한다. 서버 OFF+캐시 없음 시 오프라인 안내를 표시해야 한다.
-- **기획 대비 정정**: v2.2의 "4상태" 언급 → **5상태로 확정**.
+- **기획 대비 정정**: v2.2의 "4상태" 언급 → **5상태로 확정**. 단 5번째 상태(`conflict`)는 위와 같이 정의만 존재.
 
 ### C-2. 계정 인증 (⭐ 테스트 근거 조항)
 - 회원가입/로그인/세션 유지. `POST /auth/register`·`/auth/login`(AccessToken), `GET /auth/me`(세션 확인).
