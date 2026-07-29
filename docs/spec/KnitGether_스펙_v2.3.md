@@ -57,6 +57,11 @@
 - pending 상태 데이터는 재조회/재시도 시 원격 반영. 부모-자식(예: Project→RowCounter/WorkSession) 실패는 부모 pending으로 보존.
 - 서버 저장 상태를 `syncStatus`(§C-1, 5상태)로 표현하고 UI 배지로 노출(동기화 완료 시 배지 숨김).
 
+### A-6. 삭제 정책 (soft delete + 수동 cascade)
+- 모든 도메인 삭제는 **hard delete가 아니라 soft delete**다. 행을 지우지 않고 `deletedAt` 타임스탬프를 설정하며, 조회는 `deletedAt: null`로 필터한다.
+- **cascade는 DB onDelete가 아니라 서비스가 수동 전파**한다. 예: 프로젝트 삭제 시 `deleteProject`가 project + `rowCounter` + `workSession` + `rowInstruction` + `projectPatternCopy` + `projectProgressPhoto`에 각각 `deletedAt`을 설정한다.
+- **완료 기준**: 삭제 후 부모·자식 모두 `deletedAt`이 채워지고, 목록/상세 조회에서 사라져야 한다(재실행 후에도 부활 금지). ✅ 산출물 3 `test_04`(삭제 soft-cascade)로 실 DB 검증됨.
+
 ---
 
 ## B. 핵심 기능 스펙 (기존 기획 유지분)
@@ -107,6 +112,7 @@
 
 ### C-4. 작업시간 통계
 - 설정 → 작업시간 통계. 총 작업/오늘/세션 수/평균, 프로젝트별 집계, 최근 세션 목록.
+- **WorkSession 구간 유효성 (요구)**: `endedAt`이 있으면 `endedAt > startedAt`이어야 하며, 서버가 이를 400으로 거부해야 한다. ⚠️ 현재 미충족 — 서버에 교차 필드 검증이 없어 음수 구간 세션이 수용되고 통계가 오염됨(총 작업시간 음수 표시/과소집계). **이 조항은 QA 정합성 테스트(산출물 3, `test_06`)로 발견된 스펙 공백**이며, 결함은 **[Issue #15](../../issues/15)**(`severity/medium`).
 
 ### C-5. 뜨개 애니메이션 재생
 - 도구 → 뜨개 애니메이션. 스킬별 단계 설명 + 프레임 플레이어(예: "K 기본 프레임 1/3").

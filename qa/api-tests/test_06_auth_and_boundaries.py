@@ -69,12 +69,15 @@ def test_time_reversed_work_session_behavior(account_a):
         )
     ]
     r = account_a.api.create_project(payload)
-    # 교차 필드 검증이 없어 수용될 것으로 예상. 실제 코드를 특성화하고,
-    # 수용되면 '입력 검증 공백'을 결함 후보로 남긴다.
+    # 교차 필드 검증이 없어 수용될 것으로 예상. 실제 코드를 특성화한다.
+    # 수용(201)은 확정 결함 → Issue #15 (severity/medium, v2.3 §C-4).
+    # 영향 실증: 총 작업시간 -3000초 표시 / 통계 과소집계 / 랭킹 항목 소실.
+    # 서버 교차검증(400)이 도입되면 이 분기를 실동작에 맞게 갱신할 것.
     if r.status_code == 201:
         pytest.skip(
-            "특성화: 서버가 시간 역전 세션을 수용함(교차 검증 부재). "
-            "결함 후보로 보고 — 스펙상 금지 여부는 QA 판정 필요."
+            "특성화(Issue #15): 서버가 시간 역전 세션을 수용함(교차 검증 부재). "
+            "v2.3 §C-4는 endedAt>startedAt을 요구 → 현 동작은 스펙 위반이나 수정 전까지 감시."
         )
     else:
+        # 검증 도입 후: 400 거부가 정상 (Issue #15 해소 신호)
         assert r.status_code == 400, r.text
