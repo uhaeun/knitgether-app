@@ -1,22 +1,27 @@
 # 기능 목록과 화면-API-DB 연결 구조 - 2026-07-19
 
-> 기준 자료: iOS View/POM, 서버 Controller, Prisma schema, `docs/qa/postman/knitgether-local.postman_collection.json`
+> 기준 자료: iOS View/POM, 서버 Controller, Prisma schema, `docs/qa/postman/knitgether-local.postman_collection.json`, **정본 스펙 `docs/spec/KnitGether_스펙_v2.3.md`(조항 근거)**
 
 ## 기능 목록 + 리스크 등급
 
-| # | 기능 영역 | 화면 | 데이터 변경 | 리스크 | 우선순위 |
-|---|---|---|---|---|---|
-| 1 | 온보딩 | OnboardingView | 온보딩 완료 상태 | 신규 사용자가 앱을 시작하지 못함 | P0 |
-| 2 | 회원가입/로그인 | AuthAccountView | 계정 생성 | 高 | P0 |
-| 3 | 홈 | HomeView | - | 핵심 데이터 진입점 누락 | P2 |
-| 4 | 프로젝트 생성/수정/삭제 | AddProjectView, EditProjectView, MyKnittingView | CRUD+동기화 | 高 | P0 |
-| 5 | Workspace (단수·행·작업시간) | WorkspaceView | 세션 기록 | 高 | P0 |
-| 6 | PDF·PencilKit | PatternLibraryView, ProjectPatternPanelView | PDF/그림 파일 저장 | 파일 유실 또는 프로젝트 연결 실패 | P1 |
-| 7 | 게이지 계산기/측정 | GaugeCalculatorView, GaugeMeasureHubView | 기록/목표 저장 | 게이지 계산값 또는 기록 유실 | P1 |
-| 8 | 스킬 테스트 | SkillTestView, SkillTestResultView | 사용자 스킬 레벨 저장 | 온보딩 저장 실패, 시스템 스킬 수정 오류 | P0 |
-| 9 | 창고 (실/바늘/도구/도안/스킬) | LibraryView 하위 화면 | CRUD | 프로젝트 연결 데이터 불일치 | P1 |
-| 10 | Offline·Sync·Cache | (횡단) | 동기화·충돌 | 高 | P0 |
-| 11 | 설정/계정 | Settings, ProfileSettingsView | 로그아웃·프로필 수정 | 계정 전환 후 cache 오염 | P1 |
+> `근거 조항`은 v2.3 스펙 절. 리스크는 "실패 시 영향"을 문장으로 통일(高/中/低 단독 표기 금지).
+
+| # | 기능 영역 | 화면 | 데이터 변경 | 리스크(실패 시 영향) | 우선순위 | 근거 조항(v2.3) |
+|---|---|---|---|---|---|---|
+| 1 | 온보딩 | OnboardingView | 온보딩 완료 상태 | 신규 사용자가 앱을 시작하지 못함 | P0 | §B(온보딩) |
+| 2 | 회원가입/로그인 | AuthAccountView | 계정 생성 | 계정 생성·로그인 실패 시 앱 사용 자체가 불가 | P0 | §C-2 |
+| 3 | 홈 | HomeView | - | 핵심 데이터 진입점 누락(집계·이어서 뜨기 접근 불가) | P2 | §A-2 |
+| 4 | 프로젝트 생성/수정/삭제 | AddProjectView, EditProjectView, MyKnittingView | CRUD+동기화 | 생성·수정·삭제·동기화 실패 시 사용자 핵심 데이터 유실 | P0 | §B(프로젝트 CRUD) |
+| 5 | Workspace (단수·행·작업시간) | WorkspaceView | 세션 기록 | 세션·단수 기록 유실 시 진행 상황·작업시간 데이터 손실 | P0 | §B(작업 공간·단수·행안내) |
+| 6 | PDF·PencilKit | PatternLibraryView, ProjectPatternPanelView | PDF/그림 파일 저장 | 파일 유실 또는 프로젝트 연결 실패 | P1 | §B(도안), §C-8 |
+| 7 | 게이지 계산기/측정 | GaugeCalculatorView, GaugeMeasureHubView | 기록/목표 저장 | 게이지 계산값 또는 기록 유실 | P1 | §C-7 |
+| 8 | 스킬 테스트 | SkillTestView, SkillTestResultView | 사용자 스킬 레벨 저장 | 온보딩 저장 실패, 시스템 스킬 수정 오류 | P0 | §B(스킬) |
+| 9 | 창고 (실/바늘/도구/도안/스킬) | LibraryView 하위 화면 | CRUD | 프로젝트 연결 데이터 불일치 | P1 | §B(창고) |
+| 10 | Offline·Sync·Cache | (횡단) | 동기화·충돌 | 동기화 실패·충돌 시 데이터 유실 또는 계정 간 노출 | P0 | §C-1 |
+| 11 | 설정/계정 | Settings, ProfileSettingsView | 로그아웃·프로필 수정 | 계정 전환 후 cache 오염(타 계정 데이터 노출) | P1 | §C-2 |
+| 12 | 데이터 백업 | 설정 → 데이터 백업 | JSON 내보내기/가져오기 | 백업/복원 실패 또는 손상 시 데이터 유실 | P1 | §C-3 |
+| 13 | 뜨개 애니메이션 | 도구 → 뜨개 애니메이션 | - | 재생 실패(데이터·인증 무영향, 보조 학습 기능) | P2 | §C-5 |
+| 14 | 진행 사진 | Workspace → 진행 사진 | 사진 파일 저장 | Remote 직접 연결의 offline 제한(알려진 제약), 사진 유실 | P2 | §C-6 |
 
 <!-- 우선순위 기준: 데이터가 바뀌는 흐름(생성/수정/삭제/동기화/계정) = P0 -->
 
