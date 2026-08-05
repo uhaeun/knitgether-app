@@ -395,7 +395,7 @@ struct ProjectWorkspaceView: View {
 
     @ViewBuilder
     private var mainLayout: some View {
-        if selectedTab == .working && viewModel.displayMode == .patternAndCounter {
+        if selectedTab == .working && viewModel.displayMode != .counterOnly {
             patternFocusLayout
         } else {
             scrollLayout
@@ -500,7 +500,7 @@ struct ProjectWorkspaceView: View {
             SectionHeaderView("보기 모드")
 
             Picker("보기 모드", selection: displayModeBinding) {
-                ForEach(ProjectWorkspaceDisplayMode.allCases) { mode in
+                ForEach(ProjectWorkspaceDisplayMode.selectableCases) { mode in
                     Text(mode.title).tag(mode)
                 }
             }
@@ -512,54 +512,9 @@ struct ProjectWorkspaceView: View {
         .appCard(cornerRadius: 20)
     }
 
-    @ViewBuilder
+    // 뜨는 중 탭에서 스크롤 레이아웃은 카운터만 모드에서만 쓰인다 (mainLayout 분기 참조)
     private var mainWorkspaceArea: some View {
-        switch viewModel.displayMode {
-        case .patternOnly:
-            patternPanel(isCompact: false)
-        case .patternAndCounter:
-            VStack(spacing: AppTheme.Spacing.md) {
-                patternFocusPanel
-                compactCounterBar
-            }
-        case .counterOnly:
-            counterPanel
-        }
-    }
-
-    private func patternPanel(isCompact: Bool) -> some View {
-        ProjectPatternPanelView(
-            viewModel: viewModel,
-            isCompact: isCompact,
-            directImportAction: {
-                isShowingDirectPatternImporter = true
-            },
-            scanAction: {
-                isShowingPatternDocumentScanner = true
-            },
-            libraryAction: {
-                Task { @MainActor in
-                    await viewModel.loadAvailablePatterns()
-                    isShowingLibraryPicker = true
-                }
-            },
-            manualInputAction: {
-                manualPatternTitle = viewModel.project.patternCopy?.titleSnapshot ?? ""
-                isShowingManualPatternSheet = true
-            },
-            showPDFAction: {
-                isShowingPDFViewer = true
-            },
-            lookupAction: {
-                isShowingPatternLookup = true
-            },
-            clearDrawingAction: {
-                isShowingClearDrawingConfirmation = true
-            },
-            unlinkAction: {
-                isShowingUnlinkPatternConfirmation = true
-            }
-        )
+        counterPanel
     }
 
     private var patternFocusPanel: some View {

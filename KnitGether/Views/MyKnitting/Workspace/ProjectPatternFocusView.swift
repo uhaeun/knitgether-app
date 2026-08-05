@@ -65,7 +65,7 @@ struct ProjectPatternFocusView: View {
     private var actionMenu: some View {
         Menu {
             Picker("보기 모드", selection: $displayMode) {
-                ForEach(ProjectWorkspaceDisplayMode.allCases) { mode in
+                ForEach(ProjectWorkspaceDisplayMode.selectableCases) { mode in
                     Text(mode.title).tag(mode)
                 }
             }
