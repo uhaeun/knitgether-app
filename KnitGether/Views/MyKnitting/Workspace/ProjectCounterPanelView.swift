@@ -74,14 +74,14 @@ struct ProjectCounterPanelView: View {
     private var currentRowSummary: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline) {
-                Text(viewModel.currentRow == 0 ? "시작 전" : "현재 \(viewModel.currentRow)단")
+                Text(verbatim: viewModel.currentRow == 0 ? "시작 전" : "현재 \(viewModel.currentRow)단")
                     .font(.system(size: 48, weight: .bold, design: .rounded))
                     .monospacedDigit()
 
                 Spacer()
 
                 if let targetRow = viewModel.rowCounter.targetRow {
-                    Text("\(viewModel.currentRow) / \(targetRow)단")
+                    Text(verbatim: "\(viewModel.currentRow) / \(targetRow)단")
                         .font(.subheadline.bold())
                         .foregroundStyle(.secondary)
                 } else {

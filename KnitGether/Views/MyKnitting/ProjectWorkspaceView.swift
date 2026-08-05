@@ -633,7 +633,8 @@ struct ProjectWorkspaceView: View {
         } label: {
             VStack(spacing: 5) {
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
-                    Text(viewModel.currentRow == 0 ? "시작" : "\(viewModel.currentRow)")
+                    // verbatim을 쓰지 않으면 천 단위 구분자가 붙어 10,000처럼 표시된다.
+                    Text(verbatim: viewModel.currentRow == 0 ? "시작" : "\(viewModel.currentRow)")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(AppTheme.Color.accent)
@@ -690,7 +691,7 @@ struct ProjectWorkspaceView: View {
             }
             .frame(height: 4)
 
-            Text("목표 \(targetRow)단")
+            Text(verbatim: "목표 \(targetRow)단")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
