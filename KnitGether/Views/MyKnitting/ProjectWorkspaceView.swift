@@ -581,92 +581,97 @@ struct ProjectWorkspaceView: View {
         )
     }
 
+    // 세 영역을 나란히 두어 터치 영역이 겹치지 않게 한다.
     private var compactCounterBar: some View {
-        ZStack {
-            Button {
-                counterHaptic.impactOccurred()
+        HStack(spacing: 0) {
+            decrementZone
+            counterDivider
+            incrementZone
+            counterDivider
+            directInputZone
+        }
+        .frame(height: 92)
+        .appCard(cornerRadius: 22)
+    }
 
-                Task {
-                    await viewModel.incrementRow()
-                    presentCompletionPromptIfNeeded()
-                }
-            } label: {
-                VStack(spacing: 4) {
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(viewModel.currentRow == 0 ? "시작" : "\(viewModel.currentRow)")
-                            .font(.system(size: 44, weight: .bold, design: .rounded))
-                            .monospacedDigit()
-                            .foregroundStyle(AppTheme.Color.accent)
-                            .contentTransition(.numericText())
+    private var counterDivider: some View {
+        Rectangle()
+            .fill(AppTheme.Color.warmDivider)
+            .frame(width: 1, height: 48)
+    }
 
-                        if viewModel.currentRow > 0 {
-                            Text("단")
-                                .font(.title3.weight(.semibold))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
+    private var decrementZone: some View {
+        Button {
+            counterHaptic.impactOccurred(intensity: 0.6)
 
-                    if let targetRow = viewModel.rowCounter.targetRow, targetRow > 0 {
-                        counterProgressBar(targetRow: targetRow)
-                    } else {
-                        Text("탭하면 한 단 올라가요")
-                            .font(.caption2)
+            Task {
+                await viewModel.decrementRow()
+            }
+        } label: {
+            Image(systemName: "minus")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(AppTheme.Color.accent)
+                .frame(width: 68)
+                .frame(maxHeight: .infinity)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(CounterTapButtonStyle())
+        .disabled(viewModel.currentRow == 0)
+        .opacity(viewModel.currentRow == 0 ? 0.3 : 1)
+        .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
+        .accessibilityLabel("단수 내리기")
+    }
+
+    private var incrementZone: some View {
+        Button {
+            counterHaptic.impactOccurred()
+
+            Task {
+                await viewModel.incrementRow()
+                presentCompletionPromptIfNeeded()
+            }
+        } label: {
+            VStack(spacing: 5) {
+                HStack(alignment: .firstTextBaseline, spacing: 3) {
+                    Text(viewModel.currentRow == 0 ? "시작" : "\(viewModel.currentRow)")
+                        .font(.system(size: 40, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(AppTheme.Color.accent)
+                        .contentTransition(.numericText())
+
+                    if viewModel.currentRow > 0 {
+                        Text("단")
+                            .font(.headline)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(maxWidth: .infinity, minHeight: 92)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(CounterTapButtonStyle())
-            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNextButton)
-            .accessibilityLabel("단수 올리기")
 
-            HStack {
-                // disabled를 쓰면 비활성 상태에서 터치가 뒤에 깔린 증가 영역으로 통과한다.
-                // 항상 활성 상태로 두고 동작만 막아 터치를 이 버튼이 흡수하게 한다.
-                Button {
-                    guard viewModel.currentRow > 0 else {
-                        return
-                    }
-
-                    counterHaptic.impactOccurred(intensity: 0.6)
-
-                    Task {
-                        await viewModel.decrementRow()
-                    }
-                } label: {
-                    Image(systemName: "minus")
-                        .font(.headline)
-                        .foregroundStyle(AppTheme.Color.accent)
-                        .frame(width: 44, height: 44)
-                        .background(AppTheme.Color.accentSoft, in: Circle())
-                        .contentShape(Circle())
+                if let targetRow = viewModel.rowCounter.targetRow, targetRow > 0 {
+                    counterProgressBar(targetRow: targetRow)
                 }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
-                .accessibilityLabel("단수 내리기")
-                .opacity(viewModel.currentRow == 0 ? 0.35 : 1)
-
-                Spacer()
-
-                Button {
-                    isShowingCurrentRowEditor = true
-                } label: {
-                    Image(systemName: "square.and.pencil")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
-                .accessibilityLabel("단수 직접 입력")
             }
-            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, 4)
-        .padding(.vertical, 4)
-        .appCard(cornerRadius: 22)
+        .buttonStyle(CounterTapButtonStyle())
+        .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNextButton)
+        .accessibilityLabel("단수 올리기")
+    }
+
+    private var directInputZone: some View {
+        Button {
+            isShowingCurrentRowEditor = true
+        } label: {
+            Image(systemName: "square.and.pencil")
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.secondary)
+                .frame(width: 56)
+                .frame(maxHeight: .infinity)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(CounterTapButtonStyle())
+        .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
+        .accessibilityLabel("단수 직접 입력")
     }
 
     private func counterProgressBar(targetRow: Int) -> some View {
