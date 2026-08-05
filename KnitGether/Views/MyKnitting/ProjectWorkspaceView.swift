@@ -640,6 +640,7 @@ struct ProjectWorkspaceView: View {
                         .foregroundStyle(AppTheme.Color.accent)
                         .frame(width: 44, height: 44)
                         .background(AppTheme.Color.accentSoft, in: Circle())
+                        .contentShape(Circle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
@@ -655,6 +656,7 @@ struct ProjectWorkspaceView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
