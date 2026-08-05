@@ -419,12 +419,12 @@ struct ProjectWorkspaceView: View {
     private var patternFocusLayout: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: AppTheme.Spacing.md) {
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-                    ProjectWorkspaceHeaderView(viewModel: viewModel)
+                VStack(alignment: .leading, spacing: 10) {
+                    ProjectWorkspaceHeaderView(viewModel: viewModel, isCompact: true)
                     workspaceTabPicker
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 14)
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
 
                 patternFocusPanel
 
@@ -466,7 +466,7 @@ struct ProjectWorkspaceView: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 24)
                 }
-                .frame(height: UIScreen.main.bounds.height * 0.58)
+                .frame(height: UIScreen.main.bounds.height * 0.75)
             } else {
                 compactCounterBar
                     .padding(.horizontal, 12)

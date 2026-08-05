@@ -2,15 +2,16 @@ import SwiftUI
 
 struct ProjectWorkspaceHeaderView: View {
     @ObservedObject var viewModel: ProjectWorkspaceViewModel
+    var isCompact: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: isCompact ? 8 : 14) {
             HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: isCompact ? 4 : 8) {
                     Text(viewModel.project.name)
-                        .font(.system(size: 26, weight: .heavy))
+                        .font(.system(size: isCompact ? 18 : 26, weight: .heavy))
                         .foregroundStyle(AppTheme.Color.primaryText)
-                        .lineLimit(2)
+                        .lineLimit(isCompact ? 1 : 2)
 
                     HStack(spacing: 6) {
                         StatusBadgeView(status: viewModel.project.status)
@@ -29,7 +30,9 @@ struct ProjectWorkspaceHeaderView: View {
             }
 
             // 시작일·총 작업시간·일정은 프로젝트 정보 탭의 요약으로 옮겨 헤더를 간결하게 유지한다.
-            metadata(title: "최근 작업", value: formattedDate(viewModel.project.lastWorkedAt))
+            if !isCompact {
+                metadata(title: "최근 작업", value: formattedDate(viewModel.project.lastWorkedAt))
+            }
 
             if viewModel.project.syncStatus.needsSync {
                 SyncRetryBanner(
@@ -43,9 +46,9 @@ struct ProjectWorkspaceHeaderView: View {
                 )
             }
         }
-        .padding(18)
+        .padding(isCompact ? 12 : 18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .appCard(cornerRadius: 24)
+        .appCard(cornerRadius: isCompact ? 16 : 24)
     }
 
     private func metadata(title: String, value: String) -> some View {
