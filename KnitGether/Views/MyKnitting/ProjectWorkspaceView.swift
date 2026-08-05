@@ -466,7 +466,7 @@ struct ProjectWorkspaceView: View {
                     .padding(.horizontal, 16)
                     .padding(.bottom, 24)
                 }
-                .frame(height: UIScreen.main.bounds.height * 0.75)
+                .frame(height: UIScreen.main.bounds.height * 0.82)
             } else {
                 compactCounterBar
                     .padding(.horizontal, 12)

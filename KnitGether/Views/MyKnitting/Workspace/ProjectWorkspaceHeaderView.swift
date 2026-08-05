@@ -6,17 +6,30 @@ struct ProjectWorkspaceHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: isCompact ? 8 : 14) {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: isCompact ? 4 : 8) {
+            HStack(alignment: isCompact ? .center : .top, spacing: 12) {
+                if isCompact {
                     Text(viewModel.project.name)
-                        .font(.system(size: isCompact ? 18 : 26, weight: .heavy))
+                        .font(.system(size: 18, weight: .heavy))
                         .foregroundStyle(AppTheme.Color.primaryText)
-                        .lineLimit(isCompact ? 1 : 2)
+                        .lineLimit(1)
 
-                    HStack(spacing: 6) {
-                        StatusBadgeView(status: viewModel.project.status)
-                        if viewModel.project.syncStatus != .synced {
-                            SyncStatusBadgeView(status: viewModel.project.syncStatus)
+                    StatusBadgeView(status: viewModel.project.status)
+
+                    if viewModel.project.syncStatus != .synced {
+                        SyncStatusBadgeView(status: viewModel.project.syncStatus)
+                    }
+                } else {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(viewModel.project.name)
+                            .font(.system(size: 26, weight: .heavy))
+                            .foregroundStyle(AppTheme.Color.primaryText)
+                            .lineLimit(2)
+
+                        HStack(spacing: 6) {
+                            StatusBadgeView(status: viewModel.project.status)
+                            if viewModel.project.syncStatus != .synced {
+                                SyncStatusBadgeView(status: viewModel.project.syncStatus)
+                            }
                         }
                     }
                 }
