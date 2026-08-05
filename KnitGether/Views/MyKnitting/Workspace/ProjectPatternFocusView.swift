@@ -35,8 +35,24 @@ struct ProjectPatternFocusView: View {
             Spacer(minLength: 8)
 
             modeToggle
+            counterModeButton
             actionMenu
         }
+    }
+
+    private var counterModeButton: some View {
+        Button {
+            displayMode = .counterOnly
+        } label: {
+            Image(systemName: "list.number")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AppTheme.Color.accent)
+                .frame(width: 34, height: 34)
+                .background(.thinMaterial, in: Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("카운터만 보기")
+        .accessibilityIdentifier(AppAccessibilityID.Workspace.displayModePicker)
     }
 
     private var modeToggle: some View {
@@ -64,14 +80,6 @@ struct ProjectPatternFocusView: View {
 
     private var actionMenu: some View {
         Menu {
-            Picker("보기 모드", selection: $displayMode) {
-                ForEach(ProjectWorkspaceDisplayMode.selectableCases) { mode in
-                    Text(mode.title).tag(mode)
-                }
-            }
-
-            Divider()
-
             Button {
                 directImportAction()
             } label: {
