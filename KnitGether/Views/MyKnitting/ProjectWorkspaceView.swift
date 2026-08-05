@@ -34,6 +34,7 @@ struct ProjectWorkspaceView: View {
     @State private var isShowingYarnUsageSheet = false
     @State private var isShowingWorkSessionList = false
     @State private var isCounterSheetExpanded = false
+    private let counterHaptic = UIImpactFeedbackGenerator(style: .medium)
     @State private var editingYarnUsage: ProjectYarnUsage?
     @State private var rowInstructionSheet: RowInstructionSheet?
     @State private var pendingPatternFileImport: PendingPatternFileImport?
@@ -583,67 +584,105 @@ struct ProjectWorkspaceView: View {
     private var compactCounterBar: some View {
         ZStack {
             Button {
+                counterHaptic.impactOccurred()
+
                 Task {
                     await viewModel.incrementRow()
                     presentCompletionPromptIfNeeded()
                 }
             } label: {
-                VStack(spacing: 2) {
-                    Text(viewModel.currentRow == 0 ? "시작 전" : "\(viewModel.currentRow)단")
-                        .font(.system(size: 40, weight: .bold, design: .rounded))
-                        .monospacedDigit()
-                        .foregroundStyle(.primary)
+                VStack(spacing: 4) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(viewModel.currentRow == 0 ? "시작" : "\(viewModel.currentRow)")
+                            .font(.system(size: 44, weight: .bold, design: .rounded))
+                            .monospacedDigit()
+                            .foregroundStyle(AppTheme.Color.accent)
+                            .contentTransition(.numericText())
 
-                    if let targetRow = viewModel.rowCounter.targetRow {
-                        Text("목표 \(targetRow)단")
-                            .font(.caption)
+                        if viewModel.currentRow > 0 {
+                            Text("단")
+                                .font(.title3.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    if let targetRow = viewModel.rowCounter.targetRow, targetRow > 0 {
+                        counterProgressBar(targetRow: targetRow)
+                    } else {
+                        Text("탭하면 한 단 올라가요")
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(maxWidth: .infinity, minHeight: 84)
+                .frame(maxWidth: .infinity, minHeight: 92)
                 .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(CounterTapButtonStyle())
             .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNextButton)
             .accessibilityLabel("단수 올리기")
 
             HStack {
                 Button {
+                    counterHaptic.impactOccurred(intensity: 0.6)
+
                     Task {
                         await viewModel.decrementRow()
                     }
                 } label: {
                     Image(systemName: "minus")
-                        .font(.subheadline.weight(.semibold))
+                        .font(.headline)
                         .foregroundStyle(AppTheme.Color.accent)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 44, height: 44)
                         .background(AppTheme.Color.accentSoft, in: Circle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
                 .accessibilityLabel("단수 내리기")
                 .disabled(viewModel.currentRow == 0)
-                .opacity(viewModel.currentRow == 0 ? 0.4 : 1)
+                .opacity(viewModel.currentRow == 0 ? 0.35 : 1)
 
                 Spacer()
 
                 Button {
                     isShowingCurrentRowEditor = true
                 } label: {
-                    Image(systemName: "pencil")
-                        .font(.subheadline.weight(.semibold))
+                    Image(systemName: "square.and.pencil")
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 44, height: 44)
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
                 .accessibilityLabel("단수 직접 입력")
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 10)
         }
         .padding(.horizontal, 4)
-        .padding(.vertical, 6)
-        .appCard(cornerRadius: 20)
+        .padding(.vertical, 4)
+        .appCard(cornerRadius: 22)
+    }
+
+    private func counterProgressBar(targetRow: Int) -> some View {
+        let ratio = min(Double(viewModel.currentRow) / Double(targetRow), 1)
+
+        return VStack(spacing: 3) {
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(AppTheme.Color.accentSoft)
+
+                    Capsule()
+                        .fill(AppTheme.Color.accent)
+                        .frame(width: proxy.size.width * ratio)
+                }
+            }
+            .frame(height: 4)
+
+            Text("목표 \(targetRow)단")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: 160)
     }
 
     private var counterPanel: some View {
@@ -1132,6 +1171,18 @@ private struct NumberEditSheet: View {
                 }
             }
         }
+    }
+}
+
+private struct CounterTapButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(
+                RoundedRectangle(cornerRadius: 18)
+                    .fill(AppTheme.Color.accentSoft)
+                    .opacity(configuration.isPressed ? 1 : 0)
+            )
+            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
