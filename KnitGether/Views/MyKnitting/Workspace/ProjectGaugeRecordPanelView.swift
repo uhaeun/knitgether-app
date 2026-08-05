@@ -7,7 +7,21 @@ struct ProjectGaugeRecordPanelView: View {
     @State private var recordPendingDeletion: GaugeRecord?
 
     var body: some View {
-        WorkspaceSectionView(title: "게이지 기록", systemImage: "function") {
+        WorkspaceSectionView(
+            title: "게이지 기록",
+            systemImage: "function",
+            headerAction: {
+                WorkspaceHeaderActionButton(
+                    systemImage: "link",
+                    label: "게이지 기록 연결",
+                    isProminent: viewModel.linkedGaugeRecords.isEmpty,
+                    action: { isShowingPicker = true }
+                )
+                .disabled(viewModel.availableGaugeRecordsForLinking.isEmpty)
+                .opacity(viewModel.availableGaugeRecordsForLinking.isEmpty ? 0.35 : 1)
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.gaugeRecordLinkButton)
+            }
+        ) {
             VStack(alignment: .leading, spacing: 14) {
                 AppSoftPanel {
                     header
@@ -82,15 +96,6 @@ struct ProjectGaugeRecordPanelView: View {
             }
 
             Spacer(minLength: 12)
-
-            Button {
-                isShowingPicker = true
-            } label: {
-                Label("연결", systemImage: "link")
-            }
-            .buttonStyle(.borderedProminent)
-            .accessibilityIdentifier(AppAccessibilityID.Workspace.gaugeRecordLinkButton)
-            .disabled(viewModel.availableGaugeRecordsForLinking.isEmpty)
         }
     }
 

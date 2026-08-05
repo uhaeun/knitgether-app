@@ -13,27 +13,29 @@ struct ProjectToolPanelView: View {
     @State private var toolPendingUnlink: ToolItem?
 
     var body: some View {
-        WorkspaceSectionView(title: "사용 도구", systemImage: "wrench.and.screwdriver") {
-            VStack(alignment: .leading, spacing: 14) {
-                if viewModel.linkedTools.isEmpty {
-                    emptyState
-                } else {
-                    VStack(spacing: 8) {
-                        ForEach(viewModel.linkedTools) { tool in
-                            toolRow(tool)
-                        }
+        WorkspaceSectionView(
+            title: "사용 도구",
+            systemImage: "wrench.and.screwdriver",
+            headerAction: {
+                WorkspaceHeaderActionButton(
+                    systemImage: "plus",
+                    label: "도구 연결",
+                    isProminent: viewModel.linkedTools.isEmpty,
+                    action: { isShowingPicker = true }
+                )
+                .disabled(viewModel.availableToolsForLinking.isEmpty)
+                .opacity(viewModel.availableToolsForLinking.isEmpty ? 0.35 : 1)
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.toolLinkButton)
+            }
+        ) {
+            if viewModel.linkedTools.isEmpty {
+                emptyState
+            } else {
+                VStack(spacing: 8) {
+                    ForEach(viewModel.linkedTools) { tool in
+                        toolRow(tool)
                     }
                 }
-
-                Button {
-                    isShowingPicker = true
-                } label: {
-                    Label("도구 연결", systemImage: "plus.circle")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .accessibilityIdentifier(AppAccessibilityID.Workspace.toolLinkButton)
-                .disabled(viewModel.availableToolsForLinking.isEmpty)
             }
         }
         .sheet(isPresented: $isShowingPicker) {

@@ -6,23 +6,25 @@ struct ProjectNeedlePanelView: View {
     @State private var isShowingUnlinkConfirmation = false
 
     var body: some View {
-        WorkspaceSectionView(title: "사용 바늘", systemImage: "ruler") {
-            VStack(alignment: .leading, spacing: 14) {
-                if viewModel.project.needleId == nil {
-                    emptyState
-                } else {
-                    linkedNeedleView
-                }
-
-                Button {
-                    isShowingPicker = true
-                } label: {
-                    Label(viewModel.project.needleId == nil ? "바늘 연결" : "바늘 변경", systemImage: "plus.circle")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .accessibilityIdentifier(AppAccessibilityID.Workspace.needleLinkButton)
+        WorkspaceSectionView(
+            title: "사용 바늘",
+            systemImage: "ruler",
+            headerAction: {
+                WorkspaceHeaderActionButton(
+                    systemImage: viewModel.project.needleId == nil ? "plus" : "arrow.triangle.2.circlepath",
+                    label: viewModel.project.needleId == nil ? "바늘 연결" : "바늘 변경",
+                    isProminent: viewModel.project.needleId == nil,
+                    action: { isShowingPicker = true }
+                )
                 .disabled(viewModel.availableNeedles.isEmpty)
+                .opacity(viewModel.availableNeedles.isEmpty ? 0.35 : 1)
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.needleLinkButton)
+            }
+        ) {
+            if viewModel.project.needleId == nil {
+                emptyState
+            } else {
+                linkedNeedleView
             }
         }
         .sheet(isPresented: $isShowingPicker) {

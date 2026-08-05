@@ -16,7 +16,26 @@ struct ProjectProgressPhotoPanelView: View {
     @State private var isImportingPhoto = false
 
     var body: some View {
-        WorkspaceSectionView(title: "진행 사진", systemImage: "camera") {
+        WorkspaceSectionView(
+            title: "진행 사진",
+            systemImage: "camera",
+            headerAction: {
+                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                    Image(systemName: isImportingPhoto ? "arrow.up.circle" : "plus")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(viewModel.progressPhotos.isEmpty ? Color.white : AppTheme.Color.accent)
+                        .frame(width: 32, height: 32)
+                        .background(
+                            viewModel.progressPhotos.isEmpty ? AnyShapeStyle(AppTheme.Color.accent) : AnyShapeStyle(AppTheme.Color.accentSoft),
+                            in: Circle()
+                        )
+                }
+                .accessibilityLabel("사진 추가")
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.progressPhotoAddButton)
+                .disabled(isImportingPhoto)
+                .opacity(isImportingPhoto ? 0.35 : 1)
+            }
+        ) {
             VStack(alignment: .leading, spacing: 14) {
                 if viewModel.progressPhotos.isEmpty {
                     emptyState
@@ -39,13 +58,6 @@ struct ProjectProgressPhotoPanelView: View {
                     }
                 }
 
-                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                    Label(isImportingPhoto ? "업로드 중" : "사진 추가", systemImage: "photo.badge.plus")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .accessibilityIdentifier(AppAccessibilityID.Workspace.progressPhotoAddButton)
-                .disabled(isImportingPhoto)
             }
         }
         .onChange(of: selectedPhotoItem) { newItem in

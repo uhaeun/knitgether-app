@@ -7,31 +7,33 @@ struct ProjectYarnUsagePanelView: View {
     let deleteAction: (ProjectYarnUsage) -> Void
 
     var body: some View {
-        WorkspaceSectionView(title: "실 사용량", systemImage: "circle.hexagongrid") {
+        WorkspaceSectionView(
+            title: "실 사용량",
+            systemImage: "circle.hexagongrid",
+            headerAction: {
+                WorkspaceHeaderActionButton(
+                    systemImage: "plus",
+                    label: "사용량 기록",
+                    isProminent: viewModel.yarnUsages.isEmpty,
+                    action: recordAction
+                )
+                .disabled(viewModel.project.yarnId == nil)
+                .opacity(viewModel.project.yarnId == nil ? 0.35 : 1)
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.yarnUsageRecordButton)
+            }
+        ) {
             VStack(alignment: .leading, spacing: 14) {
                 AppSoftPanel {
-                    HStack(alignment: .firstTextBaseline) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(viewModel.project.yarnSummaryText ?? "연결된 실 없음")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(viewModel.project.yarnSummaryText ?? "연결된 실 없음")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
 
-                            Text(viewModel.yarnUsageSummaryText)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        Spacer(minLength: 12)
-
-                        Button {
-                            recordAction()
-                        } label: {
-                            Label("기록", systemImage: "plus.circle")
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .accessibilityIdentifier(AppAccessibilityID.Workspace.yarnUsageRecordButton)
-                        .disabled(viewModel.project.yarnId == nil)
+                        Text(viewModel.yarnUsageSummaryText)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 if viewModel.yarnUsages.isEmpty {
