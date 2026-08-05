@@ -63,6 +63,7 @@ struct ProjectWorkspaceView: View {
     var body: some View {
         mainLayout
             .warmScreenBackground()
+            .toolbar(.hidden, for: .tabBar)
         .navigationTitle("작업 공간")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
