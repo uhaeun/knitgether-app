@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProjectPatternFocusView: View {
     @ObservedObject var viewModel: ProjectWorkspaceViewModel
+    @Binding var displayMode: ProjectWorkspaceDisplayMode
     let directImportAction: () -> Void
     let scanAction: () -> Void
     let libraryAction: () -> Void
@@ -12,23 +13,27 @@ struct ProjectPatternFocusView: View {
     let unlinkAction: () -> Void
 
     private var previewHeight: CGFloat {
-        UIScreen.main.bounds.height * 0.68
+        UIScreen.main.bounds.height * 0.75
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            header
+        ZStack(alignment: .top) {
             patternPreview
+
+            overlayControls
+                .padding(.horizontal, 12)
+                .padding(.top, 10)
         }
-        .padding(8)
-        .appCard(cornerRadius: 20)
     }
 
-    private var header: some View {
-        HStack(spacing: 10) {
+    private var overlayControls: some View {
+        HStack(spacing: 8) {
             Text(viewModel.project.patternCopy?.titleSnapshot ?? "연결된 도안 없음")
-                .font(.subheadline.bold())
+                .font(.caption.bold())
                 .lineLimit(1)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(.thinMaterial, in: Capsule())
 
             Spacer(minLength: 8)
 
@@ -48,7 +53,7 @@ struct ProjectPatternFocusView: View {
                         .foregroundStyle(viewModel.interactionMode == mode ? .white : AppTheme.Color.accent)
                         .frame(width: 34, height: 34)
                         .background(
-                            viewModel.interactionMode == mode ? AppTheme.Color.accent : AppTheme.Color.accentSoft,
+                            viewModel.interactionMode == mode ? AnyShapeStyle(AppTheme.Color.accent) : AnyShapeStyle(.thinMaterial),
                             in: Circle()
                         )
                 }
@@ -62,6 +67,14 @@ struct ProjectPatternFocusView: View {
 
     private var actionMenu: some View {
         Menu {
+            Picker("보기 모드", selection: $displayMode) {
+                ForEach(ProjectWorkspaceDisplayMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
+                }
+            }
+
+            Divider()
+
             Button {
                 directImportAction()
             } label: {
@@ -129,7 +142,7 @@ struct ProjectPatternFocusView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(AppTheme.Color.accent)
                 .frame(width: 34, height: 34)
-                .background(AppTheme.Color.accentSoft, in: Circle())
+                .background(.thinMaterial, in: Circle())
         }
         .accessibilityIdentifier(AppAccessibilityID.Workspace.patternFocusMenuButton)
     }
@@ -143,7 +156,6 @@ struct ProjectPatternFocusView: View {
                     highlightTerms: viewModel.relatedSkills.map(\.abbreviation)
                 )
                 .frame(height: previewHeight)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
 
                 if viewModel.interactionMode == .drawing {
                     PencilCanvasView(
@@ -156,7 +168,6 @@ struct ProjectPatternFocusView: View {
                         }
                     )
                     .frame(height: previewHeight)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }
         } else {
@@ -175,13 +186,9 @@ struct ProjectPatternFocusView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
-            .frame(maxWidth: .infinity, minHeight: previewHeight)
+            .frame(maxWidth: .infinity, minHeight: previewHeight * 0.6)
             .padding()
-            .background(AppTheme.Color.warmBackground, in: RoundedRectangle(cornerRadius: 8))
-            .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(AppTheme.Color.warmDivider, lineWidth: 1)
-            }
+            .background(AppTheme.Color.warmBackground)
         }
     }
 }

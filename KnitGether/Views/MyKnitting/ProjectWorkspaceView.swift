@@ -409,7 +409,9 @@ struct ProjectWorkspaceView: View {
 
     @ViewBuilder
     private var workingTabSections: some View {
-        displayModePicker
+        if viewModel.displayMode != .patternAndCounter {
+            displayModePicker
+        }
         mainWorkspaceArea
         ProjectWorkTimePanelView(
             viewModel: viewModel,
@@ -489,6 +491,7 @@ struct ProjectWorkspaceView: View {
         case .patternAndCounter:
             VStack(spacing: AppTheme.Spacing.md) {
                 patternFocusPanel
+                    .padding(.horizontal, -20)
                 compactCounterBar
             }
         case .counterOnly:
@@ -534,6 +537,7 @@ struct ProjectWorkspaceView: View {
     private var patternFocusPanel: some View {
         ProjectPatternFocusView(
             viewModel: viewModel,
+            displayMode: displayModeBinding,
             directImportAction: {
                 isShowingDirectPatternImporter = true
             },
