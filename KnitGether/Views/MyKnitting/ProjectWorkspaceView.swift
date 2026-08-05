@@ -65,13 +65,17 @@ struct ProjectWorkspaceView: View {
         mainLayout
             .warmScreenBackground()
             .toolbar(.hidden, for: .tabBar)
-        .navigationTitle("작업 공간")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("수정") {
+                Button {
                     isShowingEditProject = true
+                } label: {
+                    Image(systemName: "slider.horizontal.3")
+                        .font(.subheadline)
                 }
+                .accessibilityLabel("프로젝트 수정")
                 .accessibilityIdentifier(AppAccessibilityID.Workspace.editProjectButton)
             }
         }
