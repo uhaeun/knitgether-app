@@ -68,6 +68,16 @@ struct ProjectWorkspaceView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack(spacing: 6) {
+                    Text(viewModel.project.name)
+                        .font(.headline)
+                        .lineLimit(1)
+
+                    StatusBadgeView(status: viewModel.project.status)
+                }
+            }
+
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     isShowingEditProject = true
@@ -424,7 +434,10 @@ struct ProjectWorkspaceView: View {
         ZStack(alignment: .bottom) {
             VStack(spacing: AppTheme.Spacing.md) {
                 VStack(alignment: .leading, spacing: 10) {
-                    ProjectWorkspaceHeaderView(viewModel: viewModel, isCompact: true)
+                    if viewModel.project.syncStatus.needsSync {
+                        ProjectWorkspaceHeaderView(viewModel: viewModel, isCompact: true)
+                    }
+
                     workspaceTabPicker
                 }
                 .padding(.horizontal, 16)
