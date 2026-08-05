@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import {
@@ -71,6 +72,8 @@ export class ProjectsService {
     private readonly fileStorage: LocalFileStorageService,
   ) {}
 
+  private readonly logger = new Logger(ProjectsService.name);
+
   async listProjects(ownerId: string): Promise<ProjectResponseDto[]> {
     const projects = await this.prisma.project.findMany({
       where: {
@@ -80,9 +83,27 @@ export class ProjectsService {
       include: this.projectInclude(ownerId),
     });
 
-    return projects
-      .sort((first, second) => this.compareProjects(first, second))
-      .map((project) => this.toResponse(project, ownerId));
+    const sorted = projects.sort((first, second) =>
+      this.compareProjects(first, second),
+    );
+
+    // 한 프로젝트의 자식 레코드가 결손이어도 목록 전체를 실패시키지 않는다.
+    // 변환에 실패한 항목만 제외하고 나머지는 정상 반환한다.
+    const responses: ProjectResponseDto[] = [];
+
+    for (const project of sorted) {
+      try {
+        responses.push(this.toResponse(project, ownerId));
+      } catch (error) {
+        this.logger.error(
+          `Skipped project ${project.id} in list response: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        );
+      }
+    }
+
+    return responses;
   }
 
   async getProject(ownerId: string, id: string): Promise<ProjectResponseDto> {
