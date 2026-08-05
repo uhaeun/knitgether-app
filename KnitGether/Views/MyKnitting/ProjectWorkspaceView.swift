@@ -61,23 +61,8 @@ struct ProjectWorkspaceView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
-                ProjectWorkspaceHeaderView(viewModel: viewModel)
-                workspaceTabPicker
-
-                switch selectedTab {
-                case .working:
-                    workingTabSections
-                case .info:
-                    infoTabSections
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 14)
-            .padding(.bottom, 28)
-        }
-        .warmScreenBackground()
+        mainLayout
+            .warmScreenBackground()
         .navigationTitle("작업 공간")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -408,10 +393,53 @@ struct ProjectWorkspaceView: View {
     }
 
     @ViewBuilder
-    private var workingTabSections: some View {
-        if viewModel.displayMode != .patternAndCounter {
-            displayModePicker
+    private var mainLayout: some View {
+        if selectedTab == .working && viewModel.displayMode == .patternAndCounter {
+            patternFocusLayout
+        } else {
+            scrollLayout
         }
+    }
+
+    private var scrollLayout: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+                ProjectWorkspaceHeaderView(viewModel: viewModel)
+                workspaceTabPicker
+
+                switch selectedTab {
+                case .working:
+                    workingTabSections
+                case .info:
+                    infoTabSections
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 14)
+            .padding(.bottom, 28)
+        }
+    }
+
+    private var patternFocusLayout: some View {
+        VStack(spacing: AppTheme.Spacing.md) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                ProjectWorkspaceHeaderView(viewModel: viewModel)
+                workspaceTabPicker
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 14)
+
+            patternFocusPanel
+
+            compactCounterBar
+                .padding(.horizontal, 20)
+                .padding(.bottom, 8)
+        }
+    }
+
+    @ViewBuilder
+    private var workingTabSections: some View {
+        displayModePicker
         mainWorkspaceArea
         ProjectWorkTimePanelView(
             viewModel: viewModel,
@@ -491,7 +519,6 @@ struct ProjectWorkspaceView: View {
         case .patternAndCounter:
             VStack(spacing: AppTheme.Spacing.md) {
                 patternFocusPanel
-                    .padding(.horizontal, -20)
                 compactCounterBar
             }
         case .counterOnly:

@@ -12,9 +12,6 @@ struct ProjectPatternFocusView: View {
     let clearDrawingAction: () -> Void
     let unlinkAction: () -> Void
 
-    private var previewHeight: CGFloat {
-        UIScreen.main.bounds.height * 0.75
-    }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -155,7 +152,7 @@ struct ProjectPatternFocusView: View {
                     url: fileURL,
                     highlightTerms: viewModel.relatedSkills.map(\.abbreviation)
                 )
-                .frame(height: previewHeight)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 if viewModel.interactionMode == .drawing {
                     PencilCanvasView(
@@ -167,7 +164,7 @@ struct ProjectPatternFocusView: View {
                             }
                         }
                     )
-                    .frame(height: previewHeight)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
         } else {
@@ -186,7 +183,7 @@ struct ProjectPatternFocusView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
-            .frame(maxWidth: .infinity, minHeight: previewHeight * 0.6)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
             .background(AppTheme.Color.warmBackground)
         }
