@@ -487,9 +487,9 @@ struct ProjectWorkspaceView: View {
         case .patternOnly:
             patternPanel(isCompact: false)
         case .patternAndCounter:
-            VStack(spacing: AppTheme.Spacing.lg) {
-                patternPanel(isCompact: true)
-                counterPanel
+            VStack(spacing: AppTheme.Spacing.md) {
+                patternFocusPanel
+                compactCounterBar
             }
         case .counterOnly:
             counterPanel
@@ -529,6 +529,98 @@ struct ProjectWorkspaceView: View {
                 isShowingUnlinkPatternConfirmation = true
             }
         )
+    }
+
+    private var patternFocusPanel: some View {
+        ProjectPatternFocusView(
+            viewModel: viewModel,
+            directImportAction: {
+                isShowingDirectPatternImporter = true
+            },
+            scanAction: {
+                isShowingPatternDocumentScanner = true
+            },
+            libraryAction: {
+                Task { @MainActor in
+                    await viewModel.loadAvailablePatterns()
+                    isShowingLibraryPicker = true
+                }
+            },
+            manualInputAction: {
+                manualPatternTitle = viewModel.project.patternCopy?.titleSnapshot ?? ""
+                isShowingManualPatternSheet = true
+            },
+            showPDFAction: {
+                isShowingPDFViewer = true
+            },
+            lookupAction: {
+                isShowingPatternLookup = true
+            },
+            clearDrawingAction: {
+                isShowingClearDrawingConfirmation = true
+            },
+            unlinkAction: {
+                isShowingUnlinkPatternConfirmation = true
+            }
+        )
+    }
+
+    private var compactCounterBar: some View {
+        HStack(spacing: AppTheme.Spacing.md) {
+            Button {
+                Task {
+                    await viewModel.decrementRow()
+                }
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(AppTheme.Color.accent)
+                    .frame(width: 48, height: 48)
+                    .background(AppTheme.Color.accentSoft, in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
+            .disabled(viewModel.currentRow == 0)
+            .opacity(viewModel.currentRow == 0 ? 0.4 : 1)
+
+            Button {
+                isShowingCurrentRowEditor = true
+            } label: {
+                VStack(spacing: 2) {
+                    Text(viewModel.currentRow == 0 ? "시작 전" : "\(viewModel.currentRow)단")
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(.primary)
+
+                    if let targetRow = viewModel.rowCounter.targetRow {
+                        Text("목표 \(targetRow)단")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
+
+            Button {
+                Task {
+                    await viewModel.incrementRow()
+                    presentCompletionPromptIfNeeded()
+                }
+            } label: {
+                Image(systemName: "chevron.right")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 48, height: 48)
+                    .background(AppTheme.Color.accent, in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNextButton)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .appCard(cornerRadius: 20)
     }
 
     private var counterPanel: some View {
