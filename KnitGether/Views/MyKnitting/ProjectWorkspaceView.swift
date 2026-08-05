@@ -581,29 +581,16 @@ struct ProjectWorkspaceView: View {
     }
 
     private var compactCounterBar: some View {
-        HStack(spacing: AppTheme.Spacing.md) {
+        ZStack {
             Button {
                 Task {
-                    await viewModel.decrementRow()
+                    await viewModel.incrementRow()
+                    presentCompletionPromptIfNeeded()
                 }
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(AppTheme.Color.accent)
-                    .frame(width: 48, height: 48)
-                    .background(AppTheme.Color.accentSoft, in: Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
-            .disabled(viewModel.currentRow == 0)
-            .opacity(viewModel.currentRow == 0 ? 0.4 : 1)
-
-            Button {
-                isShowingCurrentRowEditor = true
             } label: {
                 VStack(spacing: 2) {
                     Text(viewModel.currentRow == 0 ? "시작 전" : "\(viewModel.currentRow)단")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .font(.system(size: 40, weight: .bold, design: .rounded))
                         .monospacedDigit()
                         .foregroundStyle(.primary)
 
@@ -613,28 +600,49 @@ struct ProjectWorkspaceView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
-
-            Button {
-                Task {
-                    await viewModel.incrementRow()
-                    presentCompletionPromptIfNeeded()
-                }
-            } label: {
-                Image(systemName: "chevron.right")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 48, height: 48)
-                    .background(AppTheme.Color.accent, in: Circle())
+                .frame(maxWidth: .infinity, minHeight: 84)
+                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNextButton)
+            .accessibilityLabel("단수 올리기")
+
+            HStack {
+                Button {
+                    Task {
+                        await viewModel.decrementRow()
+                    }
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(AppTheme.Color.accent)
+                        .frame(width: 40, height: 40)
+                        .background(AppTheme.Color.accentSoft, in: Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
+                .accessibilityLabel("단수 내리기")
+                .disabled(viewModel.currentRow == 0)
+                .opacity(viewModel.currentRow == 0 ? 0.4 : 1)
+
+                Spacer()
+
+                Button {
+                    isShowingCurrentRowEditor = true
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 40, height: 40)
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier(AppAccessibilityID.Workspace.counterEditCurrentButton)
+                .accessibilityLabel("단수 직접 입력")
+            }
+            .padding(.horizontal, 12)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 4)
+        .padding(.vertical, 6)
         .appCard(cornerRadius: 20)
     }
 
