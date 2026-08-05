@@ -622,7 +622,13 @@ struct ProjectWorkspaceView: View {
             .accessibilityLabel("단수 올리기")
 
             HStack {
+                // disabled를 쓰면 비활성 상태에서 터치가 뒤에 깔린 증가 영역으로 통과한다.
+                // 항상 활성 상태로 두고 동작만 막아 터치를 이 버튼이 흡수하게 한다.
                 Button {
+                    guard viewModel.currentRow > 0 else {
+                        return
+                    }
+
                     counterHaptic.impactOccurred(intensity: 0.6)
 
                     Task {
@@ -638,7 +644,6 @@ struct ProjectWorkspaceView: View {
                 .buttonStyle(.plain)
                 .accessibilityIdentifier(AppAccessibilityID.Workspace.counterPreviousButton)
                 .accessibilityLabel("단수 내리기")
-                .disabled(viewModel.currentRow == 0)
                 .opacity(viewModel.currentRow == 0 ? 0.35 : 1)
 
                 Spacer()
