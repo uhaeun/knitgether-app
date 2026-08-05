@@ -12,7 +12,7 @@ struct ProjectPatternFocusView: View {
     let unlinkAction: () -> Void
 
     private var previewHeight: CGFloat {
-        UIScreen.main.bounds.height * 0.55
+        UIScreen.main.bounds.height * 0.68
     }
 
     var body: some View {
@@ -20,7 +20,7 @@ struct ProjectPatternFocusView: View {
             header
             patternPreview
         }
-        .padding(12)
+        .padding(8)
         .appCard(cornerRadius: 20)
     }
 
