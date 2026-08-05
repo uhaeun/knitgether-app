@@ -16,9 +16,6 @@ enum ProjectWorkspaceDisplayMode: String, Codable, CaseIterable, Identifiable, H
         rawValue
     }
 
-    // patternOnly는 저장 호환용으로만 유지하고 선택지에서는 제외한다
-    static let selectableCases: [ProjectWorkspaceDisplayMode] = [.patternAndCounter, .counterOnly]
-
     var title: String {
         switch self {
         case .patternOnly:

@@ -33,6 +33,7 @@ struct ProjectWorkspaceView: View {
     @State private var isShowingCounterMemoEditor = false
     @State private var isShowingYarnUsageSheet = false
     @State private var isShowingWorkSessionList = false
+    @State private var isCounterSheetExpanded = false
     @State private var editingYarnUsage: ProjectYarnUsage?
     @State private var rowInstructionSheet: RowInstructionSheet?
     @State private var pendingPatternFileImport: PendingPatternFileImport?
@@ -395,7 +396,7 @@ struct ProjectWorkspaceView: View {
 
     @ViewBuilder
     private var mainLayout: some View {
-        if selectedTab == .working && viewModel.displayMode != .counterOnly {
+        if selectedTab == .working {
             patternFocusLayout
         } else {
             scrollLayout
@@ -407,13 +408,7 @@ struct ProjectWorkspaceView: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                 ProjectWorkspaceHeaderView(viewModel: viewModel)
                 workspaceTabPicker
-
-                switch selectedTab {
-                case .working:
-                    workingTabSections
-                case .info:
-                    infoTabSections
-                }
+                infoTabSections
             }
             .padding(.horizontal, 20)
             .padding(.top, 14)
@@ -422,39 +417,78 @@ struct ProjectWorkspaceView: View {
     }
 
     private var patternFocusLayout: some View {
-        VStack(spacing: AppTheme.Spacing.md) {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-                ProjectWorkspaceHeaderView(viewModel: viewModel)
-                workspaceTabPicker
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 14)
-
-            patternFocusPanel
-
-            compactCounterBar
+        ZStack(alignment: .bottom) {
+            VStack(spacing: AppTheme.Spacing.md) {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                    ProjectWorkspaceHeaderView(viewModel: viewModel)
+                    workspaceTabPicker
+                }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+                .padding(.top, 14)
+
+                patternFocusPanel
+
+                Spacer(minLength: 96)
+            }
+
+            counterSheet
         }
     }
 
-    @ViewBuilder
-    private var workingTabSections: some View {
-        displayModePicker
-        mainWorkspaceArea
-        ProjectWorkTimePanelView(
-            viewModel: viewModel,
-            startAction: {
-                viewModel.startWorkSession()
-            },
-            finishAction: {
-                Task {
-                    await viewModel.finishWorkSession()
+    private var counterSheet: some View {
+        VStack(spacing: 0) {
+            Capsule()
+                .fill(AppTheme.Color.warmDivider)
+                .frame(width: 40, height: 5)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
+
+            if isCounterSheetExpanded {
+                ScrollView {
+                    VStack(spacing: AppTheme.Spacing.md) {
+                        counterPanel
+
+                        ProjectWorkTimePanelView(
+                            viewModel: viewModel,
+                            startAction: {
+                                viewModel.startWorkSession()
+                            },
+                            finishAction: {
+                                Task {
+                                    await viewModel.finishWorkSession()
+                                }
+                            },
+                            showSessionsAction: {
+                                isShowingWorkSessionList = true
+                            }
+                        )
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 24)
                 }
-            },
-            showSessionsAction: {
-                isShowingWorkSessionList = true
+                .frame(height: UIScreen.main.bounds.height * 0.58)
+            } else {
+                compactCounterBar
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 10)
             }
+        }
+        .frame(maxWidth: .infinity)
+        .background(AppTheme.Color.warmBackground)
+        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20))
+        .shadow(color: .black.opacity(0.12), radius: 8, y: -2)
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture(minimumDistance: 20)
+                .onEnded { value in
+                    withAnimation(.spring(duration: 0.3)) {
+                        if value.translation.height < -40 {
+                            isCounterSheetExpanded = true
+                        } else if value.translation.height > 40 {
+                            isCounterSheetExpanded = false
+                        }
+                    }
+                }
         )
     }
 
@@ -495,32 +529,9 @@ struct ProjectWorkspaceView: View {
         relatedSkillsSection
     }
 
-    private var displayModePicker: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeaderView("보기 모드")
-
-            Picker("보기 모드", selection: displayModeBinding) {
-                ForEach(ProjectWorkspaceDisplayMode.selectableCases) { mode in
-                    Text(mode.title).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
-            .tint(AppTheme.Color.accent)
-            .accessibilityIdentifier(AppAccessibilityID.Workspace.displayModePicker)
-        }
-        .padding(16)
-        .appCard(cornerRadius: 20)
-    }
-
-    // 뜨는 중 탭에서 스크롤 레이아웃은 카운터만 모드에서만 쓰인다 (mainLayout 분기 참조)
-    private var mainWorkspaceArea: some View {
-        counterPanel
-    }
-
     private var patternFocusPanel: some View {
         ProjectPatternFocusView(
             viewModel: viewModel,
-            displayMode: displayModeBinding,
             directImportAction: {
                 isShowingDirectPatternImporter = true
             },
@@ -737,17 +748,6 @@ struct ProjectWorkspaceView: View {
                 )
             }
         }
-    }
-
-    private var displayModeBinding: Binding<ProjectWorkspaceDisplayMode> {
-        Binding(
-            get: { viewModel.displayMode },
-            set: { mode in
-                Task {
-                    await viewModel.updateDisplayMode(mode)
-                }
-            }
-        )
     }
 
     private var counterModeBinding: Binding<RowCounterMode> {

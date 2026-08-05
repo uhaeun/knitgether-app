@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ProjectPatternFocusView: View {
     @ObservedObject var viewModel: ProjectWorkspaceViewModel
-    @Binding var displayMode: ProjectWorkspaceDisplayMode
     let directImportAction: () -> Void
     let scanAction: () -> Void
     let libraryAction: () -> Void
@@ -35,24 +34,8 @@ struct ProjectPatternFocusView: View {
             Spacer(minLength: 8)
 
             modeToggle
-            counterModeButton
             actionMenu
         }
-    }
-
-    private var counterModeButton: some View {
-        Button {
-            displayMode = .counterOnly
-        } label: {
-            Image(systemName: "list.number")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(AppTheme.Color.accent)
-                .frame(width: 34, height: 34)
-                .background(.thinMaterial, in: Circle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("카운터만 보기")
-        .accessibilityIdentifier(AppAccessibilityID.Workspace.displayModePicker)
     }
 
     private var modeToggle: some View {
