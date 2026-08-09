@@ -34,6 +34,8 @@ struct ProjectWorkspaceView: View {
     @State private var isShowingYarnUsageSheet = false
     @State private var isShowingWorkSessionList = false
     @State private var isCounterSheetExpanded = false
+    @State private var isConfirmingPatternReplacement = false
+    @State private var pendingPatternAction: (() -> Void)?
     private let counterHaptic = UIImpactFeedbackGenerator(style: .medium)
     @State private var editingYarnUsage: ProjectYarnUsage?
     @State private var rowInstructionSheet: RowInstructionSheet?
@@ -327,6 +329,19 @@ struct ProjectWorkspaceView: View {
         } message: {
             Text("이 프로젝트에서 도안 연결만 해제돼요. 도안 창고의 원본은 삭제되지 않아요.")
         }
+        .alert("기존 도안을 교체할까요?", isPresented: $isConfirmingPatternReplacement) {
+            Button("취소", role: .cancel) {
+                pendingPatternAction = nil
+            }
+
+            Button("교체", role: .destructive) {
+                let action = pendingPatternAction
+                pendingPatternAction = nil
+                action?()
+            }
+        } message: {
+            Text("기존 도안이 있어요. 교체하면 기존 도안에 작성한 드로잉이 삭제돼요. 그래도 교체할까요?")
+        }
         .alert("단수를 리셋할까요?", isPresented: $isShowingResetCounterConfirmation) {
             Button("취소", role: .cancel) {
             }
@@ -551,20 +566,28 @@ struct ProjectWorkspaceView: View {
         ProjectPatternFocusView(
             viewModel: viewModel,
             directImportAction: {
-                isShowingDirectPatternImporter = true
+                requestPatternChange {
+                    isShowingDirectPatternImporter = true
+                }
             },
             scanAction: {
-                isShowingPatternDocumentScanner = true
+                requestPatternChange {
+                    isShowingPatternDocumentScanner = true
+                }
             },
             libraryAction: {
-                Task { @MainActor in
-                    await viewModel.loadAvailablePatterns()
-                    isShowingLibraryPicker = true
+                requestPatternChange {
+                    Task { @MainActor in
+                        await viewModel.loadAvailablePatterns()
+                        isShowingLibraryPicker = true
+                    }
                 }
             },
             manualInputAction: {
-                manualPatternTitle = viewModel.project.patternCopy?.titleSnapshot ?? ""
-                isShowingManualPatternSheet = true
+                requestPatternChange {
+                    manualPatternTitle = viewModel.project.patternCopy?.titleSnapshot ?? ""
+                    isShowingManualPatternSheet = true
+                }
             },
             showPDFAction: {
                 isShowingPDFViewer = true
@@ -579,6 +602,17 @@ struct ProjectWorkspaceView: View {
                 isShowingUnlinkPatternConfirmation = true
             }
         )
+    }
+
+    // 기존 도안이 있으면 새 도안 연결 전에 교체 확인을 받는다(LINK-01).
+    // 기존 도안의 드로잉이 삭제된다는 점을 알리고, 교체 확정 시에만 실제 연결 흐름을 연다.
+    private func requestPatternChange(_ action: @escaping () -> Void) {
+        if viewModel.project.patternCopy != nil {
+            pendingPatternAction = action
+            isConfirmingPatternReplacement = true
+        } else {
+            action()
+        }
     }
 
     // 세 영역을 나란히 두어 터치 영역이 겹치지 않게 한다.
