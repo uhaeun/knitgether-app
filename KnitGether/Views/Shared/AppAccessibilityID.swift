@@ -42,6 +42,7 @@ enum AppAccessibilityID {
         static let patternUnlinkButton = "workspace.pattern.unlink"
         static let patternFocusModeToggle = "workspace.pattern.focus.mode_toggle"
         static let patternFocusMenuButton = "workspace.pattern.focus.menu"
+        static let counterSheetToggle = "workspace.counter.sheet_toggle"
         static let counterModePicker = "workspace.counter.mode"
         static let counterPreviousButton = "workspace.counter.previous"
         static let counterNextButton = "workspace.counter.next"

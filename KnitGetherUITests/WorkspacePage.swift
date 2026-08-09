@@ -9,11 +9,29 @@ struct WorkspacePage: UITestPage {
     let app: XCUIApplication
 
     func expectVisible() {
+        // 작업 공간 개편 후 내비바 타이틀은 프로젝트명이고, 카운터 바가 진입 화면의
+        // 안정 식별자다. 구화면 체크는 짧은 fallback으로만 남긴다.
         XCTAssertTrue(
-            app.navigationBars["작업 공간"].waitForExistence(timeout: 12)
-                || app.staticTexts["단수 카운터"].waitForExistence(timeout: 12),
+            app.buttons["workspace.counter.next"].waitForExistence(timeout: 12)
+                || app.navigationBars["작업 공간"].waitForExistence(timeout: 2)
+                || app.staticTexts["단수 카운터"].waitForExistence(timeout: 2),
             "작업 공간 화면이 보여야 합니다."
         )
+    }
+
+    /// 카운터 시트를 펼친다. 모드 전환, 단수 요약, 타이머, 세션 UI는 시트 안에 있다.
+    @discardableResult
+    func expandCounterSheetIfNeeded() -> WorkspacePage {
+        if anyElement("workspace.counter.mode").exists {
+            return self
+        }
+
+        tap(app.buttons["workspace.counter.sheet_toggle"].firstMatch)
+        XCTAssertTrue(
+            anyElement("workspace.counter.mode").waitForExistence(timeout: 12),
+            "카운터 시트를 펼치면 카운터 모드 픽커가 보여야 합니다."
+        )
+        return self
     }
 
     @discardableResult
@@ -24,9 +42,12 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func expectCurrentRow(_ row: Int) -> WorkspacePage {
+        // 시트를 펼치면 카운터 패널이 구화면과 같은 요약 문구를 표시한다.
+        expandCounterSheetIfNeeded()
         XCTAssertTrue(
             app.staticTexts["현재 \(row)단"].waitForExistence(timeout: 12)
-                || app.staticTexts["\(row)단 · 총 단수 미설정"].waitForExistence(timeout: 12),
+                || app.staticTexts["\(row)단 · 총 단수 미설정"].waitForExistence(timeout: 12)
+                || (row == 0 && app.staticTexts["시작 전"].waitForExistence(timeout: 2)),
             "현재 단수가 \(row)단으로 표시되어야 합니다."
         )
         return self
@@ -34,6 +55,12 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func enableRowGuideMode() -> WorkspacePage {
+        if app.buttons["workspace.row_instruction.add"].exists {
+            return self
+        }
+
+        expandCounterSheetIfNeeded()
+
         if app.buttons["workspace.row_instruction.add"].exists {
             return self
         }
@@ -63,7 +90,7 @@ struct WorkspacePage: UITestPage {
         }
         tap(app.buttons["workspace.row_instruction.form.save"].firstMatch)
         XCTAssertTrue(
-            app.navigationBars["작업 공간"].waitForExistence(timeout: 12),
+            app.navigationBars["행안내 추가"].firstMatch.waitForNonExistence(timeout: 12),
             "행안내 저장 후 작업공간으로 돌아와야 합니다."
         )
         return self
@@ -71,6 +98,7 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func editFirstRowInstruction(row: Int, text: String, skillTags: String = "") -> WorkspacePage {
+        expandCounterSheetIfNeeded()
         tap(app.buttons["행안내 수정"].firstMatch)
         XCTAssertTrue(
             app.navigationBars["행안내 수정"].waitForExistence(timeout: 12),
@@ -85,7 +113,7 @@ struct WorkspacePage: UITestPage {
         }
         tap(app.buttons["workspace.row_instruction.form.save"].firstMatch)
         XCTAssertTrue(
-            app.navigationBars["작업 공간"].waitForExistence(timeout: 12),
+            app.navigationBars["행안내 수정"].firstMatch.waitForNonExistence(timeout: 12),
             "행안내 수정 후 작업공간으로 돌아와야 합니다."
         )
         return self
@@ -93,6 +121,7 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func deleteFirstRowInstruction() -> WorkspacePage {
+        expandCounterSheetIfNeeded()
         tap(app.buttons["행안내 삭제"].firstMatch)
         let alert = app.alerts["행안내를 삭제할까요?"].firstMatch
         XCTAssertTrue(
@@ -105,6 +134,8 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func expectRowInstruction(text: String) -> WorkspacePage {
+        // 행안내 목록은 카운터 시트 안에 있어 재실행 직후에는 시트를 펼쳐야 보인다.
+        expandCounterSheetIfNeeded()
         XCTAssertTrue(
             waitForStaticText(text),
             "행안내가 보여야 합니다: \(text)"
@@ -114,6 +145,7 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func expectRowInstructionNotVisible(text: String) -> WorkspacePage {
+        expandCounterSheetIfNeeded()
         XCTAssertFalse(
             app.staticTexts[text].waitForExistence(timeout: 5),
             "삭제되거나 수정된 행안내가 보이면 안 됩니다: \(text)"
@@ -142,6 +174,8 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func expectWorkTimerRunning() -> WorkspacePage {
+        // 타이머 패널은 카운터 시트를 펼쳐야 보인다.
+        expandCounterSheetIfNeeded()
         XCTAssertTrue(
             app.buttons["workspace.work_time.finish"].waitForExistence(timeout: 12)
                 || app.staticTexts["작업 시간을 기록 중이에요."].waitForExistence(timeout: 12),
@@ -152,6 +186,7 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func finishCurrentWorkSessionAfterMinimumDuration() -> WorkspacePage {
+        expandCounterSheetIfNeeded()
         Thread.sleep(forTimeInterval: 11)
         tap(app.buttons["workspace.work_time.finish"].firstMatch)
         _ = waitUntilWorkSessionsButtonIsReady()
@@ -160,6 +195,7 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func openWorkSessions() -> WorkspacePage {
+        expandCounterSheetIfNeeded()
         let sessionsButton = waitUntilWorkSessionsButtonIsReady()
         sessionsButton.tap()
 
@@ -215,6 +251,7 @@ struct WorkspacePage: UITestPage {
 
     @discardableResult
     func expectWorkSessionsUnavailable() -> WorkspacePage {
+        expandCounterSheetIfNeeded()
         let sessionsButton = app.buttons["workspace.work_time.sessions"].firstMatch
         XCTAssertTrue(
             sessionsButton.waitForExistence(timeout: 12),

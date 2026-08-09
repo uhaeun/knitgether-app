@@ -487,11 +487,24 @@ struct ProjectWorkspaceView: View {
 
     private var counterSheet: some View {
         VStack(spacing: 0) {
-            Capsule()
-                .fill(AppTheme.Color.warmDivider)
-                .frame(width: 40, height: 5)
-                .padding(.top, 8)
-                .padding(.bottom, 4)
+            // 스와이프 외에 탭으로도 시트를 여닫을 수 있게 한다.
+            // UI 자동화가 드래그 제스처 없이 안정적으로 확장할 수 있는 입구이기도 하다.
+            Button {
+                withAnimation(.spring(duration: 0.3)) {
+                    isCounterSheetExpanded.toggle()
+                }
+            } label: {
+                Capsule()
+                    .fill(AppTheme.Color.warmDivider)
+                    .frame(width: 40, height: 5)
+                    .padding(.top, 8)
+                    .padding(.bottom, 4)
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier(AppAccessibilityID.Workspace.counterSheetToggle)
+            .accessibilityLabel(isCounterSheetExpanded ? "카운터 시트 접기" : "카운터 시트 펼치기")
 
             if isCounterSheetExpanded {
                 ScrollView {
