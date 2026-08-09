@@ -18,7 +18,7 @@ final class OfflineFirstSkillRepository: SkillRepository {
 
         do {
             let remoteSkills = try await remote.fetchSkills()
-            try await local.cacheSyncedSkills(remoteSkills)
+            try await local.cacheSyncedSkills(remoteSkills, pruningStaleEntries: true)
         } catch {
             guard shouldDefer(error) else {
                 throw error

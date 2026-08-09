@@ -1916,7 +1916,10 @@ final class LocalSkillRepository: SkillRepository {
         try persistSkills()
     }
 
-    func cacheSyncedSkills(_ remoteSkills: [Skill]) async throws {
+    func cacheSyncedSkills(
+        _ remoteSkills: [Skill],
+        pruningStaleEntries: Bool = false
+    ) async throws {
         for remoteSkill in remoteSkills {
             let syncedSkill = Self.copySkill(remoteSkill, syncStatus: .synced)
 
@@ -1928,6 +1931,15 @@ final class LocalSkillRepository: SkillRepository {
                 skills[index] = syncedSkill
             } else {
                 skills.append(syncedSkill)
+            }
+        }
+
+        if pruningStaleEntries {
+            // 전체 목록 동기화에서만 사용한다. 서버가 더 이상 제공하지 않는 synced 스킬은
+            // 삭제된 것이므로 제거해 관련 스킬 표시에 잔존하지 않게 한다(LINK-03).
+            let remoteIds = Set(remoteSkills.map(\.id))
+            skills.removeAll { skill in
+                !remoteIds.contains(skill.id) && !skill.syncStatus.needsUpload
             }
         }
 
