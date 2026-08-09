@@ -1575,6 +1575,30 @@ export class ProjectsService {
 
     const scalarInput = this.toProjectPatternCopyScalarInput(copy);
 
+    const existing = await transaction.projectPatternCopy.findUnique({
+      where: { projectId: body.id },
+    });
+
+    // 다른 도안으로 교체되는 경우(복사본 id가 바뀜) 기존 레코드를 지우고 새로 만든다.
+    // upsert의 update 브랜치는 scalarInput에 없는 파일/드로잉 키를 갱신하지 않아
+    // 이전 도안의 파일과 드로잉이 새 도안에 그대로 계승된다(결함 37). 완전 교체로 참조를 끊는다.
+    // 교체로 참조가 끊긴 물리 파일 정리는 RC-08(파일 고아화)에서 별도로 다룬다.
+    if (existing && existing.id !== copy.id) {
+      await transaction.projectPatternCopy.delete({
+        where: { projectId: body.id },
+      });
+      await transaction.projectPatternCopy.create({
+        data: {
+          id: copy.id,
+          ownerId,
+          projectId: body.id,
+          ...scalarInput,
+          deletedAt: null,
+        },
+      });
+      return;
+    }
+
     await transaction.projectPatternCopy.upsert({
       where: {
         projectId: body.id,
