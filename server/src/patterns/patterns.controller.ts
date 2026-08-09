@@ -70,6 +70,22 @@ export class PatternsController {
     return this.patternsService.updatePattern(currentUser.id, id, body);
   }
 
+  @Post(':id/file')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: Number(process.env.PATTERN_UPLOAD_MAX_BYTES ?? 52_428_800),
+      },
+    }),
+  )
+  attachPatternFile(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @UploadedFile() file?: UploadedPatternFile,
+  ): Promise<PatternResponseDto> {
+    return this.patternsService.attachPatternFile(currentUser.id, id, file);
+  }
+
   @Get(':id/file')
   async downloadPatternFile(
     @CurrentUser() currentUser: CurrentUserPayload,

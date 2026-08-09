@@ -643,6 +643,14 @@ struct GaugeCalculatorViewModelTests {
             throw GaugeReloadStubError.fetchFailed
         }
 
+        func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+            throw GaugeReloadStubError.fetchFailed
+        }
+
+        func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+            throw GaugeReloadStubError.fetchFailed
+        }
+
         func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
             throw GaugeReloadStubError.fetchFailed
         }

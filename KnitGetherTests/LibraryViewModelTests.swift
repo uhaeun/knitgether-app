@@ -209,6 +209,14 @@ private final class PatternRepositoryStub: PatternRepository {
         throw LibraryRepositoryStubError.unsupported
     }
 
+    func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+        throw LibraryRepositoryStubError.unsupported
+    }
+
+    func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+        throw LibraryRepositoryStubError.unsupported
+    }
+
     func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
         throw LibraryRepositoryStubError.unsupported
     }

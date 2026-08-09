@@ -41,6 +41,11 @@ export class PatternsService {
     fields: PatternCreateFieldsDto,
     file: UploadedPatternFile | undefined,
   ): Promise<PatternResponseDto> {
+    // 파일 없는 생성 허용: 제목을 먼저 등록하고 파일은 attachPatternFile로 나중에 채운다.
+    if (!file) {
+      return this.createTitleOnlyPattern(ownerId, fields);
+    }
+
     this.assertPdf(file);
 
     const patternId = fields.id ?? randomUUID();
@@ -127,6 +132,96 @@ export class PatternsService {
       include: {
         storedFile: true,
       },
+    });
+
+    return PatternResponseDto.fromModel(pattern);
+  }
+
+  async attachPatternFile(
+    ownerId: string,
+    id: string,
+    file: UploadedPatternFile | undefined,
+  ): Promise<PatternResponseDto> {
+    this.assertPdf(file);
+
+    const pattern = await this.findActivePattern(ownerId, id);
+
+    // 파일 채우기는 파일이 없는 도안에만 허용한다. 파일 교체는 별도 판단 대상이다.
+    if (pattern.storedFile && !pattern.storedFile.deletedAt) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Pattern already has a file.',
+      });
+    }
+
+    const fileId = randomUUID();
+    const stored = await this.fileStorage.savePatternPdf({
+      ownerId,
+      patternId: id,
+      fileId,
+      buffer: file.buffer,
+    });
+
+    const updated = await this.prisma.patternDocument.update({
+      where: { id },
+      data: {
+        fileName: file.originalname,
+        storedFile: {
+          create: {
+            id: fileId,
+            ownerId,
+            kind: 'patternPdf',
+            originalFileName: file.originalname,
+            contentType: 'application/pdf',
+            byteSize: stored.byteSize,
+            storageKey: stored.storageKey,
+            deletedAt: null,
+          },
+        },
+      },
+      include: {
+        storedFile: true,
+      },
+    });
+
+    return PatternResponseDto.fromModel(updated);
+  }
+
+  private async createTitleOnlyPattern(
+    ownerId: string,
+    fields: PatternCreateFieldsDto,
+  ): Promise<PatternResponseDto> {
+    const title = fields.title?.trim();
+
+    if (!title) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Title is required when no file is uploaded.',
+      });
+    }
+
+    const pattern = await this.prisma.$transaction(async (transaction) => {
+      await this.ensureUserProfile(transaction, ownerId);
+
+      return transaction.patternDocument.create({
+        data: {
+          id: fields.id ?? randomUUID(),
+          title,
+          designer: this.trimmedOrNull(fields.designer),
+          fileName: null,
+          pageCount: fields.pageCount,
+          notes: fields.notes ?? '',
+          deletedAt: null,
+          owner: {
+            connect: {
+              id: ownerId,
+            },
+          },
+        },
+        include: {
+          storedFile: true,
+        },
+      });
     });
 
     return PatternResponseDto.fromModel(pattern);

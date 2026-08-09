@@ -12,6 +12,7 @@ struct PatternLibraryView: View {
     @StateObject private var viewModel: PatternLibraryViewModel
     @State private var isShowingFileImporter = false
     @State private var isShowingDocumentScanner = false
+    @State private var isShowingTitleFirstForm = false
     @State private var patternPendingDetail: PatternDocument?
     @State private var patternPendingEdit: PatternDocument?
     @State private var patternPendingDeletion: PatternDocument?
@@ -69,6 +70,12 @@ struct PatternLibraryView: View {
                     } label: {
                         Label("문서 스캔", systemImage: "doc.viewfinder")
                     }
+
+                    Button {
+                        isShowingTitleFirstForm = true
+                    } label: {
+                        Label("제목으로 먼저 만들기", systemImage: "square.and.pencil")
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -89,14 +96,29 @@ struct PatternLibraryView: View {
                 handleScannedPatternResult(result)
             }
         }
+        .sheet(isPresented: $isShowingTitleFirstForm) {
+            PatternFormView(title: "제목으로 먼저 만들기") { formData in
+                await viewModel.createTitledPattern(from: formData)
+            }
+        }
         .sheet(item: $patternPendingDetail) { pattern in
             PatternDetailView(
                 pattern: pattern,
-                fileURL: viewModel.fileURL(for: pattern)
-            ) {
-                patternPendingDetail = nil
-                patternPendingEdit = pattern
-            }
+                fileURL: viewModel.fileURL(for: pattern),
+                onEdit: {
+                    patternPendingDetail = nil
+                    patternPendingEdit = pattern
+                },
+                onAttachFile: { fileURL in
+                    let updated = await viewModel.attachFile(fromFileAt: fileURL, to: pattern)
+
+                    if let updated {
+                        patternPendingDetail = updated
+                    }
+
+                    return updated != nil
+                }
+            )
         }
         .sheet(item: $patternPendingEdit) { pattern in
             PatternFormView(
@@ -280,9 +302,14 @@ struct PatternLibraryView: View {
 }
 
 private struct PatternDetailView: View {
+    @State private var isShowingAttachImporter = false
+    @State private var isAttachingFile = false
+    @State private var attachErrorMessage: String?
+
     let pattern: PatternDocument
     let fileURL: URL?
     let onEdit: () -> Void
+    var onAttachFile: ((URL) async -> Bool)? = nil
 
     var body: some View {
         NavigationStack {
@@ -328,8 +355,33 @@ private struct PatternDetailView: View {
                             }
                             .buttonStyle(.plain)
                         } else {
-                            Label("PDF 파일 없음", systemImage: "exclamationmark.triangle")
-                                .foregroundStyle(.secondary)
+                            VStack(alignment: .leading, spacing: 10) {
+                                Label("PDF 파일 없음", systemImage: "exclamationmark.triangle")
+                                    .foregroundStyle(.secondary)
+
+                                if onAttachFile != nil {
+                                    Button {
+                                        isShowingAttachImporter = true
+                                    } label: {
+                                        if isAttachingFile {
+                                            ProgressView()
+                                                .frame(maxWidth: .infinity)
+                                        } else {
+                                            Label("PDF 파일 채우기", systemImage: "doc.badge.plus")
+                                                .frame(maxWidth: .infinity)
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .tint(AppTheme.Color.accent)
+                                    .disabled(isAttachingFile)
+                                }
+
+                                if let attachErrorMessage {
+                                    Text(attachErrorMessage)
+                                        .font(.caption)
+                                        .foregroundStyle(AppTheme.Color.rose)
+                                }
+                            }
                         }
                     }
 
@@ -366,6 +418,22 @@ private struct PatternDetailView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button("수정", action: onEdit)
                         .accessibilityIdentifier(AppAccessibilityID.Library.patternEditButton)
+                }
+            }
+            .fileImporter(
+                isPresented: $isShowingAttachImporter,
+                allowedContentTypes: [.pdf],
+                allowsMultipleSelection: false
+            ) { result in
+                guard case .success(let urls) = result, let fileURL = urls.first else {
+                    return
+                }
+
+                Task {
+                    isAttachingFile = true
+                    let didAttach = await onAttachFile?(fileURL) ?? false
+                    isAttachingFile = false
+                    attachErrorMessage = didAttach ? nil : "파일을 저장하지 못했어요. 서버 연결을 확인해 주세요."
                 }
             }
         }

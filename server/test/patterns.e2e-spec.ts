@@ -216,6 +216,107 @@ describe('Patterns route', () => {
       });
   });
 
+  it('creates a title-only pattern without a file', async () => {
+    const titleOnlyPattern = {
+      ...activePattern,
+      fileName: null,
+      storedFileId: null,
+      storedFile: null,
+    };
+    prisma.patternDocument.create.mockResolvedValue(titleOnlyPattern);
+
+    const response = await request(app.getHttpServer())
+      .post('/api/v1/patterns')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        id: patternId,
+        title: 'Cozy Shawl',
+        designer: 'Yu',
+        notes: 'Use lace markers.',
+      })
+      .expect(201);
+
+    expect(prisma.patternDocument.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        id: patternId,
+        title: 'Cozy Shawl',
+        designer: 'Yu',
+        fileName: null,
+        notes: 'Use lace markers.',
+      }),
+      include: {
+        storedFile: true,
+      },
+    });
+    expect(response.body.fileName).toBeNull();
+  });
+
+  it('rejects a fileless creation without title', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/patterns')
+      .set('Authorization', 'Bearer dev-token')
+      .send({ designer: 'Yu' })
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('VALIDATION_FAILED');
+      });
+
+    expect(prisma.patternDocument.create).not.toHaveBeenCalled();
+  });
+
+  it('attaches a PDF to a pattern that has no file yet', async () => {
+    prisma.patternDocument.findFirst.mockResolvedValue({
+      ...activePattern,
+      fileName: null,
+      storedFileId: null,
+      storedFile: null,
+    });
+
+    await request(app.getHttpServer())
+      .post(`/api/v1/patterns/${patternId}/file`)
+      .set('Authorization', 'Bearer dev-token')
+      .attach('file', pdfBytes, {
+        filename: 'cozy-shawl.pdf',
+        contentType: 'application/pdf',
+      })
+      .expect(201);
+
+    expect(prisma.patternDocument.update).toHaveBeenCalledWith({
+      where: { id: patternId },
+      data: expect.objectContaining({
+        fileName: 'cozy-shawl.pdf',
+        storedFile: {
+          create: expect.objectContaining({
+            ownerId: 'user-a',
+            kind: 'patternPdf',
+            originalFileName: 'cozy-shawl.pdf',
+            contentType: 'application/pdf',
+            byteSize: pdfBytes.byteLength,
+          }),
+        },
+      }),
+      include: {
+        storedFile: true,
+      },
+    });
+  });
+
+  it('rejects attaching a file when the pattern already has one', async () => {
+    await request(app.getHttpServer())
+      .post(`/api/v1/patterns/${patternId}/file`)
+      .set('Authorization', 'Bearer dev-token')
+      .attach('file', pdfBytes, {
+        filename: 'cozy-shawl.pdf',
+        contentType: 'application/pdf',
+      })
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('VALIDATION_FAILED');
+      });
+
+    expect(prisma.patternDocument.update).not.toHaveBeenCalled();
+  });
+
   it('returns only active patterns owned by the current user', async () => {
     const response = await request(app.getHttpServer())
       .get('/api/v1/patterns')

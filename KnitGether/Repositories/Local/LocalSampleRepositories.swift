@@ -351,6 +351,37 @@ final class LocalPatternRepository: PatternRepository {
         return pattern
     }
 
+    func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+        let now = Date()
+        let pattern = PatternDocument(
+            id: UUID(),
+            ownerId: SampleData.ownerId,
+            title: title,
+            designer: designer,
+            fileName: nil,
+            localFilePath: nil,
+            pageCount: nil,
+            notes: notes,
+            createdAt: now,
+            updatedAt: now
+        )
+
+        try await savePattern(pattern)
+        return pattern
+    }
+
+    func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+        let storedFile = try fileStore.storeLibraryPatternFile(from: fileURL, patternId: pattern.id)
+        let updated = pattern.copy(
+            fileName: storedFile.fileName,
+            localFilePath: storedFile.relativePath,
+            updatedAt: Date()
+        )
+
+        try await savePattern(updated)
+        return updated
+    }
+
     func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
         let copyId = UUID()
         let copiedFile: StoredPatternFile?

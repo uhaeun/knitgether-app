@@ -13,6 +13,8 @@ protocol PatternRepository {
     func savePattern(_ pattern: PatternDocument) async throws
     func deletePattern(id: UUID) async throws
     func createPattern(fromFileAt fileURL: URL) async throws -> PatternDocument
+    func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument
+    func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument
     func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy
     func createProjectPatternCopy(fromFileAt fileURL: URL, forProjectId projectId: UUID) async throws -> ProjectPatternCopy
     func fileURL(for pattern: PatternDocument) -> URL?

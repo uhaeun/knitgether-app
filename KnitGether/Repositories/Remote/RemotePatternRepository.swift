@@ -75,6 +75,47 @@ final class RemotePatternRepository: PatternRepository {
         return try await cacheFileIfNeeded(for: uploaded)
     }
 
+    func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+        let body = CreatePatternMetadataRequest(
+            id: nil,
+            title: title,
+            designer: designer,
+            pageCount: nil,
+            notes: notes
+        )
+        let created: PatternDocument = try await apiClient.send(
+            "patterns",
+            method: "POST",
+            body: body
+        )
+
+        cachedPatterns[created.id] = created
+        return created
+    }
+
+    func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+        let didStartAccessing = fileURL.startAccessingSecurityScopedResource()
+        defer {
+            if didStartAccessing {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        let fileData = try Data(contentsOf: fileURL)
+        let updated: PatternDocument = try await apiClient.uploadMultipart(
+            "patterns/\(pattern.id.uuidString.lowercased())/file",
+            fields: [:],
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: fileURL.lastPathComponent,
+                contentType: "application/pdf",
+                data: fileData
+            )
+        )
+
+        return try await cacheFileIfNeeded(for: updated)
+    }
+
     func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
         let cachedPattern = try await cacheFileIfNeeded(for: mergeCachedPath(into: pattern))
         let copyId = UUID()
@@ -214,6 +255,24 @@ final class RemotePatternRepository: PatternRepository {
     }
 
     private func uploadLocalPattern(_ pattern: PatternDocument) async throws {
+        // 제목 선행 도안(파일 없이 생성)은 메타데이터만 업로드한다.
+        if pattern.fileName == nil && pattern.localFilePath == nil {
+            let body = CreatePatternMetadataRequest(
+                id: pattern.id,
+                title: pattern.title,
+                designer: pattern.designer,
+                pageCount: pattern.pageCount,
+                notes: pattern.notes
+            )
+            let uploaded: PatternDocument = try await apiClient.send(
+                "patterns",
+                method: "POST",
+                body: body
+            )
+            cachedPatterns[uploaded.id] = uploaded
+            return
+        }
+
         guard let localURL = fileURL(for: pattern) else {
             throw APIError.unsupportedOperation("Pattern PDF file is missing.")
         }
@@ -234,6 +293,12 @@ final class RemotePatternRepository: PatternRepository {
     }
 
     private func cacheFileIfNeeded(for pattern: PatternDocument) async throws -> PatternDocument {
+        // 제목 선행 도안은 서버에도 파일이 없어 내려받기를 시도하지 않는다.
+        if pattern.fileName == nil && pattern.localFilePath == nil {
+            cachedPatterns[pattern.id] = pattern
+            return pattern
+        }
+
         if let localFilePath = pattern.localFilePath,
            fileExists(at: localFilePath) {
             cachedPatterns[pattern.id] = pattern
@@ -338,6 +403,14 @@ final class RemotePatternRepository: PatternRepository {
 
         return FileManager.default.fileExists(atPath: url.path)
     }
+}
+
+private struct CreatePatternMetadataRequest: Encodable {
+    let id: UUID?
+    let title: String
+    let designer: String?
+    let pageCount: Int?
+    let notes: String
 }
 
 private struct SavePatternRequest: Encodable {

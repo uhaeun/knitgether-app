@@ -126,6 +126,41 @@ final class PatternLibraryViewModel: ObservableObject {
         }
     }
 
+    /// 제목 선행 생성: 파일 없이 도안 정보만 먼저 등록한다. 파일은 상세에서 나중에 채운다.
+    func createTitledPattern(from formData: PatternFormData) async -> Bool {
+        guard formData.canSave else {
+            errorMessage = "도안 제목을 입력하고 페이지 수를 숫자로 적어 주세요."
+            return false
+        }
+
+        do {
+            _ = try await patternRepository.createPattern(
+                titled: formData.trimmedTitle,
+                designer: formData.trimmedDesigner,
+                notes: formData.trimmedNotes
+            )
+            patterns = try await patternRepository.fetchPatterns()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "도안을 등록하지 못했어요."
+            return false
+        }
+    }
+
+    /// 제목 선행 도안에 PDF 파일을 채운다. 서버 반영 실패 시 로컬을 바꾸지 않는다.
+    func attachFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async -> PatternDocument? {
+        do {
+            let updated = try await patternRepository.attachPatternFile(fromFileAt: fileURL, to: pattern)
+            patterns = try await patternRepository.fetchPatterns()
+            errorMessage = nil
+            return updated
+        } catch {
+            errorMessage = "도안 파일을 저장하지 못했어요. 서버 연결을 확인해 주세요."
+            return nil
+        }
+    }
+
     func updatePattern(_ pattern: PatternDocument, from formData: PatternFormData) async -> Bool {
         guard formData.canSave else {
             errorMessage = "도안 제목을 입력하고 페이지 수를 숫자로 적어 주세요."

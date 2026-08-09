@@ -100,6 +100,31 @@ final class OfflineFirstPatternRepository: PatternRepository {
         }
     }
 
+    func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+        let rollbackSnapshot = await local.makeRollbackSnapshot()
+        let localPattern = try await local.createPattern(titled: title, designer: designer, notes: notes)
+
+        do {
+            try await remote.savePattern(localPattern)
+            try await cacheServerPatternIfAvailable(fallback: localPattern)
+            return try await local.fetchPattern(id: localPattern.id) ?? localPattern.copy(syncStatus: .synced)
+        } catch {
+            try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
+
+            return localPattern
+        }
+    }
+
+    func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+        // 파일 첨부는 오프라인 재시도 동기화 경로가 없어 서버 반영을 먼저 확인한다.
+        // 서버 실패 시 로컬을 건드리지 않고 에러를 올려 로컬/서버 불일치를 만들지 않는다.
+        let remoteUpdated = try await remote.attachPatternFile(fromFileAt: fileURL, to: pattern)
+        let localUpdated = try await local.attachPatternFile(fromFileAt: fileURL, to: pattern)
+        try await local.markPatternSynced(remoteUpdated)
+
+        return try await local.fetchPattern(id: pattern.id) ?? localUpdated
+    }
+
     func importPattern(
         _ pattern: PatternDocument,
         forProjectId projectId: UUID

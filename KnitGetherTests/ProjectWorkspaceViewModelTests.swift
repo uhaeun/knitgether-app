@@ -1589,6 +1589,14 @@ struct ProjectWorkspaceViewModelTests {
             throw TestRepositoryError.unsupported
         }
 
+        func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+            throw TestRepositoryError.unsupported
+        }
+
+        func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+            throw TestRepositoryError.unsupported
+        }
+
         func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
             throw TestRepositoryError.unsupported
         }
@@ -1669,6 +1677,14 @@ struct ProjectWorkspaceViewModelTests {
                 patterns.append(storedPattern)
             }
             return storedPattern
+        }
+
+        func createPattern(titled title: String, designer: String?, notes: String) async throws -> PatternDocument {
+            fatalError("Not needed in this test")
+        }
+
+        func attachPatternFile(fromFileAt fileURL: URL, to pattern: PatternDocument) async throws -> PatternDocument {
+            fatalError("Not needed in this test")
         }
 
         func importPattern(_ pattern: PatternDocument, forProjectId projectId: UUID) async throws -> ProjectPatternCopy {
