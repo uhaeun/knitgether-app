@@ -19,7 +19,7 @@ final class OfflineFirstProjectRepository: ProjectRepository {
 
         do {
             let remoteProjects = try await remote.fetchProjects()
-            try await local.cacheSyncedProjects(remoteProjects)
+            try await local.cacheSyncedProjects(remoteProjects, pruningStaleEntries: true)
         } catch {
             guard shouldDefer(error) else {
                 throw error
@@ -227,20 +227,16 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         }
 
         switch project.syncStatus {
-        case .localOnly, .pendingDelete:
-            try? await local.removeProjectTombstone(id: project.id)
+        case .localOnly:
+            // 서버에 존재한 적 없는 유일한 로컬 원본이다. 거부돼도 제거하지 않고
+            // 충돌로 표시해 사용자에게 알리고 데이터를 보존한다(SYNC-09).
+            try? await local.saveProject(project.copy(syncStatus: .conflict))
         case .pendingUpload:
-            do {
-                if let serverProject = try await remote.fetchProject(id: project.id) {
-                    try await local.markProjectSynced(serverProject)
-                } else {
-                    try await local.removeProjectTombstone(id: project.id)
-                }
-            } catch {
-                if !shouldDefer(error) {
-                    try? await local.removeProjectTombstone(id: project.id)
-                }
-            }
+            // 사용자가 입력한 수정본이다. 서버본으로 무통보 덮어쓰지 않고
+            // 충돌로 표시해 로컬 수정을 보존한다(SYNC-10).
+            try? await local.saveProject(project.copy(syncStatus: .conflict))
+        case .pendingDelete:
+            try? await local.removeProjectTombstone(id: project.id)
         default:
             break
         }

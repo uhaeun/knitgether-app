@@ -82,7 +82,10 @@ final class LocalProjectRepository: ProjectRepository {
         try persistProjects()
     }
 
-    func cacheSyncedProjects(_ remoteProjects: [KnittingProject]) async throws {
+    func cacheSyncedProjects(
+        _ remoteProjects: [KnittingProject],
+        pruningStaleEntries: Bool = false
+    ) async throws {
         for remoteProject in remoteProjects {
             let syncedProject = remoteProject.copy(syncStatus: .synced)
 
@@ -94,6 +97,16 @@ final class LocalProjectRepository: ProjectRepository {
                 projects[index] = syncedProject
             } else {
                 projects.append(syncedProject)
+            }
+        }
+
+        if pruningStaleEntries {
+            // 전체 목록 동기화에서만 사용한다. 서버 응답에 없는데 로컬에 synced로 남은 항목은
+            // 다른 기기 삭제나 소유자 불일치로 서버가 더 이상 제공하지 않는 것이므로 제거한다.
+            // 아직 업로드되지 않은 로컬 변경(needsUpload)은 유일한 원본일 수 있어 보존한다.
+            let remoteIds = Set(remoteProjects.map(\.id))
+            projects.removeAll { project in
+                !remoteIds.contains(project.id) && !project.syncStatus.needsUpload
             }
         }
 
