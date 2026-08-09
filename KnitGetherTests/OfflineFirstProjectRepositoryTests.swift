@@ -137,7 +137,9 @@ struct OfflineFirstProjectRepositoryTests {
         #expect(await local.pendingProjectsForSync().isEmpty)
     }
 
-    @Test func rejectedPendingLocalOnlyProjectIsRemovedOnFetch() async throws {
+    // SYNC-09: 서버가 거부한 localOnly 항목은 유일 원본이므로 제거하지 않고
+    // conflict로 보존해 사용자에게 알린다. 프루닝도 conflict를 지우면 안 된다.
+    @Test func rejectedPendingLocalOnlyProjectIsPreservedAsConflictOnFetch() async throws {
         let project = Self.makeProject(syncStatus: .localOnly)
         let local = LocalProjectRepository(projects: [project])
         let remote = ProjectRepositoryFake()
@@ -150,7 +152,7 @@ struct OfflineFirstProjectRepositoryTests {
 
         let projects = try await repository.fetchProjects()
 
-        #expect(projects.isEmpty)
+        #expect(projects.map(\.syncStatus) == [.conflict])
         #expect(await local.pendingProjectsForSync().isEmpty)
     }
 
@@ -203,6 +205,9 @@ struct OfflineFirstProjectRepositoryTests {
         let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
         let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
         remote.saveRowCounterError = nil
+        // 업로드 후 서버 목록에 반영된 상태를 흉내 낸다. 비워 두면 스테일 프루닝이
+        // 방금 동기화한 프로젝트를 서버 미제공으로 오인해 제거한다.
+        remote.remoteProjects = [project.copy(rowCounter: editedCounter, syncStatus: .synced)]
 
         _ = try await restartedRepository.fetchProjects()
 
@@ -226,6 +231,14 @@ struct OfflineFirstProjectRepositoryTests {
         let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
         let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
         remote.saveRowInstructionError = nil
+        remote.remoteProjects = [
+            project.copy(
+                rowCounter: project.rowCounter.copy(
+                    rowInstructions: [Self.makeRowInstruction(project: project, rowNumber: 12, syncStatus: .synced)]
+                ),
+                syncStatus: .synced
+            )
+        ]
 
         _ = try await restartedRepository.fetchProjects()
 
@@ -253,6 +266,24 @@ struct OfflineFirstProjectRepositoryTests {
         let restartedLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
         let restartedRepository = OfflineFirstProjectRepository(local: restartedLocal, remote: remote)
         remote.saveWorkSessionError = nil
+        remote.remoteProjects = [
+            project.copy(
+                workSessions: [
+                    WorkSession(
+                        id: session.id,
+                        ownerId: session.ownerId,
+                        projectId: session.projectId,
+                        startedAt: session.startedAt,
+                        endedAt: session.endedAt,
+                        memo: session.memo,
+                        createdAt: session.createdAt,
+                        updatedAt: session.updatedAt,
+                        syncStatus: .synced
+                    )
+                ],
+                syncStatus: .synced
+            )
+        ]
 
         _ = try await restartedRepository.fetchProjects()
         _ = try await restartedRepository.fetchProjects()

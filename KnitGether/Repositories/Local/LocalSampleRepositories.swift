@@ -103,10 +103,14 @@ final class LocalProjectRepository: ProjectRepository {
         if pruningStaleEntries {
             // 전체 목록 동기화에서만 사용한다. 서버 응답에 없는데 로컬에 synced로 남은 항목은
             // 다른 기기 삭제나 소유자 불일치로 서버가 더 이상 제공하지 않는 것이므로 제거한다.
-            // 아직 업로드되지 않은 로컬 변경(needsUpload)은 유일한 원본일 수 있어 보존한다.
+            // 아직 업로드되지 않은 로컬 변경(needsUpload)과 사용자 확인 대기(conflict)는
+            // 유일한 원본일 수 있어 보존한다. conflict를 제거하면 SYNC-09/10의
+            // 보존 조치가 같은 조회 안에서 무효화된다(2차 회귀에서 발견).
             let remoteIds = Set(remoteProjects.map(\.id))
             projects.removeAll { project in
-                !remoteIds.contains(project.id) && !project.syncStatus.needsUpload
+                !remoteIds.contains(project.id)
+                    && !project.syncStatus.needsUpload
+                    && !project.syncStatus.needsUserAttention
             }
         }
 
@@ -2132,9 +2136,12 @@ final class LocalSkillRepository: SkillRepository {
         if pruningStaleEntries {
             // 전체 목록 동기화에서만 사용한다. 서버가 더 이상 제공하지 않는 synced 스킬은
             // 삭제된 것이므로 제거해 관련 스킬 표시에 잔존하지 않게 한다(LINK-03).
+            // 프로젝트 프루닝과 동일하게 conflict는 유일 원본일 수 있어 보존한다.
             let remoteIds = Set(remoteSkills.map(\.id))
             skills.removeAll { skill in
-                !remoteIds.contains(skill.id) && !skill.syncStatus.needsUpload
+                !remoteIds.contains(skill.id)
+                    && !skill.syncStatus.needsUpload
+                    && !skill.syncStatus.needsUserAttention
             }
         }
 
