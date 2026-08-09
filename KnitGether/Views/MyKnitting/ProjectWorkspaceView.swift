@@ -95,6 +95,8 @@ struct ProjectWorkspaceView: View {
         .sheet(isPresented: $isShowingEditProject) {
             EditProjectView(
                 project: viewModel.project,
+                availableYarns: viewModel.availableYarns,
+                availableNeedles: viewModel.availableNeedles,
                 onSave: { formData in
                     await viewModel.updateProject(with: formData)
                 },
@@ -1173,6 +1175,10 @@ private struct NumberEditSheet: View {
         _valueText = State(initialValue: "\(initialValue)")
     }
 
+    private var isNegativeInput: Bool {
+        (Int(valueText) ?? 0) < 0
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -1191,6 +1197,13 @@ private struct NumberEditSheet: View {
                             identifier: AppAccessibilityID.Workspace.counterNumberField
                         )
                         .keyboardType(.numberPad)
+
+                        if isNegativeInput {
+                            Label("음수는 저장할 수 없어 0으로 보정돼요.", systemImage: "exclamationmark.triangle")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(AppTheme.Color.rose)
+                                .padding(.bottom, 8)
+                        }
                     }
                 }
                 .padding(.horizontal, 20)
@@ -1206,7 +1219,8 @@ private struct NumberEditSheet: View {
                     isDisabled: false,
                     accessibilityIdentifier: AppAccessibilityID.Workspace.counterNumberSaveButton
                 ) {
-                    saveAction(Int(valueText) ?? initialValue)
+                    // 음수는 0으로 보정한다. 보정 사실은 시트 안 안내 문구로 표시된다.
+                    saveAction(max(0, Int(valueText) ?? initialValue))
                     dismiss()
                 }
             }

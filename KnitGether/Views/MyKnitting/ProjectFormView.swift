@@ -34,9 +34,7 @@ struct ProjectFormView: View {
             scheduleSection
             memoSection
 
-            if shouldShowMaterialsSection {
-                materialsSection
-            }
+            materialsSection
 
             if includesPatternName {
                 patternSection
@@ -176,43 +174,59 @@ struct ProjectFormView: View {
             tint: AppTheme.Color.amber
         ) {
             VStack(spacing: 0) {
-                Picker(selection: yarnSelection) {
-                    Text("선택 안 함").tag(UUID?.none)
-
-                    ForEach(availableYarns) { yarn in
-                        Text(yarnPickerTitle(for: yarn)).tag(Optional(yarn.id))
-                    }
-                } label: {
-                    ProjectPickerLabel(
-                        title: "실",
-                        value: formData.yarnSummaryText ?? "선택 안 함",
+                if availableYarns.isEmpty && formData.yarnSummaryText == nil {
+                    ProjectInfoLabel(
+                        text: "창고에 등록된 실이 없어요.",
                         systemImage: "circle.hexagongrid",
                         tint: AppTheme.Color.amber
                     )
+                } else {
+                    Picker(selection: yarnSelection) {
+                        Text("선택 안 함").tag(UUID?.none)
+
+                        ForEach(availableYarns) { yarn in
+                            Text(yarnPickerTitle(for: yarn)).tag(Optional(yarn.id))
+                        }
+                    } label: {
+                        ProjectPickerLabel(
+                            title: "실",
+                            value: formData.yarnSummaryText ?? "선택 안 함",
+                            systemImage: "circle.hexagongrid",
+                            tint: AppTheme.Color.amber
+                        )
+                    }
+                    .pickerStyle(.menu)
+                    .tint(AppTheme.Color.accent)
+                    .accessibilityIdentifier(AppAccessibilityID.Project.yarnPicker)
                 }
-                .pickerStyle(.menu)
-                .tint(AppTheme.Color.accent)
-                .accessibilityIdentifier(AppAccessibilityID.Project.yarnPicker)
 
                 ProjectDivider()
 
-                Picker(selection: needleSelection) {
-                    Text("선택 안 함").tag(UUID?.none)
-
-                    ForEach(availableNeedles) { needle in
-                        Text(needlePickerTitle(for: needle)).tag(Optional(needle.id))
-                    }
-                } label: {
-                    ProjectPickerLabel(
-                        title: "바늘",
-                        value: formData.needleSummaryText ?? "선택 안 함",
+                if availableNeedles.isEmpty && formData.needleSummaryText == nil {
+                    ProjectInfoLabel(
+                        text: "창고에 등록된 바늘이 없어요.",
                         systemImage: "ruler",
                         tint: AppTheme.Color.sage
                     )
+                } else {
+                    Picker(selection: needleSelection) {
+                        Text("선택 안 함").tag(UUID?.none)
+
+                        ForEach(availableNeedles) { needle in
+                            Text(needlePickerTitle(for: needle)).tag(Optional(needle.id))
+                        }
+                    } label: {
+                        ProjectPickerLabel(
+                            title: "바늘",
+                            value: formData.needleSummaryText ?? "선택 안 함",
+                            systemImage: "ruler",
+                            tint: AppTheme.Color.sage
+                        )
+                    }
+                    .pickerStyle(.menu)
+                    .tint(AppTheme.Color.accent)
+                    .accessibilityIdentifier(AppAccessibilityID.Project.needlePicker)
                 }
-                .pickerStyle(.menu)
-                .tint(AppTheme.Color.accent)
-                .accessibilityIdentifier(AppAccessibilityID.Project.needlePicker)
             }
         }
     }
@@ -283,13 +297,6 @@ struct ProjectFormView: View {
                 )
             }
         }
-    }
-
-    private var shouldShowMaterialsSection: Bool {
-        !availableYarns.isEmpty
-            || !availableNeedles.isEmpty
-            || formData.yarnSummaryText != nil
-            || formData.needleSummaryText != nil
     }
 
     private var yarnSelection: Binding<UUID?> {

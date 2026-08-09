@@ -80,6 +80,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     @Published private(set) var availablePatterns: [PatternDocument] = []
     @Published private(set) var attachedYarn: Yarn?
     @Published private(set) var attachedNeedle: Needle?
+    @Published private(set) var availableYarns: [Yarn] = []
     @Published private(set) var availableNeedles: [Needle] = []
     @Published private(set) var availableTools: [ToolItem] = []
     @Published private(set) var linkedTools: [ToolItem] = []
@@ -268,17 +269,19 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     }
 
     func loadYarnUsage() async {
-        guard let yarnId = project.yarnId else {
-            attachedYarn = nil
-            yarnUsages = []
-            return
-        }
-
         do {
-            let yarns = try await libraryRepository.fetchYarns()
+            // 연결된 실이 없어도 창고 목록은 채운다. 수정 폼의 재료 섹션이 이 목록을 쓴다.
+            availableYarns = try await libraryRepository.fetchYarns()
+
+            guard let yarnId = project.yarnId else {
+                attachedYarn = nil
+                yarnUsages = []
+                return
+            }
+
             let usages = try await libraryRepository.fetchYarnUsages(forProjectId: project.id)
 
-            attachedYarn = yarns.first { $0.id == yarnId }
+            attachedYarn = availableYarns.first { $0.id == yarnId }
             yarnUsages = usages
             errorMessage = nil
         } catch {
