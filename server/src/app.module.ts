@@ -20,6 +20,9 @@ import { SkillsModule } from './skills/skills.module';
       // If a local .env file exists, @nestjs/config's file-sourced snapshot takes
       // precedence over those runtime mutations for the same key, silently breaking
       // test isolation. Tests should only ever see their own explicit env stubs.
+      // NOTE: this flag only covers ConfigModule's own load path. @prisma/client
+      // also injects .env into process.env at import time; test/jest.setup-env.ts
+      // pre-claims the affected keys to close that bypass.
       ignoreEnvFile: process.env.NODE_ENV === 'test',
     }),
     AuthModule,
