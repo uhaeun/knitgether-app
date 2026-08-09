@@ -10,22 +10,28 @@ import SwiftUI
 struct ProjectFormView: View {
     @Binding var formData: ProjectFormData
     let includesPatternName: Bool
+    let includesToolSelection: Bool
     let availablePatterns: [PatternDocument]
     let availableYarns: [Yarn]
     let availableNeedles: [Needle]
+    let availableTools: [ToolItem]
 
     init(
         formData: Binding<ProjectFormData>,
         includesPatternName: Bool,
+        includesToolSelection: Bool = false,
         availablePatterns: [PatternDocument] = [],
         availableYarns: [Yarn] = [],
-        availableNeedles: [Needle] = []
+        availableNeedles: [Needle] = [],
+        availableTools: [ToolItem] = []
     ) {
         _formData = formData
         self.includesPatternName = includesPatternName
+        self.includesToolSelection = includesToolSelection
         self.availablePatterns = availablePatterns
         self.availableYarns = availableYarns
         self.availableNeedles = availableNeedles
+        self.availableTools = availableTools
     }
 
     var body: some View {
@@ -35,6 +41,10 @@ struct ProjectFormView: View {
             memoSection
 
             materialsSection
+
+            if includesToolSelection {
+                toolsSection
+            }
 
             if includesPatternName {
                 patternSection
@@ -226,6 +236,57 @@ struct ProjectFormView: View {
                     .pickerStyle(.menu)
                     .tint(AppTheme.Color.accent)
                     .accessibilityIdentifier(AppAccessibilityID.Project.needlePicker)
+                }
+            }
+        }
+    }
+
+    private var toolsSection: some View {
+        ProjectFormSection(
+            title: "도구",
+            description: "함께 쓸 도구를 골라 두면 작업 화면에서 바로 확인할 수 있어요.",
+            systemImage: "wrench.and.screwdriver.fill",
+            tint: AppTheme.Color.slate
+        ) {
+            VStack(spacing: 0) {
+                if availableTools.isEmpty {
+                    ProjectInfoLabel(
+                        text: "창고에 등록된 도구가 없어요.",
+                        systemImage: "wrench.and.screwdriver",
+                        tint: AppTheme.Color.slate
+                    )
+                } else {
+                    ForEach(Array(availableTools.enumerated()), id: \.element.id) { index, tool in
+                        if index > 0 {
+                            ProjectDivider()
+                        }
+
+                        Button {
+                            formData.toggleTool(tool)
+                        } label: {
+                            HStack(spacing: 12) {
+                                ProjectFieldIcon(
+                                    systemImage: formData.isToolSelected(tool) ? "checkmark.circle.fill" : "circle",
+                                    tint: formData.isToolSelected(tool) ? AppTheme.Color.accent : AppTheme.Color.slate
+                                )
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(tool.name)
+                                        .font(.body.weight(.semibold))
+                                        .foregroundStyle(.primary)
+
+                                    Text(tool.type)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+
+                                Spacer(minLength: 0)
+                            }
+                            .contentShape(Rectangle())
+                            .padding(.vertical, 2)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
             }
         }

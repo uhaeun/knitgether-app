@@ -32,6 +32,8 @@ struct ProjectFormData {
     var needleTypeSnapshot: String
     var needleSizeSnapshot: String
     var needleLengthSnapshot: String
+    /// 생성 시점에 함께 연결할 도구. 프로젝트 저장 후 ProjectToolLink로 연결된다.
+    var selectedTools: [ToolItem] = []
 
     init(
         name: String = "",
@@ -233,6 +235,18 @@ struct ProjectFormData {
         patternDesignerSnapshot = pattern?.designer ?? ""
         patternFileNameSnapshot = pattern?.fileName ?? ""
         patternPageCountSnapshot = pattern?.pageCount
+    }
+
+    mutating func toggleTool(_ tool: ToolItem) {
+        if selectedTools.contains(where: { $0.id == tool.id }) {
+            selectedTools.removeAll { $0.id == tool.id }
+        } else {
+            selectedTools.append(tool)
+        }
+    }
+
+    func isToolSelected(_ tool: ToolItem) -> Bool {
+        selectedTools.contains { $0.id == tool.id }
     }
 
     mutating func setManualPatternName(_ name: String) {

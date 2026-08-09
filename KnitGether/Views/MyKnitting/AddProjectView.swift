@@ -16,17 +16,20 @@ struct AddProjectView: View {
     let availablePatterns: [PatternDocument]
     let availableYarns: [Yarn]
     let availableNeedles: [Needle]
+    let availableTools: [ToolItem]
     let onSave: (ProjectFormData) async -> Bool
 
     init(
         availablePatterns: [PatternDocument] = [],
         availableYarns: [Yarn] = [],
         availableNeedles: [Needle] = [],
+        availableTools: [ToolItem] = [],
         onSave: @escaping (ProjectFormData) async -> Bool
     ) {
         self.availablePatterns = availablePatterns
         self.availableYarns = availableYarns
         self.availableNeedles = availableNeedles
+        self.availableTools = availableTools
         self.onSave = onSave
     }
 
@@ -37,9 +40,11 @@ struct AddProjectView: View {
                     ProjectFormView(
                         formData: $formData,
                         includesPatternName: true,
+                        includesToolSelection: true,
                         availablePatterns: availablePatterns,
                         availableYarns: availableYarns,
-                        availableNeedles: availableNeedles
+                        availableNeedles: availableNeedles,
+                        availableTools: availableTools
                     )
 
                     if let submissionErrorMessage {

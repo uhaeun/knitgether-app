@@ -86,7 +86,8 @@ struct MyKnittingView: View {
             AddProjectView(
                 availablePatterns: viewModel.availablePatterns,
                 availableYarns: viewModel.availableYarns,
-                availableNeedles: viewModel.availableNeedles
+                availableNeedles: viewModel.availableNeedles,
+                availableTools: viewModel.availableTools
             ) { formData in
                 await viewModel.addProject(from: formData)
             }

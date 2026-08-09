@@ -13,6 +13,7 @@ final class MyKnittingViewModel: ObservableObject {
     @Published private(set) var projects: [KnittingProject] = []
     @Published private(set) var availableYarns: [Yarn] = []
     @Published private(set) var availableNeedles: [Needle] = []
+    @Published private(set) var availableTools: [ToolItem] = []
     @Published private(set) var availablePatterns: [PatternDocument] = []
     @Published private(set) var isRetryingSync = false
     @Published private(set) var errorMessage: String?
@@ -55,6 +56,7 @@ final class MyKnittingViewModel: ObservableObject {
         availablePatterns = []
         availableYarns = []
         availableNeedles = []
+        availableTools = []
         errorMessage = nil
         statusMessage = nil
         await loadProjects()
@@ -84,6 +86,7 @@ final class MyKnittingViewModel: ObservableObject {
         do {
             availableYarns = try await libraryRepository.fetchYarns()
             availableNeedles = try await libraryRepository.fetchNeedles()
+            availableTools = try await libraryRepository.fetchTools()
             clearErrorMessage(matching: Self.materialLoadErrorMessage)
         } catch {
             errorMessage = Self.materialLoadErrorMessage
@@ -112,8 +115,9 @@ final class MyKnittingViewModel: ObservableObject {
         do {
             let project = makeProject(from: formData)
             try await projectRepository.saveProject(project)
+            let didLinkAllTools = await linkSelectedTools(formData.selectedTools, toProjectId: project.id)
             projects = try await projectRepository.fetchProjects()
-            errorMessage = nil
+            errorMessage = didLinkAllTools ? nil : "프로젝트는 추가했지만 일부 도구를 연결하지 못했어요."
             statusMessage = "프로젝트를 추가했어요."
             return true
         } catch {
@@ -121,6 +125,24 @@ final class MyKnittingViewModel: ObservableObject {
             statusMessage = nil
             return false
         }
+    }
+
+    private func linkSelectedTools(_ tools: [ToolItem], toProjectId projectId: UUID) async -> Bool {
+        guard let libraryRepository, !tools.isEmpty else {
+            return true
+        }
+
+        var didLinkAll = true
+
+        for tool in tools {
+            do {
+                _ = try await libraryRepository.linkTool(tool, toProjectId: projectId)
+            } catch {
+                didLinkAll = false
+            }
+        }
+
+        return didLinkAll
     }
 
     @discardableResult
