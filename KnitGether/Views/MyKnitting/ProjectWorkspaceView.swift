@@ -108,6 +108,12 @@ struct ProjectWorkspaceView: View {
                     }
 
                     return didDelete
+                },
+                onCreateYarn: { formData in
+                    await viewModel.createYarn(from: formData)
+                },
+                onCreateNeedle: { formData in
+                    await viewModel.createNeedle(from: formData)
                 }
             )
         }

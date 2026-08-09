@@ -12,25 +12,37 @@ struct AddProjectView: View {
     @State private var formData = ProjectFormData()
     @State private var isSaving = false
     @State private var submissionErrorMessage: String?
+    @State private var isShowingNewYarnForm = false
+    @State private var isShowingNewNeedleForm = false
+    @State private var isShowingNewToolForm = false
 
     let availablePatterns: [PatternDocument]
     let availableYarns: [Yarn]
     let availableNeedles: [Needle]
     let availableTools: [ToolItem]
     let onSave: (ProjectFormData) async -> Bool
+    let onCreateYarn: ((YarnFormData) async -> Yarn?)?
+    let onCreateNeedle: ((NeedleFormData) async -> Needle?)?
+    let onCreateTool: ((ToolFormData) async -> ToolItem?)?
 
     init(
         availablePatterns: [PatternDocument] = [],
         availableYarns: [Yarn] = [],
         availableNeedles: [Needle] = [],
         availableTools: [ToolItem] = [],
-        onSave: @escaping (ProjectFormData) async -> Bool
+        onSave: @escaping (ProjectFormData) async -> Bool,
+        onCreateYarn: ((YarnFormData) async -> Yarn?)? = nil,
+        onCreateNeedle: ((NeedleFormData) async -> Needle?)? = nil,
+        onCreateTool: ((ToolFormData) async -> ToolItem?)? = nil
     ) {
         self.availablePatterns = availablePatterns
         self.availableYarns = availableYarns
         self.availableNeedles = availableNeedles
         self.availableTools = availableTools
         self.onSave = onSave
+        self.onCreateYarn = onCreateYarn
+        self.onCreateNeedle = onCreateNeedle
+        self.onCreateTool = onCreateTool
     }
 
     var body: some View {
@@ -44,7 +56,10 @@ struct AddProjectView: View {
                         availablePatterns: availablePatterns,
                         availableYarns: availableYarns,
                         availableNeedles: availableNeedles,
-                        availableTools: availableTools
+                        availableTools: availableTools,
+                        onRegisterYarn: onCreateYarn == nil ? nil : { isShowingNewYarnForm = true },
+                        onRegisterNeedle: onCreateNeedle == nil ? nil : { isShowingNewNeedleForm = true },
+                        onRegisterTool: onCreateTool == nil ? nil : { isShowingNewToolForm = true }
                     )
 
                     if let submissionErrorMessage {
@@ -67,6 +82,39 @@ struct AddProjectView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 saveBar
+            }
+            .sheet(isPresented: $isShowingNewYarnForm) {
+                YarnFormView(title: "새 실 등록") { yarnFormData in
+                    guard let yarn = await onCreateYarn?(yarnFormData) else {
+                        return false
+                    }
+
+                    formData.selectYarn(yarn)
+                    return true
+                }
+            }
+            .sheet(isPresented: $isShowingNewNeedleForm) {
+                NeedleFormView(title: "새 바늘 등록") { needleFormData in
+                    guard let needle = await onCreateNeedle?(needleFormData) else {
+                        return false
+                    }
+
+                    formData.selectNeedle(needle)
+                    return true
+                }
+            }
+            .sheet(isPresented: $isShowingNewToolForm) {
+                ToolFormView(title: "새 도구 등록") { toolFormData in
+                    guard let tool = await onCreateTool?(toolFormData) else {
+                        return false
+                    }
+
+                    if !formData.isToolSelected(tool) {
+                        formData.toggleTool(tool)
+                    }
+
+                    return true
+                }
             }
         }
     }

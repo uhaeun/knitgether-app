@@ -15,6 +15,9 @@ struct ProjectFormView: View {
     let availableYarns: [Yarn]
     let availableNeedles: [Needle]
     let availableTools: [ToolItem]
+    let onRegisterYarn: (() -> Void)?
+    let onRegisterNeedle: (() -> Void)?
+    let onRegisterTool: (() -> Void)?
 
     init(
         formData: Binding<ProjectFormData>,
@@ -23,7 +26,10 @@ struct ProjectFormView: View {
         availablePatterns: [PatternDocument] = [],
         availableYarns: [Yarn] = [],
         availableNeedles: [Needle] = [],
-        availableTools: [ToolItem] = []
+        availableTools: [ToolItem] = [],
+        onRegisterYarn: (() -> Void)? = nil,
+        onRegisterNeedle: (() -> Void)? = nil,
+        onRegisterTool: (() -> Void)? = nil
     ) {
         _formData = formData
         self.includesPatternName = includesPatternName
@@ -32,6 +38,9 @@ struct ProjectFormView: View {
         self.availableYarns = availableYarns
         self.availableNeedles = availableNeedles
         self.availableTools = availableTools
+        self.onRegisterYarn = onRegisterYarn
+        self.onRegisterNeedle = onRegisterNeedle
+        self.onRegisterTool = onRegisterTool
     }
 
     var body: some View {
@@ -210,6 +219,14 @@ struct ProjectFormView: View {
                     .accessibilityIdentifier(AppAccessibilityID.Project.yarnPicker)
                 }
 
+                if let onRegisterYarn {
+                    registerButtonRow(
+                        title: "새 실 등록해서 연결",
+                        tint: AppTheme.Color.amber,
+                        action: onRegisterYarn
+                    )
+                }
+
                 ProjectDivider()
 
                 if availableNeedles.isEmpty && formData.needleSummaryText == nil {
@@ -237,8 +254,40 @@ struct ProjectFormView: View {
                     .tint(AppTheme.Color.accent)
                     .accessibilityIdentifier(AppAccessibilityID.Project.needlePicker)
                 }
+
+                if let onRegisterNeedle {
+                    registerButtonRow(
+                        title: "새 바늘 등록해서 연결",
+                        tint: AppTheme.Color.sage,
+                        action: onRegisterNeedle
+                    )
+                }
             }
         }
+    }
+
+    private func registerButtonRow(
+        title: String,
+        tint: Color,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundStyle(tint)
+                    .frame(width: 24)
+
+                Text(title)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(tint)
+
+                Spacer(minLength: 0)
+            }
+            .contentShape(Rectangle())
+            .padding(.top, 8)
+            .padding(.bottom, 2)
+        }
+        .buttonStyle(.plain)
     }
 
     private var toolsSection: some View {
@@ -287,6 +336,14 @@ struct ProjectFormView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                }
+
+                if let onRegisterTool {
+                    registerButtonRow(
+                        title: "새 도구 등록해서 연결",
+                        tint: AppTheme.Color.slate,
+                        action: onRegisterTool
+                    )
                 }
             }
         }

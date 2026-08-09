@@ -456,6 +456,41 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
     }
 
+    /// 수정 폼에서 창고 선행 없이 실을 즉석 생성한다. 성공 시 생성된 실을 반환한다.
+    func createYarn(from formData: YarnFormData) async -> Yarn? {
+        guard formData.canSave else {
+            return nil
+        }
+
+        let yarn = formData.makeNewYarn()
+
+        do {
+            try await libraryRepository.saveYarn(yarn)
+            availableYarns = try await libraryRepository.fetchYarns()
+            return yarn
+        } catch {
+            errorMessage = "실을 저장하지 못했어요."
+            return nil
+        }
+    }
+
+    func createNeedle(from formData: NeedleFormData) async -> Needle? {
+        guard formData.canSave else {
+            return nil
+        }
+
+        let needle = formData.makeNewNeedle()
+
+        do {
+            try await libraryRepository.saveNeedle(needle)
+            availableNeedles = try await libraryRepository.fetchNeedles()
+            return needle
+        } catch {
+            errorMessage = "바늘을 저장하지 못했어요."
+            return nil
+        }
+    }
+
     func loadTools() async {
         do {
             availableTools = try await libraryRepository.fetchTools()

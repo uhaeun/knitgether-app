@@ -570,3 +570,60 @@ final class ToolLibraryViewModel: ObservableObject {
         return LibraryItemDetailRow(title: title, value: trimmed, systemImage: systemImage)
     }
 }
+
+// 프로젝트 폼의 즉석 생성이 쓰는 신규 모델 팩토리.
+// 매핑 규칙은 각 라이브러리 뷰모델의 저장 로직과 동일하게 유지한다.
+extension YarnFormData {
+    func makeNewYarn(now: Date = Date()) -> Yarn {
+        Yarn(
+            id: UUID(),
+            ownerId: SampleData.ownerId,
+            name: trimmedName,
+            brand: trimmedBrand,
+            colorway: trimmedColorway,
+            weight: trimmedWeight,
+            quantity: quantity,
+            notes: trimmedNotes,
+            createdAt: now,
+            updatedAt: now,
+            deletedAt: nil,
+            syncStatus: .localOnly
+        )
+    }
+}
+
+extension NeedleFormData {
+    func makeNewNeedle(now: Date = Date()) -> Needle {
+        Needle(
+            id: UUID(),
+            ownerId: SampleData.ownerId,
+            name: trimmedName,
+            needleType: trimmedNeedleType,
+            size: trimmedSize,
+            length: trimmedLength,
+            notes: trimmedNotes,
+            createdAt: now,
+            updatedAt: now,
+            deletedAt: nil,
+            syncStatus: .localOnly
+        )
+    }
+}
+
+extension ToolFormData {
+    func makeNewTool(now: Date = Date()) -> ToolItem {
+        ToolItem(
+            id: UUID(),
+            ownerId: SampleData.ownerId,
+            name: trimmedName,
+            type: trimmedType,
+            link: trimmedLink,
+            memo: trimmedMemo,
+            usageCount: 0,
+            createdAt: now,
+            updatedAt: now,
+            deletedAt: nil,
+            syncStatus: .localOnly
+        )
+    }
+}

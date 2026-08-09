@@ -438,7 +438,7 @@ private struct ToolLibraryRow: View {
     }
 }
 
-private struct ToolFormView: View {
+struct ToolFormView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var formData: ToolFormData
 

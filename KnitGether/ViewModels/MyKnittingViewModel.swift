@@ -127,6 +127,58 @@ final class MyKnittingViewModel: ObservableObject {
         }
     }
 
+    /// 프로젝트 폼에서 창고 선행 없이 실을 즉석 생성한다. 성공 시 생성된 실을 반환한다.
+    func createYarn(from formData: YarnFormData) async -> Yarn? {
+        guard let libraryRepository, formData.canSave else {
+            return nil
+        }
+
+        let yarn = formData.makeNewYarn()
+
+        do {
+            try await libraryRepository.saveYarn(yarn)
+            await loadProjectMaterials()
+            return yarn
+        } catch {
+            errorMessage = "실을 저장하지 못했어요."
+            return nil
+        }
+    }
+
+    func createNeedle(from formData: NeedleFormData) async -> Needle? {
+        guard let libraryRepository, formData.canSave else {
+            return nil
+        }
+
+        let needle = formData.makeNewNeedle()
+
+        do {
+            try await libraryRepository.saveNeedle(needle)
+            await loadProjectMaterials()
+            return needle
+        } catch {
+            errorMessage = "바늘을 저장하지 못했어요."
+            return nil
+        }
+    }
+
+    func createTool(from formData: ToolFormData) async -> ToolItem? {
+        guard let libraryRepository, formData.canSave else {
+            return nil
+        }
+
+        let tool = formData.makeNewTool()
+
+        do {
+            try await libraryRepository.saveTool(tool)
+            await loadProjectMaterials()
+            return tool
+        } catch {
+            errorMessage = "도구를 저장하지 못했어요."
+            return nil
+        }
+    }
+
     private func linkSelectedTools(_ tools: [ToolItem], toProjectId projectId: UUID) async -> Bool {
         guard let libraryRepository, !tools.isEmpty else {
             return true

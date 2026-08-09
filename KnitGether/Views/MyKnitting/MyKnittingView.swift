@@ -87,10 +87,20 @@ struct MyKnittingView: View {
                 availablePatterns: viewModel.availablePatterns,
                 availableYarns: viewModel.availableYarns,
                 availableNeedles: viewModel.availableNeedles,
-                availableTools: viewModel.availableTools
-            ) { formData in
-                await viewModel.addProject(from: formData)
-            }
+                availableTools: viewModel.availableTools,
+                onSave: { formData in
+                    await viewModel.addProject(from: formData)
+                },
+                onCreateYarn: { formData in
+                    await viewModel.createYarn(from: formData)
+                },
+                onCreateNeedle: { formData in
+                    await viewModel.createNeedle(from: formData)
+                },
+                onCreateTool: { formData in
+                    await viewModel.createTool(from: formData)
+                }
+            )
         }
         .sheet(item: $editingProject) { project in
             EditProjectView(
@@ -102,6 +112,12 @@ struct MyKnittingView: View {
                 },
                 onDelete: {
                     await viewModel.deleteProject(project)
+                },
+                onCreateYarn: { formData in
+                    await viewModel.createYarn(from: formData)
+                },
+                onCreateNeedle: { formData in
+                    await viewModel.createNeedle(from: formData)
                 }
             )
         }

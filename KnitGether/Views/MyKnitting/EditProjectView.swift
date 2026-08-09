@@ -14,25 +14,33 @@ struct EditProjectView: View {
     @State private var isSaving = false
     @State private var isDeleting = false
     @State private var submissionErrorMessage: String?
+    @State private var isShowingNewYarnForm = false
+    @State private var isShowingNewNeedleForm = false
 
     let project: KnittingProject
     let availableYarns: [Yarn]
     let availableNeedles: [Needle]
     let onSave: (ProjectFormData) async -> Bool
     let onDelete: (() async -> Bool)?
+    let onCreateYarn: ((YarnFormData) async -> Yarn?)?
+    let onCreateNeedle: ((NeedleFormData) async -> Needle?)?
 
     init(
         project: KnittingProject,
         availableYarns: [Yarn] = [],
         availableNeedles: [Needle] = [],
         onSave: @escaping (ProjectFormData) async -> Bool,
-        onDelete: (() async -> Bool)? = nil
+        onDelete: (() async -> Bool)? = nil,
+        onCreateYarn: ((YarnFormData) async -> Yarn?)? = nil,
+        onCreateNeedle: ((NeedleFormData) async -> Needle?)? = nil
     ) {
         self.project = project
         self.availableYarns = availableYarns
         self.availableNeedles = availableNeedles
         self.onSave = onSave
         self.onDelete = onDelete
+        self.onCreateYarn = onCreateYarn
+        self.onCreateNeedle = onCreateNeedle
         _formData = State(initialValue: ProjectFormData(project: project))
     }
 
@@ -44,7 +52,9 @@ struct EditProjectView: View {
                         formData: $formData,
                         includesPatternName: false,
                         availableYarns: availableYarns,
-                        availableNeedles: availableNeedles
+                        availableNeedles: availableNeedles,
+                        onRegisterYarn: onCreateYarn == nil ? nil : { isShowingNewYarnForm = true },
+                        onRegisterNeedle: onCreateNeedle == nil ? nil : { isShowingNewNeedleForm = true }
                     )
 
                     if let submissionErrorMessage {
@@ -73,6 +83,26 @@ struct EditProjectView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 saveBar
+            }
+            .sheet(isPresented: $isShowingNewYarnForm) {
+                YarnFormView(title: "새 실 등록") { yarnFormData in
+                    guard let yarn = await onCreateYarn?(yarnFormData) else {
+                        return false
+                    }
+
+                    formData.selectYarn(yarn)
+                    return true
+                }
+            }
+            .sheet(isPresented: $isShowingNewNeedleForm) {
+                NeedleFormView(title: "새 바늘 등록") { needleFormData in
+                    guard let needle = await onCreateNeedle?(needleFormData) else {
+                        return false
+                    }
+
+                    formData.selectNeedle(needle)
+                    return true
+                }
             }
         }
     }

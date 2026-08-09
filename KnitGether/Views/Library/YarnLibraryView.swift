@@ -492,7 +492,7 @@ private struct YarnLibraryRow: View {
     }
 }
 
-private struct YarnFormView: View {
+struct YarnFormView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var formData: YarnFormData
 
