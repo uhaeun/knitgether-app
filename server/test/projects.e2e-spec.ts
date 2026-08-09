@@ -1529,22 +1529,19 @@ describe('Projects route', () => {
         }),
       }),
     );
-    expect(prisma.workSession.deleteMany).toHaveBeenCalledWith({
-      where: {
-        ownerId: 'user-a',
-        projectId: saveProjectBody.id,
-      },
-    });
-    expect(prisma.workSession.createMany).toHaveBeenCalledWith({
-      data: [
-        expect.objectContaining({
+    expect(prisma.workSession.deleteMany).not.toHaveBeenCalled();
+    expect(prisma.workSession.createMany).not.toHaveBeenCalled();
+    expect(prisma.workSession.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: saveProjectBody.workSessions[0].id },
+        create: expect.objectContaining({
           id: saveProjectBody.workSessions[0].id,
           ownerId: 'user-a',
           projectId: saveProjectBody.id,
           memo: saveProjectBody.workSessions[0].memo,
         }),
-      ],
-    });
+      }),
+    );
     expect(response.body.id).toBe(saveProjectBody.id);
   });
 
@@ -1703,12 +1700,10 @@ describe('Projects route', () => {
       },
     });
     expect(prisma.rowInstruction.createMany).not.toHaveBeenCalled();
-    expect(prisma.workSession.deleteMany).toHaveBeenCalledWith({
-      where: {
-        ownerId: 'user-a',
-        projectId: saveProjectBody.id,
-      },
-    });
+    // SYNC-08: 요청 본문에 세션이 없어도 기존 세션은 보존한다.
+    // 삭제는 전용 DELETE 엔드포인트만 수행한다.
+    expect(prisma.workSession.deleteMany).not.toHaveBeenCalled();
+    expect(prisma.workSession.upsert).not.toHaveBeenCalled();
     expect(prisma.workSession.createMany).not.toHaveBeenCalled();
   });
 

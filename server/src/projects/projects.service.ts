@@ -1442,16 +1442,14 @@ export class ProjectsService {
 
     await this.saveRowInstructions(transaction, ownerId, body);
 
-    await transaction.workSession.deleteMany({
-      where: {
-        ownerId,
-        projectId: body.id,
-      },
-    });
-
-    if (body.workSessions.length > 0) {
-      await transaction.workSession.createMany({
-        data: body.workSessions.map((session) => ({
+    // 기존 full-replace(deleteMany 후 createMany)는 요청 본문에 없는 작업 세션을
+    // 무이력 삭제해, 다른 기기가 생성했거나 오래된 스냅샷이 모르는 세션을 소멸시켰다(SYNC-08).
+    // 증분 upsert로 바꿔 요청에 담긴 세션만 갱신/생성하고 나머지는 보존한다.
+    // 세션 삭제는 전용 DELETE 엔드포인트(deleteWorkSession)가 담당한다.
+    for (const session of body.workSessions) {
+      await transaction.workSession.upsert({
+        where: { id: session.id },
+        create: {
           id: session.id,
           ownerId,
           projectId: body.id,
@@ -1459,7 +1457,13 @@ export class ProjectsService {
           endedAt: session.endedAt ? new Date(session.endedAt) : null,
           memo: session.memo,
           deletedAt: null,
-        })),
+        },
+        update: {
+          startedAt: new Date(session.startedAt),
+          endedAt: session.endedAt ? new Date(session.endedAt) : null,
+          memo: session.memo,
+          deletedAt: null,
+        },
       });
     }
 
