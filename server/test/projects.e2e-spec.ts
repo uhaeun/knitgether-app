@@ -42,8 +42,11 @@ type MockPrismaService = {
     createMany: jest.Mock;
   };
   projectPatternCopy: {
+    findUnique: jest.Mock;
     upsert: jest.Mock;
+    create: jest.Mock;
     update: jest.Mock;
+    delete: jest.Mock;
     deleteMany: jest.Mock;
     updateMany: jest.Mock;
   };
@@ -376,8 +379,11 @@ describe('Projects route', () => {
         createMany: jest.fn(),
       },
       projectPatternCopy: {
+        findUnique: jest.fn(),
         upsert: jest.fn(),
+        create: jest.fn(),
         update: jest.fn(),
+        delete: jest.fn(),
         deleteMany: jest.fn(),
         updateMany: jest.fn(),
       },
@@ -439,8 +445,11 @@ describe('Projects route', () => {
     prisma.workSession.deleteMany.mockReset();
     prisma.workSession.updateMany.mockReset();
     prisma.workSession.createMany.mockReset();
+    prisma.projectPatternCopy.findUnique.mockReset();
     prisma.projectPatternCopy.upsert.mockReset();
+    prisma.projectPatternCopy.create.mockReset();
     prisma.projectPatternCopy.update.mockReset();
+    prisma.projectPatternCopy.delete.mockReset();
     prisma.projectPatternCopy.deleteMany.mockReset();
     prisma.projectPatternCopy.updateMany.mockReset();
     prisma.patternDocument.findFirst.mockReset();
@@ -550,8 +559,12 @@ describe('Projects route', () => {
     prisma.workSession.deleteMany.mockResolvedValue({ count: 0 });
     prisma.workSession.updateMany.mockResolvedValue({ count: 0 });
     prisma.workSession.createMany.mockResolvedValue({ count: 1 });
+    // 기본값: 기존 복사본 없음(교체 분기 미진입) → upsert 경로로 저장된다.
+    prisma.projectPatternCopy.findUnique.mockResolvedValue(null);
     prisma.projectPatternCopy.upsert.mockResolvedValue(projectPatternCopy);
+    prisma.projectPatternCopy.create.mockResolvedValue(projectPatternCopy);
     prisma.projectPatternCopy.update.mockResolvedValue(projectPatternCopyWithDrawing);
+    prisma.projectPatternCopy.delete.mockResolvedValue(projectPatternCopy);
     prisma.projectPatternCopy.deleteMany.mockResolvedValue({ count: 0 });
     prisma.projectPatternCopy.updateMany.mockResolvedValue({ count: 0 });
     prisma.patternDocument.findFirst.mockResolvedValue(
