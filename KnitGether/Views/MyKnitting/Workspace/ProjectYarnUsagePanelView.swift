@@ -2,7 +2,10 @@ import SwiftUI
 
 struct ProjectYarnUsagePanelView: View {
     @ObservedObject var viewModel: ProjectWorkspaceViewModel
+    @State private var isShowingLinkPicker = false
+    @State private var linkPendingUnlink: ProjectYarnLink?
     let recordAction: () -> Void
+    let recordForLinkAction: (ProjectYarnLink) -> Void
     let editAction: (ProjectYarnUsage) -> Void
     let deleteAction: (ProjectYarnUsage) -> Void
 
@@ -25,7 +28,8 @@ struct ProjectYarnUsagePanelView: View {
             VStack(alignment: .leading, spacing: 14) {
                 AppSoftPanel {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(viewModel.project.yarnSummaryText ?? "연결된 실 없음")
+                        // LINK-02 v1.4: 대표 실과 추가 연결 개수를 함께 요약한다.
+                        Text(yarnSummaryHeaderText)
                             .font(.subheadline)
                             .fontWeight(.semibold)
 
@@ -35,6 +39,8 @@ struct ProjectYarnUsagePanelView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
+
+                linkedYarnsBlock
 
                 if viewModel.yarnUsages.isEmpty {
                     AppSoftPanel {
@@ -50,6 +56,127 @@ struct ProjectYarnUsagePanelView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $isShowingLinkPicker) {
+            YarnLinkPickerSheet(viewModel: viewModel)
+        }
+        .alert("실 연결을 해제할까요?", isPresented: linkUnlinkBinding, presenting: linkPendingUnlink) { link in
+            Button("취소", role: .cancel) {
+                linkPendingUnlink = nil
+            }
+            Button("연결 해제", role: .destructive) {
+                Task {
+                    await viewModel.unlinkYarn(link)
+                    linkPendingUnlink = nil
+                }
+            }
+        } message: { link in
+            Text("\(link.nameSnapshot) 연결이 해제돼요. 창고 원본과 사용 기록은 유지돼요.")
+        }
+    }
+
+    private var yarnSummaryHeaderText: String {
+        let base = viewModel.project.yarnSummaryText
+
+        if viewModel.yarnLinks.isEmpty {
+            return base ?? "연결된 실 없음"
+        }
+
+        if let base {
+            return "\(base) 외 \(viewModel.yarnLinks.count)개"
+        }
+
+        return "연결된 실 \(viewModel.yarnLinks.count)개"
+    }
+
+    private var linkUnlinkBinding: Binding<Bool> {
+        Binding(
+            get: { linkPendingUnlink != nil },
+            set: { isPresented in
+                if !isPresented {
+                    linkPendingUnlink = nil
+                }
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var linkedYarnsBlock: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("추가 연결")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Button {
+                    isShowingLinkPicker = true
+                } label: {
+                    Label("실 연결", systemImage: "plus.circle.fill")
+                        .font(.caption.weight(.semibold))
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(AppTheme.Color.accent)
+                .disabled(!viewModel.areMaterialLinksAvailable)
+            }
+
+            if !viewModel.areMaterialLinksAvailable {
+                Text("추가 연결은 서버에 연결된 상태에서 표시돼요.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else if viewModel.yarnLinks.isEmpty {
+                Text("대표 실 외에 함께 쓰는 실을 연결할 수 있어요.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack(spacing: 6) {
+                    ForEach(viewModel.yarnLinks) { link in
+                        yarnLinkRow(link)
+                    }
+                }
+            }
+        }
+    }
+
+    private func yarnLinkRow(_ link: ProjectYarnLink) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: "circle.hexagongrid")
+                .font(.caption)
+                .foregroundStyle(AppTheme.Color.amber)
+
+            Text(link.summaryText)
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+
+            Spacer(minLength: 8)
+
+            Button {
+                recordForLinkAction(link)
+            } label: {
+                Image(systemName: "plus.circle")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(AppTheme.Color.accent)
+            .accessibilityLabel("\(link.nameSnapshot) 사용량 기록")
+
+            Button(role: .destructive) {
+                linkPendingUnlink = link
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("\(link.nameSnapshot) 연결 해제")
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(AppTheme.Color.warmBackground, in: RoundedRectangle(cornerRadius: 8))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(AppTheme.Color.warmDivider, lineWidth: 1)
         }
     }
 
@@ -105,6 +232,86 @@ struct ProjectYarnUsagePanelView: View {
 
     private func formattedDate(_ date: Date) -> String {
         date.formatted(.dateTime.month(.abbreviated).day().hour().minute())
+    }
+}
+
+private struct YarnLinkPickerSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject var viewModel: ProjectWorkspaceViewModel
+
+    private var selectableYarns: [Yarn] {
+        let linkedIds = Set(viewModel.yarnLinks.compactMap(\.yarnId))
+        return viewModel.availableYarns.filter { yarn in
+            yarn.id != viewModel.project.yarnId && !linkedIds.contains(yarn.id)
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if selectableYarns.isEmpty {
+                    EmptyStateView(
+                        title: "연결할 실이 없어요",
+                        description: "창고의 모든 실이 이미 연결됐거나, 실 창고가 비어 있어요.",
+                        systemImage: "circle.hexagongrid"
+                    )
+                    .padding()
+                } else {
+                    List(selectableYarns) { yarn in
+                        Button {
+                            Task {
+                                let didLink = await viewModel.linkYarn(yarn)
+                                if didLink {
+                                    dismiss()
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "circle")
+                                    .foregroundStyle(.secondary)
+
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(yarn.name)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.primary)
+
+                                    Text(yarnDetailText(for: yarn))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .listRowStyle()
+                    }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .background(AppTheme.Color.warmBackground)
+                }
+            }
+            .warmScreenBackground()
+            .navigationTitle("실 추가 연결")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("완료") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private func yarnDetailText(for yarn: Yarn) -> String {
+        [
+            yarn.brand,
+            yarn.colorway,
+            yarn.weight
+        ]
+        .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+        .filter { !$0.isEmpty }
+        .joined(separator: " · ")
     }
 }
 

@@ -8,9 +8,13 @@ import { PrismaService } from '../database/prisma.service';
 import { ProjectYarnUsageResponseDto } from '../projects/project-response.dto';
 import {
   NeedleResponseDto,
+  ProjectNeedleLinkResponseDto,
+  ProjectYarnLinkResponseDto,
   ToolItemResponseDto,
   YarnResponseDto,
   toNeedleResponse,
+  toProjectNeedleLinkResponse,
+  toProjectYarnLinkResponse,
   toToolItemResponse,
   toYarnResponse,
 } from './library-response.dto';
@@ -391,6 +395,184 @@ export class LibraryService {
         ownerId,
         projectId,
         toolId,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
+
+  // LINK-02 v1.4: 실/바늘 다중 연결. 연결 시점 스냅샷을 링크에 저장하고,
+  // 목록은 원본 생존 여부와 무관하게 링크 스냅샷을 반환한다(LINK-04/05).
+  async listProjectYarnLinks(
+    ownerId: string,
+    projectId: string,
+  ): Promise<ProjectYarnLinkResponseDto[]> {
+    await this.findActiveProject(ownerId, projectId);
+
+    const links = await this.prisma.projectYarnLink.findMany({
+      where: {
+        ownerId,
+        projectId,
+        deletedAt: null,
+      },
+      orderBy: {
+        linkedAt: 'asc',
+      },
+    });
+
+    return links.map(toProjectYarnLinkResponse);
+  }
+
+  async linkYarnToProject(
+    ownerId: string,
+    projectId: string,
+    yarnId: string,
+  ): Promise<ProjectYarnLinkResponseDto> {
+    await this.findActiveProject(ownerId, projectId);
+    const yarn = await this.findActiveYarn(ownerId, yarnId);
+    const now = new Date();
+    const snapshot = {
+      nameSnapshot: yarn.name,
+      brandSnapshot: yarn.brand,
+      colorwaySnapshot: yarn.colorway,
+      weightSnapshot: yarn.weight,
+    };
+
+    const existing = await this.prisma.projectYarnLink.findFirst({
+      where: {
+        ownerId,
+        projectId,
+        yarnId,
+      },
+    });
+
+    // 재연결은 연결 시점 스냅샷을 새로 찍는다(LINK-05 실측 관례와 동일).
+    const link = existing
+      ? await this.prisma.projectYarnLink.update({
+          where: { id: existing.id },
+          data: {
+            ...snapshot,
+            linkedAt: now,
+            deletedAt: null,
+          },
+        })
+      : await this.prisma.projectYarnLink.create({
+          data: {
+            id: randomUUID(),
+            ownerId,
+            projectId,
+            yarnId,
+            ...snapshot,
+            linkedAt: now,
+            deletedAt: null,
+          },
+        });
+
+    return toProjectYarnLinkResponse(link);
+  }
+
+  async unlinkYarnFromProject(
+    ownerId: string,
+    projectId: string,
+    yarnId: string,
+  ): Promise<void> {
+    await this.findActiveProject(ownerId, projectId);
+
+    // 원본 실이 이미 삭제(tombstone)됐어도 연결 해제는 가능해야 한다.
+    await this.prisma.projectYarnLink.updateMany({
+      where: {
+        ownerId,
+        projectId,
+        yarnId,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
+
+  async listProjectNeedleLinks(
+    ownerId: string,
+    projectId: string,
+  ): Promise<ProjectNeedleLinkResponseDto[]> {
+    await this.findActiveProject(ownerId, projectId);
+
+    const links = await this.prisma.projectNeedleLink.findMany({
+      where: {
+        ownerId,
+        projectId,
+        deletedAt: null,
+      },
+      orderBy: {
+        linkedAt: 'asc',
+      },
+    });
+
+    return links.map(toProjectNeedleLinkResponse);
+  }
+
+  async linkNeedleToProject(
+    ownerId: string,
+    projectId: string,
+    needleId: string,
+  ): Promise<ProjectNeedleLinkResponseDto> {
+    await this.findActiveProject(ownerId, projectId);
+    const needle = await this.findActiveNeedle(ownerId, needleId);
+    const now = new Date();
+    const snapshot = {
+      nameSnapshot: needle.name,
+      typeSnapshot: needle.needleType,
+      sizeSnapshot: needle.size,
+      lengthSnapshot: needle.length,
+    };
+
+    const existing = await this.prisma.projectNeedleLink.findFirst({
+      where: {
+        ownerId,
+        projectId,
+        needleId,
+      },
+    });
+
+    const link = existing
+      ? await this.prisma.projectNeedleLink.update({
+          where: { id: existing.id },
+          data: {
+            ...snapshot,
+            linkedAt: now,
+            deletedAt: null,
+          },
+        })
+      : await this.prisma.projectNeedleLink.create({
+          data: {
+            id: randomUUID(),
+            ownerId,
+            projectId,
+            needleId,
+            ...snapshot,
+            linkedAt: now,
+            deletedAt: null,
+          },
+        });
+
+    return toProjectNeedleLinkResponse(link);
+  }
+
+  async unlinkNeedleFromProject(
+    ownerId: string,
+    projectId: string,
+    needleId: string,
+  ): Promise<void> {
+    await this.findActiveProject(ownerId, projectId);
+
+    await this.prisma.projectNeedleLink.updateMany({
+      where: {
+        ownerId,
+        projectId,
+        needleId,
         deletedAt: null,
       },
       data: {

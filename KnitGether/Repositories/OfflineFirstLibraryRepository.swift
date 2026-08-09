@@ -286,6 +286,33 @@ final class OfflineFirstLibraryRepository: LibraryRepository {
         }
     }
 
+    // LINK-02 v1.4 추가 연결은 v1에서 온라인 필수 동작이다.
+    // 새 오프라인 캐시 표면을 만들지 않아 스테일 캐시 계열(결함 31) 재발 여지를 차단하고,
+    // 실패는 에러로 올려 무통보 상태를 만들지 않는다. 오프라인 캐시 확장은 2차 사이클 판단.
+    func fetchYarnLinks(forProjectId projectId: UUID) async throws -> [ProjectYarnLink] {
+        try await remote.fetchYarnLinks(forProjectId: projectId)
+    }
+
+    func linkYarn(_ yarn: Yarn, toProjectId projectId: UUID) async throws -> ProjectYarnLink {
+        try await remote.linkYarn(yarn, toProjectId: projectId)
+    }
+
+    func unlinkYarn(yarnId: UUID, fromProjectId projectId: UUID) async throws {
+        try await remote.unlinkYarn(yarnId: yarnId, fromProjectId: projectId)
+    }
+
+    func fetchNeedleLinks(forProjectId projectId: UUID) async throws -> [ProjectNeedleLink] {
+        try await remote.fetchNeedleLinks(forProjectId: projectId)
+    }
+
+    func linkNeedle(_ needle: Needle, toProjectId projectId: UUID) async throws -> ProjectNeedleLink {
+        try await remote.linkNeedle(needle, toProjectId: projectId)
+    }
+
+    func unlinkNeedle(needleId: UUID, fromProjectId projectId: UUID) async throws {
+        try await remote.unlinkNeedle(needleId: needleId, fromProjectId: projectId)
+    }
+
     func unlinkTool(_ tool: ToolItem, fromProjectId projectId: UUID) async throws {
         let rollbackSnapshot = await local.makeRollbackSnapshot()
         try await local.unlinkTool(tool, fromProjectId: projectId)

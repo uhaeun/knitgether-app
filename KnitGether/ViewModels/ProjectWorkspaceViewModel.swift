@@ -82,6 +82,9 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     @Published private(set) var attachedNeedle: Needle?
     @Published private(set) var availableYarns: [Yarn] = []
     @Published private(set) var availableNeedles: [Needle] = []
+    @Published private(set) var yarnLinks: [ProjectYarnLink] = []
+    @Published private(set) var needleLinks: [ProjectNeedleLink] = []
+    @Published private(set) var areMaterialLinksAvailable = true
     @Published private(set) var availableTools: [ToolItem] = []
     @Published private(set) var linkedTools: [ToolItem] = []
     @Published private(set) var yarnUsages: [ProjectYarnUsage] = []
@@ -359,12 +362,18 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     }
 
     @discardableResult
-    func recordYarnUsage(quantityUsed: Int, memo: String) async -> Bool {
+    func recordYarnUsage(
+        quantityUsed: Int,
+        memo: String,
+        yarnId targetYarnId: UUID? = nil,
+        yarnName targetYarnName: String? = nil
+    ) async -> Bool {
         guard quantityUsed > 0 else {
             errorMessage = "사용 수량은 1개 이상이어야 해요."
             return false
         }
-        guard let yarnId = project.yarnId else {
+        // LINK-02 v1.4: 대상 실을 지정하면 그 실에, 지정하지 않으면 대표 실에 기록한다.
+        guard let yarnId = targetYarnId ?? project.yarnId else {
             errorMessage = "프로젝트에 실을 먼저 연결해 주세요."
             return false
         }
@@ -375,7 +384,9 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             projectId: project.id,
             projectNameSnapshot: project.name,
             yarnId: yarnId,
-            yarnNameSnapshot: project.yarnNameSnapshot ?? attachedYarn?.name ?? "연결된 실",
+            yarnNameSnapshot: targetYarnName
+                ?? (targetYarnId == nil ? project.yarnNameSnapshot ?? attachedYarn?.name : nil)
+                ?? "연결된 실",
             quantityUsed: quantityUsed,
             memo: memo.trimmingCharacters(in: .whitespacesAndNewlines),
             usedAt: now,
@@ -453,6 +464,77 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             errorMessage = nil
         } catch {
             errorMessage = "바늘 창고를 불러오지 못했어요."
+        }
+    }
+
+    /// LINK-02 v1.4 추가 연결. v1에서는 온라인 필수라 실패 시 목록 대신 안내를 표시한다.
+    func loadMaterialLinks() async {
+        do {
+            yarnLinks = try await libraryRepository.fetchYarnLinks(forProjectId: project.id)
+            needleLinks = try await libraryRepository.fetchNeedleLinks(forProjectId: project.id)
+            areMaterialLinksAvailable = true
+        } catch {
+            areMaterialLinksAvailable = false
+        }
+    }
+
+    @discardableResult
+    func linkYarn(_ yarn: Yarn) async -> Bool {
+        do {
+            _ = try await libraryRepository.linkYarn(yarn, toProjectId: project.id)
+            await loadMaterialLinks()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "실을 연결하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    @discardableResult
+    func unlinkYarn(_ link: ProjectYarnLink) async -> Bool {
+        guard let yarnId = link.yarnId else {
+            return false
+        }
+
+        do {
+            try await libraryRepository.unlinkYarn(yarnId: yarnId, fromProjectId: project.id)
+            await loadMaterialLinks()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "실 연결을 해제하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    @discardableResult
+    func linkNeedle(_ needle: Needle) async -> Bool {
+        do {
+            _ = try await libraryRepository.linkNeedle(needle, toProjectId: project.id)
+            await loadMaterialLinks()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "바늘을 연결하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    @discardableResult
+    func unlinkNeedle(_ link: ProjectNeedleLink) async -> Bool {
+        guard let needleId = link.needleId else {
+            return false
+        }
+
+        do {
+            try await libraryRepository.unlinkNeedle(needleId: needleId, fromProjectId: project.id)
+            await loadMaterialLinks()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "바늘 연결을 해제하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
         }
     }
 

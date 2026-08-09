@@ -25,4 +25,11 @@ protocol LibraryRepository {
     func fetchTools(forProjectId projectId: UUID) async throws -> [ToolItem]
     func linkTool(_ tool: ToolItem, toProjectId projectId: UUID) async throws -> ToolItem
     func unlinkTool(_ tool: ToolItem, fromProjectId projectId: UUID) async throws
+    // LINK-02 v1.4 다중 연결. 추가 연결은 링크 레코드(연결 시점 스냅샷)로 관리한다.
+    func fetchYarnLinks(forProjectId projectId: UUID) async throws -> [ProjectYarnLink]
+    func linkYarn(_ yarn: Yarn, toProjectId projectId: UUID) async throws -> ProjectYarnLink
+    func unlinkYarn(yarnId: UUID, fromProjectId projectId: UUID) async throws
+    func fetchNeedleLinks(forProjectId projectId: UUID) async throws -> [ProjectNeedleLink]
+    func linkNeedle(_ needle: Needle, toProjectId projectId: UUID) async throws -> ProjectNeedleLink
+    func unlinkNeedle(needleId: UUID, fromProjectId projectId: UUID) async throws
 }

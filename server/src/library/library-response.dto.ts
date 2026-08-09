@@ -133,3 +133,106 @@ export function toToolItemResponse(tool: ToolItemModel): ToolItemResponseDto {
     syncStatus: 'Synced',
   };
 }
+
+// LINK-02 v1.4 다중 연결. 표시는 연결 시점 스냅샷을 쓴다(LINK-05).
+export type ProjectYarnLinkModel = {
+  id: string;
+  ownerId: string;
+  projectId: string;
+  yarnId: string | null;
+  nameSnapshot: string;
+  brandSnapshot: string | null;
+  colorwaySnapshot: string | null;
+  weightSnapshot: string | null;
+  linkedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+};
+
+export type ProjectNeedleLinkModel = {
+  id: string;
+  ownerId: string;
+  projectId: string;
+  needleId: string | null;
+  nameSnapshot: string;
+  typeSnapshot: string | null;
+  sizeSnapshot: string | null;
+  lengthSnapshot: string | null;
+  linkedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+};
+
+export type ProjectYarnLinkResponseDto = {
+  id: string;
+  ownerId: string;
+  projectId: string;
+  yarnId: string | null;
+  nameSnapshot: string;
+  brandSnapshot: string | null;
+  colorwaySnapshot: string | null;
+  weightSnapshot: string | null;
+  linkedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  syncStatus: SyncStatusDto;
+};
+
+export type ProjectNeedleLinkResponseDto = {
+  id: string;
+  ownerId: string;
+  projectId: string;
+  needleId: string | null;
+  nameSnapshot: string;
+  typeSnapshot: string | null;
+  sizeSnapshot: string | null;
+  lengthSnapshot: string | null;
+  linkedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  syncStatus: SyncStatusDto;
+};
+
+export function toProjectYarnLinkResponse(
+  link: ProjectYarnLinkModel,
+): ProjectYarnLinkResponseDto {
+  return {
+    id: link.id,
+    ownerId: link.ownerId,
+    projectId: link.projectId,
+    yarnId: link.yarnId,
+    nameSnapshot: link.nameSnapshot,
+    brandSnapshot: link.brandSnapshot,
+    colorwaySnapshot: link.colorwaySnapshot,
+    weightSnapshot: link.weightSnapshot,
+    linkedAt: link.linkedAt.toISOString(),
+    createdAt: link.createdAt.toISOString(),
+    updatedAt: link.updatedAt.toISOString(),
+    deletedAt: link.deletedAt?.toISOString() ?? null,
+    syncStatus: 'Synced',
+  };
+}
+
+export function toProjectNeedleLinkResponse(
+  link: ProjectNeedleLinkModel,
+): ProjectNeedleLinkResponseDto {
+  return {
+    id: link.id,
+    ownerId: link.ownerId,
+    projectId: link.projectId,
+    needleId: link.needleId,
+    nameSnapshot: link.nameSnapshot,
+    typeSnapshot: link.typeSnapshot,
+    sizeSnapshot: link.sizeSnapshot,
+    lengthSnapshot: link.lengthSnapshot,
+    linkedAt: link.linkedAt.toISOString(),
+    createdAt: link.createdAt.toISOString(),
+    updatedAt: link.updatedAt.toISOString(),
+    deletedAt: link.deletedAt?.toISOString() ?? null,
+    syncStatus: 'Synced',
+  };
+}

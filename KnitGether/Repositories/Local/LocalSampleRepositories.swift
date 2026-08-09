@@ -680,6 +680,8 @@ struct LocalLibraryRollbackSnapshot {
     let yarnUsages: [ProjectYarnUsage]
     let tools: [ToolItem]
     let projectToolLinks: [ProjectToolLink]
+    let yarnLinks: [ProjectYarnLink]
+    let needleLinks: [ProjectNeedleLink]
 }
 
 final class LocalLibraryRepository: LibraryRepository {
@@ -689,19 +691,25 @@ final class LocalLibraryRepository: LibraryRepository {
         let yarnUsages: [ProjectYarnUsage]
         let tools: [ToolItem]
         let projectToolLinks: [ProjectToolLink]
+        let yarnLinks: [ProjectYarnLink]
+        let needleLinks: [ProjectNeedleLink]
 
         init(
             yarns: [Yarn],
             needles: [Needle],
             yarnUsages: [ProjectYarnUsage],
             tools: [ToolItem] = [],
-            projectToolLinks: [ProjectToolLink] = []
+            projectToolLinks: [ProjectToolLink] = [],
+            yarnLinks: [ProjectYarnLink] = [],
+            needleLinks: [ProjectNeedleLink] = []
         ) {
             self.yarns = yarns
             self.needles = needles
             self.yarnUsages = yarnUsages
             self.tools = tools
             self.projectToolLinks = projectToolLinks
+            self.yarnLinks = yarnLinks
+            self.needleLinks = needleLinks
         }
 
         init(from decoder: Decoder) throws {
@@ -711,6 +719,8 @@ final class LocalLibraryRepository: LibraryRepository {
             yarnUsages = try container.decodeIfPresent([ProjectYarnUsage].self, forKey: .yarnUsages) ?? []
             tools = try container.decodeIfPresent([ToolItem].self, forKey: .tools) ?? []
             projectToolLinks = try container.decodeIfPresent([ProjectToolLink].self, forKey: .projectToolLinks) ?? []
+            yarnLinks = try container.decodeIfPresent([ProjectYarnLink].self, forKey: .yarnLinks) ?? []
+            needleLinks = try container.decodeIfPresent([ProjectNeedleLink].self, forKey: .needleLinks) ?? []
         }
     }
 
@@ -722,6 +732,8 @@ final class LocalLibraryRepository: LibraryRepository {
     private var yarnUsages: [ProjectYarnUsage]
     private var tools: [ToolItem]
     private var projectToolLinks: [ProjectToolLink]
+    private var yarnLinks: [ProjectYarnLink]
+    private var needleLinks: [ProjectNeedleLink]
 
     init(
         yarns: [Yarn]? = nil,
@@ -750,6 +762,8 @@ final class LocalLibraryRepository: LibraryRepository {
             self.yarnUsages = yarnUsages ?? []
             self.tools = tools ?? []
             self.projectToolLinks = projectToolLinks ?? []
+            self.yarnLinks = []
+            self.needleLinks = []
         } else if let resolvedFileURL {
             let cache = Self.loadLibrary(
                 fileURL: resolvedFileURL,
@@ -761,12 +775,16 @@ final class LocalLibraryRepository: LibraryRepository {
             self.yarnUsages = cache.yarnUsages
             self.tools = cache.tools
             self.projectToolLinks = cache.projectToolLinks
+            self.yarnLinks = cache.yarnLinks
+            self.needleLinks = cache.needleLinks
         } else {
             self.yarns = seedSamples ? SampleData.yarns : []
             self.needles = seedSamples ? SampleData.needles : []
             self.yarnUsages = []
             self.tools = []
             self.projectToolLinks = []
+            self.yarnLinks = []
+            self.needleLinks = []
         }
     }
 
@@ -776,7 +794,9 @@ final class LocalLibraryRepository: LibraryRepository {
             needles: needles,
             yarnUsages: yarnUsages,
             tools: tools,
-            projectToolLinks: projectToolLinks
+            projectToolLinks: projectToolLinks,
+            yarnLinks: yarnLinks,
+            needleLinks: needleLinks
         )
     }
 
@@ -786,6 +806,8 @@ final class LocalLibraryRepository: LibraryRepository {
         yarnUsages = snapshot.yarnUsages
         tools = snapshot.tools
         projectToolLinks = snapshot.projectToolLinks
+        yarnLinks = snapshot.yarnLinks
+        needleLinks = snapshot.needleLinks
         try persistLibrary()
     }
 
@@ -1276,6 +1298,146 @@ final class LocalLibraryRepository: LibraryRepository {
         try persistLibrary()
     }
 
+    // LINK-02 v1.4 다중 연결(로컬 모드). 연결 시점 스냅샷을 링크에 저장한다.
+    func fetchYarnLinks(forProjectId projectId: UUID) async throws -> [ProjectYarnLink] {
+        yarnLinks
+            .filter { $0.projectId == projectId && $0.deletedAt == nil }
+            .sorted { $0.linkedAt < $1.linkedAt }
+    }
+
+    func linkYarn(_ yarn: Yarn, toProjectId projectId: UUID) async throws -> ProjectYarnLink {
+        let now = Date()
+
+        // 재연결은 연결 시점 스냅샷을 새로 찍는다(LINK-05 원칙).
+        if let index = yarnLinks.firstIndex(where: { $0.projectId == projectId && $0.yarnId == yarn.id }) {
+            let existing = yarnLinks[index]
+            let refreshed = ProjectYarnLink(
+                id: existing.id,
+                ownerId: existing.ownerId,
+                projectId: projectId,
+                yarnId: yarn.id,
+                nameSnapshot: yarn.name,
+                brandSnapshot: yarn.brand,
+                colorwaySnapshot: yarn.colorway,
+                weightSnapshot: yarn.weight,
+                linkedAt: now,
+                createdAt: existing.createdAt,
+                updatedAt: now,
+                deletedAt: nil
+            )
+            yarnLinks[index] = refreshed
+            try persistLibrary()
+            return refreshed
+        }
+
+        let link = ProjectYarnLink(
+            projectId: projectId,
+            yarnId: yarn.id,
+            nameSnapshot: yarn.name,
+            brandSnapshot: yarn.brand,
+            colorwaySnapshot: yarn.colorway,
+            weightSnapshot: yarn.weight,
+            linkedAt: now
+        )
+        yarnLinks.append(link)
+        try persistLibrary()
+        return link
+    }
+
+    func unlinkYarn(yarnId: UUID, fromProjectId projectId: UUID) async throws {
+        let now = Date()
+        yarnLinks = yarnLinks.map { link in
+            guard link.projectId == projectId, link.yarnId == yarnId, link.deletedAt == nil else {
+                return link
+            }
+
+            return ProjectYarnLink(
+                id: link.id,
+                ownerId: link.ownerId,
+                projectId: link.projectId,
+                yarnId: link.yarnId,
+                nameSnapshot: link.nameSnapshot,
+                brandSnapshot: link.brandSnapshot,
+                colorwaySnapshot: link.colorwaySnapshot,
+                weightSnapshot: link.weightSnapshot,
+                linkedAt: link.linkedAt,
+                createdAt: link.createdAt,
+                updatedAt: now,
+                deletedAt: now
+            )
+        }
+        try persistLibrary()
+    }
+
+    func fetchNeedleLinks(forProjectId projectId: UUID) async throws -> [ProjectNeedleLink] {
+        needleLinks
+            .filter { $0.projectId == projectId && $0.deletedAt == nil }
+            .sorted { $0.linkedAt < $1.linkedAt }
+    }
+
+    func linkNeedle(_ needle: Needle, toProjectId projectId: UUID) async throws -> ProjectNeedleLink {
+        let now = Date()
+
+        if let index = needleLinks.firstIndex(where: { $0.projectId == projectId && $0.needleId == needle.id }) {
+            let existing = needleLinks[index]
+            let refreshed = ProjectNeedleLink(
+                id: existing.id,
+                ownerId: existing.ownerId,
+                projectId: projectId,
+                needleId: needle.id,
+                nameSnapshot: needle.name,
+                typeSnapshot: needle.needleType,
+                sizeSnapshot: needle.size,
+                lengthSnapshot: needle.length,
+                linkedAt: now,
+                createdAt: existing.createdAt,
+                updatedAt: now,
+                deletedAt: nil
+            )
+            needleLinks[index] = refreshed
+            try persistLibrary()
+            return refreshed
+        }
+
+        let link = ProjectNeedleLink(
+            projectId: projectId,
+            needleId: needle.id,
+            nameSnapshot: needle.name,
+            typeSnapshot: needle.needleType,
+            sizeSnapshot: needle.size,
+            lengthSnapshot: needle.length,
+            linkedAt: now
+        )
+        needleLinks.append(link)
+        try persistLibrary()
+        return link
+    }
+
+    func unlinkNeedle(needleId: UUID, fromProjectId projectId: UUID) async throws {
+        let now = Date()
+        needleLinks = needleLinks.map { link in
+            guard link.projectId == projectId, link.needleId == needleId, link.deletedAt == nil else {
+                return link
+            }
+
+            return ProjectNeedleLink(
+                id: link.id,
+                ownerId: link.ownerId,
+                projectId: link.projectId,
+                needleId: link.needleId,
+                nameSnapshot: link.nameSnapshot,
+                typeSnapshot: link.typeSnapshot,
+                sizeSnapshot: link.sizeSnapshot,
+                lengthSnapshot: link.lengthSnapshot,
+                linkedAt: link.linkedAt,
+                createdAt: link.createdAt,
+                updatedAt: now,
+                deletedAt: now
+            )
+        }
+        try persistLibrary()
+    }
+
     func cacheSyncedProjectTools(_ remoteTools: [ToolItem], forProjectId projectId: UUID) async {
         await cacheSyncedTools(remoteTools)
 
@@ -1396,7 +1558,9 @@ final class LocalLibraryRepository: LibraryRepository {
                 needles: needles,
                 yarnUsages: yarnUsages,
                 tools: tools,
-                projectToolLinks: projectToolLinks
+                projectToolLinks: projectToolLinks,
+                yarnLinks: yarnLinks,
+                needleLinks: needleLinks
             )
         )
         try data.write(to: fileURL, options: [.atomic])

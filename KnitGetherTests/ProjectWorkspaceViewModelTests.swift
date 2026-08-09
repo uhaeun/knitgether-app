@@ -1831,6 +1831,30 @@ struct ProjectWorkspaceViewModelTests {
             return tool
         }
 
+        func fetchYarnLinks(forProjectId projectId: UUID) async throws -> [ProjectYarnLink] {
+            return []
+        }
+
+        func linkYarn(_ yarn: Yarn, toProjectId projectId: UUID) async throws -> ProjectYarnLink {
+            fatalError("Not needed in this test")
+        }
+
+        func unlinkYarn(yarnId: UUID, fromProjectId projectId: UUID) async throws {
+            fatalError("Not needed in this test")
+        }
+
+        func fetchNeedleLinks(forProjectId projectId: UUID) async throws -> [ProjectNeedleLink] {
+            return []
+        }
+
+        func linkNeedle(_ needle: Needle, toProjectId projectId: UUID) async throws -> ProjectNeedleLink {
+            fatalError("Not needed in this test")
+        }
+
+        func unlinkNeedle(needleId: UUID, fromProjectId projectId: UUID) async throws {
+            fatalError("Not needed in this test")
+        }
+
         func unlinkTool(_ tool: ToolItem, fromProjectId projectId: UUID) async throws {
             unlinkedToolIDsByProjectID[projectId, default: []].append(tool.id)
             projectTools[projectId]?.removeAll { $0.id == tool.id }

@@ -17,6 +17,8 @@ import {
 import { ProjectYarnUsageResponseDto } from '../projects/project-response.dto';
 import {
   NeedleResponseDto,
+  ProjectNeedleLinkResponseDto,
+  ProjectYarnLinkResponseDto,
   ToolItemResponseDto,
   YarnResponseDto,
 } from './library-response.dto';
@@ -167,6 +169,79 @@ export class LibraryController {
       currentUser.id,
       projectId,
       toolId,
+    );
+  }
+
+  @Get('projects/:projectId/yarn-links')
+  listProjectYarnLinks(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('projectId') projectId: string,
+  ): Promise<ProjectYarnLinkResponseDto[]> {
+    return this.libraryService.listProjectYarnLinks(currentUser.id, projectId);
+  }
+
+  @Post('projects/:projectId/yarns/:yarnId')
+  linkProjectYarn(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('projectId') projectId: string,
+    @Param('yarnId') yarnId: string,
+  ): Promise<ProjectYarnLinkResponseDto> {
+    return this.libraryService.linkYarnToProject(
+      currentUser.id,
+      projectId,
+      yarnId,
+    );
+  }
+
+  @Delete('projects/:projectId/yarns/:yarnId')
+  @HttpCode(204)
+  unlinkProjectYarn(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('projectId') projectId: string,
+    @Param('yarnId') yarnId: string,
+  ): Promise<void> {
+    return this.libraryService.unlinkYarnFromProject(
+      currentUser.id,
+      projectId,
+      yarnId,
+    );
+  }
+
+  @Get('projects/:projectId/needle-links')
+  listProjectNeedleLinks(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('projectId') projectId: string,
+  ): Promise<ProjectNeedleLinkResponseDto[]> {
+    return this.libraryService.listProjectNeedleLinks(
+      currentUser.id,
+      projectId,
+    );
+  }
+
+  @Post('projects/:projectId/needles/:needleId')
+  linkProjectNeedle(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('projectId') projectId: string,
+    @Param('needleId') needleId: string,
+  ): Promise<ProjectNeedleLinkResponseDto> {
+    return this.libraryService.linkNeedleToProject(
+      currentUser.id,
+      projectId,
+      needleId,
+    );
+  }
+
+  @Delete('projects/:projectId/needles/:needleId')
+  @HttpCode(204)
+  unlinkProjectNeedle(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('projectId') projectId: string,
+    @Param('needleId') needleId: string,
+  ): Promise<void> {
+    return this.libraryService.unlinkNeedleFromProject(
+      currentUser.id,
+      projectId,
+      needleId,
     );
   }
 }

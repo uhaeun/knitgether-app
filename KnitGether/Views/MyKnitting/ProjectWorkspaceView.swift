@@ -32,6 +32,7 @@ struct ProjectWorkspaceView: View {
     @State private var isShowingTargetRowEditor = false
     @State private var isShowingCounterMemoEditor = false
     @State private var isShowingYarnUsageSheet = false
+    @State private var yarnUsageTargetLink: ProjectYarnLink?
     @State private var isShowingWorkSessionList = false
     @State private var isCounterSheetExpanded = false
     @State private var isConfirmingPatternReplacement = false
@@ -263,11 +264,14 @@ struct ProjectWorkspaceView: View {
         .sheet(isPresented: $isShowingYarnUsageSheet) {
             YarnUsageRecordSheet(
                 title: editingYarnUsage == nil ? "실 사용 기록" : "실 사용 수정",
-                yarnName: viewModel.project.yarnSummaryText ?? "연결된 실",
+                yarnName: yarnUsageTargetLink?.summaryText
+                    ?? viewModel.project.yarnSummaryText
+                    ?? "연결된 실",
                 maxQuantity: maxYarnUsageQuantity,
                 cancelAction: {
                     isShowingYarnUsageSheet = false
                     editingYarnUsage = nil
+                    yarnUsageTargetLink = nil
                 },
                 saveAction: { quantity, memo in
                     Task {
@@ -279,15 +283,19 @@ struct ProjectWorkspaceView: View {
                                 memo: memo
                             )
                         } else {
+                            // LINK-02 v1.4: 추가 연결 실을 지정하면 그 실에 기록한다.
                             didRecord = await viewModel.recordYarnUsage(
                                 quantityUsed: quantity,
-                                memo: memo
+                                memo: memo,
+                                yarnId: yarnUsageTargetLink?.yarnId,
+                                yarnName: yarnUsageTargetLink?.nameSnapshot
                             )
                         }
 
                         if didRecord {
                             isShowingYarnUsageSheet = false
                             editingYarnUsage = nil
+                            yarnUsageTargetLink = nil
                         }
                     }
                 },
@@ -407,6 +415,7 @@ struct ProjectWorkspaceView: View {
             await viewModel.loadDrawingData()
             await viewModel.loadYarnUsage()
             await viewModel.loadNeedles()
+            await viewModel.loadMaterialLinks()
             await viewModel.loadTools()
             await viewModel.loadProgressPhotos()
             await viewModel.loadGaugeRecords()
@@ -541,6 +550,14 @@ struct ProjectWorkspaceView: View {
             viewModel: viewModel,
             recordAction: {
                 editingYarnUsage = nil
+                yarnUsageTargetLink = nil
+                yarnUsageQuantity = 1
+                yarnUsageMemo = ""
+                isShowingYarnUsageSheet = true
+            },
+            recordForLinkAction: { link in
+                editingYarnUsage = nil
+                yarnUsageTargetLink = link
                 yarnUsageQuantity = 1
                 yarnUsageMemo = ""
                 isShowingYarnUsageSheet = true

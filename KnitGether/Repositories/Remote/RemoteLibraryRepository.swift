@@ -139,6 +139,42 @@ final class RemoteLibraryRepository: LibraryRepository {
             "library/projects/\(projectId.uuidString.lowercased())/tools/\(tool.id.uuidString.lowercased())"
         )
     }
+
+    func fetchYarnLinks(forProjectId projectId: UUID) async throws -> [ProjectYarnLink] {
+        try await apiClient.get("library/projects/\(projectId.uuidString.lowercased())/yarn-links")
+    }
+
+    func linkYarn(_ yarn: Yarn, toProjectId projectId: UUID) async throws -> ProjectYarnLink {
+        try await apiClient.send(
+            "library/projects/\(projectId.uuidString.lowercased())/yarns/\(yarn.id.uuidString.lowercased())",
+            method: "POST",
+            body: EmptyRequest()
+        )
+    }
+
+    func unlinkYarn(yarnId: UUID, fromProjectId projectId: UUID) async throws {
+        try await apiClient.delete(
+            "library/projects/\(projectId.uuidString.lowercased())/yarns/\(yarnId.uuidString.lowercased())"
+        )
+    }
+
+    func fetchNeedleLinks(forProjectId projectId: UUID) async throws -> [ProjectNeedleLink] {
+        try await apiClient.get("library/projects/\(projectId.uuidString.lowercased())/needle-links")
+    }
+
+    func linkNeedle(_ needle: Needle, toProjectId projectId: UUID) async throws -> ProjectNeedleLink {
+        try await apiClient.send(
+            "library/projects/\(projectId.uuidString.lowercased())/needles/\(needle.id.uuidString.lowercased())",
+            method: "POST",
+            body: EmptyRequest()
+        )
+    }
+
+    func unlinkNeedle(needleId: UUID, fromProjectId projectId: UUID) async throws {
+        try await apiClient.delete(
+            "library/projects/\(projectId.uuidString.lowercased())/needles/\(needleId.uuidString.lowercased())"
+        )
+    }
 }
 
 private struct SaveYarnRequest: Encodable {

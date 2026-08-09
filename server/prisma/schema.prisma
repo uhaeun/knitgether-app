@@ -36,6 +36,8 @@ model UserProfile {
   needles              Needle[]
   tools                ToolItem[]
   projectToolLinks     ProjectToolLink[]
+  projectYarnLinks     ProjectYarnLink[]
+  projectNeedleLinks   ProjectNeedleLink[]
   projectProgressPhotos ProjectProgressPhoto[]
 }
 
@@ -89,6 +91,8 @@ model Project {
   gaugeRecords GaugeRecord[]
   yarnUsages   ProjectYarnUsage[]
   toolLinks    ProjectToolLink[]
+  yarnLinks    ProjectYarnLink[]
+  needleLinks  ProjectNeedleLink[]
   progressPhotos ProjectProgressPhoto[]
 
   @@index([ownerId, deletedAt])
@@ -455,6 +459,7 @@ model Yarn {
 
   owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   projectYarnUsages ProjectYarnUsage[]
+  projectLinks      ProjectYarnLink[]
 
   @@index([ownerId, deletedAt])
 }
@@ -532,4 +537,49 @@ model ProjectToolLink {
   @@unique([projectId, toolId])
   @@index([ownerId, projectId, deletedAt])
   @@index([ownerId, toolId, deletedAt])
+}
+
+// LINK-02 v1.4: 실/바늘 다중 연결. 대표(Project.yarnId/needleId)는 유지하고
+// 추가 연결을 링크 레코드로 관리한다. 표시는 연결 시점 스냅샷을 쓴다(LINK-05).
+model ProjectYarnLink {
+  id               String    @id @db.Uuid
+  ownerId          String
+  projectId        String    @db.Uuid
+  yarnId           String?   @db.Uuid
+  nameSnapshot     String
+  brandSnapshot    String?
+  colorwaySnapshot String?
+  weightSnapshot   String?
+  linkedAt         DateTime  @default(now())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  yarn    Yarn?       @relation(fields: [yarnId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, projectId, deletedAt])
+  @@index([ownerId, yarnId, deletedAt])
+}
+
+model ProjectNeedleLink {
+  id             String    @id @db.Uuid
+  ownerId        String
+  projectId      String    @db.Uuid
+  needleId       String?   @db.Uuid
+  nameSnapshot   String
+  typeSnapshot   String?
+  sizeSnapshot   String?
+  lengthSnapshot String?
+  linkedAt       DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  owner   UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, projectId, deletedAt])
+  @@index([ownerId, needleId, deletedAt])
 }
