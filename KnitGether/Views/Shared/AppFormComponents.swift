@@ -75,6 +75,7 @@ struct AppFormTextFieldRow: View {
     var axis: Axis = .horizontal
     var minHeight: CGFloat? = nil
     var identifier: String? = nil
+    var isRequired: Bool = false
 
     var body: some View {
         HStack(alignment: axis == .vertical ? .top : .center, spacing: 12) {
@@ -85,9 +86,20 @@ struct AppFormTextFieldRow: View {
                 .padding(.top, axis == .vertical ? 3 : 0)
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(title)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                HStack(spacing: 4) {
+                    Text(title)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+
+                    if isRequired {
+                        Text("필수")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(AppTheme.Color.rose)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1)
+                            .background(AppTheme.Color.roseSoft, in: Capsule())
+                    }
+                }
 
                 textField
             }

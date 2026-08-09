@@ -524,7 +524,8 @@ private struct YarnFormView: View {
                             placeholder: "예: Cotton DK",
                             systemImage: "textformat",
                             text: $formData.name,
-                            identifier: AppAccessibilityID.Library.yarnNameField
+                            identifier: AppAccessibilityID.Library.yarnNameField,
+                            isRequired: true
                         )
 
                         AppFormDivider()

@@ -124,6 +124,13 @@ struct NeedleFormData {
     var canSave: Bool {
         !trimmedName.isEmpty && !trimmedNeedleType.isEmpty && !trimmedSize.isEmpty
     }
+
+    /// 표기 통일용 표준 바늘 사이즈. 자유 입력의 편차(5.00mm 등)를 줄이기 위한 퀵픽 목록이다.
+    static let standardSizes: [String] = [
+        "2.0mm", "2.25mm", "2.5mm", "2.75mm", "3.0mm", "3.25mm", "3.5mm", "3.75mm",
+        "4.0mm", "4.5mm", "5.0mm", "5.5mm", "6.0mm", "6.5mm", "7.0mm", "8.0mm",
+        "9.0mm", "10.0mm", "12.0mm", "15.0mm"
+    ]
 }
 
 struct ToolFormData {

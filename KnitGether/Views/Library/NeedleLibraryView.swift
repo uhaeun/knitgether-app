@@ -424,7 +424,8 @@ private struct NeedleFormView: View {
                             placeholder: "예: 치아오구 레드",
                             systemImage: "textformat",
                             text: $formData.name,
-                            identifier: AppAccessibilityID.Library.needleNameField
+                            identifier: AppAccessibilityID.Library.needleNameField,
+                            isRequired: true
                         )
 
                         AppFormDivider()
@@ -434,18 +435,39 @@ private struct NeedleFormView: View {
                             placeholder: "대바늘, 코바늘, 줄바늘",
                             systemImage: "tag",
                             text: $formData.needleType,
-                            identifier: AppAccessibilityID.Library.needleTypeField
+                            identifier: AppAccessibilityID.Library.needleTypeField,
+                            isRequired: true
                         )
 
                         AppFormDivider()
 
-                        AppFormTextFieldRow(
-                            title: "사이즈",
-                            placeholder: "예: 4.0mm",
-                            systemImage: "ruler",
-                            text: $formData.size,
-                            identifier: AppAccessibilityID.Library.needleSizeField
-                        )
+                        // 자유 입력을 유지하되(POM과 기존 데이터 호환) 표준 사이즈 퀵픽으로
+                        // 표기 편차(예: 5.00mm vs 5.0mm)를 줄인다.
+                        HStack(alignment: .center, spacing: 8) {
+                            AppFormTextFieldRow(
+                                title: "사이즈",
+                                placeholder: "예: 4.0mm",
+                                systemImage: "ruler",
+                                text: $formData.size,
+                                identifier: AppAccessibilityID.Library.needleSizeField,
+                                isRequired: true
+                            )
+
+                            Menu {
+                                ForEach(NeedleFormData.standardSizes, id: \.self) { size in
+                                    Button(size) {
+                                        formData.size = size
+                                    }
+                                }
+                            } label: {
+                                Image(systemName: "chevron.up.chevron.down")
+                                    .font(.caption.weight(.bold))
+                                    .foregroundStyle(AppTheme.Color.sage)
+                                    .frame(width: 30, height: 30)
+                                    .background(AppTheme.Color.sage.opacity(0.12), in: RoundedRectangle(cornerRadius: AppTheme.Radius.small))
+                            }
+                            .accessibilityLabel("표준 사이즈 선택")
+                        }
 
                         AppFormDivider()
 

@@ -470,7 +470,8 @@ private struct ToolFormView: View {
                             placeholder: "예: 코마커 세트",
                             systemImage: "textformat",
                             text: $formData.name,
-                            identifier: AppAccessibilityID.Library.toolNameField
+                            identifier: AppAccessibilityID.Library.toolNameField,
+                            isRequired: true
                         )
 
                         AppFormDivider()
@@ -480,7 +481,8 @@ private struct ToolFormView: View {
                             placeholder: "마커, 줄자, 돗바늘 등",
                             systemImage: "tag",
                             text: $formData.type,
-                            identifier: AppAccessibilityID.Library.toolTypeField
+                            identifier: AppAccessibilityID.Library.toolTypeField,
+                            isRequired: true
                         )
 
                         AppFormDivider()
