@@ -251,6 +251,15 @@ private struct ToolDetailView: View {
                         }
                     }
 
+                    detailSection(title: "사진", systemImage: "photo") {
+                        LibraryItemPhotoContent(
+                            hasPhoto: currentTool.photoByteSize != nil,
+                            loadPhoto: { await viewModel.loadPhotoData(for: currentTool) },
+                            uploadPhoto: { data in await viewModel.uploadPhoto(data, for: currentTool) },
+                            deletePhoto: { await viewModel.deletePhoto(for: currentTool) }
+                        )
+                    }
+
                     if let url = linkURL {
                         detailSection(title: "링크", systemImage: "link") {
                         Link(destination: url) {

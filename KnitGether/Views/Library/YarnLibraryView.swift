@@ -252,6 +252,15 @@ private struct YarnDetailView: View {
                         }
                     }
 
+                    detailSection(title: "사진", systemImage: "photo") {
+                        LibraryItemPhotoContent(
+                            hasPhoto: currentYarn.photoByteSize != nil,
+                            loadPhoto: { await viewModel.loadPhotoData(for: currentYarn) },
+                            uploadPhoto: { data in await viewModel.uploadPhoto(data, for: currentYarn) },
+                            deletePhoto: { await viewModel.deletePhoto(for: currentYarn) }
+                        )
+                    }
+
                     if !trimmedNotes.isEmpty {
                         detailSection(title: "메모", systemImage: "note.text") {
                             Text(trimmedNotes)

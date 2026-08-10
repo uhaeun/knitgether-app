@@ -7,8 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
+import { UploadedPatternFile } from '../patterns/uploaded-pattern-file';
 import { ApiAuthGuard } from '../auth/api-auth.guard';
 import {
   CurrentUser,
@@ -170,6 +176,111 @@ export class LibraryController {
       projectId,
       toolId,
     );
+  }
+
+  @Post('yarns/:id/photo')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: Number(process.env.PROGRESS_PHOTO_UPLOAD_MAX_BYTES ?? 15_728_640),
+      },
+    }),
+  )
+  uploadYarnPhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @UploadedFile() file?: UploadedPatternFile,
+  ): Promise<YarnResponseDto> {
+    return this.libraryService.uploadYarnPhoto(currentUser.id, id, file);
+  }
+
+  @Get('yarns/:id/photo')
+  async downloadYarnPhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const photo = await this.libraryService.getYarnPhotoFile(currentUser.id, id);
+    response.setHeader('Content-Type', photo.contentType);
+    this.libraryService.openPhotoReadStream(photo.storageKey).pipe(response);
+  }
+
+  @Delete('yarns/:id/photo')
+  deleteYarnPhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<YarnResponseDto> {
+    return this.libraryService.deleteYarnPhoto(currentUser.id, id);
+  }
+
+  @Post('needles/:id/photo')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: Number(process.env.PROGRESS_PHOTO_UPLOAD_MAX_BYTES ?? 15_728_640),
+      },
+    }),
+  )
+  uploadNeedlePhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @UploadedFile() file?: UploadedPatternFile,
+  ): Promise<NeedleResponseDto> {
+    return this.libraryService.uploadNeedlePhoto(currentUser.id, id, file);
+  }
+
+  @Get('needles/:id/photo')
+  async downloadNeedlePhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const photo = await this.libraryService.getNeedlePhotoFile(currentUser.id, id);
+    response.setHeader('Content-Type', photo.contentType);
+    this.libraryService.openPhotoReadStream(photo.storageKey).pipe(response);
+  }
+
+  @Delete('needles/:id/photo')
+  deleteNeedlePhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<NeedleResponseDto> {
+    return this.libraryService.deleteNeedlePhoto(currentUser.id, id);
+  }
+
+  @Post('tools/:id/photo')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: Number(process.env.PROGRESS_PHOTO_UPLOAD_MAX_BYTES ?? 15_728_640),
+      },
+    }),
+  )
+  uploadToolPhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @UploadedFile() file?: UploadedPatternFile,
+  ): Promise<ToolItemResponseDto> {
+    return this.libraryService.uploadToolPhoto(currentUser.id, id, file);
+  }
+
+  @Get('tools/:id/photo')
+  async downloadToolPhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+    @Res() response: Response,
+  ): Promise<void> {
+    const photo = await this.libraryService.getToolPhotoFile(currentUser.id, id);
+    response.setHeader('Content-Type', photo.contentType);
+    this.libraryService.openPhotoReadStream(photo.storageKey).pipe(response);
+  }
+
+  @Delete('tools/:id/photo')
+  deleteToolPhoto(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('id') id: string,
+  ): Promise<ToolItemResponseDto> {
+    return this.libraryService.deleteToolPhoto(currentUser.id, id);
   }
 
   @Get('projects/:projectId/yarn-links')

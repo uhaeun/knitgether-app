@@ -1,5 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { promises as fs } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/app.setup';
@@ -47,6 +50,7 @@ type MockPrismaService = {
 describe('Library route', () => {
   let app: INestApplication;
   let prisma: MockPrismaService;
+  let storageRoot: string;
 
   const yarnId = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
   const needleId = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd';
@@ -147,6 +151,8 @@ describe('Library route', () => {
   beforeAll(async () => {
     process.env.DEV_AUTH_TOKEN = 'dev-token';
     process.env.DEV_AUTH_USER_ID = 'user-a';
+    storageRoot = await fs.mkdtemp(join(tmpdir(), 'knitgether-library-'));
+    process.env.FILE_STORAGE_ROOT = storageRoot;
 
     prisma = {
       userProfile: {
@@ -249,7 +255,9 @@ describe('Library route', () => {
   afterAll(async () => {
     delete process.env.DEV_AUTH_TOKEN;
     delete process.env.DEV_AUTH_USER_ID;
+    delete process.env.FILE_STORAGE_ROOT;
     await app.close();
+    await fs.rm(storageRoot, { recursive: true, force: true });
   });
 
   it('rejects unauthenticated yarn requests', async () => {
@@ -595,10 +603,79 @@ describe('Library route', () => {
     expect(response.body.sizeSnapshot).toBe(activeNeedle.size);
   });
 
+  it('uploads a representative photo for an owned yarn', async () => {
+    const photoBytes = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10]);
+    prisma.yarn.update.mockResolvedValue({
+      ...activeYarn,
+      photoContentType: 'image/jpeg',
+      photoByteSize: photoBytes.byteLength,
+    });
+
+    const response = await request(app.getHttpServer())
+      .post(`/api/v1/library/yarns/${yarnId}/photo`)
+      .set('Authorization', 'Bearer dev-token')
+      .attach('file', photoBytes, {
+        filename: 'yarn.jpg',
+        contentType: 'image/jpeg',
+      })
+      .expect(201);
+
+    expect(prisma.yarn.update).toHaveBeenCalledWith({
+      where: { id: yarnId },
+      data: expect.objectContaining({
+        photoStorageKey: expect.stringContaining(`library/user-a/yarns/${yarnId}`),
+        photoContentType: 'image/jpeg',
+        photoByteSize: photoBytes.byteLength,
+      }),
+    });
+    expect(response.body.photoContentType).toBe('image/jpeg');
+  });
+
+  it('rejects a non-image yarn photo upload', async () => {
+    await request(app.getHttpServer())
+      .post(`/api/v1/library/yarns/${yarnId}/photo`)
+      .set('Authorization', 'Bearer dev-token')
+      .attach('file', Buffer.from('plain text'), {
+        filename: 'notes.txt',
+        contentType: 'text/plain',
+      })
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('VALIDATION_FAILED');
+      });
+
+    expect(prisma.yarn.update).not.toHaveBeenCalled();
+  });
+
+  it('deletes a yarn photo and clears photo fields', async () => {
+    prisma.yarn.findFirst.mockResolvedValue({
+      ...activeYarn,
+      photoStorageKey: `library/user-a/yarns/${yarnId}/old.jpg`,
+      photoContentType: 'image/jpeg',
+      photoByteSize: 6,
+    });
+
+    await request(app.getHttpServer())
+      .delete(`/api/v1/library/yarns/${yarnId}/photo`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200);
+
+    expect(prisma.yarn.update).toHaveBeenCalledWith({
+      where: { id: yarnId },
+      data: {
+        photoStorageKey: null,
+        photoContentType: null,
+        photoByteSize: null,
+      },
+    });
+  });
+
   function expectedYarnResponse() {
     return {
       id: yarnId,
       ownerId: 'user-a',
+      photoContentType: null,
+      photoByteSize: null,
       name: 'Soft Merino DK',
       brand: 'Sample Yarn Co.',
       colorway: 'Cloud Gray',
@@ -616,6 +693,8 @@ describe('Library route', () => {
     return {
       id: needleId,
       ownerId: 'user-a',
+      photoContentType: null,
+      photoByteSize: null,
       name: 'Wood Circular Needle',
       needleType: 'Circular',
       size: '5.0 mm',

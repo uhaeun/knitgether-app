@@ -453,6 +453,9 @@ model Yarn {
   weight    String?
   quantity  Int
   notes     String    @default("")
+  photoStorageKey  String?
+  photoContentType String?
+  photoByteSize    Int?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -493,6 +496,9 @@ model Needle {
   size       String
   length     String?
   notes      String    @default("")
+  photoStorageKey  String?
+  photoContentType String?
+  photoByteSize    Int?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
@@ -509,6 +515,9 @@ model ToolItem {
   type      String
   link      String?
   memo      String    @default("")
+  photoStorageKey  String?
+  photoContentType String?
+  photoByteSize    Int?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?

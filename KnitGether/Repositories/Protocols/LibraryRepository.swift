@@ -7,6 +7,13 @@
 
 import Foundation
 
+/// 관찰 6: 실, 바늘, 도구의 대표 사진. rawValue는 서버 경로 세그먼트다.
+enum LibraryItemPhotoKind: String {
+    case yarn = "yarns"
+    case needle = "needles"
+    case tool = "tools"
+}
+
 protocol LibraryRepository {
     func fetchYarns() async throws -> [Yarn]
     func saveYarn(_ yarn: Yarn) async throws
@@ -32,4 +39,23 @@ protocol LibraryRepository {
     func fetchNeedleLinks(forProjectId projectId: UUID) async throws -> [ProjectNeedleLink]
     func linkNeedle(_ needle: Needle, toProjectId projectId: UUID) async throws -> ProjectNeedleLink
     func unlinkNeedle(needleId: UUID, fromProjectId projectId: UUID) async throws
+    // 대표 사진(관찰 6). v1에서는 온라인 필수 동작이다.
+    func uploadLibraryItemPhoto(_ imageData: Data, fileName: String, kind: LibraryItemPhotoKind, itemId: UUID) async throws
+    func fetchLibraryItemPhotoData(kind: LibraryItemPhotoKind, itemId: UUID) async throws -> Data
+    func deleteLibraryItemPhoto(kind: LibraryItemPhotoKind, itemId: UUID) async throws
+}
+
+extension LibraryRepository {
+    // 기본 구현: 사진을 지원하지 않는 저장소(로컬 모드, 테스트 목)용.
+    func uploadLibraryItemPhoto(_ imageData: Data, fileName: String, kind: LibraryItemPhotoKind, itemId: UUID) async throws {
+        throw APIError.unsupportedOperation("사진은 서버에 연결된 상태에서만 저장할 수 있어요.")
+    }
+
+    func fetchLibraryItemPhotoData(kind: LibraryItemPhotoKind, itemId: UUID) async throws -> Data {
+        throw APIError.unsupportedOperation("사진은 서버에 연결된 상태에서만 볼 수 있어요.")
+    }
+
+    func deleteLibraryItemPhoto(kind: LibraryItemPhotoKind, itemId: UUID) async throws {
+        throw APIError.unsupportedOperation("사진은 서버에 연결된 상태에서만 삭제할 수 있어요.")
+    }
 }

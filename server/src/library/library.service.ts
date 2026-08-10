@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../database/prisma.service';
+import { LocalFileStorageService } from '../storage/local-file-storage.service';
+import { UploadedPatternFile } from '../patterns/uploaded-pattern-file';
 import { ProjectYarnUsageResponseDto } from '../projects/project-response.dto';
 import {
   NeedleResponseDto,
@@ -22,7 +24,10 @@ import { SaveNeedleDto, SaveToolItemDto, SaveYarnDto } from './library-save.dto'
 
 @Injectable()
 export class LibraryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly fileStorage: LocalFileStorageService,
+  ) {}
 
   async listYarns(ownerId: string): Promise<YarnResponseDto[]> {
     const yarns = await this.prisma.yarn.findMany({
@@ -579,6 +584,240 @@ export class LibraryService {
         deletedAt: new Date(),
       },
     });
+  }
+
+  // 관찰 6: 실, 바늘, 도구의 대표 사진 1장. 교체 시 이전 파일은 정리한다.
+  async uploadYarnPhoto(
+    ownerId: string,
+    id: string,
+    file: UploadedPatternFile | undefined,
+  ): Promise<YarnResponseDto> {
+    this.assertImage(file);
+    const yarn = await this.findActiveYarn(ownerId, id);
+    const stored = await this.fileStorage.saveLibraryItemPhoto({
+      ownerId,
+      itemKind: 'yarns',
+      itemId: id,
+      fileId: randomUUID(),
+      fileName: file.originalname,
+      buffer: file.buffer,
+    });
+
+    const updated = await this.prisma.yarn.update({
+      where: { id },
+      data: {
+        photoStorageKey: stored.storageKey,
+        photoContentType: file.mimetype,
+        photoByteSize: stored.byteSize,
+      },
+    });
+
+    await this.fileStorage.remove(yarn.photoStorageKey);
+    return toYarnResponse(updated);
+  }
+
+  async getYarnPhotoFile(ownerId: string, id: string) {
+    const yarn = await this.findActiveYarn(ownerId, id);
+
+    if (!yarn.photoStorageKey) {
+      throw new NotFoundException({
+        code: 'PHOTO_NOT_FOUND',
+        message: 'Photo not found.',
+      });
+    }
+
+    await this.fileStorage.assertExists(yarn.photoStorageKey);
+    return {
+      storageKey: yarn.photoStorageKey,
+      contentType: yarn.photoContentType ?? 'image/jpeg',
+    };
+  }
+
+  async deleteYarnPhoto(ownerId: string, id: string): Promise<YarnResponseDto> {
+    const yarn = await this.findActiveYarn(ownerId, id);
+    const updated = await this.prisma.yarn.update({
+      where: { id },
+      data: {
+        photoStorageKey: null,
+        photoContentType: null,
+        photoByteSize: null,
+      },
+    });
+
+    await this.fileStorage.remove(yarn.photoStorageKey);
+    return toYarnResponse(updated);
+  }
+
+  async uploadNeedlePhoto(
+    ownerId: string,
+    id: string,
+    file: UploadedPatternFile | undefined,
+  ): Promise<NeedleResponseDto> {
+    this.assertImage(file);
+    const needle = await this.findActiveNeedle(ownerId, id);
+    const stored = await this.fileStorage.saveLibraryItemPhoto({
+      ownerId,
+      itemKind: 'needles',
+      itemId: id,
+      fileId: randomUUID(),
+      fileName: file.originalname,
+      buffer: file.buffer,
+    });
+
+    const updated = await this.prisma.needle.update({
+      where: { id },
+      data: {
+        photoStorageKey: stored.storageKey,
+        photoContentType: file.mimetype,
+        photoByteSize: stored.byteSize,
+      },
+    });
+
+    await this.fileStorage.remove(needle.photoStorageKey);
+    return toNeedleResponse(updated);
+  }
+
+  async getNeedlePhotoFile(ownerId: string, id: string) {
+    const needle = await this.findActiveNeedle(ownerId, id);
+
+    if (!needle.photoStorageKey) {
+      throw new NotFoundException({
+        code: 'PHOTO_NOT_FOUND',
+        message: 'Photo not found.',
+      });
+    }
+
+    await this.fileStorage.assertExists(needle.photoStorageKey);
+    return {
+      storageKey: needle.photoStorageKey,
+      contentType: needle.photoContentType ?? 'image/jpeg',
+    };
+  }
+
+  async deleteNeedlePhoto(
+    ownerId: string,
+    id: string,
+  ): Promise<NeedleResponseDto> {
+    const needle = await this.findActiveNeedle(ownerId, id);
+    const updated = await this.prisma.needle.update({
+      where: { id },
+      data: {
+        photoStorageKey: null,
+        photoContentType: null,
+        photoByteSize: null,
+      },
+    });
+
+    await this.fileStorage.remove(needle.photoStorageKey);
+    return toNeedleResponse(updated);
+  }
+
+  async uploadToolPhoto(
+    ownerId: string,
+    id: string,
+    file: UploadedPatternFile | undefined,
+  ): Promise<ToolItemResponseDto> {
+    this.assertImage(file);
+    const tool = await this.findActiveTool(ownerId, id);
+    const stored = await this.fileStorage.saveLibraryItemPhoto({
+      ownerId,
+      itemKind: 'tools',
+      itemId: id,
+      fileId: randomUUID(),
+      fileName: file.originalname,
+      buffer: file.buffer,
+    });
+
+    const updated = await this.prisma.toolItem.update({
+      where: { id },
+      data: {
+        photoStorageKey: stored.storageKey,
+        photoContentType: file.mimetype,
+        photoByteSize: stored.byteSize,
+      },
+      include: {
+        _count: {
+          select: {
+            projectLinks: {
+              where: {
+                deletedAt: null,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await this.fileStorage.remove(tool.photoStorageKey);
+    return toToolItemResponse(updated);
+  }
+
+  async getToolPhotoFile(ownerId: string, id: string) {
+    const tool = await this.findActiveTool(ownerId, id);
+
+    if (!tool.photoStorageKey) {
+      throw new NotFoundException({
+        code: 'PHOTO_NOT_FOUND',
+        message: 'Photo not found.',
+      });
+    }
+
+    await this.fileStorage.assertExists(tool.photoStorageKey);
+    return {
+      storageKey: tool.photoStorageKey,
+      contentType: tool.photoContentType ?? 'image/jpeg',
+    };
+  }
+
+  async deleteToolPhoto(
+    ownerId: string,
+    id: string,
+  ): Promise<ToolItemResponseDto> {
+    const tool = await this.findActiveTool(ownerId, id);
+    const updated = await this.prisma.toolItem.update({
+      where: { id },
+      data: {
+        photoStorageKey: null,
+        photoContentType: null,
+        photoByteSize: null,
+      },
+      include: {
+        _count: {
+          select: {
+            projectLinks: {
+              where: {
+                deletedAt: null,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await this.fileStorage.remove(tool.photoStorageKey);
+    return toToolItemResponse(updated);
+  }
+
+  openPhotoReadStream(storageKey: string) {
+    return this.fileStorage.openReadStream(storageKey);
+  }
+
+  private assertImage(
+    file: UploadedPatternFile | undefined,
+  ): asserts file is UploadedPatternFile {
+    if (!file) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Photo file is required.',
+      });
+    }
+
+    if (!file.mimetype?.startsWith('image/')) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Photo upload must be an image file.',
+      });
+    }
   }
 
   private async findActiveYarn(ownerId: string, id: string) {

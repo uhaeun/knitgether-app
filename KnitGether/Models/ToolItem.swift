@@ -7,6 +7,8 @@ struct ToolItem: Codable, Identifiable, Hashable {
     let type: String
     let link: String?
     let memo: String
+    var photoContentType: String? = nil
+    var photoByteSize: Int? = nil
     let usageCount: Int
     let createdAt: Date
     let updatedAt: Date

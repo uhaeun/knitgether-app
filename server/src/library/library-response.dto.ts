@@ -3,6 +3,8 @@ export type SyncStatusDto = 'Synced';
 export type YarnModel = {
   id: string;
   ownerId: string;
+  photoContentType?: string | null;
+  photoByteSize?: number | null;
   name: string;
   brand: string | null;
   colorway: string | null;
@@ -17,6 +19,8 @@ export type YarnModel = {
 export type NeedleModel = {
   id: string;
   ownerId: string;
+  photoContentType?: string | null;
+  photoByteSize?: number | null;
   name: string;
   needleType: string;
   size: string;
@@ -30,6 +34,8 @@ export type NeedleModel = {
 export type ToolItemModel = {
   id: string;
   ownerId: string;
+  photoContentType?: string | null;
+  photoByteSize?: number | null;
   name: string;
   type: string;
   link: string | null;
@@ -45,6 +51,8 @@ export type ToolItemModel = {
 export type YarnResponseDto = {
   id: string;
   ownerId: string;
+  photoContentType: string | null;
+  photoByteSize: number | null;
   name: string;
   brand: string | null;
   colorway: string | null;
@@ -60,6 +68,8 @@ export type YarnResponseDto = {
 export type NeedleResponseDto = {
   id: string;
   ownerId: string;
+  photoContentType: string | null;
+  photoByteSize: number | null;
   name: string;
   needleType: string;
   size: string;
@@ -74,6 +84,8 @@ export type NeedleResponseDto = {
 export type ToolItemResponseDto = {
   id: string;
   ownerId: string;
+  photoContentType: string | null;
+  photoByteSize: number | null;
   name: string;
   type: string;
   link: string | null;
@@ -89,6 +101,8 @@ export function toYarnResponse(yarn: YarnModel): YarnResponseDto {
   return {
     id: yarn.id,
     ownerId: yarn.ownerId,
+    photoContentType: yarn.photoContentType ?? null,
+    photoByteSize: yarn.photoByteSize ?? null,
     name: yarn.name,
     brand: yarn.brand,
     colorway: yarn.colorway,
@@ -106,6 +120,8 @@ export function toNeedleResponse(needle: NeedleModel): NeedleResponseDto {
   return {
     id: needle.id,
     ownerId: needle.ownerId,
+    photoContentType: needle.photoContentType ?? null,
+    photoByteSize: needle.photoByteSize ?? null,
     name: needle.name,
     needleType: needle.needleType,
     size: needle.size,
@@ -122,6 +138,8 @@ export function toToolItemResponse(tool: ToolItemModel): ToolItemResponseDto {
   return {
     id: tool.id,
     ownerId: tool.ownerId,
+    photoContentType: tool.photoContentType ?? null,
+    photoByteSize: tool.photoByteSize ?? null,
     name: tool.name,
     type: tool.type,
     link: tool.link,

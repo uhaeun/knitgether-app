@@ -250,6 +250,42 @@ final class YarnLibraryViewModel: ObservableObject {
         }
     }
 
+
+    // 관찰 6 대표 사진. 온라인 필수(v1) 동작이라 실패 시 에러를 표시한다.
+    @discardableResult
+    func uploadPhoto(_ imageData: Data, for yarn: Yarn) async -> Bool {
+        do {
+            try await libraryRepository.uploadLibraryItemPhoto(
+                imageData,
+                fileName: "photo.jpg",
+                kind: .yarn,
+                itemId: yarn.id
+            )
+            yarns = try await libraryRepository.fetchYarns()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "실 사진을 저장하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    @discardableResult
+    func deletePhoto(for yarn: Yarn) async -> Bool {
+        do {
+            try await libraryRepository.deleteLibraryItemPhoto(kind: .yarn, itemId: yarn.id)
+            yarns = try await libraryRepository.fetchYarns()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "실 사진을 삭제하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    func loadPhotoData(for yarn: Yarn) async -> Data? {
+        try? await libraryRepository.fetchLibraryItemPhotoData(kind: .yarn, itemId: yarn.id)
+    }
     private func saveYarn(from formData: YarnFormData, existingYarn: Yarn?) async -> Bool {
         guard formData.canSave else {
             errorMessage = "실 이름을 입력해 주세요."
@@ -379,6 +415,42 @@ final class NeedleLibraryViewModel: ObservableObject {
         }
     }
 
+
+    // 관찰 6 대표 사진. 온라인 필수(v1) 동작이라 실패 시 에러를 표시한다.
+    @discardableResult
+    func uploadPhoto(_ imageData: Data, for needle: Needle) async -> Bool {
+        do {
+            try await libraryRepository.uploadLibraryItemPhoto(
+                imageData,
+                fileName: "photo.jpg",
+                kind: .needle,
+                itemId: needle.id
+            )
+            needles = try await libraryRepository.fetchNeedles()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "바늘 사진을 저장하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    @discardableResult
+    func deletePhoto(for needle: Needle) async -> Bool {
+        do {
+            try await libraryRepository.deleteLibraryItemPhoto(kind: .needle, itemId: needle.id)
+            needles = try await libraryRepository.fetchNeedles()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "바늘 사진을 삭제하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    func loadPhotoData(for needle: Needle) async -> Data? {
+        try? await libraryRepository.fetchLibraryItemPhotoData(kind: .needle, itemId: needle.id)
+    }
     private func saveNeedle(from formData: NeedleFormData, existingNeedle: Needle?) async -> Bool {
         guard formData.canSave else {
             errorMessage = "바늘 이름, 종류, 사이즈를 입력해 주세요."
@@ -506,6 +578,42 @@ final class ToolLibraryViewModel: ObservableObject {
         }
     }
 
+
+    // 관찰 6 대표 사진. 온라인 필수(v1) 동작이라 실패 시 에러를 표시한다.
+    @discardableResult
+    func uploadPhoto(_ imageData: Data, for tool: ToolItem) async -> Bool {
+        do {
+            try await libraryRepository.uploadLibraryItemPhoto(
+                imageData,
+                fileName: "photo.jpg",
+                kind: .tool,
+                itemId: tool.id
+            )
+            tools = try await libraryRepository.fetchTools()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "도구 사진을 저장하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    @discardableResult
+    func deletePhoto(for tool: ToolItem) async -> Bool {
+        do {
+            try await libraryRepository.deleteLibraryItemPhoto(kind: .tool, itemId: tool.id)
+            tools = try await libraryRepository.fetchTools()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = "도구 사진을 삭제하지 못했어요. 서버 연결을 확인해 주세요."
+            return false
+        }
+    }
+
+    func loadPhotoData(for tool: ToolItem) async -> Data? {
+        try? await libraryRepository.fetchLibraryItemPhotoData(kind: .tool, itemId: tool.id)
+    }
     private func saveTool(from formData: ToolFormData, existingTool: ToolItem?) async -> Bool {
         guard formData.canSave else {
             errorMessage = "도구 이름과 종류를 입력해 주세요."

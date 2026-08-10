@@ -313,6 +313,19 @@ final class OfflineFirstLibraryRepository: LibraryRepository {
         try await remote.unlinkNeedle(needleId: needleId, fromProjectId: projectId)
     }
 
+    // 대표 사진도 추가 연결과 같은 원칙으로 온라인 필수(v1)다.
+    func uploadLibraryItemPhoto(_ imageData: Data, fileName: String, kind: LibraryItemPhotoKind, itemId: UUID) async throws {
+        try await remote.uploadLibraryItemPhoto(imageData, fileName: fileName, kind: kind, itemId: itemId)
+    }
+
+    func fetchLibraryItemPhotoData(kind: LibraryItemPhotoKind, itemId: UUID) async throws -> Data {
+        try await remote.fetchLibraryItemPhotoData(kind: kind, itemId: itemId)
+    }
+
+    func deleteLibraryItemPhoto(kind: LibraryItemPhotoKind, itemId: UUID) async throws {
+        try await remote.deleteLibraryItemPhoto(kind: kind, itemId: itemId)
+    }
+
     func unlinkTool(_ tool: ToolItem, fromProjectId projectId: UUID) async throws {
         let rollbackSnapshot = await local.makeRollbackSnapshot()
         try await local.unlinkTool(tool, fromProjectId: projectId)

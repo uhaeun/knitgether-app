@@ -16,6 +16,8 @@ struct Yarn: Codable, Identifiable, Hashable {
     let weight: String?
     let quantity: Int
     let notes: String
+    var photoContentType: String? = nil
+    var photoByteSize: Int? = nil
     let createdAt: Date
     let updatedAt: Date
     let deletedAt: Date?

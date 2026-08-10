@@ -175,6 +175,35 @@ final class RemoteLibraryRepository: LibraryRepository {
             "library/projects/\(projectId.uuidString.lowercased())/needles/\(needleId.uuidString.lowercased())"
         )
     }
+
+    func uploadLibraryItemPhoto(_ imageData: Data, fileName: String, kind: LibraryItemPhotoKind, itemId: UUID) async throws {
+        struct EmptyResponse: Decodable {
+            let id: UUID
+        }
+
+        let _: EmptyResponse = try await apiClient.uploadMultipart(
+            "library/\(kind.rawValue)/\(itemId.uuidString.lowercased())/photo",
+            fields: [:],
+            file: MultipartFile(
+                fieldName: "file",
+                fileName: fileName,
+                contentType: "image/jpeg",
+                data: imageData
+            )
+        )
+    }
+
+    func fetchLibraryItemPhotoData(kind: LibraryItemPhotoKind, itemId: UUID) async throws -> Data {
+        try await apiClient.downloadData(
+            "library/\(kind.rawValue)/\(itemId.uuidString.lowercased())/photo"
+        )
+    }
+
+    func deleteLibraryItemPhoto(kind: LibraryItemPhotoKind, itemId: UUID) async throws {
+        try await apiClient.delete(
+            "library/\(kind.rawValue)/\(itemId.uuidString.lowercased())/photo"
+        )
+    }
 }
 
 private struct SaveYarnRequest: Encodable {

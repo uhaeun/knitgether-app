@@ -251,6 +251,15 @@ private struct NeedleDetailView: View {
                         }
                     }
 
+                    detailSection(title: "사진", systemImage: "photo") {
+                        LibraryItemPhotoContent(
+                            hasPhoto: currentNeedle.photoByteSize != nil,
+                            loadPhoto: { await viewModel.loadPhotoData(for: currentNeedle) },
+                            uploadPhoto: { data in await viewModel.uploadPhoto(data, for: currentNeedle) },
+                            deletePhoto: { await viewModel.deletePhoto(for: currentNeedle) }
+                        )
+                    }
+
                     if !trimmedNotes.isEmpty {
                         detailSection(title: "메모", systemImage: "note.text") {
                             Text(trimmedNotes)

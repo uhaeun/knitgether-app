@@ -15,6 +15,8 @@ struct Needle: Codable, Identifiable, Hashable {
     let size: String
     let length: String?
     let notes: String
+    var photoContentType: String? = nil
+    var photoByteSize: Int? = nil
     let createdAt: Date
     let updatedAt: Date
     let deletedAt: Date?
