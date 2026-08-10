@@ -18,6 +18,8 @@ final class MyKnittingViewModel: ObservableObject {
     @Published private(set) var isRetryingSync = false
     @Published private(set) var errorMessage: String?
     @Published private(set) var statusMessage: String?
+    /// 서버 응답 대신 캐시로 폴백해 표시 중임을 알린다(CNT-03 잔여 무통보).
+    @Published private(set) var isShowingCacheFallbackNotice = false
 
     private let projectRepository: any ProjectRepository
     private let patternRepository: (any PatternRepository)?
@@ -44,6 +46,7 @@ final class MyKnittingViewModel: ObservableObject {
     func loadProjects() async {
         do {
             projects = try await projectRepository.fetchProjects()
+            isShowingCacheFallbackNotice = await projectRepository.isLastListFetchServedFromCache
             clearErrorMessage(matching: Self.projectLoadErrorMessage)
         } catch {
             errorMessage = Self.projectLoadErrorMessage

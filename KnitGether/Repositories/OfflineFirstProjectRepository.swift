@@ -4,6 +4,7 @@ import Foundation
 final class OfflineFirstProjectRepository: ProjectRepository {
     private let local: LocalProjectRepository
     private let remote: any ProjectRepository
+    private(set) var isLastListFetchServedFromCache = false
 
     init(
         local: LocalProjectRepository,
@@ -32,6 +33,7 @@ final class OfflineFirstProjectRepository: ProjectRepository {
             throw deferredRemoteError
         }
 
+        isLastListFetchServedFromCache = deferredRemoteError != nil
         return localProjects
     }
 

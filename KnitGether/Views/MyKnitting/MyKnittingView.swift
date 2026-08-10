@@ -173,6 +173,10 @@ struct MyKnittingView: View {
                 syncRetryRow
             }
 
+            if viewModel.isShowingCacheFallbackNotice {
+                cacheFallbackNoticeRow
+            }
+
             ForEach(filteredProjects) { project in
                 NavigationLink {
                     workspaceView(for: project, initialTab: .working)
@@ -329,6 +333,20 @@ struct MyKnittingView: View {
     private var syncRetryRow: some View {
         SyncRetryBanner(
             message: "계정 저장 확인이 필요한 프로젝트가 있어요.",
+            isRetrying: viewModel.isRetryingSync,
+            retryAction: {
+                Task {
+                    await viewModel.retrySync()
+                }
+            }
+        )
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
+    }
+
+    private var cacheFallbackNoticeRow: some View {
+        SyncRetryBanner(
+            message: "서버와 연결하지 못해 이 기기에 저장된 내용을 보여주고 있어요.",
             isRetrying: viewModel.isRetryingSync,
             retryAction: {
                 Task {

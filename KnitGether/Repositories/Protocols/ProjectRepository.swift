@@ -17,6 +17,15 @@ protocol ProjectRepository {
     func deleteRowInstruction(id: UUID, forProjectId projectId: UUID) async throws
     func saveWorkSession(_ session: WorkSession, forProjectId projectId: UUID) async throws -> WorkSession
     func deleteWorkSession(id: UUID, forProjectId projectId: UUID) async throws
+    /// 직전 목록 조회가 서버 응답 대신 로컬 캐시로 폴백했는지.
+    /// 무통보 폴백을 화면에서 안내하기 위한 신호다(CNT-03 잔여 무통보).
+    var isLastListFetchServedFromCache: Bool { get async }
+}
+
+extension ProjectRepository {
+    var isLastListFetchServedFromCache: Bool {
+        get async { false }
+    }
 }
 
 extension ProjectRepository {
