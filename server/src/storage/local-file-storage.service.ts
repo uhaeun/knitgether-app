@@ -121,6 +121,36 @@ export class LocalFileStorageService {
     };
   }
 
+  async saveLibraryItemPhoto(params: {
+    ownerId: string;
+    itemKind: 'yarns' | 'needles' | 'tools';
+    itemId: string;
+    fileId: string;
+    fileName: string;
+    buffer: Buffer;
+  }): Promise<StoredPatternPdf> {
+    const storageKey = [
+      'library',
+      params.ownerId,
+      params.itemKind,
+      params.itemId,
+      `${params.fileId}-${params.fileName.replace(/[^a-zA-Z0-9._-]/g, '_')}`,
+    ].join('/');
+    const absolutePath = this.absolutePath(storageKey);
+
+    await fs.mkdir(dirname(absolutePath), { recursive: true });
+    await fs.writeFile(absolutePath, params.buffer);
+
+    return {
+      storageKey,
+      byteSize: params.buffer.byteLength,
+    };
+  }
+
+  async readFile(storageKey: string): Promise<Buffer> {
+    return fs.readFile(this.absolutePath(storageKey));
+  }
+
   async assertExists(storageKey: string): Promise<void> {
     try {
       await fs.access(this.absolutePath(storageKey));
