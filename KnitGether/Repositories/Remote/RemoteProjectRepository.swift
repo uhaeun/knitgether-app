@@ -278,7 +278,10 @@ private struct SaveProjectRequest: Encodable {
     let workspaceDisplayMode: String?
     let workspaceSheetPosition: String?
     let relatedSkillIds: [String]
-    let patternCopy: SaveProjectPatternCopyRequest?
+    // JSONEncoder는 nil 옵셔널을 필드 생략으로 인코딩해, 도안 해제(patternCopy 없음)가
+    // 서버에 undefined(no-op)로 도착해 복사본이 잔존했다(결함 18). 해제 신호가 전달되도록
+    // 명시적 null을 인코딩한다. 서버는 null이면 복사본을 제거한다.
+    let patternCopy: ExplicitNullEncodable<SaveProjectPatternCopyRequest>
     let rowCounter: SaveRowCounterRequest
     let workSessions: [SaveWorkSessionRequest]
 
@@ -305,9 +308,28 @@ private struct SaveProjectRequest: Encodable {
         workspaceDisplayMode = project.workspaceDisplayMode?.rawValue
         workspaceSheetPosition = project.workspaceSheetPosition?.rawValue
         relatedSkillIds = project.relatedSkillIds.map { $0.uuidString.lowercased() }
-        patternCopy = project.patternCopy.map(SaveProjectPatternCopyRequest.init)
+        patternCopy = ExplicitNullEncodable(project.patternCopy.map(SaveProjectPatternCopyRequest.init))
         rowCounter = SaveRowCounterRequest(rowCounter: project.rowCounter)
         workSessions = project.workSessions.map(SaveWorkSessionRequest.init)
+    }
+}
+
+/// nil을 필드 생략이 아니라 JSON null로 인코딩한다.
+private struct ExplicitNullEncodable<Wrapped: Encodable>: Encodable {
+    let wrapped: Wrapped?
+
+    init(_ wrapped: Wrapped?) {
+        self.wrapped = wrapped
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+
+        if let wrapped {
+            try container.encode(wrapped)
+        } else {
+            try container.encodeNil()
+        }
     }
 }
 
