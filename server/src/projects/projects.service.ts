@@ -1560,12 +1560,20 @@ export class ProjectsService {
       });
     }
 
+    let sourceStoredFile: {
+      storageKey: string;
+      contentType: string | null;
+    } | null = null;
+
     if (copy.sourcePatternDocumentId) {
       const sourcePattern = await transaction.patternDocument.findFirst({
         where: {
           id: copy.sourcePatternDocumentId,
           ownerId,
           deletedAt: null,
+        },
+        include: {
+          storedFile: true,
         },
       });
 
@@ -1575,6 +1583,13 @@ export class ProjectsService {
           message: 'Pattern not found.',
         });
       }
+
+      if (sourcePattern.storedFile && !sourcePattern.storedFile.deletedAt) {
+        sourceStoredFile = {
+          storageKey: sourcePattern.storedFile.storageKey,
+          contentType: sourcePattern.storedFile.contentType,
+        };
+      }
     }
 
     const scalarInput = this.toProjectPatternCopyScalarInput(copy);
@@ -1582,6 +1597,39 @@ export class ProjectsService {
     const existing = await transaction.projectPatternCopy.findUnique({
       where: { projectId: body.id },
     });
+
+    // 창고 경로 연결은 파일 업로드 없이 메타만 도착해 서버 복사본에 파일 키가 비었다(결함 19/38).
+    // 원본 StoredFile을 물리 복사해 복사본을 원본과 독립시킨다(LINK-04/05 원칙).
+    // 업로드 경로로 이미 파일이 채워진 복사본은 덮지 않는다.
+    const materializedFileInput = async (): Promise<
+      | {
+          fileStorageKey: string;
+          fileContentType: string | null;
+          fileByteSize: number;
+        }
+      | Record<string, never>
+    > => {
+      if (!sourceStoredFile) {
+        return {};
+      }
+
+      const buffer = await this.fileStorage.readFile(
+        sourceStoredFile.storageKey,
+      );
+      const stored = await this.fileStorage.saveProjectPatternCopyPdf({
+        ownerId,
+        projectId: body.id,
+        copyId: copy.id,
+        fileId: randomUUID(),
+        buffer,
+      });
+
+      return {
+        fileStorageKey: stored.storageKey,
+        fileContentType: sourceStoredFile.contentType,
+        fileByteSize: stored.byteSize,
+      };
+    };
 
     // 다른 도안으로 교체되는 경우(복사본 id가 바뀜) 기존 레코드를 지우고 새로 만든다.
     // upsert의 update 브랜치는 scalarInput에 없는 파일/드로잉 키를 갱신하지 않아
@@ -1597,11 +1645,15 @@ export class ProjectsService {
           ownerId,
           projectId: body.id,
           ...scalarInput,
+          ...(await materializedFileInput()),
           deletedAt: null,
         },
       });
       return;
     }
+
+    const fileInput =
+      existing?.fileStorageKey ? {} : await materializedFileInput();
 
     await transaction.projectPatternCopy.upsert({
       where: {
@@ -1612,11 +1664,13 @@ export class ProjectsService {
         ownerId,
         projectId: body.id,
         ...scalarInput,
+        ...fileInput,
         deletedAt: null,
       },
       update: {
         ownerId,
         ...scalarInput,
+        ...fileInput,
         deletedAt: null,
       },
     });

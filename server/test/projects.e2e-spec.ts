@@ -1590,6 +1590,13 @@ describe('Projects route', () => {
   it('saves a project pattern copy with the project', async () => {
     prisma.project.findFirstOrThrow.mockResolvedValueOnce(userAProjectWithPatternCopy);
 
+    // 창고 원본의 물리 파일을 준비한다. 저장 시 서버가 이 파일을 복사본으로
+    // 물리 복사해 파일 키를 채워야 한다(결함 19/38).
+    const sourceStorageKey = projectPatternCopy.sourcePatternDocument.storedFile.storageKey;
+    const sourcePdfBytes = Buffer.from('%PDF-1.4\n% source pattern');
+    await fs.mkdir(dirname(join(storageRoot, sourceStorageKey)), { recursive: true });
+    await fs.writeFile(join(storageRoot, sourceStorageKey), sourcePdfBytes);
+
     await request(app.getHttpServer())
       .post('/api/v1/projects')
       .set('Authorization', 'Bearer dev-token')
@@ -1601,6 +1608,9 @@ describe('Projects route', () => {
         id: projectPatternCopy.sourcePatternDocumentId,
         ownerId: 'user-a',
         deletedAt: null,
+      },
+      include: {
+        storedFile: true,
       },
     });
     expect(prisma.projectPatternCopy.upsert).toHaveBeenCalledWith({
@@ -1614,6 +1624,9 @@ describe('Projects route', () => {
         sourcePatternDocumentId: projectPatternCopy.sourcePatternDocumentId,
         titleSnapshot: 'Cozy Shawl',
         fileNameSnapshot: 'cozy-shawl.pdf',
+        fileStorageKey: expect.stringContaining('pattern-copies'),
+        fileContentType: 'application/pdf',
+        fileByteSize: sourcePdfBytes.byteLength,
         deletedAt: null,
       }),
       update: expect.objectContaining({
