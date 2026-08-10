@@ -70,8 +70,8 @@ struct NeedleLibraryView: View {
         }
         .sheet(item: $needlePendingDetail) { needle in
             NeedleDetailView(
-                needle: needle,
-                detailRows: NeedleLibraryViewModel.detailRows(for: needle)
+                viewModel: viewModel,
+                needle: needle
             ) { formData in
                 await viewModel.updateNeedle(needle, from: formData)
             } onDelete: {
@@ -221,27 +221,32 @@ private struct NeedleDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingEditForm = false
     @State private var isShowingDeleteConfirmation = false
+    @ObservedObject var viewModel: NeedleLibraryViewModel
 
     let needle: Needle
-    let detailRows: [LibraryItemDetailRow]
     let onUpdate: (NeedleFormData) async -> Bool
     let onDelete: () async -> Bool
+
+    // 시트 아이템은 열림 시점 스냅샷이라 수정 후에도 옛 값을 그린다(결함 17 계열).
+    private var currentNeedle: Needle {
+        viewModel.needles.first { $0.id == needle.id } ?? needle
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     AppDetailHeaderView(
-                        title: needle.name,
-                        subtitle: "\(needle.needleType) · \(needle.size)",
+                        title: currentNeedle.name,
+                        subtitle: "\(currentNeedle.needleType) · \(currentNeedle.size)",
                         systemImage: "ruler",
                         tint: AppTheme.Color.sage
                     ) {
-                        SyncStatusBadgeView(status: needle.syncStatus)
+                        SyncStatusBadgeView(status: currentNeedle.syncStatus)
                     }
 
                     detailSection(title: "기본 정보", systemImage: "info.circle") {
-                        ForEach(detailRows, id: \.title) { row in
+                        ForEach(NeedleLibraryViewModel.detailRows(for: currentNeedle), id: \.title) { row in
                             NeedleDetailRowView(row: row)
                         }
                     }
@@ -287,7 +292,7 @@ private struct NeedleDetailView: View {
             .sheet(isPresented: $isShowingEditForm) {
                 NeedleFormView(
                     title: "바늘 수정",
-                    initialFormData: NeedleFormData(needle: needle)
+                    initialFormData: NeedleFormData(needle: currentNeedle)
                 ) { formData in
                     // The form sheet dismisses itself on success; the detail screen
                     // must stay put so the user lands back on it, not the list.
@@ -307,7 +312,7 @@ private struct NeedleDetailView: View {
                     }
                 }
             } message: {
-                Text("\(needle.name)을 바늘 창고에서 삭제합니다.")
+                Text("\(currentNeedle.name)을 바늘 창고에서 삭제합니다.")
             }
         }
     }
@@ -329,7 +334,7 @@ private struct NeedleDetailView: View {
     }
 
     private var trimmedNotes: String {
-        needle.notes.trimmingCharacters(in: .whitespacesAndNewlines)
+        currentNeedle.notes.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 

@@ -70,8 +70,8 @@ struct ToolLibraryView: View {
         }
         .sheet(item: $toolPendingDetail) { tool in
             ToolDetailView(
-                tool: tool,
-                detailRows: ToolLibraryViewModel.detailRows(for: tool)
+                viewModel: viewModel,
+                tool: tool
             ) { formData in
                 await viewModel.updateTool(tool, from: formData)
             } onDelete: {
@@ -221,27 +221,32 @@ private struct ToolDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingEditForm = false
     @State private var isShowingDeleteConfirmation = false
+    @ObservedObject var viewModel: ToolLibraryViewModel
 
     let tool: ToolItem
-    let detailRows: [LibraryItemDetailRow]
     let onUpdate: (ToolFormData) async -> Bool
     let onDelete: () async -> Bool
+
+    // 시트 아이템은 열림 시점 스냅샷이라 수정 후에도 옛 값을 그린다(결함 17 계열).
+    private var currentTool: ToolItem {
+        viewModel.tools.first { $0.id == tool.id } ?? tool
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     AppDetailHeaderView(
-                        title: tool.name,
-                        subtitle: tool.type,
+                        title: currentTool.name,
+                        subtitle: currentTool.type,
                         systemImage: iconName,
                         tint: AppTheme.Color.amber
                     ) {
-                        SyncStatusBadgeView(status: tool.syncStatus)
+                        SyncStatusBadgeView(status: currentTool.syncStatus)
                     }
 
                     detailSection(title: "기본 정보", systemImage: "info.circle") {
-                        ForEach(detailRows, id: \.title) { row in
+                        ForEach(ToolLibraryViewModel.detailRows(for: currentTool), id: \.title) { row in
                             ToolDetailRowView(row: row)
                         }
                     }
@@ -249,7 +254,7 @@ private struct ToolDetailView: View {
                     if let url = linkURL {
                         detailSection(title: "링크", systemImage: "link") {
                         Link(destination: url) {
-                            Label(tool.link ?? url.absoluteString, systemImage: "link")
+                            Label(currentTool.link ?? url.absoluteString, systemImage: "link")
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(AppTheme.Color.accent)
                                 .lineLimit(2)
@@ -298,7 +303,7 @@ private struct ToolDetailView: View {
             .sheet(isPresented: $isShowingEditForm) {
                 ToolFormView(
                     title: "도구 수정",
-                    initialFormData: ToolFormData(tool: tool)
+                    initialFormData: ToolFormData(tool: currentTool)
                 ) { formData in
                     // The form sheet dismisses itself on success; the detail screen
                     // must stay put so the user lands back on it, not the list.
@@ -318,7 +323,7 @@ private struct ToolDetailView: View {
                     }
                 }
             } message: {
-                Text("\(tool.name)을 도구 창고에서 삭제합니다.")
+                Text("\(currentTool.name)을 도구 창고에서 삭제합니다.")
             }
         }
     }
@@ -340,11 +345,11 @@ private struct ToolDetailView: View {
     }
 
     private var trimmedMemo: String {
-        tool.memo.trimmingCharacters(in: .whitespacesAndNewlines)
+        currentTool.memo.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private var linkURL: URL? {
-        guard let link = tool.link?.trimmingCharacters(in: .whitespacesAndNewlines), !link.isEmpty else {
+        guard let link = currentTool.link?.trimmingCharacters(in: .whitespacesAndNewlines), !link.isEmpty else {
             return nil
         }
 
@@ -356,7 +361,7 @@ private struct ToolDetailView: View {
     }
 
     private var iconName: String {
-        ToolLibraryRow.iconName(for: tool.type)
+        ToolLibraryRow.iconName(for: currentTool.type)
     }
 }
 

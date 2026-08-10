@@ -71,8 +71,7 @@ struct YarnLibraryView: View {
         .sheet(item: $yarnPendingDetail) { yarn in
             YarnDetailView(
                 viewModel: viewModel,
-                yarn: yarn,
-                detailRows: YarnLibraryViewModel.detailRows(for: yarn)
+                yarn: yarn
             ) { formData in
                 await viewModel.updateYarn(yarn, from: formData)
             } onDelete: {
@@ -225,25 +224,30 @@ private struct YarnDetailView: View {
     @ObservedObject var viewModel: YarnLibraryViewModel
 
     let yarn: Yarn
-    let detailRows: [LibraryItemDetailRow]
     let onUpdate: (YarnFormData) async -> Bool
     let onDelete: () async -> Bool
+
+    // 시트 아이템은 열림 시점 스냅샷이라 수정이나 새로고침 후에도 옛 값을 그린다(결함 17).
+    // 표시는 항상 뷰모델의 최신 값을 쓴다.
+    private var currentYarn: Yarn {
+        viewModel.yarns.first { $0.id == yarn.id } ?? yarn
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     AppDetailHeaderView(
-                        title: yarn.name,
+                        title: currentYarn.name,
                         subtitle: subtitle,
                         systemImage: "circle.hexagongrid",
                         tint: AppTheme.Color.amber
                     ) {
-                        SyncStatusBadgeView(status: yarn.syncStatus)
+                        SyncStatusBadgeView(status: currentYarn.syncStatus)
                     }
 
                     detailSection(title: "기본 정보", systemImage: "info.circle") {
-                        ForEach(detailRows, id: \.title) { row in
+                        ForEach(YarnLibraryViewModel.detailRows(for: currentYarn), id: \.title) { row in
                             YarnDetailRowView(row: row)
                         }
                     }
@@ -263,7 +267,7 @@ private struct YarnDetailView: View {
                                 .foregroundStyle(.secondary)
                         } else {
                             AppMetricChip(
-                                text: "누적 사용 \(viewModel.totalUsedQuantity(for: yarn))개",
+                                text: "누적 사용 \(viewModel.totalUsedQuantity(for: currentYarn))개",
                                 systemImage: "number",
                                 tint: AppTheme.Color.amber
                             )
@@ -282,7 +286,9 @@ private struct YarnDetailView: View {
             }
             .warmScreenBackground()
             .refreshable {
-                await viewModel.loadYarnUsages(for: yarn)
+                // 새로고침은 사용 기록만이 아니라 실 목록도 서버에서 다시 가져온다(결함 17).
+                await viewModel.loadYarns()
+                await viewModel.loadYarnUsages(for: currentYarn)
             }
             .navigationTitle("실 상세")
             .navigationBarTitleDisplayMode(.inline)
@@ -314,7 +320,7 @@ private struct YarnDetailView: View {
             .sheet(isPresented: $isShowingEditForm) {
                 YarnFormView(
                     title: "실 수정",
-                    initialFormData: YarnFormData(yarn: yarn)
+                    initialFormData: YarnFormData(yarn: currentYarn)
                 ) { formData in
                     // The form sheet dismisses itself on success; the detail screen
                     // must stay put so the user lands back on it, not the list.
@@ -334,7 +340,7 @@ private struct YarnDetailView: View {
                     }
                 }
             } message: {
-                Text("\(yarn.name)을 실 창고에서 삭제합니다.")
+                Text("\(currentYarn.name)을 실 창고에서 삭제합니다.")
             }
             .task(id: yarn.id) {
                 await viewModel.loadYarnUsages(for: yarn)
@@ -359,7 +365,7 @@ private struct YarnDetailView: View {
     }
 
     private var subtitle: String? {
-        [yarn.brand, yarn.colorway]
+        [currentYarn.brand, currentYarn.colorway]
             .compactMap { $0 }
             .filter { !$0.isEmpty }
             .joined(separator: " · ")
@@ -367,11 +373,11 @@ private struct YarnDetailView: View {
     }
 
     private var trimmedNotes: String {
-        yarn.notes.trimmingCharacters(in: .whitespacesAndNewlines)
+        currentYarn.notes.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private var usageRecords: [ProjectYarnUsage] {
-        viewModel.yarnUsageRecords(for: yarn)
+        viewModel.yarnUsageRecords(for: currentYarn)
     }
 }
 
