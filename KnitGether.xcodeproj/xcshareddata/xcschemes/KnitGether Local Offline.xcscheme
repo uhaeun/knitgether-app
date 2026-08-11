@@ -52,6 +52,17 @@
                ReferencedContainer = "container:KnitGether.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "862FAC41302B218900EA14CB"
+               BuildableName = "KnitGetherQAUITests.xctest"
+               BlueprintName = "KnitGetherQAUITests"
+               ReferencedContainer = "container:KnitGether.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

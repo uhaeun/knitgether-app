@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
+		862FAC48302B218900EA14CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 863BE9612FCF06C500C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 863BE9682FCF06C500C11388;
+			remoteInfo = KnitGether;
+		};
 		863BE9772FCF06C700C11388 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 863BE9612FCF06C500C11388 /* Project object */;
@@ -24,12 +31,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		862FAC42302B218900EA14CB /* KnitGetherQAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnitGetherQAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		863BE9692FCF06C500C11388 /* KnitGether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KnitGether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		863BE9762FCF06C700C11388 /* KnitGetherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnitGetherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		863BE9802FCF06C700C11388 /* KnitGetherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnitGetherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		862FAC43302B218900EA14CB /* KnitGetherQAUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = KnitGetherQAUITests;
+			sourceTree = "<group>";
+		};
 		863BE96B2FCF06C500C11388 /* KnitGether */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = KnitGether;
@@ -48,6 +61,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		862FAC3F302B218900EA14CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		863BE9662FCF06C500C11388 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,6 +98,7 @@
 				863BE96B2FCF06C500C11388 /* KnitGether */,
 				863BE9792FCF06C700C11388 /* KnitGetherTests */,
 				863BE9832FCF06C700C11388 /* KnitGetherUITests */,
+				862FAC43302B218900EA14CB /* KnitGetherQAUITests */,
 				863BE96A2FCF06C500C11388 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +109,7 @@
 				863BE9692FCF06C500C11388 /* KnitGether.app */,
 				863BE9762FCF06C700C11388 /* KnitGetherTests.xctest */,
 				863BE9802FCF06C700C11388 /* KnitGetherUITests.xctest */,
+				862FAC42302B218900EA14CB /* KnitGetherQAUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +117,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		862FAC41302B218900EA14CB /* KnitGetherQAUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 862FAC4C302B218900EA14CB /* Build configuration list for PBXNativeTarget "KnitGetherQAUITests" */;
+			buildPhases = (
+				862FAC3E302B218900EA14CB /* Sources */,
+				862FAC3F302B218900EA14CB /* Frameworks */,
+				862FAC40302B218900EA14CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				862FAC49302B218900EA14CB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				862FAC43302B218900EA14CB /* KnitGetherQAUITests */,
+			);
+			name = KnitGetherQAUITests;
+			packageProductDependencies = (
+			);
+			productName = KnitGetherQAUITests;
+			productReference = 862FAC42302B218900EA14CB /* KnitGetherQAUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		863BE9682FCF06C500C11388 /* KnitGether */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 863BE98A2FCF06C700C11388 /* Build configuration list for PBXNativeTarget "KnitGether" */;
@@ -170,9 +215,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2650;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					862FAC41302B218900EA14CB = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 863BE9682FCF06C500C11388;
+					};
 					863BE9682FCF06C500C11388 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -203,11 +252,19 @@
 				863BE9682FCF06C500C11388 /* KnitGether */,
 				863BE9752FCF06C700C11388 /* KnitGetherTests */,
 				863BE97F2FCF06C700C11388 /* KnitGetherUITests */,
+				862FAC41302B218900EA14CB /* KnitGetherQAUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		862FAC40302B218900EA14CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		863BE9672FCF06C500C11388 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +289,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		862FAC3E302B218900EA14CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		863BE9652FCF06C500C11388 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +320,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		862FAC49302B218900EA14CB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 863BE9682FCF06C500C11388 /* KnitGether */;
+			targetProxy = 862FAC48302B218900EA14CB /* PBXContainerItemProxy */;
+		};
 		863BE9782FCF06C700C11388 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 863BE9682FCF06C500C11388 /* KnitGether */;
@@ -269,6 +338,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		862FAC4A302B218900EA14CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 36343444V7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uhaeun.KnitGetherQAUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = KnitGether;
+			};
+			name = Debug;
+		};
+		862FAC4B302B218900EA14CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 36343444V7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uhaeun.KnitGetherQAUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = KnitGether;
+			};
+			name = Release;
+		};
 		863BE9882FCF06C700C11388 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -533,6 +644,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		862FAC4C302B218900EA14CB /* Build configuration list for PBXNativeTarget "KnitGetherQAUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				862FAC4A302B218900EA14CB /* Debug */,
+				862FAC4B302B218900EA14CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		863BE9642FCF06C500C11388 /* Build configuration list for PBXProject "KnitGether" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
