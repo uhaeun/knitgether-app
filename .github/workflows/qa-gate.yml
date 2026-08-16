@@ -1,0 +1,59 @@
+name: QA Gate
+
+on:
+  push:
+    branches: [fix/qa-cycle-defects]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa-gate:
+    name: Build, Unit Regression, DEF-15 UI Regression
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select simulator
+        run: |
+          SIM=$(xcrun simctl list devices available | awk '/iPhone/ && /Shutdown|Booted/ {print; exit}')
+          UDID=$(echo "$SIM" | sed -E 's/.*\(([0-9A-Fa-f-]{36})\).*/\1/')
+          echo "SIMULATOR_UDID=$UDID" >> "$GITHUB_ENV"
+
+      - name: Build for testing
+        run: |
+          xcodebuild build-for-testing \
+            -project KnitGether.xcodeproj \
+            -scheme "KnitGether Local Offline" \
+            -destination "id=${SIMULATOR_UDID}"
+
+      - name: Unit regression
+        run: |
+          mkdir -p TestResults
+          xcodebuild test-without-building \
+            -project KnitGether.xcodeproj \
+            -scheme "KnitGether Local Offline" \
+            -destination "id=${SIMULATOR_UDID}" \
+            -only-testing:KnitGetherTests \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults/unit.xcresult
+
+      - name: DEF-15 UI regression
+        run: |
+          xcodebuild test-without-building \
+            -project KnitGether.xcodeproj \
+            -scheme "KnitGether Local Offline" \
+            -destination "id=${SIMULATOR_UDID}" \
+            -only-testing:KnitGetherQAUITests/DEF_15_RegressionTests/testDEF15 \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults/def15.xcresult
+
+      - name: Upload failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-gate-results
+          path: TestResults/*.xcresult
+          if-no-files-found: ignore
