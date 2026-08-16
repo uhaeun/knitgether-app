@@ -75,6 +75,7 @@ struct ProjectCounterPanelView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline) {
                 Text(verbatim: viewModel.currentRow == 0 ? "시작 전" : "현재 \(viewModel.currentRow)단")
+                    .accessibilityIdentifier(AppAccessibilityID.Workspace.counterCurrent)
                     .font(.system(size: 48, weight: .bold, design: .rounded))
                     .monospacedDigit()
 
