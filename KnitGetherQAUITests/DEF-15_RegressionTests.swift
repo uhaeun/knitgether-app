@@ -18,17 +18,6 @@ final class DEF_15_RegressionTests: XCTestCase {
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
     func testDEF15() throws {
         let app = XCUIApplication()
         app.launchArguments = ["-knitgether.onboardingCompleted", "YES"]
@@ -64,27 +53,17 @@ final class DEF_15_RegressionTests: XCTestCase {
         XCTAssertTrue(projectRow.waitForExistence(timeout: 5))
         projectRow.tap()
         
-        // Given: 시트 열어서 카운터가 0("시작 전")인지 확인
-        let sheetToggle = app.buttons["workspace.counter.sheet_toggle"]
-        XCTAssertTrue(sheetToggle.waitForExistence(timeout: 5))
-        sheetToggle.tap()
-	
-        let counterValue = app.staticTexts["workspace.counter.current"]
-        XCTAssertTrue(counterValue.waitForExistence(timeout: 5))
-        XCTAssertEqual(counterValue.label, "시작 전")
-
-        sheetToggle.tap()   // 시트 닫기 (같은 토글로 열고 닫음)
-
-        // When: 카운터 바의 감소 버튼 탭 (DEF-15 결함 지점)
-        let decrementButton = app.buttons["workspace.counter.previous"]
-        XCTAssertTrue(decrementButton.waitForExistence(timeout: 5))
-        decrementButton.tap()
-
-        // Then: 시트 다시 열어서 여전히 "시작 전"인지 확인
-        sheetToggle.tap()
-        XCTAssertTrue(counterValue.waitForExistence(timeout: 5))
-        XCTAssertEqual(counterValue.label, "시작 전")
-    }
-    
+        // Given: 카운터가 0("시작 전") 상태
+        let workspace = WorkspacePage(app: app)
+        let counter = workspace.openCounterSheet()
+        counter.expectValue("시작 전")
+        counter.close()
         
+        // When: 카운터 바의 감소 버튼 탭 (DEF-15 결함 지점)
+        workspace.tapDecrement()
+        
+        // Then: 여전히 0("시작 전")
+        workspace.openCounterSheet().expectValue("시작 전")
+        
+    }
 }
