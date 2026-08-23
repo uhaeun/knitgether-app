@@ -137,7 +137,8 @@ nonisolated final class APIClient {
             }
         }
 
-        if let token = try await configuration.authTokenProvider() {
+        let sentToken = try await configuration.authTokenProvider()
+        if let token = sentToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             Self.debugLog("REQUEST \(method) \(url.absoluteString) auth=present(\(token.prefix(12))...)")
         } else {
@@ -159,7 +160,10 @@ nonisolated final class APIClient {
         }
 
         guard (200..<300).contains(httpResponse.statusCode) else {
-            if httpResponse.statusCode == 401 {
+            // 토큰 없이 나간 요청의 401은 현재 세션이 무효라는 증거가 아니므로
+            // 세션을 지우지 않는다. 지우면 로그인 직전 발사된 요청의 늦은 401이
+            // 새 세션을 삭제하는 경합이 생긴다 (DEF-16).
+            if httpResponse.statusCode == 401, sentToken != nil {
                 await configuration.authFailureHandler()
             }
 
