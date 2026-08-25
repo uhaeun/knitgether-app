@@ -6,9 +6,30 @@
 #
 # 실행: ./.venv/bin/python -m pytest tests/ -v
 
+import os
+
 import pytest
 from appium import webdriver
 from appium.options.ios import XCUITestOptions
+
+# 실패 시 자동 스크린샷이 저장되는 폴더 (CI artifact 개념의 로컬판)
+FAILURE_DIR = os.path.join(os.path.dirname(__file__), "failures")
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """테스트가 실패하면, 드라이버가 정리되기 전에 화면을 찍어 남긴다."""
+    outcome = yield
+    report = outcome.get_result()
+    if report.when == "call" and report.failed:
+        for fixture_name in ("driver", "fresh_driver", "server_driver"):
+            d = item.funcargs.get(fixture_name)
+            if d is not None:
+                os.makedirs(FAILURE_DIR, exist_ok=True)
+                shot = os.path.join(FAILURE_DIR, f"{item.name}.png")
+                d.save_screenshot(shot)
+                print(f"\n[실패 스크린샷] {shot}")
+                break
 
 UDID = "3E4280D4-3E27-42E0-9C35-E84B24E08BD1"  # iPhone 17 Pro Max 시뮬레이터
 BUNDLE_ID = "com.uhaeun.KnitGether"
