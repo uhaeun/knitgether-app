@@ -141,22 +141,24 @@ struct ProjectPatternFocusView: View {
             ZStack {
                 PDFKitView(
                     url: fileURL,
-                    highlightTerms: viewModel.relatedSkills.map(\.abbreviation)
+                    highlightTerms: viewModel.relatedSkills.map(\.abbreviation),
+                    pageMemoryKey: "knitgether.pattern.page.\(viewModel.project.id.uuidString)"
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                if viewModel.interactionMode == .drawing {
-                    PencilCanvasView(
-                        drawingData: $viewModel.drawingData,
-                        isDrawingEnabled: true,
-                        onDrawingChanged: { data in
-                            Task {
-                                await viewModel.saveDrawingData(data)
-                            }
+                // 캔버스는 두 모드 모두에 둔다. 그리기 모드일 때만 캔버스를 그리면
+                // 보기 모드로 바꿨을 때 그린 내용이 통째로 사라진다 (DEF-18).
+                // 입력만 모드에 따라 끊으면 보기 모드에서도 내용은 보이고 편집은 막힌다.
+                PencilCanvasView(
+                    drawingData: $viewModel.drawingData,
+                    isDrawingEnabled: viewModel.interactionMode == .drawing,
+                    onDrawingChanged: { data in
+                        Task {
+                            await viewModel.saveDrawingData(data)
                         }
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
+                    }
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         } else {
             VStack(spacing: 12) {
