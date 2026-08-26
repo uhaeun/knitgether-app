@@ -96,7 +96,16 @@ extension ProjectRepository {
             updatedSessions = currentSessions + [session]
         }
 
-        try await saveProject(project.copy(workSessions: updatedSessions))
+        // 세션을 저장할 때 프로젝트의 마지막 작업 시각도 함께 갱신한다.
+        // 이게 빠져 있어서 저장 파일의 lastWorkedAt이 계속 nil로 남았고,
+        // 목록의 최근 작업 순 정렬과 홈의 이어서 뜨기가 동작하지 않았다 (DEF-17).
+        let latestWorkedAt = updatedSessions.compactMap(\.endedAt).max()
+        try await saveProject(
+            project.copy(
+                lastWorkedAt: latestWorkedAt ?? project.lastWorkedAt,
+                workSessions: updatedSessions
+            )
+        )
         return session
     }
 
