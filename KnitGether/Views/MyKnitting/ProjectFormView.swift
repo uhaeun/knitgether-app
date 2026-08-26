@@ -74,7 +74,8 @@ struct ProjectFormView: View {
                     placeholder: "예: 여름 가디건",
                     systemImage: "text.cursor",
                     text: $formData.name,
-                    identifier: AppAccessibilityID.Project.nameField
+                    identifier: AppAccessibilityID.Project.nameField,
+                    characterLimit: ProjectFormData.nameCharacterLimit
                 )
 
                 ProjectDivider()
@@ -546,15 +547,27 @@ private struct ProjectTextInput: View {
     let systemImage: String
     @Binding var text: String
     var identifier: String? = nil
+    /// 글자 수 상한. 주면 남은 글자 수를 표시하고 초과 입력을 잘라낸다 (SPEC-PROJ-01).
+    var characterLimit: Int? = nil
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             ProjectFieldIcon(systemImage: systemImage, tint: AppTheme.Color.accent)
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(title)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Text(title)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+
+                    if let characterLimit {
+                        Spacer()
+                        Text("\(text.count)/\(characterLimit)")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                    }
+                }
 
                 textField
             }
@@ -569,6 +582,12 @@ private struct ProjectTextInput: View {
             .font(.body.weight(.semibold))
             .textInputAutocapitalization(.sentences)
             .submitLabel(.done)
+            // 타이핑이든 붙여넣기든 상한을 넘는 입력은 잘라낸다
+            .onChange(of: text) { newValue in
+                if let characterLimit, newValue.count > characterLimit {
+                    text = String(newValue.prefix(characterLimit))
+                }
+            }
 
         if let identifier {
             base.accessibilityIdentifier(identifier)

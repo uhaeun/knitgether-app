@@ -10,6 +10,8 @@ import {
   IsUUID,
   Min,
   ValidateNested,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class SaveRowInstructionDto {
@@ -171,7 +173,10 @@ export class SaveProjectDto {
   @IsUUID()
   id!: string;
 
+  // 이름은 1~30자 (SPEC-PROJ-01). 클라이언트 폼과 서버 두 층에서 막는다.
   @IsString()
+  @MinLength(1)
+  @MaxLength(30)
   name!: string;
 
   @IsString()

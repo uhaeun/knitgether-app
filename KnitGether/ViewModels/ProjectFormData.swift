@@ -8,6 +8,9 @@
 import Foundation
 
 struct ProjectFormData {
+    /// 프로젝트 이름 글자 수 상한 (SPEC-PROJ-01). 클라이언트 폼과 서버 검증이 같은 값을 쓴다.
+    static let nameCharacterLimit = 30
+
     var name: String
     var status: ProjectStatus
     var startDate: Date
@@ -210,7 +213,7 @@ struct ProjectFormData {
     }
 
     var canSave: Bool {
-        !trimmedName.isEmpty
+        !trimmedName.isEmpty && trimmedName.count <= Self.nameCharacterLimit
     }
 
     mutating func selectYarn(_ yarn: Yarn?) {
