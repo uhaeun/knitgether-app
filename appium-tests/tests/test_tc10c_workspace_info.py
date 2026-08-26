@@ -104,9 +104,11 @@ def test_ui_57_progress_photo(kg):
 
     시뮬레이터 사진 라이브러리는 simctl addmedia로 미리 채운다. 기법: 시나리오
     """
+    import os
     from support import simctl
-    simctl.add_photo("/Users/yuha/Desktop/Projects/KnitGether/docs/qa/portfolio/"
-                     "evidence/0727_manual_verification/01_home.png")
+    from support.paths import QA_EVIDENCE_DIR
+    simctl.add_photo(os.path.join(QA_EVIDENCE_DIR,
+                                  "0727_manual_verification", "01_home.png"))
 
     s = Seed(); s.project("사진대상")
     lst, ws, info = _open_info(kg, "사진대상", s)

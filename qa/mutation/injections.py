@@ -4,7 +4,10 @@
 일부러 고장을 심어 지정한 케이스만 정확히 빨개지는지 보면 그 둘이 갈린다.
 엉뚱한 케이스가 같이 터지면 그 테스트는 과잉 결합이라 분리 대상이다.
 """
-ROOT = "/Users/yuha/Desktop/Projects/KnitGether"
+import os
+
+# 이 파일 위치: <repo>/qa/mutation/injections.py  ->  두 단계 위가 레포 루트
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 
 INJECTIONS = {
     "counter-lower-bound": {

@@ -3,6 +3,7 @@
 도안 연결의 네 경로(PDF 직접, 문서 스캔, 창고, 수동), 교체와 해제, 그리기, 페이지 유지를 본다.
 DEF-10(교체 시 드로잉 경고) 회귀와 DEF-18, DEF-19 회귀가 여기 모여 있다.
 """
+import os
 import time
 
 import pytest
@@ -13,9 +14,10 @@ from pages.my_knitting_page import MyKnittingPage
 from pages.pattern_panel_page import PatternPanelPage
 from pages.workspace_page import WorkspacePage
 from support import simctl, texts as T
+from support.paths import SAMPLE_PATTERNS_DIR
 from support.seed import Seed
 
-SAMPLE_PDF = "/Users/yuha/Desktop/Projects/KnitGether/KnitGether/Resources/SamplePatterns/sample4.pdf"
+SAMPLE_PDF = os.path.join(SAMPLE_PATTERNS_DIR, "sample4.pdf")
 # 창고에는 sample1~4가 샘플 데이터로 이미 들어 있다. 가져오기 결과를 그 샘플과 구분하려면
 # 파일 이름이 겹치지 않아야 한다.
 IMPORT_PDF_NAME = "qa-import-check"   # 한글 파일명은 macOS에서 NFD로 저장돼 비교가 어긋난다

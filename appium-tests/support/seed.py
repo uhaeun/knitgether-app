@@ -10,6 +10,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 from . import simctl
+from .paths import SAMPLE_PATTERNS_DIR
 
 OWNER = "local-user"
 
@@ -35,7 +36,7 @@ def _stamp(obj, at=None):
 class Seed:
     """프로젝트와 창고 항목을 쌓아두었다가 apply()에서 한 번에 기록한다."""
 
-    SAMPLE_DIR = "/Users/yuha/Desktop/Projects/KnitGether/KnitGether/Resources/SamplePatterns"
+    SAMPLE_DIR = SAMPLE_PATTERNS_DIR
 
     def __init__(self):
         self.files = []          # (상대경로, 원본경로) 목록. apply()에서 실제로 복사한다
