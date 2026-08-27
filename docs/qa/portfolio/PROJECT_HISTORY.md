@@ -62,7 +62,7 @@
 - `04_pom_screen_success_failure_criteria.md` — POM 화면별 PASS/FAIL 판정 기준, 공통 판정 규칙(PASS/FAIL/ENV_ISSUE/NEED_SPEC_CONFIRM)
 - `05_test_plan_2026-07-19.md` — 테스트 계획서 (범위/제외범위/리스크등급/환경매트릭스/Entry-Exit Criteria/결함 처리 규칙)
 - `06_smoke_test_cases.md` — 스모크 TC 15개 (Happy Path/Negative/Boundary/State Transition/Persistence/Offline/API-DB 태그)
-- `07_qa_round_1_execution_2026-07-19.md` — 1회차 실행 리포트
+- `evidence/0719_qa_round_1_execution.md` — 1회차 실행 리포트 (2026-08-27 이동, 원래 `07_qa_round_1_execution_2026-07-19.md`)
 
 **중요한 지점**: Codex가 `02_project_goal.md`, `03_feature_inventory.md`의 **판단 내용(리스크 등급 P0/P1/P2)까지 채워버림**. 이는 원래 "사용자가 직접 판단"하기로 한 영역이라, Claude가 검토하며 "이 등급표를 그대로 쓰지 말고, 동의 여부를 하나씩 확인하는 방식으로 자기 판단을 남기라"고 조언함.
 
