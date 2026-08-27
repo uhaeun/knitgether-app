@@ -82,13 +82,34 @@ def _options(*, onboarding_completed=True, api_base_url="", full_reset=False, ca
 
 
 def _default_app_path():
+    """DerivedData 에서 가장 최근에 빌드된 KnitGether.app 을 고른다.
+
+    DerivedData 폴더 이름의 해시는 프로젝트 '경로'에서 나온다. 레포 폴더 이름을 바꾸거나
+    다른 위치로 옮기면 새 폴더가 생기고 옛 폴더는 그대로 남는다. 알파벳순으로 고르면
+    그 순간부터 낡은 빌드를 상대로 테스트가 돌면서도 아무 경고가 없다.
+    빌드 시각이 가장 늦은 것을 고르고, 후보가 둘 이상이면 어떤 걸 골랐는지 알린다.
+    """
     base = os.path.expanduser("~/Library/Developer/Xcode/DerivedData")
-    for entry in sorted(os.listdir(base)):
+    candidates = []
+    for entry in os.listdir(base):
         if entry.startswith("KnitGether-"):
             p = os.path.join(base, entry, "Build/Products/Debug-iphonesimulator/KnitGether.app")
             if os.path.isdir(p):
-                return p
-    raise LookupError("KnitGether.app 을 DerivedData에서 찾지 못했다")
+                candidates.append((os.path.getmtime(p), p))
+
+    if not candidates:
+        raise LookupError(
+            "KnitGether.app 을 DerivedData에서 찾지 못했다. "
+            "Xcode에서 시뮬레이터용으로 한 번 빌드하거나 KG_APP_PATH 로 직접 지정하라."
+        )
+
+    candidates.sort()
+    newest = candidates[-1][1]
+    if len(candidates) > 1:
+        built = time.strftime("%Y-%m-%d %H:%M", time.localtime(candidates[-1][0]))
+        print(f"\n[conftest] DerivedData 후보 {len(candidates)}개 중 최신 빌드 사용 ({built})"
+              f"\n           {newest}")
+    return newest
 
 
 class AppSession:
