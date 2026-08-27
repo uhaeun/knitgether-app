@@ -184,19 +184,49 @@ class DriverPool:
         self._driver = None
 
     def get(self, kind, **options):
+        """세션을 확보한다. activate_app 실패가 곧 세션 사망은 아니다.
+
+        privacy grant 가 앱을 종료시키므로 뒤이어 activate_app 으로 다시 띄우는데,
+        이 호출이 실패해도 세션까지 끊겼는지는 따로 확인해야 한다. 세션이 멀쩡한데
+        버리면 멀쩡한 세션을 낭비하고, 죽은 세션을 그대로 돌려주면 실패가 테스트 본문의
+        "요소를 못 찾음"으로 둔갑해 원인을 엉뚱한 곳에서 찾게 된다.
+        그래서 실패 직후에 살아 있는지 보고, 죽었을 때만 세션을 새로 연다.
+        재시도는 1회로 묶는다. 원인이 결정적이면 반복해도 같은 자리에서 죽어
+        스위트가 끝나지 않는다.
+        """
         if self._kind == kind and self._alive():
             return self._driver
         self.close()
-        self._driver = webdriver.Remote(APPIUM_SERVER, options=_options(**options))
-        # 앱을 다시 깔면 권한 부여가 초기화된다. 온보딩 케이스가 재설치를 하므로
-        # 세션을 새로 열 때마다 다시 준다. 안 주면 문서 스캔에서 권한 다이얼로그가 뜨고
-        # 그 다이얼로그가 다음 케이스 화면까지 막는다.
-        # simctl privacy grant 는 대상 앱을 종료시킨다. 부여한 뒤 다시 띄워야 한다.
-        simctl.grant_permissions()
-        self._driver.activate_app(simctl.BUNDLE_ID)
-        self._kind = kind
-        time.sleep(2)
-        return self._driver
+
+        for attempt in (1, 2):
+            self._driver = webdriver.Remote(APPIUM_SERVER, options=_options(**options))
+            # 재설치(full_reset) 경로에서만 세션이 끊긴다. 재시도까지 재설치를 반복하면
+            # 같은 자리에서 또 끊겨 두 번 다 실패한다. 1차 시도가 이미 재설치를 끝냈으므로
+            # 컨테이너는 깨끗하고 권한도 부여된 상태다. 재시도는 깔린 앱에 붙기만 한다.
+            # 온보딩 초기화는 full_reset 이 아니라 KNITGETHER_UI_TEST_RESET_ONBOARDING 이
+            # 하므로 재시도 세션에도 그대로 적용된다.
+            options = {**options, "full_reset": False}
+            # 앱을 다시 깔면 권한 부여가 초기화된다. 온보딩 케이스가 재설치를 하므로
+            # 세션을 새로 열 때마다 다시 준다. 안 주면 문서 스캔에서 권한 다이얼로그가 뜨고
+            # 그 다이얼로그가 다음 케이스 화면까지 막는다.
+            # simctl privacy grant 는 대상 앱을 종료시킨다. 부여한 뒤 다시 띄워야 한다.
+            simctl.grant_permissions()
+            try:
+                self._driver.activate_app(simctl.BUNDLE_ID)
+            except Exception as exc:
+                if self._alive():
+                    print(f"\n[conftest] activate_app 실패({type(exc).__name__}). "
+                          f"세션은 살아 있어 그대로 진행한다.")
+                elif attempt == 1:
+                    print(f"\n[conftest] activate_app 이 세션까지 끊었다({type(exc).__name__}). "
+                          f"세션을 다시 연다.")
+                    self.close()
+                    continue
+                else:
+                    raise
+            self._kind = kind
+            time.sleep(2)
+            return self._driver
 
     def _alive(self):
         try:
