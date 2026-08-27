@@ -38,6 +38,15 @@ class LibraryPage(BasePage):
                 names.append(self.label_of(kids[0]).strip())
         return names
 
+    def wait_for_rows(self, prefix, timeout=20):
+        """목록에 행이 하나라도 나타날 때까지 기다린다."""
+        end = time.time() + timeout
+        while time.time() < end:
+            if self.item_names(prefix):
+                return True
+            time.sleep(0.5)
+        return False
+
     def wait_for_item(self, prefix, name, timeout=30):
         """목록에 항목이 나타날 때까지 기다린다.
 

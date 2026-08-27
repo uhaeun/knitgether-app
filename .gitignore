@@ -30,3 +30,6 @@ server/storage/
 
 # claude.ai 전략 세션 핸드오프 문서 — 역할 정본은 PROJECT_HISTORY.md의 재정의(5a06b57)로 일원화
 KnitGether_QA_핸드오프.md
+
+__pycache__/
+*.pyc

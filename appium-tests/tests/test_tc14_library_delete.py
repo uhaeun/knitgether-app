@@ -77,6 +77,8 @@ def test_ui_76_delete_library_pattern_keeps_project_copy(kg):
     lst, ws = kg.page(MyKnittingPage), kg.page(WorkspacePage)
 
     lib.open(T.LIB_PATTERN)
+    # 저장 파일을 지우면 앱이 샘플 도안을 다시 심는다. 그 시딩이 끝나기 전에 읽으면 목록이 비어 있다.
+    assert lib.wait_for_rows("library.pattern"), "창고에 샘플 도안이 나타나지 않음"
     target = lib.item_names("library.pattern")[0]
     lib.delete_by_swipe(target, "도안을 삭제할까요?")
     assert target not in lib.item_names("library.pattern"), "창고에서 삭제되지 않음"
