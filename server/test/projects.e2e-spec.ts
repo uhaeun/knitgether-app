@@ -1677,7 +1677,7 @@ describe('Projects route', () => {
       .set('Authorization', 'Bearer dev-token')
       .send({
         ...saveProjectBody,
-        name: 'Favorite Cardigan Updated Offline',
+        name: 'Favorite Cardigan Offline',
         rowCounter: {
           ...saveProjectBody.rowCounter,
           currentRow: 48,
@@ -1692,7 +1692,7 @@ describe('Projects route', () => {
       expect.objectContaining({
         where: { id: saveProjectBody.id },
         data: expect.objectContaining({
-          name: 'Favorite Cardigan Updated Offline',
+          name: 'Favorite Cardigan Offline',
         }),
       }),
     );
