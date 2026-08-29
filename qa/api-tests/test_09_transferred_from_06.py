@@ -15,8 +15,6 @@ import base64
 import os
 from pathlib import Path
 
-import pytest
-
 from helpers import project_payload, uid
 
 SERVER_ROOT = Path(__file__).resolve().parents[2] / "server"
@@ -139,9 +137,6 @@ def test_rc_08_deleted_project_leaves_pattern_file_on_disk(account_a, db):
     응답, DB, 파일 세 층을 순서대로 본다. 앞 두 층만 보면 삭제가 정상으로
     보이기 때문에, 파일 층을 봐야만 드러나는 결함이다.
     """
-    if not STORAGE_ROOT.exists():
-        pytest.skip(f"스토리지 경로가 없다: {STORAGE_ROOT}")
-
     payload = _payload_with_pattern("RC08-고아")
     pid = payload["id"]
     assert account_a.api.create_project(payload).status_code == 201
@@ -155,7 +150,10 @@ def test_rc_08_deleted_project_leaves_pattern_file_on_disk(account_a, db):
     key, deleted_at = _storage_key(db, pid)
     assert key, "업로드했는데 DB에 fileStorageKey가 없다"
     path = STORAGE_ROOT / key
-    assert path.exists(), f"DB에는 키가 있는데 디스크에 파일이 없다: {path}"
+    assert path.exists(), (
+        f"DB에는 키가 있는데 디스크에 파일이 없다: {path}. "
+        f"STORAGE_ROOT({STORAGE_ROOT})가 서버가 쓰는 경로와 다를 수 있다"
+    )
     assert deleted_at is None
 
     # 1층 응답: 삭제는 성공한다
@@ -177,14 +175,13 @@ def test_rc_08_orphan_census(db):
     개별 재현과 별개로 누적 규모를 남긴다. 운영 리스크는 건당 심각도가 아니라
     쌓이는 속도로 판단해야 하기 때문이다.
     """
-    if not STORAGE_ROOT.exists():
-        pytest.skip(f"스토리지 경로가 없다: {STORAGE_ROOT}")
-
+    # 경로가 없으면 스킵하지 않고 빈 집합으로 센다. 스킵은 게이트에서 조용히
+    # 사라져 커버가 있는 것처럼 보이게 만든다. 갓 만든 환경의 0건은 사실이다.
     on_disk = {
         str(p.relative_to(STORAGE_ROOT))
         for p in STORAGE_ROOT.rglob("*")
         if p.is_file() and ".omc" not in p.parts
-    }
+    } if STORAGE_ROOT.exists() else set()
 
     referenced = set()
     with db.cursor() as cur:
