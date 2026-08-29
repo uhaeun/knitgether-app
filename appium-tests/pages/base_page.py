@@ -174,6 +174,12 @@ class BasePage:
         assert self.exists(self.button(expect), PRED, self.TIMEOUT), \
             f"롱프레스 메뉴에 '{expect}'가 없음"
 
+    def long_press_point(self, x, y, expect, duration=1.2):
+        """좌표를 길게 눌러 컨텍스트 메뉴를 연다."""
+        self.driver.execute_script(
+            "mobile: touchAndHold", {"x": x, "y": y, "duration": duration})
+        return self.exists(self.button(expect), PRED, self.TIMEOUT)
+
     def long_press_row(self, name, expect):
         """롱프레스 메뉴를 연다.
 

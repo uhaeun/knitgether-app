@@ -101,10 +101,11 @@ class ProjectInfoPage(BasePage):
 
         해제 입구가 버튼이 아니라 행의 롱프레스 메뉴다(식별자 없음).
         """
-        # 부분 일치로 찾으면 "게이지 계산기에서 저장한 세탁 전/후 기록을..." 안내 문구가 먼저 잡힌다
-        row = f'label == "{row_label}"'
         for _ in range(3):
-            self.long_press_element(self.find(row, PRED), "연결 해제")
+            x, y = self._gauge_row_center(row_label)
+            if not self.long_press_point(x, y, "연결 해제"):
+                time.sleep(0.8)
+                continue
             time.sleep(1.0)          # 메뉴가 다 뜨기 전에 누르면 탭이 무시된다
             self.tap_at_locator(self.button("연결 해제"), PRED)
             if self.alert_shown("게이지 기록 연결을 해제할까요?", timeout=4):
@@ -112,3 +113,22 @@ class ProjectInfoPage(BasePage):
                 time.sleep(1.5)
                 return self
         raise AssertionError("게이지 연결 해제 확인창이 뜨지 않음")
+
+    def _gauge_row_center(self, row_label):
+        """게이지 기록 행 컨테이너의 중심 좌표.
+
+        컨텍스트 메뉴는 제목과 코수 줄을 함께 감싼 행 컨테이너에 붙어 있다. 제목
+        StaticText 만 눌러도 될 때가 있지만, 그 요소는 행보다 작고 위쪽에 치우쳐 있어
+        롱프레스가 컨테이너에 닿지 않는 일이 있었다. 두 줄을 합친 영역의 중심을 누른다.
+
+        부분 일치로 찾으면 "게이지 계산기에서 저장한 세탁 전/후 기록을..." 안내 문구가
+        먼저 잡히므로 제목은 정확히 일치로 찾는다.
+        """
+        title = self.find(f'label == "{row_label}"', PRED).rect
+        bottom = title["y"] + title["height"]
+        for detail in self._all('label CONTAINS "코 / "', PRED):
+            box = detail.rect
+            if box["y"] >= title["y"]:
+                bottom = max(bottom, box["y"] + box["height"])
+                break
+        return title["x"] + 40, (title["y"] + bottom) // 2
