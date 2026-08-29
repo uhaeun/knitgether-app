@@ -13,7 +13,7 @@
 시트 `로드맵` 탭. 층, 기법, 우선순위, 근거, 제약은 시트 원문이다.
 
 | TC | 항목 | 층 | 기법 | 우선순위 | 제약 | UI 케이스 | API 케이스 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | TC1 | 온보딩 (6페이지) | 스모크 | 시나리오 | P1 | 초기 상태 필요(앱 초기화 옵션). 6페이지 완주 기준 | UI-01 | 없음 |
 | TC2 | 회원가입 | 스모크 | 경계값, 에러 기대, 시나리오 | P1 | 서버 필요, 매 실행 고유 이메일 | UI-02~07 | API-01~03 |
 | TC3 | 로그인 | 스모크 | 시나리오, 에러 기대 | P1 | 서버 필요, 테스트 계정 필요 | UI-08~12 | API-04, 05 |
@@ -58,91 +58,111 @@
 
 ## 2. UI 케이스 (UI-01 ~ UI-78)
 
-`Appium 함수` 열은 2026-08-27 리포지토리 실측이다. **함수가 존재한다는 사실이지 통과했다는 판정이 아니다.**
-`시트 상태` 열은 2026-08-24 시트 원문이다.
+`Appium 함수` 열은 2026-08-27 리포지토리 실측이다. 함수가 존재한다는 사실이지 통과했다는 판정이 아니다.
+`시트 상태` 열은 2026-08-24 시트 원문이며 갱신하지 않는다. 그 시점의 수동 판정을 남겨두어야 자동 재실행과 구분되기 때문이다.
+`자동 실행 판정` 열은 2026-08-29 분할 실행 3회(정방향 2회, 역순 1회) 결과다. 세 회차가 모두 79 passed, 1 skipped, 0 failed로 같았으므로 실행된 케이스는 전건 PASS다.
 
-| 케이스 | TC | 시나리오 | 기법 | Appium 함수 (8/27 실측) | 시트 상태 (8/24) | 자동/수동 | 판정 근거 |
+**이 열을 읽을 때 주의할 것.** 시트에 `PASS (8/23)` 로 적힌 11건은 이미 수동으로 통과한 케이스다. 여기서 다시 PASS가 나온 것은 신규 발견이 아니라 자동 재실행이다. 반대로 `실행 대기` 56건은 이번 자동 실행이 첫 판정이다.
+
+| 케이스 | TC | 시나리오 | 기법 | Appium 함수 (8/27 실측) | 시트 상태 (8/24) | 자동 실행 판정 (8/29) | 자동/수동 | 판정 근거 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| UI-01 | TC1 | 온보딩 6페이지 완주 후 메인 페이지 확인 | 시나리오 | `test_ui_01_complete_six_pages` | 실행 대기 |  |  |
-| UI-02 | TC2 | 회원가입 성공 | 시나리오 | `test_ui_02_signup_success` | 실행 대기 |  |  |
-| UI-03 | TC2 | 회원가입 실패 - 중복 이메일 | 에러 기대 | `test_ui_03_duplicate_email_rejected` | 실행 대기 |  |  |
-| UI-04 | TC2 | 회원가입 실패 - 잘못된 이메일 형식 | 에러 기대 | `test_ui_04_05_06_submit_disabled_on_invalid_input` (3건 통합) | 실행 대기 |  |  |
-| UI-05 | TC2 | 회원가입 실패 - 비밀번호 미입력 | 경계값 | 위와 동일 함수 | 실행 대기 |  |  |
-| UI-06 | TC2 | 회원가입 실패 - 비밀번호 7자 | 경계값 | 위와 동일 함수 | 실행 대기 |  |  |
-| UI-07 | TC2 | 회원가입 실패 - 비밀번호 257자 | 경계값 | `test_ui_07_password_too_long_rejected` | 실행 대기 |  |  |
-| UI-08 | TC3 | 로그인 성공 (DEF-16 증상 감시) | 시나리오 | `test_ui_08_login_success` | 실행 대기 |  |  |
-| UI-09 | TC3 | 로그인 실패 - 빈 입력 | 에러 기대 | `test_ui_09_login_disabled_on_empty_input` | 실행 대기 |  |  |
-| UI-10 | TC3 | 로그인 실패 - 이메일 형식 오류 | 에러 기대 | `test_ui_10_login_disabled_on_malformed_email` | 실행 대기 |  |  |
-| UI-11 | TC3 | 로그인 실패 - 존재하지 않는 이메일 | 에러 기대 | `test_ui_11_unknown_email_rejected` | 실행 대기 |  |  |
-| UI-12 | TC3 | 로그인 실패 - 잘못된 비밀번호 | 에러 기대 | `test_ui_12_wrong_password_rejected` | 실행 대기 |  |  |
-| UI-13 | TC4 | 프로젝트 추가 - 상단 [+] 버튼 | 시나리오, 에러 기대, 경계값 | `test_ui_13_add_via_top_plus` | 실행 대기 |  |  |
-| UI-14 | TC4 | 프로젝트 추가 - 0개 상태 [+ 추가] | 시나리오 | `test_ui_14_add_from_empty_state` | 실행 대기 |  |  |
-| UI-15 | TC4 | 프로젝트 추가 - 연속 5개 | 시나리오 | `test_ui_15_add_five_in_a_row` | 실행 대기 |  |  |
-| UI-16 | TC4 | 중복 이름 생성 (명세 공백 관찰) | 시나리오 | `test_ui_16_duplicate_names_allowed` | 실행 대기 |  |  |
-| UI-17 | TC4 | 이름 길이 상한 경계값 (SPEC-PROJ-01) | 경계값 | `test_ui_17_name_length_boundary` | FAIL 예상 (미실행) |  |  |
-| UI-18 | TC5 | 수정 - 작업 화면 경로 기본 | 시나리오 | `test_ui_18_rename_from_workspace` | 실행 대기 |  |  |
-| UI-19 | TC5 | 이름만 수정 시 실 연결 유지 (작업 화면) | 시나리오, 상태 전이 | `test_ui_19_rename_keeps_yarn_link_workspace_path` | 실행 대기 |  |  |
-| UI-20 | TC5 | 이름만 수정 시 실 연결 유지 (롱프레스) | 시나리오, 상태 전이 | `test_ui_20_rename_keeps_yarn_link_long_press_path` | 실행 대기 |  |  |
-| UI-21 | TC5 | 스와이프 수정 진입 검증 | 시나리오 | `test_ui_21_rename_from_swipe` | 실행 대기 |  |  |
-| UI-22 | TC5 | 오손상 방지 (n개 중 1개만 수정) | 상태 전이 | `test_ui_22_editing_one_project_leaves_others` | 실행 대기 |  |  |
-| UI-23 | TC5 | 수정 취소 분기 | 상태 전이 | `test_ui_23_cancel_discards_changes` | 실행 대기 |  |  |
-| UI-24 | TC5 | 목표일 설정과 표시 | 시나리오 | `test_ui_24_target_date_shows_and_persists` | 실행 대기 |  |  |
-| UI-25 | TC5 | 목표일 표시 경계값 (D-day) | 경계값 | `test_ui_25_dday_boundary` | 실행 대기 |  |  |
-| UI-26 | TC5 | 상태 변경 전이 (CO→WIP→UFO→WIP→FO) | 상태 전이 | `test_ui_26_status_transitions_persist` | 실행 대기 |  |  |
-| UI-27 | TC5 | 완료 처리의 홈 집계 반영 | 상태 전이 | `test_ui_27_completion_updates_home_counts` | 실행 대기 |  |  |
-| UI-28 | TC6 | 삭제 - 수정 폼 경로 (취소 분기 포함) | 상태 전이 | `test_ui_28_delete_from_edit_form_with_cancel` | 실행 대기 |  |  |
-| UI-29 | TC6 | 삭제 - 롱프레스 경로 | 상태 전이 | `test_ui_29_delete_via_long_press` | 실행 대기 |  |  |
-| UI-30 | TC6 | 삭제 - 스와이프 경로 | 상태 전이 | `test_ui_30_delete_via_swipe` | 실행 대기 |  |  |
-| UI-31 | TC6 | 연속 삭제와 격리 (3개 중 2개) | 상태 전이 | `test_ui_31_delete_two_of_three_keeps_rest` | 실행 대기 |  |  |
-| UI-32 | TC7 | 대량 생성 탐색 (30개) | 경계값, 탐색 | `test_ui_32_bulk_create_thirty` | PASS (8/23) |  |  |
-| UI-33 | TC8 | 정렬 - 최근 작업 순 반영 (DEF-17 회귀) | 상태 전이, 회귀 | `test_ui_33_recent_work_moves_to_top` | FAIL 예상 (미실행) |  |  |
-| UI-34 | TC8 | 정렬 - 이력 없을 때 시작일 내림차순 | 시나리오 | `test_ui_34_start_date_desc_without_history` | 실행 대기 |  |  |
-| UI-35 | TC8 | 정렬 - 복수 작업 이력 간 상대 순서 | 상태 전이 | `test_ui_35_relative_order_between_histories` | FAIL 예상 (미실행) |  |  |
-| UI-36 | TC8 | 필터 - 상태별 표시 | 시나리오 | `test_ui_36_status_filter` | 실행 대기 |  |  |
-| UI-37 | TC9 | 즐겨찾기 토글과 상단 고정 | 상태 전이 | `test_ui_37_favorite_pins_to_top` | PASS (8/23) |  |  |
-| UI-38 | TC9 | 즐겨찾기 그룹 내 정렬 (DEF-17 계열) | 상태 전이, 회귀 | `test_ui_38_order_inside_favorite_group` | FAIL 예상 (미실행) |  |  |
-| UI-39 | TC10 | 작업 화면 진입 여정 (DEF-15 자동화 경로) | 시나리오, 회귀 | `test_ui_39_enter_workspace_and_counter` | 자동화 완료 |  |  |
-| UI-40 | TC10 | 도안 연결 - PDF 직접 (창고 보관 안함) | 시나리오 | `test_ui_40_import_pdf_link_only` | PASS (8/23) |  |  |
-| UI-41 | TC10 | 도안 연결 - PDF 직접 (창고 보관) | 시나리오 | `test_ui_41_import_pdf_keep_in_library` | PASS (8/23) |  |  |
-| UI-42 | TC10 | 도안 연결 - 문서 스캔 (카메라) | 시나리오 | `test_ui_42a_document_scan_on_simulator` / `test_ui_42b_document_scan_on_device` | 실기기 수동 대기 |  |  |
-| UI-43 | TC10 | 도안 연결 - 도안 창고 (DEF-13 경로) | 시나리오 | `test_ui_43_link_from_library` | PASS (8/23) |  |  |
-| UI-44 | TC10 | 도안 연결 - 수동 입력 | 시나리오 | `test_ui_44_manual_pattern` | PASS (8/23) |  |  |
-| UI-45 | TC10 | 도안 교체 - 드로잉 삭제 경고 (DEF-10 회귀) | 상태 전이, 회귀 | `test_ui_45_replace_warns_and_clears_drawing` | PASS (8/23) |  |  |
-| UI-46 | TC10 | 도안 연결 해제 | 상태 전이 | `test_ui_46_unlink_pattern` | PASS (8/23) |  |  |
-| UI-47 | TC10 | 도안 그리기 - 작성 | 시나리오 | `test_ui_47_draw_on_pattern` | PASS (8/23) |  |  |
-| UI-48 | TC10 | 도안 그리기 - 재실행 후 유지 | 상태 전이 | `test_ui_48_drawing_survives_relaunch` | PASS (8/23) |  |  |
-| UI-49 | TC10 | 도안 뷰어 - 드로잉 표시 (DEF-18 회귀) | 상태 전이, 회귀 | `test_ui_49_drawing_visible_in_viewer_mode` | FAIL (8/23, DEF-18) |  |  |
-| UI-50 | TC10 | 도안 그리기 - 삭제 (취소 분기 포함) | 상태 전이 | `test_ui_50_delete_drawing_with_cancel` | PASS (8/23) |  |  |
-| UI-51 | TC10 | 도안 뷰어 - 페이지 이동과 복귀 유지 (DEF-19 회귀) | 상태 전이, 회귀 | `test_ui_51_step2_page_kept_after_tab_round_trip` / `test_ui_51_step3_page_kept_after_lookup` | 스텝 2 FAIL, 스텝 3 PASS (8/23) |  |  |
-| UI-52 | TC10 | 단수 카운터 - 간편 모드 | 시나리오 | `test_ui_52_simple_mode_increment_and_decrement` | 자동화 완료 |  |  |
-| UI-53 | TC10 | 단수 카운터 - 행안내 모드 | 시나리오 | `test_ui_53_row_guide_mode` | 실행 대기 |  |  |
-| UI-54 | TC10 | 단수 카운터 - 하한 경계 (DEF-15 회귀) | 경계값, 회귀 | `test_ui_54_lower_bound_stays_at_start` | 자동화 완료 |  |  |
-| UI-55 | TC10 | 단수 카운터 - 직접 입력 경계값 | 경계값 | `test_ui_55_direct_input_boundaries` | 실행 대기 |  |  |
-| UI-56 | TC10 | 정보 탭 - 프로젝트 요약 표시 | 시나리오 | `test_ui_56_summary_matches_actual_values` | 실행 대기 |  |  |
-| UI-57 | TC10 | 정보 탭 - 진행 사진 기록 | 시나리오 | `test_ui_57_progress_photo` | 실행 대기 |  |  |
-| UI-58 | TC10 | 정보 탭 - 실 사용량 표시 | 시나리오 | `test_ui_58_linked_yarn_shown` | 실행 대기 |  |  |
-| UI-59 | TC10 | 정보 탭 - 사용 바늘 표시 | 시나리오 | `test_ui_59_linked_needle_shown` | 실행 대기 |  |  |
-| UI-60 | TC10 | 정보 탭 - 사용 도구 표시 | 시나리오 | `test_ui_60_linked_tool_shown` | 실행 대기 |  |  |
-| UI-61 | TC10 | 정보 탭 - 게이지 기록 연결과 해제 | 상태 전이 | `test_ui_61_gauge_record_link_and_unlink` | 실행 대기 |  |  |
-| UI-62 | TC10 | 정보 탭 - 작업 메모 기록 | 시나리오 | `test_ui_62_work_memo_saved_and_persists` | 실행 대기 |  |  |
-| UI-63 | TC10 | 정보 탭 - 관련 스킬 표시 | 시나리오 | `test_ui_63_related_skills_shown_and_navigable` | 실행 대기 |  |  |
-| UI-64 | TC11 | 재방문 - 앱 종료 후 작업 상태 보존 | 상태 전이, 시나리오 | `test_ui_64_state_survives_app_restart` | 실행 대기 |  |  |
-| UI-65 | TC12 | 실 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_65_register_yarn` | 실행 대기 |  |  |
-| UI-66 | TC12 | 바늘 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_66_register_needle` | 실행 대기 |  |  |
-| UI-67 | TC12 | 도구 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_67_register_tool` | 실행 대기 |  |  |
-| UI-68 | TC12 | 실과 바늘 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_68_link_and_unlink_yarn_and_needle` | 실행 대기 |  |  |
-| UI-69 | TC12 | 도구 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_69_link_and_unlink_tool` | 실행 대기 |  |  |
-| UI-70 | TC13 | 실 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_70_yarn_edit_does_not_propagate` | 실행 대기 |  |  |
-| UI-71 | TC13 | 바늘 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_71_needle_edit_does_not_propagate` | 실행 대기 |  |  |
-| UI-72 | TC13 | 도구 수정 - 창고 반영 | 상태 전이 | `test_ui_72_tool_edit_propagates` | 실행 대기 |  |  |
-| UI-73 | TC14 | 실 삭제 - 미연결 | 상태 전이 | `test_ui_73_delete_unlinked_yarn` | 실행 대기 |  |  |
-| UI-74 | TC14 | 실 삭제 - 연결된 실 (스냅샷 보존) | 상태 전이 | `test_ui_74_delete_linked_yarn_keeps_snapshot` | 실행 대기 |  |  |
-| UI-75 | TC14 | 바늘과 도구 삭제 - 연결 상태 | 상태 전이 | `test_ui_75_delete_linked_needle_and_tool` | 실행 대기 |  |  |
-| UI-76 | TC14 | 창고 도안 삭제 - 프로젝트 복사본 영향 | 상태 전이 | `test_ui_76_delete_library_pattern_keeps_project_copy` | 실행 대기 |  |  |
-| UI-77 | TC15 | 로그아웃 - 게이트 표시와 데이터 비노출 | 상태 전이 | `test_ui_77_logout_shows_gate_and_hides_account_data` | 실행 대기 |  |  |
-| UI-78 | TC16 | 오프라인 생성 - 복구 후 동기화 | 상태 전이, 시나리오 | `test_ui_78_offline_create_then_sync_on_recovery` | 수동 트랙 |  |  |
+| UI-01 | TC1 | 온보딩 6페이지 완주 후 메인 페이지 확인 | 시나리오 | `test_ui_01_complete_six_pages` | 실행 대기 | PASS |  |  |
+| UI-02 | TC2 | 회원가입 성공 | 시나리오 | `test_ui_02_signup_success` | 실행 대기 | PASS |  |  |
+| UI-03 | TC2 | 회원가입 실패 - 중복 이메일 | 에러 기대 | `test_ui_03_duplicate_email_rejected` | 실행 대기 | PASS |  |  |
+| UI-04 | TC2 | 회원가입 실패 - 잘못된 이메일 형식 | 에러 기대 | `test_ui_04_05_06_submit_disabled_on_invalid_input` (3건 통합) | 실행 대기 | PASS |  |  |
+| UI-05 | TC2 | 회원가입 실패 - 비밀번호 미입력 | 경계값 | 위와 동일 함수 | 실행 대기 | PASS |  |  |
+| UI-06 | TC2 | 회원가입 실패 - 비밀번호 7자 | 경계값 | 위와 동일 함수 | 실행 대기 | PASS |  |  |
+| UI-07 | TC2 | 회원가입 실패 - 비밀번호 257자 | 경계값 | `test_ui_07_password_too_long_rejected` | 실행 대기 | PASS |  |  |
+| UI-08 | TC3 | 로그인 성공 (DEF-16 증상 감시) | 시나리오 | `test_ui_08_login_success` | 실행 대기 | PASS |  |  |
+| UI-09 | TC3 | 로그인 실패 - 빈 입력 | 에러 기대 | `test_ui_09_login_disabled_on_empty_input` | 실행 대기 | PASS |  |  |
+| UI-10 | TC3 | 로그인 실패 - 이메일 형식 오류 | 에러 기대 | `test_ui_10_login_disabled_on_malformed_email` | 실행 대기 | PASS |  |  |
+| UI-11 | TC3 | 로그인 실패 - 존재하지 않는 이메일 | 에러 기대 | `test_ui_11_unknown_email_rejected` | 실행 대기 | PASS |  |  |
+| UI-12 | TC3 | 로그인 실패 - 잘못된 비밀번호 | 에러 기대 | `test_ui_12_wrong_password_rejected` | 실행 대기 | PASS |  |  |
+| UI-13 | TC4 | 프로젝트 추가 - 상단 [+] 버튼 | 시나리오, 에러 기대, 경계값 | `test_ui_13_add_via_top_plus` | 실행 대기 | PASS |  |  |
+| UI-14 | TC4 | 프로젝트 추가 - 0개 상태 [+ 추가] | 시나리오 | `test_ui_14_add_from_empty_state` | 실행 대기 | PASS |  |  |
+| UI-15 | TC4 | 프로젝트 추가 - 연속 5개 | 시나리오 | `test_ui_15_add_five_in_a_row` | 실행 대기 | PASS |  |  |
+| UI-16 | TC4 | 중복 이름 생성 (명세 공백 관찰) | 시나리오 | `test_ui_16_duplicate_names_allowed` | 실행 대기 | PASS |  |  |
+| UI-17 | TC4 | 이름 길이 상한 경계값 (SPEC-PROJ-01) | 경계값 | `test_ui_17_name_length_boundary` | FAIL 예상 (미실행) | PASS |  |  |
+| UI-18 | TC5 | 수정 - 작업 화면 경로 기본 | 시나리오 | `test_ui_18_rename_from_workspace` | 실행 대기 | PASS |  |  |
+| UI-19 | TC5 | 이름만 수정 시 실 연결 유지 (작업 화면) | 시나리오, 상태 전이 | `test_ui_19_rename_keeps_yarn_link_workspace_path` | 실행 대기 | PASS |  |  |
+| UI-20 | TC5 | 이름만 수정 시 실 연결 유지 (롱프레스) | 시나리오, 상태 전이 | `test_ui_20_rename_keeps_yarn_link_long_press_path` | 실행 대기 | PASS |  |  |
+| UI-21 | TC5 | 스와이프 수정 진입 검증 | 시나리오 | `test_ui_21_rename_from_swipe` | 실행 대기 | PASS |  |  |
+| UI-22 | TC5 | 오손상 방지 (n개 중 1개만 수정) | 상태 전이 | `test_ui_22_editing_one_project_leaves_others` | 실행 대기 | PASS |  |  |
+| UI-23 | TC5 | 수정 취소 분기 | 상태 전이 | `test_ui_23_cancel_discards_changes` | 실행 대기 | PASS |  |  |
+| UI-24 | TC5 | 목표일 설정과 표시 | 시나리오 | `test_ui_24_target_date_shows_and_persists` | 실행 대기 | PASS |  |  |
+| UI-25 | TC5 | 목표일 표시 경계값 (D-day) | 경계값 | `test_ui_25_dday_boundary` | 실행 대기 | PASS |  |  |
+| UI-26 | TC5 | 상태 변경 전이 (CO→WIP→UFO→WIP→FO) | 상태 전이 | `test_ui_26_status_transitions_persist` | 실행 대기 | PASS |  |  |
+| UI-27 | TC5 | 완료 처리의 홈 집계 반영 | 상태 전이 | `test_ui_27_completion_updates_home_counts` | 실행 대기 | PASS |  |  |
+| UI-28 | TC6 | 삭제 - 수정 폼 경로 (취소 분기 포함) | 상태 전이 | `test_ui_28_delete_from_edit_form_with_cancel` | 실행 대기 | PASS |  |  |
+| UI-29 | TC6 | 삭제 - 롱프레스 경로 | 상태 전이 | `test_ui_29_delete_via_long_press` | 실행 대기 | PASS |  |  |
+| UI-30 | TC6 | 삭제 - 스와이프 경로 | 상태 전이 | `test_ui_30_delete_via_swipe` | 실행 대기 | PASS |  |  |
+| UI-31 | TC6 | 연속 삭제와 격리 (3개 중 2개) | 상태 전이 | `test_ui_31_delete_two_of_three_keeps_rest` | 실행 대기 | PASS |  |  |
+| UI-32 | TC7 | 대량 생성 탐색 (30개) | 경계값, 탐색 | `test_ui_32_bulk_create_thirty` | PASS (8/23) | PASS |  |  |
+| UI-33 | TC8 | 정렬 - 최근 작업 순 반영 (DEF-17 회귀) | 상태 전이, 회귀 | `test_ui_33_recent_work_moves_to_top` | FAIL 예상 (미실행) | PASS |  |  |
+| UI-34 | TC8 | 정렬 - 이력 없을 때 시작일 내림차순 | 시나리오 | `test_ui_34_start_date_desc_without_history` | 실행 대기 | PASS |  |  |
+| UI-35 | TC8 | 정렬 - 복수 작업 이력 간 상대 순서 | 상태 전이 | `test_ui_35_relative_order_between_histories` | FAIL 예상 (미실행) | PASS |  |  |
+| UI-36 | TC8 | 필터 - 상태별 표시 | 시나리오 | `test_ui_36_status_filter` | 실행 대기 | PASS |  |  |
+| UI-37 | TC9 | 즐겨찾기 토글과 상단 고정 | 상태 전이 | `test_ui_37_favorite_pins_to_top` | PASS (8/23) | PASS |  |  |
+| UI-38 | TC9 | 즐겨찾기 그룹 내 정렬 (DEF-17 계열) | 상태 전이, 회귀 | `test_ui_38_order_inside_favorite_group` | FAIL 예상 (미실행) | PASS |  |  |
+| UI-39 | TC10 | 작업 화면 진입 여정 (DEF-15 자동화 경로) | 시나리오, 회귀 | `test_ui_39_enter_workspace_and_counter` | 자동화 완료 | PASS |  |  |
+| UI-40 | TC10 | 도안 연결 - PDF 직접 (창고 보관 안함) | 시나리오 | `test_ui_40_import_pdf_link_only` | PASS (8/23) | PASS |  |  |
+| UI-41 | TC10 | 도안 연결 - PDF 직접 (창고 보관) | 시나리오 | `test_ui_41_import_pdf_keep_in_library` | PASS (8/23) | PASS |  |  |
+| UI-42 | TC10 | 도안 연결 - 문서 스캔 (카메라) | 시나리오 | `test_ui_42a_document_scan_on_simulator` / `test_ui_42b_document_scan_on_device` | 실기기 수동 대기 | 42a PASS, 42b 미실행 |  |  |
+| UI-43 | TC10 | 도안 연결 - 도안 창고 (DEF-13 경로) | 시나리오 | `test_ui_43_link_from_library` | PASS (8/23) | PASS |  |  |
+| UI-44 | TC10 | 도안 연결 - 수동 입력 | 시나리오 | `test_ui_44_manual_pattern` | PASS (8/23) | PASS |  |  |
+| UI-45 | TC10 | 도안 교체 - 드로잉 삭제 경고 (DEF-10 회귀) | 상태 전이, 회귀 | `test_ui_45_replace_warns_and_clears_drawing` | PASS (8/23) | PASS |  |  |
+| UI-46 | TC10 | 도안 연결 해제 | 상태 전이 | `test_ui_46_unlink_pattern` | PASS (8/23) | PASS |  |  |
+| UI-47 | TC10 | 도안 그리기 - 작성 | 시나리오 | `test_ui_47_draw_on_pattern` | PASS (8/23) | PASS |  |  |
+| UI-48 | TC10 | 도안 그리기 - 재실행 후 유지 | 상태 전이 | `test_ui_48_drawing_survives_relaunch` | PASS (8/23) | PASS |  |  |
+| UI-49 | TC10 | 도안 뷰어 - 드로잉 표시 (DEF-18 회귀) | 상태 전이, 회귀 | `test_ui_49_drawing_visible_in_viewer_mode` | FAIL (8/23, DEF-18) | PASS |  |  |
+| UI-50 | TC10 | 도안 그리기 - 삭제 (취소 분기 포함) | 상태 전이 | `test_ui_50_delete_drawing_with_cancel` | PASS (8/23) | PASS |  |  |
+| UI-51 | TC10 | 도안 뷰어 - 페이지 이동과 복귀 유지 (DEF-19 회귀) | 상태 전이, 회귀 | `test_ui_51_step2_page_kept_after_tab_round_trip` / `test_ui_51_step3_page_kept_after_lookup` | 스텝 2 FAIL, 스텝 3 PASS (8/23) | PASS |  |  |
+| UI-52 | TC10 | 단수 카운터 - 간편 모드 | 시나리오 | `test_ui_52_simple_mode_increment_and_decrement` | 자동화 완료 | PASS |  |  |
+| UI-53 | TC10 | 단수 카운터 - 행안내 모드 | 시나리오 | `test_ui_53_row_guide_mode` | 실행 대기 | PASS |  |  |
+| UI-54 | TC10 | 단수 카운터 - 하한 경계 (DEF-15 회귀) | 경계값, 회귀 | `test_ui_54_lower_bound_stays_at_start` | 자동화 완료 | PASS |  |  |
+| UI-55 | TC10 | 단수 카운터 - 직접 입력 경계값 | 경계값 | `test_ui_55_direct_input_boundaries` | 실행 대기 | PASS |  |  |
+| UI-56 | TC10 | 정보 탭 - 프로젝트 요약 표시 | 시나리오 | `test_ui_56_summary_matches_actual_values` | 실행 대기 | PASS |  |  |
+| UI-57 | TC10 | 정보 탭 - 진행 사진 기록 | 시나리오 | `test_ui_57_progress_photo` | 실행 대기 | PASS |  |  |
+| UI-58 | TC10 | 정보 탭 - 실 사용량 표시 | 시나리오 | `test_ui_58_linked_yarn_shown` | 실행 대기 | PASS |  |  |
+| UI-59 | TC10 | 정보 탭 - 사용 바늘 표시 | 시나리오 | `test_ui_59_linked_needle_shown` | 실행 대기 | PASS |  |  |
+| UI-60 | TC10 | 정보 탭 - 사용 도구 표시 | 시나리오 | `test_ui_60_linked_tool_shown` | 실행 대기 | PASS |  |  |
+| UI-61 | TC10 | 정보 탭 - 게이지 기록 연결과 해제 | 상태 전이 | `test_ui_61_gauge_record_link_and_unlink` | 실행 대기 | PASS |  |  |
+| UI-62 | TC10 | 정보 탭 - 작업 메모 기록 | 시나리오 | `test_ui_62_work_memo_saved_and_persists` | 실행 대기 | PASS |  |  |
+| UI-63 | TC10 | 정보 탭 - 관련 스킬 표시 | 시나리오 | `test_ui_63_related_skills_shown_and_navigable` | 실행 대기 | PASS |  |  |
+| UI-64 | TC11 | 재방문 - 앱 종료 후 작업 상태 보존 | 상태 전이, 시나리오 | `test_ui_64_state_survives_app_restart` | 실행 대기 | PASS |  |  |
+| UI-65 | TC12 | 실 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_65_register_yarn` | 실행 대기 | PASS |  |  |
+| UI-66 | TC12 | 바늘 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_66_register_needle` | 실행 대기 | PASS |  |  |
+| UI-67 | TC12 | 도구 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_67_register_tool` | 실행 대기 | PASS |  |  |
+| UI-68 | TC12 | 실과 바늘 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_68_link_and_unlink_yarn_and_needle` | 실행 대기 | PASS |  |  |
+| UI-69 | TC12 | 도구 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_69_link_and_unlink_tool` | 실행 대기 | PASS |  |  |
+| UI-70 | TC13 | 실 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_70_yarn_edit_does_not_propagate` | 실행 대기 | PASS |  |  |
+| UI-71 | TC13 | 바늘 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_71_needle_edit_does_not_propagate` | 실행 대기 | PASS |  |  |
+| UI-72 | TC13 | 도구 수정 - 창고 반영 | 상태 전이 | `test_ui_72_tool_edit_propagates` | 실행 대기 | PASS |  |  |
+| UI-73 | TC14 | 실 삭제 - 미연결 | 상태 전이 | `test_ui_73_delete_unlinked_yarn` | 실행 대기 | PASS |  |  |
+| UI-74 | TC14 | 실 삭제 - 연결된 실 (스냅샷 보존) | 상태 전이 | `test_ui_74_delete_linked_yarn_keeps_snapshot` | 실행 대기 | PASS |  |  |
+| UI-75 | TC14 | 바늘과 도구 삭제 - 연결 상태 | 상태 전이 | `test_ui_75_delete_linked_needle_and_tool` | 실행 대기 | PASS |  |  |
+| UI-76 | TC14 | 창고 도안 삭제 - 프로젝트 복사본 영향 | 상태 전이 | `test_ui_76_delete_library_pattern_keeps_project_copy` | 실행 대기 | PASS |  |  |
+| UI-77 | TC15 | 로그아웃 - 게이트 표시와 데이터 비노출 | 상태 전이 | `test_ui_77_logout_shows_gate_and_hides_account_data` | 실행 대기 | PASS |  |  |
+| UI-78 | TC16 | 오프라인 생성 - 복구 후 동기화 | 상태 전이, 시나리오 | `test_ui_78_offline_create_then_sync_on_recovery` | 수동 트랙 | PASS |  |  |
 
 **UI 케이스 78건 중 함수가 존재하는 것: 78건 (통합 함수 1개가 UI-04, 05, 06을 함께 담당하고, UI-42와 UI-51은 각각 2개 함수로 분리)**
+
+### FAIL에서 PASS로 뒤집힌 6건
+
+시트에서 실패거나 실패가 예상됐던 6건이 8/29 실행에서 전부 통과했다.
+
+| 케이스 | 시트 상태 (8/24) | 8/29 판정 | 관련 결함 |
+| --- | --- | --- | --- |
+| UI-17 | FAIL 예상 (미실행) | PASS | SPEC-PROJ-01 이름 1~30자 |
+| UI-33 | FAIL 예상 (미실행) | PASS | DEF-17 lastWorkedAt 미저장 |
+| UI-35 | FAIL 예상 (미실행) | PASS | DEF-17 |
+| UI-38 | FAIL 예상 (미실행) | PASS | DEF-17 |
+| UI-49 | FAIL (8/23, DEF-18) | PASS | DEF-18 보기 모드 드로잉 미표시 |
+| UI-51 | 스텝 2 FAIL, 스텝 3 PASS (8/23) | PASS | DEF-19 탭 복귀 시 페이지 초기화 |
+
+이 6건은 스위트 구축 당시 `xfail(strict=True)` 로 묶여 있었다. 결함이 그대로였다면 지금도 실패로 찍혀야 하고, 고쳐졌다면 XPASS로 터져서 마커를 떼라고 알려주는 장치다. 8/26 수정 커밋 이후 마커를 제거했고 현재 스위트에 xfail은 0개다.
+
+**이 6건의 PASS는 자동 재실행이 아니라 회귀 재판정이다.** 시트에 `PASS (8/23)` 로 적힌 11건과는 성격이 다르므로 최종 페이지에서 같은 줄에 세우지 않는다.
 
 ---
 
@@ -216,5 +236,5 @@
 ## 5. 남은 판단 (QA가 채운다)
 
 1. 2절과 3절의 `자동/수동`, `판정 근거` 두 열 전건
-2. 시트 `상태` 열이 8/24 기준이라 8/25~26에 들어온 Appium 스위트를 반영하지 않는다. 스위트 실행 후 판정으로 갱신할 것
+2. ~~시트 `상태` 열이 8/24 기준이라 8/25~26에 들어온 Appium 스위트를 반영하지 않는다.~~ 2026-08-29 해소. `자동 실행 판정 (8/29)` 열을 새로 두어 반영했다. 시트 상태 열은 발견 시점 구분을 위해 그대로 남겼다
 3. UI-04, 05, 06을 함수 하나로 합친 것이 케이스 추적성에 문제가 되는지 (실패 시 세 케이스 중 어느 쪽인지 구분 가능한가)
