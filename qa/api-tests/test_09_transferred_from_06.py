@@ -20,7 +20,23 @@ import pytest
 from helpers import project_payload, uid
 
 SERVER_ROOT = Path(__file__).resolve().parents[2] / "server"
-STORAGE_ROOT = Path(os.environ.get("FILE_STORAGE_ROOT") or (SERVER_ROOT / "storage"))
+
+
+def _storage_root():
+    """서버가 실제로 파일을 쓰는 경로.
+
+    FILE_STORAGE_ROOT는 서버가 자기 작업 디렉터리 기준으로 푸는 값이라
+    상대경로면 서버 루트에 붙여야 한다. pytest의 작업 디렉터리를 기준으로
+    풀면 CI에서 엉뚱한 곳을 보고 조용히 skip된다.
+    """
+    configured = (os.environ.get("FILE_STORAGE_ROOT") or "").strip()
+    if not configured:
+        return SERVER_ROOT / "storage"
+    path = Path(configured)
+    return path if path.is_absolute() else (SERVER_ROOT / path).resolve()
+
+
+STORAGE_ROOT = _storage_root()
 
 # 최소 유효 PDF. 파일 내용이 아니라 저장 여부가 검증 대상이라 이걸로 충분하다.
 TINY_PDF = base64.b64decode(
