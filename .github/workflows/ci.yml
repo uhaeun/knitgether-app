@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  # 브랜치에서 게이트를 실증하려면 수동 실행 경로가 필요하다. main 대상 트리거만
+  # 두면 작업 브랜치에서 추가한 잡이 병합 전까지 한 번도 돌지 않는다.
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
