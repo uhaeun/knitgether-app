@@ -226,7 +226,20 @@ class DriverPool:
                     raise
             self._kind = kind
             time.sleep(2)
+            self._apply_settings()
             return self._driver
+
+    def _apply_settings(self):
+        """오버레이 요소를 인덱스로 바인딩한다.
+
+        컨텍스트 메뉴 항목은 기본 바인딩에서 element.click() 이 조용히 유실된다.
+        설정이 거부되더라도 스위트를 죽이지는 않는다. 실패하면 좌표 탭 경로가 그대로 쓰인다.
+        """
+        try:
+            self._driver.update_settings({"boundElementsByIndex": True})
+        except Exception as exc:
+            print(f"\n[conftest] boundElementsByIndex 적용 실패({type(exc).__name__}). "
+                  f"좌표 탭 경로로 진행한다.")
 
     def _alive(self):
         try:
