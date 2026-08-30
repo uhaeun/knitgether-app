@@ -125,6 +125,10 @@ assert wrong_pw.status_code == unknown.status_code, (
 
 화면으로 판정할 수 없어 06에서 넘어온 항목들이다. 셋 다 화면에 나오지 않는 것을 본다. 어떤 HTTP 동사를 썼는지, 토큰 안에 든 만료 시각, 디스크에 남은 파일이다.
 
+Charles가 앱 트래픽을 잡은 장면이다. `User-Agent: KnitGether/1`이 시뮬레이터 앱의 요청임을 증명하고, 응답 본문에 서버가 돌려준 `Project`와 `rowCounter`가 그대로 보인다. 04에 적은 대로 시뮬레이터가 macOS 프록시를 따르지 않는 경우가 있어, 이 날은 Charles Reverse Proxy(로컬 3998을 서버 3000으로 전달)로 앱을 통과시켰다.
+
+![Charles GET /projects 200](evidence/0830_charles_app_get_projects_200.png)
+
 ### 4-1. SYNC-03 원격 반영의 POST와 PATCH 분기
 
 Postman으로 POST를 보내 201을 받은 뒤 같은 id를 psql로 조회한 장면이다. 응답 본문의 `ownerId`, `name`, `status`가 `Project` 행과 일치하고 `RowCounter` 행이 `projectId`로 연결돼 있어야 생성이 성립한 것으로 본다.
