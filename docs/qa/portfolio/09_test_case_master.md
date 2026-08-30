@@ -4,7 +4,7 @@
 > 이 문서는 카탈로그다. 케이스별 스텝, Given/When/Then 전문은 시트가 정본이다.
 > 1차 사이클(TC-CUJ, TC-SYNC 계열 21건)은 05와 06이 정본이며, 여기에는 계보만 싣는다.
 
-**미기입 열 안내**: `자동/수동`과 `판정 근거` 두 열은 비어 있다. 이 판단이 이 문서의 핵심이라 QA(유하은)가 직접 채운다. 나머지 열은 시트와 리포지토리에서 옮기거나 실측한 사실이다.
+**초안 안내**: `자동/수동`과 `판정 근거` 두 열은 2026-08-30에 초안으로 채웠고 QA(유하은) 검토 전이다. 검토가 끝나면 이 문장을 지운다.
 
 ---
 
@@ -13,7 +13,7 @@
 시트 `로드맵` 탭. 층, 기법, 우선순위, 근거, 제약은 시트 원문이다.
 
 | TC | 항목 | 층 | 기법 | 우선순위 | 제약 | UI 케이스 | API 케이스 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- | --- |
 | TC1 | 온보딩 (6페이지) | 스모크 | 시나리오 | P1 | 초기 상태 필요(앱 초기화 옵션). 6페이지 완주 기준 | UI-01 | 없음 |
 | TC2 | 회원가입 | 스모크 | 경계값, 에러 기대, 시나리오 | P1 | 서버 필요, 매 실행 고유 이메일 | UI-02~07 | API-01~03 |
 | TC3 | 로그인 | 스모크 | 시나리오, 에러 기대 | P1 | 서버 필요, 테스트 계정 필요 | UI-08~12 | API-04, 05 |
@@ -65,85 +65,85 @@
 **이 열을 읽을 때 주의할 것.** 시트에 `PASS (8/23)` 로 적힌 11건은 이미 수동으로 통과한 케이스다. 여기서 다시 PASS가 나온 것은 신규 발견이 아니라 자동 재실행이다. 반대로 `실행 대기` 56건은 이번 자동 실행이 첫 판정이다.
 
 | 케이스 | TC | 시나리오 | 기법 | Appium 함수 (8/27 실측) | 시트 상태 (8/24) | 자동 실행 판정 (8/29) | 자동/수동 | 판정 근거 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| UI-01 | TC1 | 온보딩 6페이지 완주 후 메인 페이지 확인 | 시나리오 | `test_ui_01_complete_six_pages` | 실행 대기 | PASS |  |  |
-| UI-02 | TC2 | 회원가입 성공 | 시나리오 | `test_ui_02_signup_success` | 실행 대기 | PASS |  |  |
-| UI-03 | TC2 | 회원가입 실패 - 중복 이메일 | 에러 기대 | `test_ui_03_duplicate_email_rejected` | 실행 대기 | PASS |  |  |
-| UI-04 | TC2 | 회원가입 실패 - 잘못된 이메일 형식 | 에러 기대 | `test_ui_04_05_06_submit_disabled_on_invalid_input` (3건 통합) | 실행 대기 | PASS |  |  |
-| UI-05 | TC2 | 회원가입 실패 - 비밀번호 미입력 | 경계값 | 위와 동일 함수 | 실행 대기 | PASS |  |  |
-| UI-06 | TC2 | 회원가입 실패 - 비밀번호 7자 | 경계값 | 위와 동일 함수 | 실행 대기 | PASS |  |  |
-| UI-07 | TC2 | 회원가입 실패 - 비밀번호 257자 | 경계값 | `test_ui_07_password_too_long_rejected` | 실행 대기 | PASS |  |  |
-| UI-08 | TC3 | 로그인 성공 (DEF-16 증상 감시) | 시나리오 | `test_ui_08_login_success` | 실행 대기 | PASS |  |  |
-| UI-09 | TC3 | 로그인 실패 - 빈 입력 | 에러 기대 | `test_ui_09_login_disabled_on_empty_input` | 실행 대기 | PASS |  |  |
-| UI-10 | TC3 | 로그인 실패 - 이메일 형식 오류 | 에러 기대 | `test_ui_10_login_disabled_on_malformed_email` | 실행 대기 | PASS |  |  |
-| UI-11 | TC3 | 로그인 실패 - 존재하지 않는 이메일 | 에러 기대 | `test_ui_11_unknown_email_rejected` | 실행 대기 | PASS |  |  |
-| UI-12 | TC3 | 로그인 실패 - 잘못된 비밀번호 | 에러 기대 | `test_ui_12_wrong_password_rejected` | 실행 대기 | PASS |  |  |
-| UI-13 | TC4 | 프로젝트 추가 - 상단 [+] 버튼 | 시나리오, 에러 기대, 경계값 | `test_ui_13_add_via_top_plus` | 실행 대기 | PASS |  |  |
-| UI-14 | TC4 | 프로젝트 추가 - 0개 상태 [+ 추가] | 시나리오 | `test_ui_14_add_from_empty_state` | 실행 대기 | PASS |  |  |
-| UI-15 | TC4 | 프로젝트 추가 - 연속 5개 | 시나리오 | `test_ui_15_add_five_in_a_row` | 실행 대기 | PASS |  |  |
-| UI-16 | TC4 | 중복 이름 생성 (명세 공백 관찰) | 시나리오 | `test_ui_16_duplicate_names_allowed` | 실행 대기 | PASS |  |  |
-| UI-17 | TC4 | 이름 길이 상한 경계값 (SPEC-PROJ-01) | 경계값 | `test_ui_17_name_length_boundary` | FAIL 예상 (미실행) | PASS |  |  |
-| UI-18 | TC5 | 수정 - 작업 화면 경로 기본 | 시나리오 | `test_ui_18_rename_from_workspace` | 실행 대기 | PASS |  |  |
-| UI-19 | TC5 | 이름만 수정 시 실 연결 유지 (작업 화면) | 시나리오, 상태 전이 | `test_ui_19_rename_keeps_yarn_link_workspace_path` | 실행 대기 | PASS |  |  |
-| UI-20 | TC5 | 이름만 수정 시 실 연결 유지 (롱프레스) | 시나리오, 상태 전이 | `test_ui_20_rename_keeps_yarn_link_long_press_path` | 실행 대기 | PASS |  |  |
-| UI-21 | TC5 | 스와이프 수정 진입 검증 | 시나리오 | `test_ui_21_rename_from_swipe` | 실행 대기 | PASS |  |  |
-| UI-22 | TC5 | 오손상 방지 (n개 중 1개만 수정) | 상태 전이 | `test_ui_22_editing_one_project_leaves_others` | 실행 대기 | PASS |  |  |
-| UI-23 | TC5 | 수정 취소 분기 | 상태 전이 | `test_ui_23_cancel_discards_changes` | 실행 대기 | PASS |  |  |
-| UI-24 | TC5 | 목표일 설정과 표시 | 시나리오 | `test_ui_24_target_date_shows_and_persists` | 실행 대기 | PASS |  |  |
-| UI-25 | TC5 | 목표일 표시 경계값 (D-day) | 경계값 | `test_ui_25_dday_boundary` | 실행 대기 | PASS |  |  |
-| UI-26 | TC5 | 상태 변경 전이 (CO→WIP→UFO→WIP→FO) | 상태 전이 | `test_ui_26_status_transitions_persist` | 실행 대기 | PASS |  |  |
-| UI-27 | TC5 | 완료 처리의 홈 집계 반영 | 상태 전이 | `test_ui_27_completion_updates_home_counts` | 실행 대기 | PASS |  |  |
-| UI-28 | TC6 | 삭제 - 수정 폼 경로 (취소 분기 포함) | 상태 전이 | `test_ui_28_delete_from_edit_form_with_cancel` | 실행 대기 | PASS |  |  |
-| UI-29 | TC6 | 삭제 - 롱프레스 경로 | 상태 전이 | `test_ui_29_delete_via_long_press` | 실행 대기 | PASS |  |  |
-| UI-30 | TC6 | 삭제 - 스와이프 경로 | 상태 전이 | `test_ui_30_delete_via_swipe` | 실행 대기 | PASS |  |  |
-| UI-31 | TC6 | 연속 삭제와 격리 (3개 중 2개) | 상태 전이 | `test_ui_31_delete_two_of_three_keeps_rest` | 실행 대기 | PASS |  |  |
-| UI-32 | TC7 | 대량 생성 탐색 (30개) | 경계값, 탐색 | `test_ui_32_bulk_create_thirty` | PASS (8/23) | PASS |  |  |
-| UI-33 | TC8 | 정렬 - 최근 작업 순 반영 (DEF-17 회귀) | 상태 전이, 회귀 | `test_ui_33_recent_work_moves_to_top` | FAIL 예상 (미실행) | PASS |  |  |
-| UI-34 | TC8 | 정렬 - 이력 없을 때 시작일 내림차순 | 시나리오 | `test_ui_34_start_date_desc_without_history` | 실행 대기 | PASS |  |  |
-| UI-35 | TC8 | 정렬 - 복수 작업 이력 간 상대 순서 | 상태 전이 | `test_ui_35_relative_order_between_histories` | FAIL 예상 (미실행) | PASS |  |  |
-| UI-36 | TC8 | 필터 - 상태별 표시 | 시나리오 | `test_ui_36_status_filter` | 실행 대기 | PASS |  |  |
-| UI-37 | TC9 | 즐겨찾기 토글과 상단 고정 | 상태 전이 | `test_ui_37_favorite_pins_to_top` | PASS (8/23) | PASS |  |  |
-| UI-38 | TC9 | 즐겨찾기 그룹 내 정렬 (DEF-17 계열) | 상태 전이, 회귀 | `test_ui_38_order_inside_favorite_group` | FAIL 예상 (미실행) | PASS |  |  |
-| UI-39 | TC10 | 작업 화면 진입 여정 (DEF-15 자동화 경로) | 시나리오, 회귀 | `test_ui_39_enter_workspace_and_counter` | 자동화 완료 | PASS |  |  |
-| UI-40 | TC10 | 도안 연결 - PDF 직접 (창고 보관 안함) | 시나리오 | `test_ui_40_import_pdf_link_only` | PASS (8/23) | PASS |  |  |
-| UI-41 | TC10 | 도안 연결 - PDF 직접 (창고 보관) | 시나리오 | `test_ui_41_import_pdf_keep_in_library` | PASS (8/23) | PASS |  |  |
-| UI-42 | TC10 | 도안 연결 - 문서 스캔 (카메라) | 시나리오 | `test_ui_42a_document_scan_on_simulator` / `test_ui_42b_document_scan_on_device` | 실기기 수동 대기 | 42a PASS, 42b 미실행 |  |  |
-| UI-43 | TC10 | 도안 연결 - 도안 창고 (DEF-13 경로) | 시나리오 | `test_ui_43_link_from_library` | PASS (8/23) | PASS |  |  |
-| UI-44 | TC10 | 도안 연결 - 수동 입력 | 시나리오 | `test_ui_44_manual_pattern` | PASS (8/23) | PASS |  |  |
-| UI-45 | TC10 | 도안 교체 - 드로잉 삭제 경고 (DEF-10 회귀) | 상태 전이, 회귀 | `test_ui_45_replace_warns_and_clears_drawing` | PASS (8/23) | PASS |  |  |
-| UI-46 | TC10 | 도안 연결 해제 | 상태 전이 | `test_ui_46_unlink_pattern` | PASS (8/23) | PASS |  |  |
-| UI-47 | TC10 | 도안 그리기 - 작성 | 시나리오 | `test_ui_47_draw_on_pattern` | PASS (8/23) | PASS |  |  |
-| UI-48 | TC10 | 도안 그리기 - 재실행 후 유지 | 상태 전이 | `test_ui_48_drawing_survives_relaunch` | PASS (8/23) | PASS |  |  |
-| UI-49 | TC10 | 도안 뷰어 - 드로잉 표시 (DEF-18 회귀) | 상태 전이, 회귀 | `test_ui_49_drawing_visible_in_viewer_mode` | FAIL (8/23, DEF-18) | PASS |  |  |
-| UI-50 | TC10 | 도안 그리기 - 삭제 (취소 분기 포함) | 상태 전이 | `test_ui_50_delete_drawing_with_cancel` | PASS (8/23) | PASS |  |  |
-| UI-51 | TC10 | 도안 뷰어 - 페이지 이동과 복귀 유지 (DEF-19 회귀) | 상태 전이, 회귀 | `test_ui_51_step2_page_kept_after_tab_round_trip` / `test_ui_51_step3_page_kept_after_lookup` | 스텝 2 FAIL, 스텝 3 PASS (8/23) | PASS |  |  |
-| UI-52 | TC10 | 단수 카운터 - 간편 모드 | 시나리오 | `test_ui_52_simple_mode_increment_and_decrement` | 자동화 완료 | PASS |  |  |
-| UI-53 | TC10 | 단수 카운터 - 행안내 모드 | 시나리오 | `test_ui_53_row_guide_mode` | 실행 대기 | PASS |  |  |
-| UI-54 | TC10 | 단수 카운터 - 하한 경계 (DEF-15 회귀) | 경계값, 회귀 | `test_ui_54_lower_bound_stays_at_start` | 자동화 완료 | PASS |  |  |
-| UI-55 | TC10 | 단수 카운터 - 직접 입력 경계값 | 경계값 | `test_ui_55_direct_input_boundaries` | 실행 대기 | PASS |  |  |
-| UI-56 | TC10 | 정보 탭 - 프로젝트 요약 표시 | 시나리오 | `test_ui_56_summary_matches_actual_values` | 실행 대기 | PASS |  |  |
-| UI-57 | TC10 | 정보 탭 - 진행 사진 기록 | 시나리오 | `test_ui_57_progress_photo` | 실행 대기 | PASS |  |  |
-| UI-58 | TC10 | 정보 탭 - 실 사용량 표시 | 시나리오 | `test_ui_58_linked_yarn_shown` | 실행 대기 | PASS |  |  |
-| UI-59 | TC10 | 정보 탭 - 사용 바늘 표시 | 시나리오 | `test_ui_59_linked_needle_shown` | 실행 대기 | PASS |  |  |
-| UI-60 | TC10 | 정보 탭 - 사용 도구 표시 | 시나리오 | `test_ui_60_linked_tool_shown` | 실행 대기 | PASS |  |  |
-| UI-61 | TC10 | 정보 탭 - 게이지 기록 연결과 해제 | 상태 전이 | `test_ui_61_gauge_record_link_and_unlink` | 실행 대기 | PASS |  |  |
-| UI-62 | TC10 | 정보 탭 - 작업 메모 기록 | 시나리오 | `test_ui_62_work_memo_saved_and_persists` | 실행 대기 | PASS |  |  |
-| UI-63 | TC10 | 정보 탭 - 관련 스킬 표시 | 시나리오 | `test_ui_63_related_skills_shown_and_navigable` | 실행 대기 | PASS |  |  |
-| UI-64 | TC11 | 재방문 - 앱 종료 후 작업 상태 보존 | 상태 전이, 시나리오 | `test_ui_64_state_survives_app_restart` | 실행 대기 | PASS |  |  |
-| UI-65 | TC12 | 실 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_65_register_yarn` | 실행 대기 | PASS |  |  |
-| UI-66 | TC12 | 바늘 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_66_register_needle` | 실행 대기 | PASS |  |  |
-| UI-67 | TC12 | 도구 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_67_register_tool` | 실행 대기 | PASS |  |  |
-| UI-68 | TC12 | 실과 바늘 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_68_link_and_unlink_yarn_and_needle` | 실행 대기 | PASS |  |  |
-| UI-69 | TC12 | 도구 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_69_link_and_unlink_tool` | 실행 대기 | PASS |  |  |
-| UI-70 | TC13 | 실 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_70_yarn_edit_does_not_propagate` | 실행 대기 | PASS |  |  |
-| UI-71 | TC13 | 바늘 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_71_needle_edit_does_not_propagate` | 실행 대기 | PASS |  |  |
-| UI-72 | TC13 | 도구 수정 - 창고 반영 | 상태 전이 | `test_ui_72_tool_edit_propagates` | 실행 대기 | PASS |  |  |
-| UI-73 | TC14 | 실 삭제 - 미연결 | 상태 전이 | `test_ui_73_delete_unlinked_yarn` | 실행 대기 | PASS |  |  |
-| UI-74 | TC14 | 실 삭제 - 연결된 실 (스냅샷 보존) | 상태 전이 | `test_ui_74_delete_linked_yarn_keeps_snapshot` | 실행 대기 | PASS |  |  |
-| UI-75 | TC14 | 바늘과 도구 삭제 - 연결 상태 | 상태 전이 | `test_ui_75_delete_linked_needle_and_tool` | 실행 대기 | PASS |  |  |
-| UI-76 | TC14 | 창고 도안 삭제 - 프로젝트 복사본 영향 | 상태 전이 | `test_ui_76_delete_library_pattern_keeps_project_copy` | 실행 대기 | PASS |  |  |
-| UI-77 | TC15 | 로그아웃 - 게이트 표시와 데이터 비노출 | 상태 전이 | `test_ui_77_logout_shows_gate_and_hides_account_data` | 실행 대기 | PASS |  |  |
-| UI-78 | TC16 | 오프라인 생성 - 복구 후 동기화 | 상태 전이, 시나리오 | `test_ui_78_offline_create_then_sync_on_recovery` | 수동 트랙 | PASS |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| UI-01 | TC1 | 온보딩 6페이지 완주 후 메인 페이지 확인 | 시나리오 | `test_ui_01_complete_six_pages` | 실행 대기 | PASS | 자동 | 6페이지 뒤 입력 이름 텍스트 존재와 메인 탭바 요소 존재 |
+| UI-02 | TC2 | 회원가입 성공 | 시나리오 | `test_ui_02_signup_success` | 실행 대기 | PASS | 자동 | 가입 뒤 홈 인사말에 입력한 이름 텍스트 존재 |
+| UI-03 | TC2 | 회원가입 실패 - 중복 이메일 | 에러 기대 | `test_ui_03_duplicate_email_rejected` | 실행 대기 | PASS | 자동 | 중복 이메일 에러 문구 표시와 로그아웃 버튼 부재 |
+| UI-04 | TC2 | 회원가입 실패 - 잘못된 이메일 형식 | 에러 기대 | `test_ui_04_05_06_submit_disabled_on_invalid_input` (3건 통합) | 실행 대기 | PASS | 자동 | 형식 오류 이메일 입력 시 가입 버튼 enabled 속성 false |
+| UI-05 | TC2 | 회원가입 실패 - 비밀번호 미입력 | 경계값 | 위와 동일 함수 | 실행 대기 | PASS | 자동 | 비밀번호 빈칸일 때 가입 버튼 enabled 속성 false |
+| UI-06 | TC2 | 회원가입 실패 - 비밀번호 7자 | 경계값 | 위와 동일 함수 | 실행 대기 | PASS | 자동 | 비밀번호 7자일 때 가입 버튼 enabled 속성 false |
+| UI-07 | TC2 | 회원가입 실패 - 비밀번호 257자 | 경계값 | `test_ui_07_password_too_long_rejected` | 실행 대기 | PASS | 자동 | 257자로 제출 뒤 로그아웃 버튼 부재(미로그인 상태) |
+| UI-08 | TC3 | 로그인 성공 (DEF-16 증상 감시) | 시나리오 | `test_ui_08_login_success` | 실행 대기 | PASS | 자동 | 홈 인사말에 계정 이름, 전체 프로젝트 카드 정수 파싱 성공 |
+| UI-09 | TC3 | 로그인 실패 - 빈 입력 | 에러 기대 | `test_ui_09_login_disabled_on_empty_input` | 실행 대기 | PASS | 자동 | 빈 입력에서 로그인 버튼 enabled 속성 false |
+| UI-10 | TC3 | 로그인 실패 - 이메일 형식 오류 | 에러 기대 | `test_ui_10_login_disabled_on_malformed_email` | 실행 대기 | PASS | 자동 | 형식 오류 이메일에서 로그인 버튼 enabled 속성 false |
+| UI-11 | TC3 | 로그인 실패 - 존재하지 않는 이메일 | 에러 기대 | `test_ui_11_unknown_email_rejected` | 실행 대기 | PASS | 자동 | 인증 실패 공통 문구 표시와 로그아웃 버튼 부재 |
+| UI-12 | TC3 | 로그인 실패 - 잘못된 비밀번호 | 에러 기대 | `test_ui_12_wrong_password_rejected` | 실행 대기 | PASS | 자동 | UI-11과 같은 실패 문구 표시와 로그아웃 버튼 부재 |
+| UI-13 | TC4 | 프로젝트 추가 - 상단 [+] 버튼 | 시나리오, 에러 기대, 경계값 | `test_ui_13_add_via_top_plus` | 실행 대기 | PASS | 자동 | 빈값과 공백에서 저장 enabled false, 저장 뒤 목록에 이름 존재 |
+| UI-14 | TC4 | 프로젝트 추가 - 0개 상태 [+ 추가] | 시나리오 | `test_ui_14_add_from_empty_state` | 실행 대기 | PASS | 자동 | 빈 상태 안내 문구 존재, 저장 뒤 목록에 이름 존재 |
+| UI-15 | TC4 | 프로젝트 추가 - 연속 5개 | 시나리오 | `test_ui_15_add_five_in_a_row` | 실행 대기 | PASS | 자동 | 목록 이름 배열에 5개 포함과 상단 개수 라벨 5 |
+| UI-16 | TC4 | 중복 이름 생성 (명세 공백 관찰) | 시나리오 | `test_ui_16_duplicate_names_allowed` | 실행 대기 | PASS | 자동 | 목록 이름 배열에서 같은 이름 count가 2 |
+| UI-17 | TC4 | 이름 길이 상한 경계값 (SPEC-PROJ-01) | 경계값 | `test_ui_17_name_length_boundary` | FAIL 예상 (미실행) | PASS | 자동 | 1/30과 30/30 카운터 텍스트, 31자 입력 뒤 필드 value 길이 30 |
+| UI-18 | TC5 | 수정 - 작업 화면 경로 기본 | 시나리오 | `test_ui_18_rename_from_workspace` | 실행 대기 | PASS | 자동 | 작업 화면 제목 텍스트와 목록에 새 이름 존재, 옛 이름 부재 |
+| UI-19 | TC5 | 이름만 수정 시 실 연결 유지 (작업 화면) | 시나리오, 상태 전이 | `test_ui_19_rename_keeps_yarn_link_workspace_path` | 실행 대기 | PASS | 자동 | 재진입 폼에 실 이름 존재, 행 label에 "재료 미연결" 부재 |
+| UI-20 | TC5 | 이름만 수정 시 실 연결 유지 (롱프레스) | 시나리오, 상태 전이 | `test_ui_20_rename_keeps_yarn_link_long_press_path` | 실행 대기 | PASS | 자동 | 롱프레스 재진입 폼에 실 이름 존재, 행 label "재료 미연결" 부재 |
+| UI-21 | TC5 | 스와이프 수정 진입 검증 | 시나리오 | `test_ui_21_rename_from_swipe` | 실행 대기 | PASS | 자동 | 수정 폼 제목 문구 존재와 저장 뒤 목록에 새 이름 존재 |
+| UI-22 | TC5 | 오손상 방지 (n개 중 1개만 수정) | 상태 전이 | `test_ui_22_editing_one_project_leaves_others` | 실행 대기 | PASS | 자동 | 미수정 프로젝트 행 label 문자열이 수정 전후 동일 |
+| UI-23 | TC5 | 수정 취소 분기 | 상태 전이 | `test_ui_23_cancel_discards_changes` | 실행 대기 | PASS | 자동 | 목록에 원래 이름만 존재, 재진입 폼 name value가 원래 이름 |
+| UI-24 | TC5 | 목표일 설정과 표시 | 시나리오 | `test_ui_24_target_date_shows_and_persists` | 실행 대기 | PASS | 자동 | 정보 탭 일정 값 존재와 행 label에 D-3, 재실행 뒤 동일 |
+| UI-25 | TC5 | 목표일 표시 경계값 (D-day) | 경계값 | `test_ui_25_dday_boundary` | 실행 대기 | PASS | 자동(보조 수동) | 행 label에 D+1, D-Day, D-1 문구. 색상은 눈으로 확인 |
+| UI-26 | TC5 | 상태 변경 전이 (CO→WIP→UFO→WIP→FO) | 상태 전이 | `test_ui_26_status_transitions_persist` | 실행 대기 | PASS | 자동 | 전이마다 행 label의 상태 배지 문자열, 재실행 뒤 FO 유지 |
+| UI-27 | TC5 | 완료 처리의 홈 집계 반영 | 상태 전이 | `test_ui_27_completion_updates_home_counts` | 실행 대기 | PASS | 자동 | 홈 완성됨 카드 정수가 이전값 +2, 재실행 뒤 동일 |
+| UI-28 | TC6 | 삭제 - 수정 폼 경로 (취소 분기 포함) | 상태 전이 | `test_ui_28_delete_from_edit_form_with_cancel` | 실행 대기 | PASS | 자동 | 취소 뒤 목록에 존재, 승인 뒤 부재, 재실행 뒤 부재 |
+| UI-29 | TC6 | 삭제 - 롱프레스 경로 | 상태 전이 | `test_ui_29_delete_via_long_press` | 실행 대기 | PASS | 자동 | 확인창 승인 뒤 목록 이름 배열에 부재 |
+| UI-30 | TC6 | 삭제 - 스와이프 경로 | 상태 전이 | `test_ui_30_delete_via_swipe` | 실행 대기 | PASS | 자동 | 확인창 승인 뒤 목록 이름 배열에 부재 |
+| UI-31 | TC6 | 연속 삭제와 격리 (3개 중 2개) | 상태 전이 | `test_ui_31_delete_two_of_three_keeps_rest` | 실행 대기 | PASS | 자동 | 목록 이름 배열이 남긴 1건과 정확히 일치, 재실행 뒤 동일 |
+| UI-32 | TC7 | 대량 생성 탐색 (30개) | 경계값, 탐색 | `test_ui_32_bulk_create_thirty` | PASS (8/23) | PASS | 자동 | 목록 개수 라벨 30, 홈 전체 카드 30, 재실행 뒤 동일 |
+| UI-33 | TC8 | 정렬 - 최근 작업 순 반영 (DEF-17 회귀) | 상태 전이, 회귀 | `test_ui_33_recent_work_moves_to_top` | FAIL 예상 (미실행) | PASS | 자동 | 목록 첫 이름이 작업한 항목, 행 label "최근 작업 없음" 부재 |
+| UI-34 | TC8 | 정렬 - 이력 없을 때 시작일 내림차순 | 시나리오 | `test_ui_34_start_date_desc_without_history` | 실행 대기 | PASS | 자동 | 목록 이름 배열이 생성 역순 C, B, A와 일치 |
+| UI-35 | TC8 | 정렬 - 복수 작업 이력 간 상대 순서 | 상태 전이 | `test_ui_35_relative_order_between_histories` | FAIL 예상 (미실행) | PASS | 자동 | 세션 기록마다 목록 첫 이름이 마지막 작업 항목 |
+| UI-36 | TC8 | 필터 - 상태별 표시 | 시나리오 | `test_ui_36_status_filter` | 실행 대기 | PASS | 자동 | 칩 선택별 목록 이름 배열이 해당 상태 항목만 |
+| UI-37 | TC9 | 즐겨찾기 토글과 상단 고정 | 상태 전이 | `test_ui_37_favorite_pins_to_top` | PASS (8/23) | PASS | 자동 | 목록 첫 이름, 행 label "즐겨찾기 아님" 부재, 해제 뒤 원복 |
+| UI-38 | TC9 | 즐겨찾기 그룹 내 정렬 (DEF-17 계열) | 상태 전이, 회귀 | `test_ui_38_order_inside_favorite_group` | FAIL 예상 (미실행) | PASS | 자동 | 세션 기록 뒤 즐겨찾기 그룹 첫 이름이 방금 작업한 항목 |
+| UI-39 | TC10 | 작업 화면 진입 여정 (DEF-15 자동화 경로) | 시나리오, 회귀 | `test_ui_39_enter_workspace_and_counter` | 자동화 완료 | PASS | 자동 | 카운터 현재값 텍스트가 "시작 전" 초기 문구 |
+| UI-40 | TC10 | 도안 연결 - PDF 직접 (창고 보관 안함) | 시나리오 | `test_ui_40_import_pdf_link_only` | PASS (8/23) | PASS | 자동 | 도안 빈 안내 부재와 창고 도안 목록에 파일명 부재 |
+| UI-41 | TC10 | 도안 연결 - PDF 직접 (창고 보관) | 시나리오 | `test_ui_41_import_pdf_keep_in_library` | PASS (8/23) | PASS | 자동 | 도안 빈 안내 부재와 창고 도안 목록에 파일명 존재 |
+| UI-42 | TC10 | 도안 연결 - 문서 스캔 (카메라) | 시나리오 | `test_ui_42a_document_scan_on_simulator` / `test_ui_42b_document_scan_on_device` | 실기기 수동 대기 | 42a PASS, 42b 미실행 | 자동(보조 수동) | 42a 스캐너 안내 문구 존재, 취소 뒤 빈 안내. 42b 실기기 촬영 |
+| UI-43 | TC10 | 도안 연결 - 도안 창고 (DEF-13 경로) | 시나리오 | `test_ui_43_link_from_library` | PASS (8/23) | PASS | 자동 | 도안 빈 안내 부재와 창고 목록에 원본 이름 잔존 |
+| UI-44 | TC10 | 도안 연결 - 수동 입력 | 시나리오 | `test_ui_44_manual_pattern` | PASS (8/23) | PASS | 자동 | 도안 제목 텍스트, PDF 부재 안내와 수동 도안 안내 문구 존재 |
+| UI-45 | TC10 | 도안 교체 - 드로잉 삭제 경고 (DEF-10 회귀) | 상태 전이, 회귀 | `test_ui_45_replace_warns_and_clears_drawing` | PASS (8/23) | PASS | 자동 | 메뉴의 그리기 삭제 항목 유무. 취소 뒤 있음, 교체 뒤 없음 |
+| UI-46 | TC10 | 도안 연결 해제 | 상태 전이 | `test_ui_46_unlink_pattern` | PASS (8/23) | PASS | 자동 | 해제 뒤 도안 빈 안내 문구 존재 |
+| UI-47 | TC10 | 도안 그리기 - 작성 | 시나리오 | `test_ui_47_draw_on_pattern` | PASS (8/23) | PASS | 자동 | 선 긋기 뒤 메뉴에 그리기 삭제 항목 존재 |
+| UI-48 | TC10 | 도안 그리기 - 재실행 후 유지 | 상태 전이 | `test_ui_48_drawing_survives_relaunch` | PASS (8/23) | PASS | 자동 | 재실행 뒤 메뉴에 그리기 삭제 항목 존재 |
+| UI-49 | TC10 | 도안 뷰어 - 드로잉 표시 (DEF-18 회귀) | 상태 전이, 회귀 | `test_ui_49_drawing_visible_in_viewer_mode` | FAIL (8/23, DEF-18) | PASS | 자동 | 드로잉 영역 스크린샷 픽셀 차이 1% 이내(통제 비교 선행) |
+| UI-50 | TC10 | 도안 그리기 - 삭제 (취소 분기 포함) | 상태 전이 | `test_ui_50_delete_drawing_with_cancel` | PASS (8/23) | PASS | 자동 | 취소 뒤 삭제 항목 존재, 승인 뒤 부재, 도안 빈 안내 부재 |
+| UI-51 | TC10 | 도안 뷰어 - 페이지 이동과 복귀 유지 (DEF-19 회귀) | 상태 전이, 회귀 | `test_ui_51_step2_page_kept_after_tab_round_trip` / `test_ui_51_step3_page_kept_after_lookup` | 스텝 2 FAIL, 스텝 3 PASS (8/23) | PASS | 자동 | 이탈 전후 뷰어 본문 StaticText 5개 목록이 동일 |
+| UI-52 | TC10 | 단수 카운터 - 간편 모드 | 시나리오 | `test_ui_52_simple_mode_increment_and_decrement` | 자동화 완료 | PASS | 자동 | 카운터 텍스트가 3회 증가 뒤 3, 1회 감소 뒤 2 |
+| UI-53 | TC10 | 단수 카운터 - 행안내 모드 | 시나리오 | `test_ui_53_row_guide_mode` | 실행 대기 | PASS | 자동 | 카운터 텍스트 1과 첫 행 안내 문구 존재 |
+| UI-54 | TC10 | 단수 카운터 - 하한 경계 (DEF-15 회귀) | 경계값, 회귀 | `test_ui_54_lower_bound_stays_at_start` | 자동화 완료 | PASS | 자동 | 시작 전에서 감소 뒤 카운터 텍스트 "시작 전" 유지 |
+| UI-55 | TC10 | 단수 카운터 - 직접 입력 경계값 | 경계값 | `test_ui_55_direct_input_boundaries` | 실행 대기 | PASS | 자동 | 입력 10000은 그대로, 0과 -5는 "시작 전" 텍스트 |
+| UI-56 | TC10 | 정보 탭 - 프로젝트 요약 표시 | 시나리오 | `test_ui_56_summary_matches_actual_values` | 실행 대기 | PASS | 자동 | 요약 4항목 텍스트가 시드값(7 / 20단, D-5, 1시간 0분)과 일치 |
+| UI-57 | TC10 | 정보 탭 - 진행 사진 기록 | 시나리오 | `test_ui_57_progress_photo` | 실행 대기 | PASS | 자동(보조 수동) | 진행 사진 없음 안내 부재, 재실행 뒤 동일. 사진 내용은 눈 |
+| UI-58 | TC10 | 정보 탭 - 실 사용량 표시 | 시나리오 | `test_ui_58_linked_yarn_shown` | 실행 대기 | PASS | 자동 | 실 사용량 섹션 제목과 시드한 실 이름 텍스트 존재 |
+| UI-59 | TC10 | 정보 탭 - 사용 바늘 표시 | 시나리오 | `test_ui_59_linked_needle_shown` | 실행 대기 | PASS | 자동 | 사용 바늘 섹션 제목과 시드한 바늘 이름 텍스트 존재 |
+| UI-60 | TC10 | 정보 탭 - 사용 도구 표시 | 시나리오 | `test_ui_60_linked_tool_shown` | 실행 대기 | PASS | 자동 | 사용 도구 섹션 제목과 시드한 도구 이름 텍스트 존재 |
+| UI-61 | TC10 | 정보 탭 - 게이지 기록 연결과 해제 | 상태 전이 | `test_ui_61_gauge_record_link_and_unlink` | 실행 대기 | PASS | 자동 | 0개 연결됨, 1개 연결됨, 0개 연결됨 순 표시, 피커에 원본 잔존 |
+| UI-62 | TC10 | 정보 탭 - 작업 메모 기록 | 시나리오 | `test_ui_62_work_memo_saved_and_persists` | 실행 대기 | PASS | 자동 | 메모 필드 value가 입력값, 재실행 뒤 동일 |
+| UI-63 | TC10 | 정보 탭 - 관련 스킬 표시 | 시나리오 | `test_ui_63_related_skills_shown_and_navigable` | 실행 대기 | PASS | 자동 | 스킬 섹션과 skills.json 첫 항목 이름 존재, 탭 뒤에도 존재 |
+| UI-64 | TC11 | 재방문 - 앱 종료 후 작업 상태 보존 | 상태 전이, 시나리오 | `test_ui_64_state_survives_app_restart` | 실행 대기 | PASS | 자동 | 재실행 뒤 카운터 3, 도안 빈 안내 부재, 정보 탭 실 이름 존재 |
+| UI-65 | TC12 | 실 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_65_register_yarn` | 실행 대기 | PASS | 자동 | 미입력 저장 enabled false, 목록에 이름 존재, 재실행 뒤 동일 |
+| UI-66 | TC12 | 바늘 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_66_register_needle` | 실행 대기 | PASS | 자동 | 미입력 저장 enabled false, 목록에 이름 존재, 재실행 뒤 동일 |
+| UI-67 | TC12 | 도구 등록 - 폼 검증 포함 | 시나리오, 에러 기대 | `test_ui_67_register_tool` | 실행 대기 | PASS | 자동 | 미입력 저장 enabled false, 목록에 이름 존재, 재실행 뒤 동일 |
+| UI-68 | TC12 | 실과 바늘 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_68_link_and_unlink_yarn_and_needle` | 실행 대기 | PASS | 자동 | 정보 탭에 실과 바늘 이름 존재, 해제 뒤 부재, 창고 원본 존재 |
+| UI-69 | TC12 | 도구 - 프로젝트 연결과 해제 | 상태 전이 | `test_ui_69_link_and_unlink_tool` | 실행 대기 | PASS | 자동 | 정보 탭에 도구 이름 존재, 해제 뒤 부재, 창고 원본 존재 |
+| UI-70 | TC13 | 실 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_70_yarn_edit_does_not_propagate` | 실행 대기 | PASS | 자동 | 창고 목록에 새 이름, 정보 탭에는 옛 이름 텍스트 존재 |
+| UI-71 | TC13 | 바늘 수정 - 창고 반영과 스냅샷 비전파 | 상태 전이 | `test_ui_71_needle_edit_does_not_propagate` | 실행 대기 | PASS | 자동 | 창고 목록에 새 이름, 정보 탭에는 옛 이름 텍스트 존재 |
+| UI-72 | TC13 | 도구 수정 - 창고 반영 | 상태 전이 | `test_ui_72_tool_edit_propagates` | 실행 대기 | PASS | 자동 | 창고 목록과 정보 탭 모두 새 이름 텍스트 존재 |
+| UI-73 | TC14 | 실 삭제 - 미연결 | 상태 전이 | `test_ui_73_delete_unlinked_yarn` | 실행 대기 | PASS | 자동 | 창고 목록에 이름 부재, 재실행 뒤 부재 |
+| UI-74 | TC14 | 실 삭제 - 연결된 실 (스냅샷 보존) | 상태 전이 | `test_ui_74_delete_linked_yarn_keeps_snapshot` | 실행 대기 | PASS | 자동 | 창고 목록에 부재, 정보 탭에 실 이름 존재 |
+| UI-75 | TC14 | 바늘과 도구 삭제 - 연결 상태 | 상태 전이 | `test_ui_75_delete_linked_needle_and_tool` | 실행 대기 | PASS | 자동 | 정보 탭에 바늘 이름 존재, 도구 이름 부재 |
+| UI-76 | TC14 | 창고 도안 삭제 - 프로젝트 복사본 영향 | 상태 전이 | `test_ui_76_delete_library_pattern_keeps_project_copy` | 실행 대기 | PASS | 자동 | 창고 목록에 원본 부재, 프로젝트 도안 빈 안내 부재 |
+| UI-77 | TC15 | 로그아웃 - 게이트 표시와 데이터 비노출 | 상태 전이 | `test_ui_77_logout_shows_gate_and_hides_account_data` | 실행 대기 | PASS | 자동 | 타 계정 프로젝트 목록 부재, 로그아웃 뒤 버튼 부재와 개수 0 |
+| UI-78 | TC16 | 오프라인 생성 - 복구 후 동기화 | 상태 전이, 시나리오 | `test_ui_78_offline_create_then_sync_on_recovery` | 수동 트랙 | PASS | 자동(보조 수동) | 단절 중 행 label "이 기기에만 있음", 복구 뒤 부재, 중복 1건 [?] |
 
 **UI 케이스 78건 중 함수가 존재하는 것: 78건 (통합 함수 1개가 UI-04, 05, 06을 함께 담당하고, UI-42와 UI-51은 각각 2개 함수로 분리)**
 
@@ -172,31 +172,31 @@
 
 | API | 구분 | TC | 영역 | 검증 내용 | 기법 | 판정 기준 | 근거/이력 | 자동/수동 | 판정 근거 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| API-01 | 기본 동작 | TC2 | 인증 | 회원가입 성공 시 계정 생성과 토큰 발급 | 시나리오 | 201 + 토큰 반환 + psql User 행 생성 | 서버 규칙 코드 확인 (8~256자) |  |  |
-| API-02 | 기본 동작 | TC2 | 인증 | 비밀번호 길이 규칙의 서버 거부 | 경계값 | 7자와 257자 둘 다 400 (VALIDATION_FAILED) | 8/22 클라 실측과 짝 |  |  |
-| API-03 | 기본 동작 | TC2 | 인증 | 중복 이메일 가입 거부 | 에러 기대 | 2회째 거부 응답 | UI-03의 서버 층 확인 |  |  |
-| API-04 | 기본 동작 | TC3 | 인증 | 로그인 성공과 실패 자격 거부 | 에러 기대 | 성공 200 + 토큰, 실패 401 (계정 존재 비노출) | 8/22 오류 메시지 동등성 실측 |  |  |
-| API-05 | 기본 동작 | TC3 | 인증 | 무토큰 요청의 보호 자원 거부 | 에러 기대 | 401 | DEF-16 조사 중 실측 |  |  |
-| API-06 | 기본 동작 | TC4 | 프로젝트 | 목록 조회와 소유자 격리 | 시나리오 | 200 + 소유 항목만 반환 (psql 대조) | 06 AUTH-04 실측 |  |  |
-| API-07 | 기본 동작 | TC4 | 프로젝트 | 생성 계약과 필수 필드 | 에러 기대 | 정상 201 + psql 행 생성, 누락 400 | 07 실측 |  |  |
-| API-08 | 기본 동작 | TC4 | 프로젝트 | 허용되지 않은 필드 거부 | 에러 기대 | 400 (forbidNonWhitelisted) | 07 실측. DEF-03 재현에 쓴 방법 |  |  |
-| API-09 | 기본 동작 | TC4 | 프로젝트 | 타입 오류 거부 | 에러 기대 | 400 | 오탐 정정 이력 (curl 순수 숫자 검증) |  |  |
-| API-10 | 기본 동작 | TC5 | 프로젝트 | 수정 반영과 부재 ID 처리 | 시나리오 | 정상 200 + psql 반영, 부재 404 | 07 실측 |  |  |
-| API-11 | 기본 동작 | TC6 | 프로젝트 | 삭제의 tombstone 처리 | 상태 전이 | 행 삭제 아닌 deletedAt 마킹 + 목록 제외 | 06 SYNC-06 실측 PASS |  |  |
-| API-12 | 기본 동작 | TC10 | 작업 세션 | 세션 저장 검증 규칙 | 에러 기대 | 각각 400 (VALIDATION_FAILED) | 서버 코드 확인. **신규 실행 필요** |  |  |
-| API-13 | 기본 동작 | TC10 | 파일 | 업로드 파일과 DB 참조의 정합 | 시나리오 | 참조와 파일이 1:1 (고아 없음) | 07 고아 파일 대조 실측 (0 rows) |  |  |
-| API-14 | 기본 동작 | TC15 | 계정 격리 | 타 계정 리소스 직접 접근 거부 | 에러 기대 | 404 또는 403 (존재 비노출) | 치명도 3위 계열. **신규 실행 필요** |  |  |
-| API-15 | 기본 동작 | TC4 | 프로젝트 | 단건 조회 | 시나리오 | 200 + 응답 필드가 psql 행과 일치 | **신규 실행 필요** |  |  |
-| API-16 | 기본 동작 | TC10 | 작업 세션 | 세션 정상 저장 | 시나리오 | 성공 응답 + WorkSession 행 생성 + 목록 표시 | **신규 실행 필요** |  |  |
-| API-17 | 기본 동작 | TC12~14 | 창고 | 재료 CRUD 기본 사이클 | 시나리오 | 각 단계 정상 응답과 DB 반영 | **신규 실행 필요** |  |  |
-| API-18 | 결함 회귀 | TC16 | 동기화 | stale PATCH가 기존 세션을 삭제하지 않는지 (DEF-01, 02) | 상태 전이 | 기존 세션 전부 잔존 (하드 삭제 없음) | d0a753a 수정 |  |  |
-| API-19 | 결함 회귀 | TC16 | 동기화 | 서버 거부 시 localOnly 보존 (DEF-03) | 에러 기대 | 로컬 보존 + 사용자 안내 표시 | conflict 보존 (eab799d) |  |  |
-| API-20 | 결함 회귀 | TC16 | 동기화 | 수정본 거부 시 무통보 폐기 금지 (DEF-04, 12) | 에러 기대 | 폐기 시 사유 안내 표시 | conflict 보존 계열 |  |  |
-| API-21 | 결함 회귀 | TC4 | 프로젝트 | RowCounter 없는 프로젝트의 목록 격리 (DEF-08) | 에러 기대 | 200 + 해당 프로젝트만 제외 + 로그 기록 | 06c7a10 수정 |  |  |
-| API-22 | 결함 회귀 | TC10 | 스킬 | 서버 삭제 스킬의 캐시 제거 (DEF-09) | 상태 전이 | 삭제된 스킬 미표시 (캐시 프루닝) | 실행 주간 재확인 예정 |  |  |
-| API-23 | 결함 회귀 | TC10 | 파일 | 창고 경로 도안의 서버 파일 키 (DEF-13) | 시나리오 | null 아님 | a74945a 수정 |  |  |
-| API-24 | 결함 회귀 | TC10 | 파일 | 교체 후 서버 드로잉 키 정리 (DEF-14) | 상태 전이 | 잔존 키 없음 | 0109898 수정 |  |  |
-| API-25 | 결함 회귀 | TC8 | 프로젝트 | 세션 저장 시 서버 lastWorkedAt 갱신 (DEF-17) | 상태 전이 | 세션 종료 시각으로 갱신 | **8/29 실행 4 passed** (`qa/api-tests/test_07_last_worked_at.py`) |  |  |
+| API-01 | 기본 동작 | TC2 | 인증 | 회원가입 성공 시 계정 생성과 토큰 발급 | 시나리오 | 201 + 토큰 반환 + psql User 행 생성 | 서버 규칙 코드 확인 (8~256자) | 자동(보조 수동) | 1층 201과 accessToken, /auth/me 200. 2층 User 행은 미조회 [?] |
+| API-02 | 기본 동작 | TC2 | 인증 | 비밀번호 길이 규칙의 서버 거부 | 경계값 | 7자와 257자 둘 다 400 (VALIDATION_FAILED) | 8/22 클라 실측과 짝 | 자동 | 1층 7자와 257자 400, 8자와 256자 201 |
+| API-03 | 기본 동작 | TC2 | 인증 | 중복 이메일 가입 거부 | 에러 기대 | 2회째 거부 응답 | UI-03의 서버 층 확인 | 자동 | 1층 2회째 409와 body에 EMAIL_ALREADY_REGISTERED |
+| API-04 | 기본 동작 | TC3 | 인증 | 로그인 성공과 실패 자격 거부 | 에러 기대 | 성공 200 + 토큰, 실패 401 (계정 존재 비노출) | 8/22 오류 메시지 동등성 실측 | 자동 | 1층 성공 200과 accessToken, 오답과 없는 계정 모두 401로 동일 |
+| API-05 | 기본 동작 | TC3 | 인증 | 무토큰 요청의 보호 자원 거부 | 에러 기대 | 401 | DEF-16 조사 중 실측 | 자동 | 1층 무토큰, 변조, 비JWT 토큰 GET /projects 전부 401 |
+| API-06 | 기본 동작 | TC4 | 프로젝트 | 목록 조회와 소유자 격리 | 시나리오 | 200 + 소유 항목만 반환 (psql 대조) | 06 AUTH-04 실측 | 자동 | 1층 B 목록에 A 프로젝트 id 부재, 2층 Project ownerId가 A |
+| API-07 | 기본 동작 | TC4 | 프로젝트 | 생성 계약과 필수 필드 | 에러 기대 | 정상 201 + psql 행 생성, 누락 400 | 07 실측 | 자동(보조 수동) | 1층 POST 201, 없는 id PATCH 400 또는 404. 필수 누락 400은 수동 |
+| API-08 | 기본 동작 | TC4 | 프로젝트 | 허용되지 않은 필드 거부 | 에러 기대 | 400 (forbidNonWhitelisted) | 07 실측. DEF-03 재현에 쓴 방법 | 자동 | 1층 미지 필드 포함 POST가 400 |
+| API-09 | 기본 동작 | TC4 | 프로젝트 | 타입 오류 거부 | 에러 기대 | 400 | 오탐 정정 이력 (curl 순수 숫자 검증) | 자동 | 1층 isFavorite에 문자열 넣은 POST가 400 |
+| API-10 | 기본 동작 | TC5 | 프로젝트 | 수정 반영과 부재 ID 처리 | 시나리오 | 정상 200 + psql 반영, 부재 404 | 07 실측 | 자동 | 1층 PATCH 200과 GET name이 후행값, 없는 id PATCH 400 또는 404 |
+| API-11 | 기본 동작 | TC6 | 프로젝트 | 삭제의 tombstone 처리 | 상태 전이 | 행 삭제 아닌 deletedAt 마킹 + 목록 제외 | 06 SYNC-06 실측 PASS | 자동 | 2층 Project와 자식 deletedAt not null, 1층 GET 404와 목록 부재 |
+| API-12 | 기본 동작 | TC10 | 작업 세션 | 세션 저장 검증 규칙 | 에러 기대 | 각각 400 (VALIDATION_FAILED) | 서버 코드 확인. **신규 실행 필요** | 자동(보조 수동) | 1층 시간 역전 세션 400. 현재 201이라 skip(Issue #15). 나머지 규칙 수동 [?] |
+| API-13 | 기본 동작 | TC10 | 파일 | 업로드 파일과 DB 참조의 정합 | 시나리오 | 참조와 파일이 1:1 (고아 없음) | 07 고아 파일 대조 실측 (0 rows) | 자동(보조 수동) | 2층 fileStorageKey와 3층 디스크 파일 1:1, 고아 수는 기록만 [?] |
+| API-14 | 기본 동작 | TC15 | 계정 격리 | 타 계정 리소스 직접 접근 거부 | 에러 기대 | 404 또는 403 (존재 비노출) | 치명도 3위 계열. **신규 실행 필요** | 자동 | 1층 B 토큰 GET, PATCH, DELETE 404, 2층 name과 deletedAt 불변 |
+| API-15 | 기본 동작 | TC4 | 프로젝트 | 단건 조회 | 시나리오 | 200 + 응답 필드가 psql 행과 일치 | **신규 실행 필요** | 자동(보조 수동) | 1층 GET 200과 name, lastWorkedAt 필드. 전 필드 psql 대조는 수동 [?] |
+| API-16 | 기본 동작 | TC10 | 작업 세션 | 세션 정상 저장 | 시나리오 | 성공 응답 + WorkSession 행 생성 + 목록 표시 | **신규 실행 필요** | 자동 | 1층 세션 포함 POST 201, 2층 WorkSession 행 deletedAt null [?] |
+| API-17 | 기본 동작 | TC12~14 | 창고 | 재료 CRUD 기본 사이클 | 시나리오 | 각 단계 정상 응답과 DB 반영 | **신규 실행 필요** | 수동 | 테스트 없음. Postman 각 단계 응답과 psql 창고 테이블 행 대조 [?] |
+| API-18 | 결함 회귀 | TC16 | 동기화 | stale PATCH가 기존 세션을 삭제하지 않는지 (DEF-01, 02) | 상태 전이 | 기존 세션 전부 잔존 (하드 삭제 없음) | d0a753a 수정 | 자동 | 2층 부분 PATCH와 재전송 뒤 WorkSession 살아있는 id 집합 불변 |
+| API-19 | 결함 회귀 | TC16 | 동기화 | 서버 거부 시 localOnly 보존 (DEF-03) | 에러 기대 | 로컬 보존 + 사용자 안내 표시 | conflict 보존 (eab799d) | 자동(보조 수동) | 1층 400, 2층 세션 집합 불변. 클라 localOnly 보존은 화면 수동 |
+| API-20 | 결함 회귀 | TC16 | 동기화 | 수정본 거부 시 무통보 폐기 금지 (DEF-04, 12) | 에러 기대 | 폐기 시 사유 안내 표시 | conflict 보존 계열 | 자동 | 1층 400, 2층 Project name 원본 유지와 세션 집합 불변 |
+| API-21 | 결함 회귀 | TC4 | 프로젝트 | RowCounter 없는 프로젝트의 목록 격리 (DEF-08) | 에러 기대 | 200 + 해당 프로젝트만 제외 + 로그 기록 | 06c7a10 수정 | 수동 | psql로 RowCounter 없는 행 삽입 뒤 목록 200, 해당 건 제외, 로그 확인 [?] |
+| API-22 | 결함 회귀 | TC10 | 스킬 | 서버 삭제 스킬의 캐시 제거 (DEF-09) | 상태 전이 | 삭제된 스킬 미표시 (캐시 프루닝) | 실행 주간 재확인 예정 | 수동 | psql 스킬 삭제 뒤 앱 재동기화, 화면에서 스킬 미표시 [?] |
+| API-23 | 결함 회귀 | TC10 | 파일 | 창고 경로 도안의 서버 파일 키 (DEF-13) | 시나리오 | null 아님 | a74945a 수정 | 수동 | 창고 경로 연결 뒤 2층 ProjectPatternCopy fileStorageKey not null [?] |
+| API-24 | 결함 회귀 | TC10 | 파일 | 교체 후 서버 드로잉 키 정리 (DEF-14) | 상태 전이 | 잔존 키 없음 | 0109898 수정 | 수동 | 교체 뒤 2층 drawingStorageKey 갱신과 3층 이전 키 파일 부재 [?] |
+| API-25 | 결함 회귀 | TC8 | 프로젝트 | 세션 저장 시 서버 lastWorkedAt 갱신 (DEF-17) | 상태 전이 | 세션 종료 시각으로 갱신 | **8/29 실행 4 passed** (`qa/api-tests/test_07_last_worked_at.py`) | 자동 | 1층 GET lastWorkedAt과 2층 Project 값 일치, 갱신, 목록 내림차순 |
 
 **실행 부담 (시트 원문)**: 07 실측 이력이 있는 항목은 이력 인용 가능. 신규 실행 필요 항목은 API-12, 14, 15, 16, 17과 API-25(수정 후)뿐이다.
 
@@ -285,6 +285,6 @@ P1만 골라 채운 것은 04의 투자 원칙을 따른 것이다. 자르는 �
 
 ## 5. 남은 판단 (QA가 채운다)
 
-1. 2절과 3절의 `자동/수동`, `판정 근거` 두 열 전건
+1. 2절과 3절의 `자동/수동`, `판정 근거` 두 열 전건. 2026-08-30 초안 완료, 검토 대기
 2. ~~시트 `상태` 열이 8/24 기준이라 8/25~26에 들어온 Appium 스위트를 반영하지 않는다.~~ 2026-08-29 해소. `자동 실행 판정 (8/29)` 열을 새로 두어 반영했다. 시트 상태 열은 발견 시점 구분을 위해 그대로 남겼다
 3. UI-04, 05, 06을 함수 하나로 합친 것이 케이스 추적성에 문제가 되는지 (실패 시 세 케이스 중 어느 쪽인지 구분 가능한가)
