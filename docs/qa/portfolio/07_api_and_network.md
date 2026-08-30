@@ -127,6 +127,12 @@ assert wrong_pw.status_code == unknown.status_code, (
 
 ### 4-1. SYNC-03 원격 반영의 POST와 PATCH 분기
 
+Postman으로 POST를 보내 201을 받은 뒤 같은 id를 psql로 조회한 장면이다. 응답 본문의 `ownerId`, `name`, `status`가 `Project` 행과 일치하고 `RowCounter` 행이 `projectId`로 연결돼 있어야 생성이 성립한 것으로 본다.
+
+![Postman POST /projects 201 Created](evidence/0830_postman_project_create_201.png)
+
+![같은 id를 psql로 조회](evidence/0830_psql_project_after_postman.png)
+
 클라이언트는 synced 항목이면 PATCH, 아니면 POST를 쓴다(`RemoteProjectRepository.swift:34`). 어떤 동사를 골랐는지는 서버에서 볼 수 없다. 그래서 그 분기가 성립하려면 서버가 무엇을 보장해야 하는지를 대신 고정했다.
 
 | 검증 | 결과 |
