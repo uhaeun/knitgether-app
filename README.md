@@ -6,6 +6,12 @@
 
 구현은 AI 바이브코딩으로 진행했다. 따라서 이 기록은 **사람이 리뷰하지 않은 AI 생성 코드에서 무엇이 깨지는지**를 문서화된 기준선과 실측으로 확인한 실전 기록이기도 하다. 기획자가 자기 제품을 검증하는 편향은 5가지 원칙으로 통제했다([00_project_background](docs/qa/portfolio/00_project_background.md)).
 
+<p>
+<img src="docs/qa/portfolio/evidence/0830_app_home.png" width="220" alt="홈 화면">
+<img src="docs/qa/portfolio/evidence/0727_manual_verification/02_library_hub.png" width="220" alt="창고 허브">
+<img src="docs/qa/portfolio/evidence/0727_manual_verification/12_work_statistics.png" width="220" alt="작업시간 통계">
+</p>
+
 ## 숫자로 보는 범위
 
 | 항목 | 규모 | 근거 문서 |

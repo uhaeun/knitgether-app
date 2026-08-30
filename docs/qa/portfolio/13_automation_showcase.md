@@ -40,6 +40,12 @@
 
 파일 이름이 TC 그룹(`test_tc08_sort_filter.py`)이고 함수 이름이 케이스 ID(`test_ui_33_recent_work_moves_to_top`)다. 09의 카탈로그와 코드가 이름으로 직접 대응된다.
 
+2026-08-30 재실행 기록. TC1은 온보딩 6페이지 완주 1건, TC2에서 TC6은 회원가입부터 프로젝트 삭제까지 30건이며 전건 통과했다. 시뮬레이터 iPhone 17 Pro Max, Appium 3.1.2, Python 3.14.
+
+![TC2에서 TC6 30건 통과](evidence/0830_appium_tc02-06_30passed.png)
+
+![TC1 온보딩 1건 통과](evidence/0830_appium_tc01_1passed.png)
+
 ### Page 객체 12개
 
 `base_page` (공통 조작 28개), `auth`, `onboarding`, `home`, `my_knitting`, `project_form`, `project_info`, `workspace`, `counter_panel`, `pattern_panel`, `work_time_panel`, `library`

@@ -52,6 +52,10 @@ assert deleted_after is not None
 assert path.exists()
 ```
 
+2층을 실제로 보는 모습이다. TC2 회원가입 자동 실행 직후 psql로 `UserAccount`를 조회하면 테스트가 만든 계정 4행이 생성 시각과 함께 남아 있다. 화면의 PASS와 이 행이 같이 있어야 가입이 성공한 것으로 판정한다.
+
+![TC2 실행 직후 UserAccount 조회](evidence/0830_psql_UserAccount_after_tc02.png)
+
 ---
 
 ## 3. API 계약 검증
