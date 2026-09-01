@@ -76,6 +76,8 @@ struct AppFormTextFieldRow: View {
     var minHeight: CGFloat? = nil
     var identifier: String? = nil
     var isRequired: Bool = false
+    /// 글자 수 상한. 주면 글자 수 카운터를 표시하고 초과 입력을 잘라낸다 (SPEC-PROJ-01과 같은 UX).
+    var characterLimit: Int? = nil
 
     var body: some View {
         HStack(alignment: axis == .vertical ? .top : .center, spacing: 12) {
@@ -99,6 +101,14 @@ struct AppFormTextFieldRow: View {
                             .padding(.vertical, 1)
                             .background(AppTheme.Color.roseSoft, in: Capsule())
                     }
+
+                    if let characterLimit {
+                        Spacer()
+                        Text("\(text.count)/\(characterLimit)")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                    }
                 }
 
                 textField
@@ -114,6 +124,12 @@ struct AppFormTextFieldRow: View {
             .foregroundStyle(AppTheme.Color.primaryText)
             .lineLimit(axis == .vertical ? 4...10 : 1...1)
             .frame(minHeight: minHeight)
+            // 타이핑이든 붙여넣기든 상한을 넘는 입력은 잘라낸다
+            .onChange(of: text) { newValue in
+                if let characterLimit, newValue.count > characterLimit {
+                    text = String(newValue.prefix(characterLimit))
+                }
+            }
 
         if let identifier {
             base.accessibilityIdentifier(identifier)
@@ -130,6 +146,8 @@ struct AppFormTextEditorRow: View {
     @Binding var text: String
     var minHeight: CGFloat = 120
     var identifier: String? = nil
+    /// 글자 수 상한. 주면 글자 수 카운터를 표시하고 초과 입력을 잘라낸다 (SPEC-PROJ-01과 같은 UX).
+    var characterLimit: Int? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -142,6 +160,14 @@ struct AppFormTextEditorRow: View {
                 Text(title)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
+
+                if let characterLimit {
+                    Spacer()
+                    Text("\(text.count)/\(characterLimit)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
             }
 
             ZStack(alignment: .topLeading) {
@@ -167,6 +193,12 @@ struct AppFormTextEditorRow: View {
             .frame(minHeight: minHeight)
             .scrollContentBackground(.hidden)
             .foregroundStyle(AppTheme.Color.primaryText)
+            // 타이핑이든 붙여넣기든 상한을 넘는 입력은 잘라낸다
+            .onChange(of: text) { newValue in
+                if let characterLimit, newValue.count > characterLimit {
+                    text = String(newValue.prefix(characterLimit))
+                }
+            }
 
         if let identifier {
             base.accessibilityIdentifier(identifier)

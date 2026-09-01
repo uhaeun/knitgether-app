@@ -110,6 +110,19 @@ describe('Profile route', () => {
     expect(response.body).toEqual(expectedProfileResponse());
   });
 
+  it('rejects a display name longer than 80 characters', async () => {
+    await request(app.getHttpServer())
+      .patch('/api/v1/profile')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        displayName: 'a'.repeat(81),
+        preferredUnits: 'Metric',
+      })
+      .expect(400);
+
+    expect(prisma.userProfile.upsert).not.toHaveBeenCalled();
+  });
+
   function expectedProfileResponse() {
     return {
       id: 'user-a',

@@ -28,6 +28,11 @@ final class MyKnittingViewModel: ObservableObject {
     private static let projectLoadErrorMessage = "프로젝트를 불러오지 못했어요."
     private static let patternLoadErrorMessage = "프로젝트 도안 목록을 불러오지 못했어요."
     private static let materialLoadErrorMessage = "프로젝트 재료를 불러오지 못했어요."
+    private static let projectConflictMessage = "다른 기기에서 수정된 내용이 있어요. 서버에 저장된 최신 내용을 다시 불러왔으니 확인 후 다시 시도해 주세요."
+
+    /// 프로젝트 목록 필터 선택. 화면을 떠났다 돌아와도 앱 세션 동안 유지되고,
+    /// 앱을 재시작하면 초기화된다(메모리에만 저장).
+    static var sessionStatusFilter: ProjectStatus?
 
     init(
         projectRepository: any ProjectRepository,
@@ -124,10 +129,21 @@ final class MyKnittingViewModel: ObservableObject {
             statusMessage = "프로젝트를 추가했어요."
             return true
         } catch {
-            errorMessage = "프로젝트를 추가하지 못했어요."
-            statusMessage = nil
+            await handleProjectSaveFailure(error, fallbackMessage: "프로젝트를 추가하지 못했어요.")
             return false
         }
+    }
+
+    /// 다른 기기에서 먼저 수정돼 서버가 409(PROJECT_CONFLICT)를 돌려준 경우,
+    /// 서버 본이 반영된 목록을 다시 불러오고 충돌 안내를 표시한다(SPEC-SYNC-11 후속).
+    private func handleProjectSaveFailure(_ error: Error, fallbackMessage: String) async {
+        if (error as? APIError)?.isProjectConflict == true {
+            projects = (try? await projectRepository.fetchProjects()) ?? projects
+            errorMessage = Self.projectConflictMessage
+        } else {
+            errorMessage = fallbackMessage
+        }
+        statusMessage = nil
     }
 
     /// 프로젝트 폼에서 창고 선행 없이 실을 즉석 생성한다. 성공 시 생성된 실을 반환한다.
@@ -216,8 +232,7 @@ final class MyKnittingViewModel: ObservableObject {
             statusMessage = "프로젝트를 수정했어요."
             return true
         } catch {
-            errorMessage = "프로젝트를 수정하지 못했어요."
-            statusMessage = nil
+            await handleProjectSaveFailure(error, fallbackMessage: "프로젝트를 수정하지 못했어요.")
             return false
         }
     }

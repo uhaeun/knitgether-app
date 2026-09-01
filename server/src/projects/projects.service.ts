@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -144,16 +145,49 @@ export class ProjectsService {
       });
 
       if (existingProject) {
+        this.assertNoSaveConflict(existingProject, body, ownerId);
         await transaction.project.update({
           where: { id: body.id },
           data: this.toProjectUpdateInput(ownerId, body),
           include: this.projectInclude(ownerId),
         });
       } else {
-        await transaction.project.create({
-          data: this.toProjectCreateInput(ownerId, body),
-          include: this.projectInclude(ownerId),
+        // 프로젝트 개수 상한. 활성(deletedAt null) 프로젝트가 200개 이상이면
+        // 새 프로젝트 생성을 거부한다. 기존 프로젝트 갱신(위 분기)은 막지 않는다.
+        const activeCount = await transaction.project.count({
+          where: {
+            ownerId,
+            deletedAt: null,
+          },
         });
+
+        if (activeCount >= 200) {
+          throw new BadRequestException({
+            code: 'PROJECT_LIMIT_EXCEEDED',
+            message: 'Project limit of 200 has been reached.',
+          });
+        }
+
+        try {
+          await transaction.project.create({
+            data: this.toProjectCreateInput(ownerId, body),
+            include: this.projectInclude(ownerId),
+          });
+        } catch (error) {
+          // (id, ownerId) findFirst에 걸리지 않은 채 같은 id가 다른 소유자에게
+          // 이미 존재하면 create가 P2002로 터진다. 500 대신 409로 변환한다.
+          if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === 'P2002'
+          ) {
+            throw new ConflictException({
+              code: 'PROJECT_ID_CONFLICT',
+              message: 'A project with this ID already exists.',
+            });
+          }
+
+          throw error;
+        }
       }
 
       await this.saveProjectChildren(transaction, ownerId, body);
@@ -201,6 +235,8 @@ export class ProjectsService {
           message: 'Project not found.',
         });
       }
+
+      this.assertNoSaveConflict(existingProject, body, ownerId);
 
       await transaction.project.update({
         where: { id },
@@ -481,15 +517,10 @@ export class ProjectsService {
       await this.findActiveWorkSession(ownerId, projectId, sessionId);
     }
 
+    this.assertWorkSessionTimes(body);
+
     const startedAt = new Date(body.startedAt);
     const endedAt = body.endedAt ? new Date(body.endedAt) : null;
-
-    if (endedAt && endedAt.getTime() < startedAt.getTime()) {
-      throw new BadRequestException({
-        code: 'VALIDATION_FAILED',
-        message: 'Work session end time must be after the start time.',
-      });
-    }
 
     const data = {
       ownerId,
@@ -1356,6 +1387,69 @@ export class ProjectsService {
       throw new BadRequestException({
         code: 'VALIDATION_FAILED',
         message: 'Work session project ID must match the project ID.',
+      });
+    }
+
+    // 프로젝트 저장 본문에 실린 세션에도 단건 API와 같은 시간 규칙을 적용한다(GitHub #15).
+    for (const session of body.workSessions) {
+      this.assertWorkSessionTimes(session);
+    }
+  }
+
+  // 작업 세션 교차 필드 검증(GitHub #15 서버측 수정).
+  // endedAt이 있으면 startedAt보다 뒤여야 하고, 세션 길이는 24시간을 넘을 수 없다.
+  private assertWorkSessionTimes(session: SaveWorkSessionDto): void {
+    if (!session.endedAt) {
+      return;
+    }
+
+    const startedAt = new Date(session.startedAt).getTime();
+    const endedAt = new Date(session.endedAt).getTime();
+
+    if (endedAt <= startedAt) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Work session end time must be after the start time.',
+      });
+    }
+
+    const maxSessionMs = 24 * 60 * 60 * 1000;
+    if (endedAt - startedAt > maxSessionMs) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Work session length must be 24 hours or less.',
+      });
+    }
+  }
+
+  // 낙관적 잠금. 클라이언트가 baseUpdatedAt을 보낸 경우에만 동작하며,
+  // 서버 updatedAt이 그보다 뒤면 409와 함께 서버 최신 본을 details.latest로 돌려준다.
+  private assertNoSaveConflict(
+    existing: ProjectWithChildren,
+    body: SaveProjectDto,
+    ownerId: string,
+  ): void {
+    if (!body.baseUpdatedAt) {
+      return;
+    }
+
+    const baseUpdatedAt = new Date(body.baseUpdatedAt).getTime();
+
+    if (existing.updatedAt.getTime() > baseUpdatedAt) {
+      // 최신 본 변환이 실패해도(예: 소프트 삭제된 행의 카운터 결손) 409 자체는 유지한다.
+      let latest: ProjectResponseDto | null = null;
+      try {
+        latest = this.toResponse(existing, ownerId);
+      } catch {
+        latest = null;
+      }
+
+      throw new ConflictException({
+        code: 'PROJECT_CONFLICT',
+        message: 'Project was modified after the provided base version.',
+        details: {
+          latest,
+        },
       });
     }
   }

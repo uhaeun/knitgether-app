@@ -68,8 +68,29 @@ final class OfflineFirstProjectRepository: ProjectRepository {
             try await remote.saveProject(uploadProject)
             try await cacheServerProjectIfAvailable(fallback: uploadProject)
         } catch {
+            if isProjectConflict(error) {
+                // 다른 기기에서 먼저 수정된 프로젝트다(409 PROJECT_CONFLICT).
+                // 로컬 수정본을 되돌리고 서버 본을 받아 캐시에 반영한 뒤,
+                // 상위(뷰모델)가 충돌 안내를 표시하도록 오류를 그대로 던진다.
+                try? await local.restoreRollbackSnapshot(rollbackSnapshot)
+                await refreshServerCopyAfterConflict(projectId: project.id)
+                throw error
+            }
+
             try await rollbackLocalChangeIfRejected(rollbackSnapshot, after: error)
         }
+    }
+
+    private func isProjectConflict(_ error: Error) -> Bool {
+        (error as? APIError)?.isProjectConflict == true
+    }
+
+    private func refreshServerCopyAfterConflict(projectId: UUID) async {
+        guard let serverProject = try? await remote.fetchProject(id: projectId) else {
+            return
+        }
+
+        try? await local.markProjectSynced(serverProject)
     }
 
     func deleteProject(id: UUID) async throws {

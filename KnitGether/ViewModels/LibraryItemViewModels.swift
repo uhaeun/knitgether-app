@@ -229,6 +229,12 @@ final class YarnLibraryViewModel: ObservableObject {
         yarnUsageRecords(for: yarn).reduce(0) { $0 + $1.quantityUsed }
     }
 
+    /// 이 실이 사용 기록(ProjectYarnUsage)으로 연결된 프로젝트 수.
+    /// 삭제 확인창의 연결 고지에 쓴다. 사용 기록을 아직 불러오지 않았으면 0을 반환한다.
+    func linkedProjectCount(for yarn: Yarn) -> Int {
+        Set(yarnUsageRecords(for: yarn).map(\.projectId)).count
+    }
+
     func addYarn(from formData: YarnFormData) async -> Bool {
         await saveYarn(from: formData, existingYarn: nil)
     }

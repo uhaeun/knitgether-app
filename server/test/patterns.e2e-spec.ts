@@ -251,6 +251,31 @@ describe('Patterns route', () => {
     expect(response.body.fileName).toBeNull();
   });
 
+  it('rejects a pattern title longer than 30 characters on creation', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/patterns')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        id: patternId,
+        title: 'a'.repeat(31),
+      })
+      .expect(400);
+
+    expect(prisma.patternDocument.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a pattern title longer than 30 characters on update', async () => {
+    await request(app.getHttpServer())
+      .patch(`/api/v1/patterns/${patternId}`)
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        title: 'a'.repeat(31),
+      })
+      .expect(400);
+
+    expect(prisma.patternDocument.update).not.toHaveBeenCalled();
+  });
+
   it('rejects a fileless creation without title', async () => {
     await request(app.getHttpServer())
       .post('/api/v1/patterns')

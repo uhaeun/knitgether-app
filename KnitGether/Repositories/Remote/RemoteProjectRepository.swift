@@ -4,6 +4,12 @@ final class RemoteProjectRepository: ProjectRepository {
     private let apiClient: APIClient
     private let fileStore: LocalPatternFileStore
 
+    /// 프로젝트별로 마지막으로 확인한 서버 updatedAt.
+    /// 저장(PATCH) 시 baseUpdatedAt으로 함께 보내 낙관적 잠금(409 PROJECT_CONFLICT)의 기준이 된다.
+    /// 앱 세션 동안만 유지되며, 없으면 baseUpdatedAt을 생략한다(서버는 생략 시 기존 last-write-wins).
+    private let serverUpdatedAtLock = NSLock()
+    private var lastKnownServerUpdatedAtByProjectId: [UUID: Date] = [:]
+
     init(
         apiClient: APIClient,
         fileStore: LocalPatternFileStore = LocalPatternFileStore()
@@ -14,6 +20,7 @@ final class RemoteProjectRepository: ProjectRepository {
 
     func fetchProjects() async throws -> [KnittingProject] {
         let projects: [KnittingProject] = try await apiClient.get("projects")
+        projects.forEach(recordServerUpdatedAt)
         return try await projects.asyncMap { project in
             try await cachePatternCopyFileIfNeeded(for: project)
         }
@@ -22,6 +29,7 @@ final class RemoteProjectRepository: ProjectRepository {
     func fetchProject(id: UUID) async throws -> KnittingProject? {
         do {
             let project: KnittingProject = try await apiClient.get("projects/\(id.uuidString.lowercased())")
+            recordServerUpdatedAt(project)
             return try await cachePatternCopyFileIfNeeded(for: project)
         } catch let error as APIError where error.statusCode == 404 {
             return nil
@@ -29,24 +37,44 @@ final class RemoteProjectRepository: ProjectRepository {
     }
 
     func saveProject(_ project: KnittingProject) async throws {
-        let body = SaveProjectRequest(project: project)
-
         if project.syncStatus == .synced {
-            let _: KnittingProject = try await apiClient.send(
+            let body = SaveProjectRequest(
+                project: project,
+                baseUpdatedAt: lastKnownServerUpdatedAt(forProjectId: project.id)
+            )
+            let savedProject: KnittingProject = try await apiClient.send(
                 "projects/\(project.id.uuidString.lowercased())",
                 method: "PATCH",
                 body: body
             )
+            recordServerUpdatedAt(savedProject)
         } else {
-            let _: KnittingProject = try await apiClient.send(
+            let savedProject: KnittingProject = try await apiClient.send(
                 "projects",
                 method: "POST",
-                body: body
+                body: SaveProjectRequest(project: project, baseUpdatedAt: nil)
             )
+            recordServerUpdatedAt(savedProject)
         }
 
         try await uploadDirectPatternCopyFileIfNeeded(for: project)
         try await uploadPatternCopyDrawingIfNeeded(for: project)
+    }
+
+    private func recordServerUpdatedAt(_ project: KnittingProject) {
+        serverUpdatedAtLock.lock()
+        defer {
+            serverUpdatedAtLock.unlock()
+        }
+        lastKnownServerUpdatedAtByProjectId[project.id] = project.updatedAt
+    }
+
+    private func lastKnownServerUpdatedAt(forProjectId id: UUID) -> Date? {
+        serverUpdatedAtLock.lock()
+        defer {
+            serverUpdatedAtLock.unlock()
+        }
+        return lastKnownServerUpdatedAtByProjectId[id]
     }
 
     func deleteProject(id: UUID) async throws {
@@ -284,8 +312,12 @@ private struct SaveProjectRequest: Encodable {
     let patternCopy: ExplicitNullEncodable<SaveProjectPatternCopyRequest>
     let rowCounter: SaveRowCounterRequest
     let workSessions: [SaveWorkSessionRequest]
+    /// 클라이언트가 마지막으로 확인한 서버 updatedAt. 서버는 이 값이 자신의 updatedAt보다
+    /// 오래되면 409(code: PROJECT_CONFLICT)로 거부한다. nil이면 필드를 생략한다.
+    let baseUpdatedAt: Date?
 
-    nonisolated init(project: KnittingProject) {
+    nonisolated init(project: KnittingProject, baseUpdatedAt: Date? = nil) {
+        self.baseUpdatedAt = baseUpdatedAt
         id = project.id.uuidString.lowercased()
         name = project.name
         status = project.status.rawValue

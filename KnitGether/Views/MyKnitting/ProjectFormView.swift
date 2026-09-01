@@ -173,16 +173,32 @@ struct ProjectFormView: View {
             systemImage: "note.text",
             tint: AppTheme.Color.slate
         ) {
-            TextEditor(text: $formData.memo)
-                .frame(minHeight: 128)
-                .padding(10)
-                .scrollContentBackground(.hidden)
-                .background(AppTheme.Color.warmBackground, in: RoundedRectangle(cornerRadius: AppTheme.Radius.small))
-                .overlay {
-                    RoundedRectangle(cornerRadius: AppTheme.Radius.small)
-                        .stroke(AppTheme.Color.warmDivider, lineWidth: 1)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Spacer()
+                    Text("\(formData.memo.count)/\(AppInputLimit.memo)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
-                .accessibilityIdentifier(AppAccessibilityID.Project.memoField)
+
+                TextEditor(text: $formData.memo)
+                    .frame(minHeight: 128)
+                    .padding(10)
+                    .scrollContentBackground(.hidden)
+                    .background(AppTheme.Color.warmBackground, in: RoundedRectangle(cornerRadius: AppTheme.Radius.small))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: AppTheme.Radius.small)
+                            .stroke(AppTheme.Color.warmDivider, lineWidth: 1)
+                    }
+                    .accessibilityIdentifier(AppAccessibilityID.Project.memoField)
+                    // 타이핑이든 붙여넣기든 상한을 넘는 입력은 잘라낸다 (SPEC-PROJ-01과 같은 UX)
+                    .onChange(of: formData.memo) { newValue in
+                        if newValue.count > AppInputLimit.memo {
+                            formData.memo = String(newValue.prefix(AppInputLimit.memo))
+                        }
+                    }
+            }
         }
     }
 
@@ -384,7 +400,8 @@ struct ProjectFormView: View {
                     title: "수동 도안 이름",
                     placeholder: "예: Basic Cardigan Pattern",
                     systemImage: "square.and.pencil",
-                    text: manualPatternName
+                    text: manualPatternName,
+                    characterLimit: AppInputLimit.name
                 )
 
                 ProjectDivider()

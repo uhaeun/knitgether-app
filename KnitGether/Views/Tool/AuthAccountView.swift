@@ -18,6 +18,7 @@ struct AuthAccountView: View {
     @StateObject private var viewModel: AuthAccountViewModel
     @State private var mode: Mode = .login
     @State private var isSubmitting = false
+    @State private var isShowingSignOutFailureAlert = false
 
     init(
         authRepository: any AuthRepository,
@@ -147,11 +148,7 @@ struct AuthAccountView: View {
             .appCard(cornerRadius: 20)
 
             Button(role: .destructive) {
-                do {
-                    try viewModel.signOut()
-                } catch {
-                    // The stored session remains visible if secure storage fails to clear.
-                }
+                attemptSignOut()
             } label: {
                 Label("로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
                     .frame(maxWidth: .infinity)
@@ -159,6 +156,24 @@ struct AuthAccountView: View {
             .buttonStyle(.bordered)
             .controlSize(.large)
             .accessibilityIdentifier(AppAccessibilityID.Auth.logoutButton)
+            .alert("로그아웃하지 못했어요", isPresented: $isShowingSignOutFailureAlert) {
+                Button("다시 시도") {
+                    attemptSignOut()
+                }
+
+                Button("닫기", role: .cancel) {}
+            } message: {
+                Text("저장된 로그인 정보를 삭제하지 못해 로그인 세션이 아직 남아 있어요. 잠시 후 다시 시도해 주세요.")
+            }
+        }
+    }
+
+    /// Keychain 삭제 실패를 무통보로 삼키지 않는다. 세션이 남아 있음을 알리고 재시도를 제공한다.
+    private func attemptSignOut() {
+        do {
+            try viewModel.signOut()
+        } catch {
+            isShowingSignOutFailureAlert = true
         }
     }
 
@@ -235,7 +250,8 @@ struct AuthAccountView: View {
                 systemImage: "lock",
                 text: $viewModel.formData.password,
                 isSecure: true,
-                identifier: AppAccessibilityID.Auth.passwordField
+                identifier: AppAccessibilityID.Auth.passwordField,
+                characterLimit: AppInputLimit.password
             )
         }
         .padding(.horizontal, 16)
@@ -250,7 +266,8 @@ struct AuthAccountView: View {
                 systemImage: "person",
                 text: $viewModel.formData.displayName,
                 isSecure: false,
-                identifier: AppAccessibilityID.Auth.displayNameField
+                identifier: AppAccessibilityID.Auth.displayNameField,
+                characterLimit: AppInputLimit.displayName
             )
             .textInputAutocapitalization(.words)
 
@@ -280,7 +297,8 @@ struct AuthAccountView: View {
         systemImage: String,
         text: Binding<String>,
         isSecure: Bool,
-        identifier: String
+        identifier: String,
+        characterLimit: Int? = nil
     ) -> some View {
         HStack(spacing: 12) {
             Image(systemName: systemImage)
@@ -298,6 +316,19 @@ struct AuthAccountView: View {
             .font(.body)
             .foregroundStyle(AppTheme.Color.primaryText)
             .accessibilityIdentifier(identifier)
+            // 타이핑이든 붙여넣기든 상한을 넘는 입력은 잘라낸다 (SPEC-PROJ-01과 같은 UX)
+            .onChange(of: text.wrappedValue) { newValue in
+                if let characterLimit, newValue.count > characterLimit {
+                    text.wrappedValue = String(newValue.prefix(characterLimit))
+                }
+            }
+
+            if let characterLimit {
+                Text("\(text.wrappedValue.count)/\(characterLimit)")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
         }
         .padding(.vertical, 16)
     }

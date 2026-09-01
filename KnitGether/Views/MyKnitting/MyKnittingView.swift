@@ -139,6 +139,9 @@ struct MyKnittingView: View {
             Text("삭제한 프로젝트는 복구할 수 없어요.")
         }
         .onAppear {
+            // 필터 선택을 화면 이탈 후에도 앱 세션 동안 유지한다(앱 재시작 시 초기화).
+            selectedStatusFilter = MyKnittingViewModel.sessionStatusFilter
+
             Task {
                 await viewModel.loadProjects()
                 await viewModel.loadProjectPatterns()
@@ -306,6 +309,8 @@ struct MyKnittingView: View {
 
         return Button {
             selectedStatusFilter = status
+            // 화면 이탈 후에도 앱 세션 동안 필터를 유지한다
+            MyKnittingViewModel.sessionStatusFilter = status
         } label: {
             Text(title)
                 .font(.caption.weight(.semibold))

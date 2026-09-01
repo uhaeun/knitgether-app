@@ -104,6 +104,8 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     private let progressPhotoRepository: (any ProjectProgressPhotoRepository)?
     private var sessionStartedAt: Date?
     private let minimumWorkSessionDuration: TimeInterval = 10
+    /// 화면을 열어둔 채 방치한 세션의 상한(4시간). 초과분은 잘라서 저장하고 세션 메모로 남긴다.
+    private let maximumWorkSessionDuration: TimeInterval = 4 * 60 * 60
     private var isDeleted = false
 
     init(
@@ -744,6 +746,11 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         errorMessage = nil
     }
 
+    /// 뷰 계층에서 발생한 실패(PDF 파일 선택, 문서 스캔 등)를 공통 오류 얼럿으로 표시한다.
+    func presentError(_ message: String) {
+        errorMessage = message
+    }
+
     func retrySync() async {
         guard !isRetryingSync else {
             return
@@ -799,7 +806,16 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             return
         }
 
-        let endedAt = Date()
+        var endedAt = Date()
+        var clampMemo: String?
+
+        // 화면을 열어둔 채 방치한 세션은 4시간으로 절단해 저장한다.
+        // 절단 사실은 세션 메모로 남겨 통계와 세션 목록에서 확인할 수 있게 한다.
+        if endedAt.timeIntervalSince(sessionStartedAt) > maximumWorkSessionDuration {
+            endedAt = sessionStartedAt.addingTimeInterval(maximumWorkSessionDuration)
+            clampMemo = "화면을 켜 둔 채 방치된 세션으로 판단해 4시간까지만 기록했어요."
+        }
+
         currentSessionElapsed = endedAt.timeIntervalSince(sessionStartedAt)
         self.sessionStartedAt = nil
         isTrackingTime = false
@@ -811,7 +827,8 @@ final class ProjectWorkspaceViewModel: ObservableObject {
 
         let updatedProject = project.recordingWorkSession(
             startedAt: sessionStartedAt,
-            endedAt: endedAt
+            endedAt: endedAt,
+            memo: clampMemo
         )
 
         guard let session = updatedProject.workSessions.last else {
@@ -993,7 +1010,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             drawingData = data
             errorMessage = nil
         } catch {
-            errorMessage = "그리기를 저장하지 못했어요."
+            await handleProjectSaveFailure(error, fallbackMessage: "그리기를 저장하지 못했어요.")
         }
     }
 
@@ -1327,7 +1344,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             await loadRelatedSkills()
             return true
         } catch {
-            errorMessage = "프로젝트를 수정하지 못했어요."
+            await handleProjectSaveFailure(error, fallbackMessage: "프로젝트를 수정하지 못했어요.")
             return false
         }
     }
@@ -1364,9 +1381,24 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             self.errorMessage = nil
             return true
         } catch {
-            self.errorMessage = errorMessage
+            await handleProjectSaveFailure(error, fallbackMessage: errorMessage)
             return false
         }
+    }
+
+    /// 다른 기기에서 먼저 수정돼 서버가 409(PROJECT_CONFLICT)를 돌려준 경우,
+    /// 서버 본을 다시 받아 화면에 반영하고 충돌 안내를 표시한다(SPEC-SYNC-11 후속).
+    private func handleProjectSaveFailure(_ error: Error, fallbackMessage: String) async {
+        guard (error as? APIError)?.isProjectConflict == true else {
+            errorMessage = fallbackMessage
+            return
+        }
+
+        if let refreshedProject = try? await projectRepository.fetchProject(id: project.id) {
+            applyProjectState(refreshedProject)
+            await loadDrawingData()
+        }
+        errorMessage = "다른 기기에서 수정된 내용이 있어요. 서버에 저장된 최신 내용을 다시 불러왔으니 확인 후 다시 시도해 주세요."
     }
 
     private func latestProjectState(afterSaving updatedProject: KnittingProject) async -> KnittingProject {

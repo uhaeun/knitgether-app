@@ -985,7 +985,8 @@ struct ProjectWorkspaceView: View {
 
             pendingPatternFileImport = PendingPatternFileImport(fileURL: fileURL, source: .file)
         case .failure:
-            break
+            // 파일 선택 실패를 무통보로 삼키지 않는다. 공통 오류 얼럿으로 안내한다.
+            viewModel.presentError("PDF 파일을 가져오지 못했어요. 파일을 다시 선택해 주세요.")
         }
     }
 
@@ -994,7 +995,8 @@ struct ProjectWorkspaceView: View {
         case .success(let fileURL):
             pendingPatternFileImport = PendingPatternFileImport(fileURL: fileURL, source: .scan)
         case .failure:
-            break
+            // 스캔 실패를 무통보로 삼키지 않는다. 공통 오류 얼럿으로 안내한다.
+            viewModel.presentError("문서 스캔에 실패했어요. 다시 시도해 주세요.")
         }
     }
 
@@ -1154,7 +1156,8 @@ private struct ManualPatternSheet: View {
                             placeholder: "예: 직접 입력한 도안",
                             systemImage: "textformat",
                             text: $title,
-                            identifier: AppAccessibilityID.Workspace.patternManualTitleField
+                            identifier: AppAccessibilityID.Workspace.patternManualTitleField,
+                            characterLimit: AppInputLimit.name
                         )
                     }
                 }
@@ -1215,6 +1218,11 @@ private struct NumberEditSheet: View {
         (Int(valueText) ?? 0) < 0
     }
 
+    /// 비어 있지 않은데 정수로 해석되지 않는 입력. 저장 시 기존 값이 유지된다.
+    private var isNonNumericInput: Bool {
+        !valueText.isEmpty && Int(valueText) == nil
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -1236,6 +1244,13 @@ private struct NumberEditSheet: View {
 
                         if isNegativeInput {
                             Label("음수는 저장할 수 없어 0으로 보정돼요.", systemImage: "exclamationmark.triangle")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(AppTheme.Color.rose)
+                                .padding(.bottom, 8)
+                        }
+
+                        if isNonNumericInput {
+                            Label("숫자만 입력할 수 있어요. 저장하면 기존 값이 유지돼요.", systemImage: "exclamationmark.triangle")
                                 .font(.caption.weight(.semibold))
                                 .foregroundStyle(AppTheme.Color.rose)
                                 .padding(.bottom, 8)

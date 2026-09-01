@@ -101,7 +101,7 @@ struct YarnLibraryView: View {
                 }
             }
         } message: { yarn in
-            Text("\(yarn.name)을 실 창고에서 삭제합니다.")
+            Text(Self.deletionMessage(for: yarn, linkedProjectCount: viewModel.linkedProjectCount(for: yarn)))
         }
         .task {
             await viewModel.loadYarns()
@@ -110,6 +110,17 @@ struct YarnLibraryView: View {
             await viewModel.loadYarns()
         }
         .warmScreenBackground()
+    }
+
+    /// 삭제 확인창 본문. 프로젝트에 연결(ProjectYarnUsage)돼 있으면 사용 중임을 함께 고지한다.
+    static func deletionMessage(for yarn: Yarn, linkedProjectCount: Int) -> String {
+        let base = "\(yarn.name)을 실 창고에서 삭제합니다."
+
+        guard linkedProjectCount > 0 else {
+            return base
+        }
+
+        return base + " 현재 \(linkedProjectCount)개 프로젝트에서 사용 중이에요. 삭제해도 프로젝트에 남긴 기록과 스냅샷은 유지돼요."
     }
 
     private var yarnList: some View {
@@ -141,7 +152,11 @@ struct YarnLibraryView: View {
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
                         yarnPendingDeletion = yarn
-                        isShowingDeleteConfirmation = true
+                        // 확인창에 연결된 프로젝트 수를 고지하기 위해 사용 기록을 먼저 불러온다
+                        Task {
+                            await viewModel.loadYarnUsages(for: yarn)
+                            isShowingDeleteConfirmation = true
+                        }
                     } label: {
                         Label("삭제", systemImage: "trash")
                     }
@@ -349,7 +364,12 @@ private struct YarnDetailView: View {
                     }
                 }
             } message: {
-                Text("\(currentYarn.name)을 실 창고에서 삭제합니다.")
+                Text(
+                    YarnLibraryView.deletionMessage(
+                        for: currentYarn,
+                        linkedProjectCount: viewModel.linkedProjectCount(for: currentYarn)
+                    )
+                )
             }
             .task(id: yarn.id) {
                 await viewModel.loadYarnUsages(for: yarn)
@@ -540,7 +560,8 @@ struct YarnFormView: View {
                             systemImage: "textformat",
                             text: $formData.name,
                             identifier: AppAccessibilityID.Library.yarnNameField,
-                            isRequired: true
+                            isRequired: true,
+                            characterLimit: AppInputLimit.name
                         )
 
                         AppFormDivider()
@@ -598,7 +619,8 @@ struct YarnFormView: View {
                             text: $formData.notes,
                             axis: .vertical,
                             minHeight: 92,
-                            identifier: AppAccessibilityID.Library.yarnNotesField
+                            identifier: AppAccessibilityID.Library.yarnNotesField,
+                            characterLimit: AppInputLimit.memo
                         )
                     }
                 }

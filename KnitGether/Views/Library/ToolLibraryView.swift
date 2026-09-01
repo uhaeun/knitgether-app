@@ -485,7 +485,8 @@ struct ToolFormView: View {
                             systemImage: "textformat",
                             text: $formData.name,
                             identifier: AppAccessibilityID.Library.toolNameField,
-                            isRequired: true
+                            isRequired: true,
+                            characterLimit: AppInputLimit.name
                         )
 
                         AppFormDivider()
@@ -525,7 +526,8 @@ struct ToolFormView: View {
                             text: $formData.memo,
                             axis: .vertical,
                             minHeight: 92,
-                            identifier: AppAccessibilityID.Library.toolMemoField
+                            identifier: AppAccessibilityID.Library.toolMemoField,
+                            characterLimit: AppInputLimit.memo
                         )
                     }
                 }

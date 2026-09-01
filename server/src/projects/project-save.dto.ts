@@ -40,7 +40,9 @@ export class SaveRowCounterDto {
   @IsUUID()
   projectId!: string;
 
+  // 카운터 이름 상한 30자. 프로젝트 이름(30자)과 같은 급의 짧은 라벨이다.
   @IsString()
+  @MaxLength(30)
   name!: string;
 
   @IsOptional()
@@ -85,8 +87,10 @@ export class SaveWorkSessionDto {
   @IsISO8601()
   endedAt!: string | null;
 
+  // 세션 메모 상한 500자(프로젝트 memo와 동일한 메모류 상한).
   @IsOptional()
   @IsString()
+  @MaxLength(500)
   memo!: string | null;
 }
 
@@ -185,7 +189,9 @@ export class SaveProjectDto {
   @IsBoolean()
   isFavorite!: boolean;
 
+  // 프로젝트 메모 상한 500자.
   @IsString()
+  @MaxLength(500)
   memo!: string;
 
   @IsISO8601()
@@ -268,4 +274,11 @@ export class SaveProjectDto {
   @ValidateNested({ each: true })
   @Type(() => SaveWorkSessionDto)
   workSessions!: SaveWorkSessionDto[];
+
+  // 낙관적 잠금 기준 시각. 클라이언트가 마지막으로 본 서버 updatedAt을 보내면
+  // 서버 updatedAt이 그보다 뒤일 때 409(PROJECT_CONFLICT)로 거부한다.
+  // 보내지 않으면 기존 last-write-wins 동작을 유지한다(하위 호환).
+  @IsOptional()
+  @IsISO8601()
+  baseUpdatedAt?: string | null;
 }

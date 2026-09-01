@@ -439,7 +439,8 @@ struct NeedleFormView: View {
                             systemImage: "textformat",
                             text: $formData.name,
                             identifier: AppAccessibilityID.Library.needleNameField,
-                            isRequired: true
+                            isRequired: true,
+                            characterLimit: AppInputLimit.name
                         )
 
                         AppFormDivider()
@@ -507,7 +508,8 @@ struct NeedleFormView: View {
                             text: $formData.notes,
                             axis: .vertical,
                             minHeight: 92,
-                            identifier: AppAccessibilityID.Library.needleNotesField
+                            identifier: AppAccessibilityID.Library.needleNotesField,
+                            characterLimit: AppInputLimit.memo
                         )
                     }
                 }

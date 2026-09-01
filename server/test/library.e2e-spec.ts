@@ -670,6 +670,57 @@ describe('Library route', () => {
     });
   });
 
+  it('rejects a yarn name longer than 30 characters', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/library/yarns')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveYarnBody,
+        name: 'a'.repeat(31),
+      })
+      .expect(400);
+
+    expect(prisma.yarn.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects yarn notes longer than 500 characters', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/library/yarns')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveYarnBody,
+        notes: 'a'.repeat(501),
+      })
+      .expect(400);
+
+    expect(prisma.yarn.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a needle name longer than 30 characters', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/library/needles')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveNeedleBody,
+        name: 'a'.repeat(31),
+      })
+      .expect(400);
+
+    expect(prisma.needle.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a tool name longer than 30 characters', async () => {
+    // 길이 검증은 ValidationPipe 단계에서 끝나므로 도구 모델 목킹 없이도 검증된다.
+    await request(app.getHttpServer())
+      .post('/api/v1/library/tools')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        name: 'a'.repeat(31),
+        type: 'marker',
+      })
+      .expect(400);
+  });
+
   function expectedYarnResponse() {
     return {
       id: yarnId,

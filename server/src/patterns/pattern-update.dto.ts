@@ -1,8 +1,10 @@
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class PatternUpdateDto {
+  // 도안 제목 상한 30자(수동 등록 포함).
   @IsOptional()
   @IsString()
+  @MaxLength(30)
   title?: string;
 
   @IsOptional()

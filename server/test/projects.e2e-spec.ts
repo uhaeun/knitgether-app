@@ -4,6 +4,7 @@ import { promises as fs } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import request from 'supertest';
+import { Prisma } from '@prisma/client';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/app.setup';
 import { PrismaService } from '../src/database/prisma.service';
@@ -16,6 +17,7 @@ type MockPrismaService = {
     findMany: jest.Mock;
     findFirst: jest.Mock;
     findFirstOrThrow: jest.Mock;
+    count: jest.Mock;
     create: jest.Mock;
     update: jest.Mock;
   };
@@ -353,6 +355,7 @@ describe('Projects route', () => {
         findMany: jest.fn(),
         findFirst: jest.fn(),
         findFirstOrThrow: jest.fn(),
+        count: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
       },
@@ -427,6 +430,7 @@ describe('Projects route', () => {
     prisma.project.findMany.mockReset();
     prisma.project.findFirst.mockReset();
     prisma.project.findFirstOrThrow.mockReset();
+    prisma.project.count.mockReset();
     prisma.project.create.mockReset();
     prisma.project.update.mockReset();
     prisma.rowCounter.findFirst.mockReset();
@@ -487,6 +491,7 @@ describe('Projects route', () => {
     });
     prisma.userProfile.upsert.mockResolvedValue(undefined);
     prisma.project.findFirstOrThrow.mockResolvedValue(userAProject);
+    prisma.project.count.mockResolvedValue(1);
     prisma.project.create.mockResolvedValue(userAProject);
     prisma.project.update.mockResolvedValue(userAProject);
     prisma.rowCounter.findFirst.mockResolvedValue(userAProject.rowCounter);
@@ -1764,6 +1769,244 @@ describe('Projects route', () => {
       .expect(({ body }) => {
         expect(body.code).toBe('PROJECT_NOT_FOUND');
       });
+  });
+
+  it('rejects a project memo longer than 500 characters', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        memo: 'a'.repeat(501),
+      })
+      .expect(400);
+
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a row counter name longer than 30 characters', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        rowCounter: {
+          ...saveProjectBody.rowCounter,
+          name: 'a'.repeat(31),
+        },
+      })
+      .expect(400);
+
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a work session memo longer than 500 characters', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        workSessions: [
+          {
+            ...saveProjectBody.workSessions[0],
+            memo: 'a'.repeat(501),
+          },
+        ],
+      })
+      .expect(400);
+
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a work session whose end time is not after its start time', async () => {
+    await request(app.getHttpServer())
+      .post(`/api/v1/projects/${userAProject.id}/work-sessions`)
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody.workSessions[0],
+        startedAt: '2026-07-03T09:00:00.000Z',
+        endedAt: '2026-07-03T09:00:00.000Z',
+      })
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('VALIDATION_FAILED');
+        expect(body.message).toBe(
+          'Work session end time must be after the start time.',
+        );
+      });
+
+    expect(prisma.workSession.upsert).not.toHaveBeenCalled();
+  });
+
+  it('rejects a work session longer than 24 hours', async () => {
+    await request(app.getHttpServer())
+      .post(`/api/v1/projects/${userAProject.id}/work-sessions`)
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody.workSessions[0],
+        startedAt: '2026-07-03T08:00:00.000Z',
+        endedAt: '2026-07-04T08:00:00.001Z',
+      })
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('VALIDATION_FAILED');
+        expect(body.message).toBe(
+          'Work session length must be 24 hours or less.',
+        );
+      });
+
+    expect(prisma.workSession.upsert).not.toHaveBeenCalled();
+  });
+
+  it('accepts a work session exactly 24 hours long', async () => {
+    await request(app.getHttpServer())
+      .post(`/api/v1/projects/${userAProject.id}/work-sessions`)
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody.workSessions[0],
+        startedAt: '2026-07-03T08:00:00.000Z',
+        endedAt: '2026-07-04T08:00:00.000Z',
+      })
+      .expect(201);
+
+    expect(prisma.workSession.upsert).toHaveBeenCalled();
+  });
+
+  it('rejects a project save whose work session reverses time', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        workSessions: [
+          {
+            ...saveProjectBody.workSessions[0],
+            startedAt: '2026-07-03T09:00:00.000Z',
+            endedAt: '2026-07-03T08:00:00.000Z',
+          },
+        ],
+      })
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('VALIDATION_FAILED');
+        expect(body.message).toBe(
+          'Work session end time must be after the start time.',
+        );
+      });
+
+    expect(prisma.project.create).not.toHaveBeenCalled();
+    expect(prisma.workSession.upsert).not.toHaveBeenCalled();
+  });
+
+  it('rejects a new project when the owner already has 200 active projects', async () => {
+    prisma.project.count.mockResolvedValueOnce(200);
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send(saveProjectBody)
+      .expect(400)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_LIMIT_EXCEEDED');
+      });
+
+    expect(prisma.project.count).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        deletedAt: null,
+      },
+    });
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('still saves an existing project when the owner is at the project limit', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce(userAProject);
+    prisma.project.count.mockResolvedValueOnce(200);
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send(saveProjectBody)
+      .expect(201);
+
+    expect(prisma.project.count).not.toHaveBeenCalled();
+    expect(prisma.project.update).toHaveBeenCalled();
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('returns 409 when creating a project whose ID belongs to another owner', async () => {
+    prisma.project.create.mockRejectedValueOnce(
+      new Prisma.PrismaClientKnownRequestError(
+        'Unique constraint failed on the fields: (`id`)',
+        {
+          code: 'P2002',
+          clientVersion: '6.0.0',
+        },
+      ),
+    );
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send(saveProjectBody)
+      .expect(409)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_ID_CONFLICT');
+      });
+  });
+
+  it('returns 409 with the server copy when baseUpdatedAt is older than the stored project', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce(userAProject);
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        // 서버 updatedAt(2026-07-03T09:00Z)보다 이른 기준 시각 → 그 사이 다른 저장이 있었다.
+        baseUpdatedAt: '2026-07-03T08:00:00.000Z',
+      })
+      .expect(409)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_CONFLICT');
+        expect(body.details.latest.id).toBe(userAProject.id);
+        expect(body.details.latest.updatedAt).toBe('2026-07-03T09:00:00.000Z');
+      });
+
+    expect(prisma.project.update).not.toHaveBeenCalled();
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('saves a project when baseUpdatedAt matches the stored updatedAt', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce(userAProject);
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        baseUpdatedAt: '2026-07-03T09:00:00.000Z',
+      })
+      .expect(201);
+
+    expect(prisma.project.update).toHaveBeenCalled();
+  });
+
+  it('rejects a stale patch when baseUpdatedAt is older than the stored project', async () => {
+    await request(app.getHttpServer())
+      .patch(`/api/v1/projects/${userAProject.id}`)
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        baseUpdatedAt: '2026-07-03T08:00:00.000Z',
+      })
+      .expect(409)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_CONFLICT');
+        expect(body.details.latest.id).toBe(userAProject.id);
+      });
+
+    expect(prisma.project.update).not.toHaveBeenCalled();
   });
 
   function expectedProjectYarnUsageResponse() {
