@@ -110,6 +110,7 @@ project-save.dto.ts, library-save.dto.ts, pattern-create-fields.dto.ts, pattern-
 - 근거: ProjectWorkspaceView.swift:428 onDisappear가 유일한 종료 지점. 앱 타깃 전체에 scenePhase 참조 없음(grep 실측 2026-09-01)
 - 검증 방법: 시뮬레이터에서 진입 → Cmd+Shift+H로 홈 이동 → 1분 대기 → 복귀 → 이탈. 세션 목록에서 길이가 1분 이상이면 재현. 기대는 홈 이동 시점에 종료된 세션 1건
 - 참고: 앱 강제 종료 시 세션 유실은 별도 명세 공백(02의 4번)이라 이 결함에 섞지 않는다
+- 정정(9/1): 핸드오프 이슈 #9와 같은 증상. 발견 시점은 QA 신규 발견이 아니라 핸드오프 known issue. 이슈는 #9, #40은 중복으로 닫음
 
 ### DEF 후보 B. 저장 충돌 안내 문구가 동작과 모순
 
