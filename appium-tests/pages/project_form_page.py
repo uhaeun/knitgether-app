@@ -53,19 +53,26 @@ class ProjectFormPage(BasePage):
         """목표일 토글을 켜고 캘린더에서 날짜를 고른다.
 
         목표일 DatePicker는 토글을 켜야 생기므로 항상 마지막 Date Picker가 목표일이다.
+        캘린더 팝오버는 "오늘"이 아니라 지금 선택돼 있는 목표일의 달로 열린다(compact
+        DatePicker의 표준 동작). 그래서 이동 횟수는 실행 시각의 오늘이 아니라 "Date Picker"
+        버튼에 지금 표시된 값(예: "Aug 31, 2026")을 기준으로 계산해야 한다. 이전에는 항상
+        오늘 기준으로 계산해 두 번째 이상 호출에서 엉뚱한 달에 머물렀다(UI-25 회귀).
         """
         if self.find(self._switch(T.TARGET_DATE_TOGGLE), PRED).get_attribute("value") != "1":
             self.tap(self._switch(T.TARGET_DATE_TOGGLE), PRED)
             time.sleep(0.8)
-        self._all(self.button("Date Picker"), PRED)[-1].click()
+
+        picker_button = self._all(self.button("Date Picker"), PRED)[-1]
+        baseline = self._parse_picker_date(picker_button.get_attribute("value"))
+        picker_button.click()
         time.sleep(1.2)
 
-        today = __import__("datetime").date.today()
-        delta = (date.year - today.year) * 12 + (date.month - today.month)
+        delta = (date.year - baseline.year) * 12 + (date.month - baseline.month)
         for _ in range(abs(delta)):
             self.tap("DatePicker.NextMonth" if delta > 0 else "DatePicker.PreviousMonth")
             time.sleep(0.5)
 
+        today = __import__("datetime").date.today()
         cell = date.strftime(DAY_FORMAT)
         target = f"Today, {cell}" if date == today else cell
         self.tap(f'label == "{target}"', PRED)
@@ -73,6 +80,11 @@ class ProjectFormPage(BasePage):
         self.tap('name == "PopoverDismissRegion"', PRED)
         time.sleep(0.5)
         return self
+
+    @staticmethod
+    def _parse_picker_date(label):
+        """"Date Picker" 버튼의 value("Aug 31, 2026")를 date로 파싱한다."""
+        return __import__("datetime").datetime.strptime(label, "%b %d, %Y").date()
 
     def select_yarn(self, name):
         """실 선택. 선택지 라벨이 '이름 · 브랜드 · 색 · 굵기' 합성이라 부분 일치로 고른다."""
