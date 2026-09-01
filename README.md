@@ -16,9 +16,9 @@
 
 | 항목 | 규모 | 근거 문서 |
 |---|---|---|
-| 검증 기준선 | 기능 스펙 42건 | [02_functional_spec](docs/qa/portfolio/02_functional_spec.md) |
+| 검증 기준선 | 기능 스펙 47건, 화면 기능정의서 2편 | [02_functional_spec](docs/qa/portfolio/02_functional_spec.md), [docs/spec](docs/spec) |
 | 테스트 케이스 | TC 16그룹 · UI 78건 · API 계약 25건 | [09_test_case_master](docs/qa/portfolio/09_test_case_master.md) |
-| 결함 | DEF 20건, 원인 계열 4개 | [10_defect_catalog](docs/qa/portfolio/10_defect_catalog.md) |
+| 결함 | DEF 29건 (Critical 13, Major 8, Minor 6, 축 제외 2) + 스펙 신설 1건, 원인 계열 4개. 9/1 정적 점검분 8건은 실행 재현 전 | [10_defect_catalog](docs/qa/portfolio/10_defect_catalog.md) |
 | 자동화 | Appium 테스트 함수 78 · Page 객체 12 | [13_automation_showcase](docs/qa/portfolio/13_automation_showcase.md) |
 | 테스트의 테스트 | 뮤테이션 주입 6종으로 스위트 검출력 검증 | [13_automation_showcase](docs/qa/portfolio/13_automation_showcase.md) |
 | 회귀 게이트 | GitHub Actions 워크플로 2본 | `.github/workflows/` |
@@ -42,6 +42,8 @@
 
 ```
 docs/qa/portfolio/   QA 포트폴리오 문서 00~14 (읽는 순서·의존관계는 00_TOC)
+docs/spec/           화면 기능정의서 2편, 기획서 v2.2 원본, 커밋 대조표
+docs/                아키텍처 전환 기록, 로컬/온라인 방식, 보안 점검
 appium-tests/        Appium UI 회귀 스위트 — tests/(TC01~16), pages/(POM), support/
 qa/mutation/         결함 주입 도구 — 테스트 스위트의 검출력 검증
 qa/api-probes/       API 스모크·회귀 스크립트
