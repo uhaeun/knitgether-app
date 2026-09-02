@@ -421,6 +421,41 @@ struct RemoteProjectRepositoryTests {
         try await repository.saveProject(project)
     }
 
+    /// 서버 updatedAt은 밀리초를 가진다. 저장 요청의 baseUpdatedAt이 초 단위로 잘리면
+    /// 서버 낙관적 잠금이 실제 충돌이 아닌데 409(PROJECT_CONFLICT)를 낸다.
+    /// 서버가 준 시각을 밀리초까지 그대로 되돌려 보내는지 확인한다.
+    @Test func saveSyncedProjectSendsBaseUpdatedAtWithMilliseconds() async throws {
+        let project = Self.project(syncStatus: .synced)
+        let serverUpdatedAt = "2026-07-03T09:00:00.123Z"
+        let responseJSON = Self.projectResponseJSON.replacingOccurrences(
+            of: "\"updatedAt\": \"2026-07-03T09:00:00.000Z\"",
+            with: "\"updatedAt\": \"\(serverUpdatedAt)\""
+        )
+
+        let session = MockURLProtocol.makeSession { request in
+            if request.httpMethod == "PATCH" {
+                let body = try Self.bodyData(from: request)
+                let object = try #require(
+                    JSONSerialization.jsonObject(with: body) as? [String: Any]
+                )
+                #expect(object["baseUpdatedAt"] as? String == serverUpdatedAt)
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(responseJSON.utf8))
+        }
+
+        let repository = Self.makeRepository(session: session)
+
+        _ = try await repository.fetchProject(id: project.id)
+        try await repository.saveProject(project)
+    }
+
     @Test func deleteProjectRequestsProjectDeleteEndpoint() async throws {
         let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let session = MockURLProtocol.makeSession { request in

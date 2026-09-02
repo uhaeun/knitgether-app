@@ -451,7 +451,8 @@ struct NeedleFormView: View {
                             systemImage: "tag",
                             text: $formData.needleType,
                             identifier: AppAccessibilityID.Library.needleTypeField,
-                            isRequired: true
+                            isRequired: true,
+                            characterLimit: AppInputLimit.shortText
                         )
 
                         AppFormDivider()
@@ -465,7 +466,8 @@ struct NeedleFormView: View {
                                 systemImage: "ruler",
                                 text: $formData.size,
                                 identifier: AppAccessibilityID.Library.needleSizeField,
-                                isRequired: true
+                                isRequired: true,
+                                characterLimit: AppInputLimit.shortText
                             )
 
                             Menu {
@@ -491,7 +493,8 @@ struct NeedleFormView: View {
                             placeholder: "예: 80cm",
                             systemImage: "arrow.left.and.right",
                             text: $formData.length,
-                            identifier: AppAccessibilityID.Library.needleLengthField
+                            identifier: AppAccessibilityID.Library.needleLengthField,
+                            characterLimit: AppInputLimit.shortText
                         )
                     }
 

@@ -497,7 +497,8 @@ struct ToolFormView: View {
                             systemImage: "tag",
                             text: $formData.type,
                             identifier: AppAccessibilityID.Library.toolTypeField,
-                            isRequired: true
+                            isRequired: true,
+                            characterLimit: AppInputLimit.shortText
                         )
 
                         AppFormDivider()
@@ -507,7 +508,8 @@ struct ToolFormView: View {
                             placeholder: "구매 링크 또는 참고 링크",
                             systemImage: "link",
                             text: $formData.link,
-                            identifier: AppAccessibilityID.Library.toolLinkField
+                            identifier: AppAccessibilityID.Library.toolLinkField,
+                            characterLimit: AppInputLimit.link
                         )
                         .textInputAutocapitalization(.never)
                         .keyboardType(.URL)

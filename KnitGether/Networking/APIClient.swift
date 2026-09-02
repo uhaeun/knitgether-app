@@ -41,7 +41,14 @@ nonisolated final class APIClient {
         self.decoder = decoder
 
         let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
+        // 기본 .iso8601은 밀리초를 버린다. 서버 updatedAt은 밀리초를 가지므로
+        // 그 값을 baseUpdatedAt으로 되돌려 보낼 때 초 단위로 잘리면
+        // 낙관적 잠금이 실제 충돌이 아닌데 409(PROJECT_CONFLICT)를 낸다.
+        // 디코딩과 같은 정밀도로 인코딩해 서버가 준 시각을 그대로 되돌려 준다.
+        encoder.dateEncodingStrategy = .custom { date, encoder in
+            var container = encoder.singleValueContainer()
+            try container.encode(Self.iso8601String(from: date))
+        }
         self.encoder = encoder
     }
 
@@ -213,6 +220,13 @@ nonisolated final class APIClient {
         data.appendString("--\(boundary)--\(lineBreak)")
 
         return data
+    }
+
+    /// 서버로 보내는 날짜 표기. 서버가 내려주는 형식(밀리초 포함 ISO-8601)과 같은 정밀도를 쓴다.
+    private static func iso8601String(from date: Date) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.string(from: date)
     }
 
     private static func date(

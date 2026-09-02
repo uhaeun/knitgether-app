@@ -1992,6 +1992,51 @@ describe('Projects route', () => {
     expect(prisma.project.update).toHaveBeenCalled();
   });
 
+  // 저장된 updatedAt은 밀리초를 가지는데(Prisma DateTime은 timestamp(3)),
+  // 클라이언트가 그 값을 초 단위로 잘라 baseUpdatedAt으로 보내면 서버는 그것을
+  // 잘린 값인지 실제로 뒤처진 값인지 구분할 수 없어 409를 낸다.
+  // 그래서 클라이언트는 서버가 준 시각을 밀리초까지 그대로 되돌려 보내야 한다.
+  it('returns 409 when baseUpdatedAt is truncated to seconds while the stored updatedAt has milliseconds', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce({
+      ...userAProject,
+      updatedAt: new Date('2026-07-03T09:00:00.123Z'),
+    });
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        baseUpdatedAt: '2026-07-03T09:00:00Z',
+      })
+      .expect(409)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_CONFLICT');
+        expect(body.details.latest.updatedAt).toBe('2026-07-03T09:00:00.123Z');
+      });
+
+    expect(prisma.project.update).not.toHaveBeenCalled();
+    expect(prisma.project.create).not.toHaveBeenCalled();
+  });
+
+  it('saves a project when baseUpdatedAt echoes the stored updatedAt down to the millisecond', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce({
+      ...userAProject,
+      updatedAt: new Date('2026-07-03T09:00:00.123Z'),
+    });
+
+    await request(app.getHttpServer())
+      .post('/api/v1/projects')
+      .set('Authorization', 'Bearer dev-token')
+      .send({
+        ...saveProjectBody,
+        baseUpdatedAt: '2026-07-03T09:00:00.123Z',
+      })
+      .expect(201);
+
+    expect(prisma.project.update).toHaveBeenCalled();
+  });
+
   it('rejects a stale patch when baseUpdatedAt is older than the stored project', async () => {
     await request(app.getHttpServer())
       .patch(`/api/v1/projects/${userAProject.id}`)

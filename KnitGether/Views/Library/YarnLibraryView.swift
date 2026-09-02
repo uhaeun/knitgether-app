@@ -571,7 +571,8 @@ struct YarnFormView: View {
                             placeholder: "브랜드",
                             systemImage: "tag",
                             text: $formData.brand,
-                            identifier: AppAccessibilityID.Library.yarnBrandField
+                            identifier: AppAccessibilityID.Library.yarnBrandField,
+                            characterLimit: AppInputLimit.shortText
                         )
 
                         AppFormDivider()
@@ -581,7 +582,8 @@ struct YarnFormView: View {
                             placeholder: "색상 이름 또는 번호",
                             systemImage: "paintpalette",
                             text: $formData.colorway,
-                            identifier: AppAccessibilityID.Library.yarnColorwayField
+                            identifier: AppAccessibilityID.Library.yarnColorwayField,
+                            characterLimit: AppInputLimit.shortText
                         )
 
                         AppFormDivider()
@@ -591,7 +593,8 @@ struct YarnFormView: View {
                             placeholder: "DK, Worsted 등",
                             systemImage: "scalemass",
                             text: $formData.weight,
-                            identifier: AppAccessibilityID.Library.yarnWeightField
+                            identifier: AppAccessibilityID.Library.yarnWeightField,
+                            characterLimit: AppInputLimit.shortText
                         )
 
                         AppFormDivider()
