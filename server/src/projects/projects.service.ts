@@ -146,6 +146,7 @@ export class ProjectsService {
 
       if (existingProject) {
         this.assertNoSaveConflict(existingProject, body, ownerId);
+        this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
         await transaction.project.update({
           where: { id: body.id },
           data: this.toProjectUpdateInput(ownerId, body),
@@ -237,6 +238,7 @@ export class ProjectsService {
       }
 
       this.assertNoSaveConflict(existingProject, body, ownerId);
+      this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
 
       await transaction.project.update({
         where: { id },
@@ -1464,6 +1466,27 @@ export class ProjectsService {
       ...this.toProjectScalarInput(body),
       deletedAt: null,
     };
+  }
+
+  // 카운터는 projectId 기준 upsert로 1:1 유지하므로 본문이 보낸 새 id는 저장되지 않는다.
+  // 행 지시가 그 저장되지 않은 id를 참조하면 외래키 위반(P2003)이 500으로 새어 나온다(DEF-20).
+  // 막을 지점은 그 참조 경로뿐이다. 행 지시가 없으면 기존대로 저장된 카운터를 갱신하고 통과시킨다.
+  // 불일치 자체를 계약 위반으로 막으면 로컬 id가 어긋난 기기의 저장이 영구히 거부되고,
+  // 앱은 서버 거부를 SYNC-10대로 무통보 폐기하므로 유실 경로가 생긴다.
+  private assertStoredRowCounterIdentity(
+    storedRowCounter: { id: string } | null,
+    body: SaveProjectDto,
+  ): void {
+    if ((body.rowCounter.rowInstructions?.length ?? 0) === 0) {
+      return;
+    }
+
+    if (!storedRowCounter || body.rowCounter.id !== storedRowCounter.id) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Row counter ID must match the stored project row counter.',
+      });
+    }
   }
 
   private toProjectUpdateInput(

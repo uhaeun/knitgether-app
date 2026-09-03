@@ -99,8 +99,8 @@ def test_injection_actually_injects(account_a):
     )
 
 
-def test_unknown_row_counter_id_leaks_500(account_a):
-    """QA 신규 발견 (2026-08-29, 07 트랙). 검증 공백이 500으로 새는가.
+def test_unknown_row_counter_id_is_rejected_without_mutation(account_a, db):
+    """DEF-20 회귀. 저장되지 않은 rowCounter id는 400으로 거부하고 원본을 보존한다.
 
     클라이언트가 기존 프로젝트에 새 rowCounter id를 보내면서 행 지시를 함께
     보내면 서버가 500을 돌려준다. 서버는 프로젝트당 카운터를 1:1로 유지하므로
@@ -114,8 +114,8 @@ def test_unknown_row_counter_id_leaks_500(account_a):
     클라이언트 UUID 생성 구조라 이 상황이 만들어질 수 있고, 그때 사용자가 받는 것은
     처리 가능한 4xx가 아니라 내부 오류다.
 
-    이 테스트가 통과한다는 것은 공백이 그대로라는 뜻이다. 서버가 4xx로 바꾸면
-    FAIL하고, 그때가 가드가 채워졌다는 신호다.
+    내부 FK 오류를 500으로 노출하지 않고, 입력 계약 위반으로 처리해야 한다.
+    부모 이름까지 바뀌지 않아야 거부가 원자적이라고 판정한다.
     """
     payload = project_payload(name="FK누수-원본")
     pid = payload["id"]
@@ -128,7 +128,10 @@ def test_unknown_row_counter_id_leaks_500(account_a):
     ]
     r = account_a.api.patch(f"/projects/{pid}", json=bad)
 
-    assert r.status_code == 500, (
-        f"응답이 {r.status_code}다. 4xx로 바뀌었다면 가드가 채워진 것이므로 "
-        "이 테스트를 회귀 감시로 뒤집고 10에 결함 해소를 기록할 것"
-    )
+    assert r.status_code == 400, f"없는 rowCounter id가 {r.status_code}로 처리됐다: {r.text}"
+    assert r.json().get("code") == "VALIDATION_FAILED"
+
+    with db.cursor() as cur:
+        cur.execute('SELECT name FROM "Project" WHERE id=%s;', (pid,))
+        (name,) = cur.fetchone()
+    assert name == "FK누수-원본", "거부된 요청이 부모 프로젝트를 일부 변경했다"

@@ -40,10 +40,8 @@ def test_api_07_missing_scalar_field_is_rejected(account_a):
     assert r.status_code == 400, f"name 누락이 {r.status_code}로 통과했다: {r.text}"
 
 
-def test_api_07_missing_row_counter_leaks_500_not_400(account_a):
-    """신규 발견(QA 신규 발견, 2026-08-31): 필수 중첩 객체(rowCounter) 누락은
-    400이 아니라 500이다. API-07의 판정 기준("누락 400")을 이 필드에서는
-    만족하지 못한다.
+def test_api_07_missing_row_counter_is_rejected_without_insert(account_a, db):
+    """DEF-22 회귀. 필수 중첩 객체(rowCounter) 누락은 400이며 DB를 바꾸지 않는다.
 
     재현: rowCounter 키 자체를 뺀 SaveProjectDto로 POST /projects.
     원인: `project-save.dto.ts`의 `rowCounter`는 `@ValidateNested()`만 있고
@@ -55,15 +53,17 @@ def test_api_07_missing_row_counter_leaks_500_not_400(account_a):
     영향: 클라이언트가 rowCounter를 빠뜨린 페이로드를 보내면 400으로 폼을
     고쳐 재시도할 수 있는 대신 내부 오류를 받는다. 이 assertion은 결함을
     감추지 않고 현재 실제 동작(500)을 그대로 고정해 회귀 감시로 쓴다.
-    500이 400으로 바뀌면 이 결함이 해소된 것이므로 그때 뒤집는다.
+    DTO 경계에서 거부해 서비스의 역참조와 일반 500까지 도달하지 않아야 한다.
     """
     without_row_counter = project_payload(name="API07-rowCounter누락")
     del without_row_counter["rowCounter"]
     r = account_a.api.create_project(without_row_counter)
-    assert r.status_code == 500, (
-        f"rowCounter 누락이 {r.status_code}다. 500이었던 결함이 해소됐다면 이 단언을 "
-        "400으로 뒤집고 09/10의 API-07 기재를 갱신할 것"
-    )
+    assert r.status_code == 400, f"rowCounter 누락이 {r.status_code}로 처리됐다: {r.text}"
+
+    with db.cursor() as cur:
+        cur.execute('SELECT count(*) FROM "Project" WHERE id = %s', (without_row_counter["id"],))
+        (count,) = cur.fetchone()
+    assert count == 0, "거부된 요청이 Project 행을 남겼다"
 
 
 # ---------------------------------------------------------------- API-12 (부분 보강)

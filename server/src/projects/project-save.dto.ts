@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsDefined,
   IsInt,
   IsISO8601,
   IsIn,
@@ -261,6 +262,7 @@ export class SaveProjectDto {
   @IsUUID('all', { each: true })
   relatedSkillIds!: string[];
 
+  @IsDefined()
   @ValidateNested()
   @Type(() => SaveRowCounterDto)
   rowCounter!: SaveRowCounterDto;
