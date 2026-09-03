@@ -783,30 +783,43 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
     }
 
-    func startWorkSession() {
+    func startWorkSession(at now: Date = Date()) {
         guard sessionStartedAt == nil, !isDeleted else {
             return
         }
 
-        sessionStartedAt = Date()
+        sessionStartedAt = now
         currentSessionElapsed = 0
         isTrackingTime = true
     }
 
-    func refreshCurrentSessionElapsed() {
+    func refreshCurrentSessionElapsed(at now: Date = Date()) {
         guard let sessionStartedAt else {
             return
         }
 
-        currentSessionElapsed = Date().timeIntervalSince(sessionStartedAt)
+        currentSessionElapsed = now.timeIntervalSince(sessionStartedAt)
     }
 
-    func finishWorkSession() async {
+    /// 앱이 백그라운드로 들어간 시점에 진행 중인 세션을 종료한다(TIME-02, DEF-23).
+    /// 종료 지점이 화면 이탈 하나뿐이면 홈으로 나가 방치한 시간이 작업 시간으로 기록된다.
+    func handleAppBackgrounded(at now: Date = Date()) async {
+        await finishWorkSession(at: now)
+    }
+
+    /// 앱이 다시 활성화되면 세션을 새로 시작한다. 진행 중인 세션이 있으면
+    /// `startWorkSession`의 가드가 걸려 아무 일도 하지 않으므로,
+    /// 백그라운드를 거치지 않은 활성화(알림 배너, 앱 전환기)는 세션을 건드리지 않는다.
+    func handleAppActivated(at now: Date = Date()) {
+        startWorkSession(at: now)
+    }
+
+    func finishWorkSession(at now: Date = Date()) async {
         guard let sessionStartedAt, !isDeleted else {
             return
         }
 
-        var endedAt = Date()
+        var endedAt = now
         var clampMemo: String?
 
         // 화면을 열어둔 채 방치한 세션은 4시간으로 절단해 저장한다.

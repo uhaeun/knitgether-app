@@ -15,6 +15,7 @@ struct ProjectWorkspaceView: View {
     }
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var viewModel: ProjectWorkspaceViewModel
     @State private var selectedTab: WorkspaceTab
     @State private var isShowingEditProject = false
@@ -66,6 +67,16 @@ struct ProjectWorkspaceView: View {
     }
 
     var body: some View {
+        // 세션 종료 지점이 화면 이탈 하나뿐이면 홈으로 나가 방치한 시간까지 작업 시간이 된다(DEF-23).
+        // 백그라운드 진입에서 끊고 활성화에서 새 세션을 연다(TIME-02).
+        // 아래 chrome 체인에 붙이면 타입 체크 시간이 상한을 넘겨 body를 둘로 나눴다.
+        chrome
+            .onChange(of: scenePhase) { phase in
+                handleScenePhaseChange(phase)
+            }
+    }
+
+    private var chrome: some View {
         mainLayout
             .warmScreenBackground()
             .toolbar(.hidden, for: .tabBar)
@@ -429,6 +440,17 @@ struct ProjectWorkspaceView: View {
             Task {
                 await viewModel.finishWorkSession()
             }
+        }
+    }
+
+    private func handleScenePhaseChange(_ phase: ScenePhase) {
+        switch phase {
+        case .background:
+            Task { await viewModel.handleAppBackgrounded() }
+        case .active:
+            viewModel.handleAppActivated()
+        default:
+            break
         }
     }
 

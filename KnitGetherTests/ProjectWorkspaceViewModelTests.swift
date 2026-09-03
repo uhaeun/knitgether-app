@@ -423,6 +423,33 @@ struct ProjectWorkspaceViewModelTests {
         #expect(viewModel.project.workSessions.isEmpty)
     }
 
+    @Test func backgroundEndsSessionAndActivationStartsANewOne() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        let backgroundedAt = startedAt.addingTimeInterval(30)
+
+        viewModel.startWorkSession(at: startedAt)
+        await viewModel.handleAppBackgrounded(at: backgroundedAt)
+
+        let storedSession = repository.savedProjects.last?.workSessions.last
+        #expect(!viewModel.isTrackingTime)
+        #expect(storedSession?.startedAt == startedAt)
+        #expect(storedSession?.endedAt == backgroundedAt)
+
+        viewModel.handleAppActivated(at: backgroundedAt.addingTimeInterval(5))
+
+        #expect(viewModel.isTrackingTime)
+        #expect(viewModel.currentSessionElapsed == 0)
+    }
+
     @Test func recordingWorkSessionCreatesLocalOnlySessionForSyncedProject() throws {
         let project = Self.makeProject(syncStatus: .synced)
         let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
