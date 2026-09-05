@@ -38,6 +38,12 @@ class LibraryPage(BasePage):
                 names.append(self.label_of(kids[0]).strip())
         return names
 
+    def pull_to_refresh(self):
+        """목록을 아래로 당겨 새로고침한다. 서버 삭제분 프루닝을 촉발하는 조회 시점이다."""
+        self.driver.execute_script("mobile: swipe", {"direction": "down"})
+        time.sleep(2)
+        return self
+
     def wait_for_rows(self, prefix, timeout=20):
         """목록에 행이 하나라도 나타날 때까지 기다린다."""
         end = time.time() + timeout
