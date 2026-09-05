@@ -8,6 +8,7 @@
 격리는 컨테이너의 저장 파일을 지우고 다시 쓰는 방식으로 한다.
 """
 import os
+import subprocess
 import time
 import uuid
 
@@ -258,8 +259,28 @@ class DriverPool:
         self._kind = None
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _installed_app():
+    """세션 시작 시 최신 빌드를 시뮬레이터에 설치한다.
+
+    이것이 없으면 대부분의 케이스(full_reset=False)가 bundle_id로 이미 설치된 앱을
+    실행만 하므로, 코드를 고쳐도 시뮬레이터에는 예전 바이너리가 남아 있고 스위트는 그것을
+    검증한다. 2026-09-03에 이 상태로 로그인 케이스 전체가 실패했고, 원인을 앱이 아니라
+    서버와 키체인에서 찾느라 시간을 썼다.
+
+    검출력과는 다른 축의 문제다. 케이스가 무엇을 보는지 이전에, 어느 바이너리를 보는지가
+    특정되지 않으면 회귀 판정의 대상이 없다.
+    """
+    app_path = os.environ.get("KG_APP_PATH") or _default_app_path()
+    subprocess.run(["xcrun", "simctl", "install", simctl.UDID, app_path],
+                   capture_output=True, text=True, check=True)
+    built = time.strftime("%Y-%m-%d %H:%M", time.localtime(os.path.getmtime(app_path)))
+    print(f"\n[conftest] 앱 설치 완료 (빌드 {built})\n           {app_path}")
+    return app_path
+
+
 @pytest.fixture(scope="session")
-def _pool():
+def _pool(_installed_app):
     simctl.grant_permissions()
     pool = DriverPool()
     yield pool
