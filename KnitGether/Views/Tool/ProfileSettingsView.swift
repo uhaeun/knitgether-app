@@ -54,7 +54,8 @@ struct ProfileSettingsView: View {
                         placeholder: "이름",
                         systemImage: "person",
                         text: $viewModel.formData.displayName,
-                        identifier: AppAccessibilityID.Settings.profileNameField
+                        identifier: AppAccessibilityID.Settings.profileNameField,
+                        characterLimit: AppInputLimit.displayName
                     )
                     .textInputAutocapitalization(.words)
                 }
