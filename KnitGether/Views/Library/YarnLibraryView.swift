@@ -112,7 +112,7 @@ struct YarnLibraryView: View {
         .warmScreenBackground()
     }
 
-    /// 삭제 확인창 본문. 프로젝트에 연결(ProjectYarnUsage)돼 있으면 사용 중임을 함께 고지한다.
+    /// 삭제 확인창 본문. 프로젝트에 연결돼 있으면 함께 고지한다(DEF-25).
     static func deletionMessage(for yarn: Yarn, linkedProjectCount: Int) -> String {
         let base = "\(yarn.name)을 실 창고에서 삭제합니다."
 
@@ -120,7 +120,7 @@ struct YarnLibraryView: View {
             return base
         }
 
-        return base + " 현재 \(linkedProjectCount)개 프로젝트에서 사용 중이에요. 삭제해도 프로젝트에 남긴 기록과 스냅샷은 유지돼요."
+        return base + " 현재 \(linkedProjectCount)개 프로젝트에 연결돼 있어요. 삭제해도 프로젝트에 남긴 기록과 스냅샷은 유지돼요."
     }
 
     private var yarnList: some View {
@@ -152,9 +152,11 @@ struct YarnLibraryView: View {
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
                         yarnPendingDeletion = yarn
-                        // 확인창에 연결된 프로젝트 수를 고지하기 위해 사용 기록을 먼저 불러온다
+                        // 확인창에 연결된 프로젝트 수를 고지하기 위해 먼저 세어 둔다(DEF-25).
+                        // 사용 기록이 아니라 연결 기준이다. 연결만 해두고 아직 쓰지 않은 실도
+                        // 지우면 프로젝트에서 사라지므로 고지 대상이다.
                         Task {
-                            await viewModel.loadYarnUsages(for: yarn)
+                            await viewModel.loadLinkedProjectCount(for: yarn)
                             isShowingDeleteConfirmation = true
                         }
                     } label: {

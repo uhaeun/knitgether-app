@@ -33,6 +33,12 @@ protocol LibraryRepository {
     func linkTool(_ tool: ToolItem, toProjectId projectId: UUID) async throws -> ToolItem
     func unlinkTool(_ tool: ToolItem, fromProjectId projectId: UUID) async throws
     // LINK-02 v1.4 다중 연결. 추가 연결은 링크 레코드(연결 시점 스냅샷)로 관리한다.
+    /// 창고 항목이 현재 연결된 프로젝트 수. 삭제 확인창의 연결 고지에 쓴다(DEF-25).
+    /// 실, 바늘, 도구가 같은 기준(연결)으로 답한다.
+    func linkedProjectCount(forYarnId yarnId: UUID) async throws -> Int
+    func linkedProjectCount(forNeedleId needleId: UUID) async throws -> Int
+    func linkedProjectCount(forToolId toolId: UUID) async throws -> Int
+
     func fetchYarnLinks(forProjectId projectId: UUID) async throws -> [ProjectYarnLink]
     func linkYarn(_ yarn: Yarn, toProjectId projectId: UUID) async throws -> ProjectYarnLink
     func unlinkYarn(yarnId: UUID, fromProjectId projectId: UUID) async throws
@@ -58,4 +64,10 @@ extension LibraryRepository {
     func deleteLibraryItemPhoto(kind: LibraryItemPhotoKind, itemId: UUID) async throws {
         throw APIError.unsupportedOperation("사진은 서버에 연결된 상태에서만 삭제할 수 있어요.")
     }
+
+    /// 연결 수를 셀 수 없는 구현(로컬 샘플 등)은 0을 돌려 고지를 생략한다.
+    /// 0을 "연결 없음"으로 단정하지 않는다. 화면은 0일 때 고지 문장을 붙이지 않을 뿐이다.
+    func linkedProjectCount(forYarnId yarnId: UUID) async throws -> Int { 0 }
+    func linkedProjectCount(forNeedleId needleId: UUID) async throws -> Int { 0 }
+    func linkedProjectCount(forToolId toolId: UUID) async throws -> Int { 0 }
 }

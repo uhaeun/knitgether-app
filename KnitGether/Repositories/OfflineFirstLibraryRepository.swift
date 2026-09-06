@@ -82,6 +82,22 @@ final class OfflineFirstLibraryRepository: LibraryRepository {
         return try await local.fetchYarnUsages(forProjectId: projectId)
     }
 
+    /// 연결 수는 서버만 알 수 있다. 로컬 캐시에는 다른 프로젝트의 링크가 없어
+    /// 오프라인에서 세면 실제보다 적게 나온다. 적게 고지하는 것은 고지하지 않는 것보다
+    /// 나쁘다. 사용자가 "연결 없음"으로 읽고 지우기 때문이다. 그래서 서버에만 묻고,
+    /// 실패하면 0을 돌려 고지 문장을 생략한다(DEF-25).
+    func linkedProjectCount(forYarnId yarnId: UUID) async throws -> Int {
+        (try? await remote.linkedProjectCount(forYarnId: yarnId)) ?? 0
+    }
+
+    func linkedProjectCount(forNeedleId needleId: UUID) async throws -> Int {
+        (try? await remote.linkedProjectCount(forNeedleId: needleId)) ?? 0
+    }
+
+    func linkedProjectCount(forToolId toolId: UUID) async throws -> Int {
+        (try? await remote.linkedProjectCount(forToolId: toolId)) ?? 0
+    }
+
     func fetchYarnUsages(forYarnId yarnId: UUID) async throws -> [ProjectYarnUsage] {
         await syncPendingChanges()
 

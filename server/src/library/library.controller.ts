@@ -22,6 +22,7 @@ import {
 } from '../auth/current-user.decorator';
 import { ProjectYarnUsageResponseDto } from '../projects/project-response.dto';
 import {
+  LinkedProjectCountResponseDto,
   NeedleResponseDto,
   ProjectNeedleLinkResponseDto,
   ProjectYarnLinkResponseDto,
@@ -281,6 +282,35 @@ export class LibraryController {
     @Param('id') id: string,
   ): Promise<ToolItemResponseDto> {
     return this.libraryService.deleteToolPhoto(currentUser.id, id);
+  }
+
+  /// 창고 항목 삭제 확인창의 연결 고지에 쓴다(DEF-25).
+  /// 실, 바늘, 도구가 같은 기준(연결)으로 답한다.
+  @Get('yarns/:yarnId/linked-project-count')
+  countProjectsLinkedToYarn(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('yarnId') yarnId: string,
+  ): Promise<LinkedProjectCountResponseDto> {
+    return this.libraryService.countProjectsLinkedToYarn(currentUser.id, yarnId);
+  }
+
+  @Get('needles/:needleId/linked-project-count')
+  countProjectsLinkedToNeedle(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('needleId') needleId: string,
+  ): Promise<LinkedProjectCountResponseDto> {
+    return this.libraryService.countProjectsLinkedToNeedle(
+      currentUser.id,
+      needleId,
+    );
+  }
+
+  @Get('tools/:toolId/linked-project-count')
+  countProjectsLinkedToTool(
+    @CurrentUser() currentUser: CurrentUserPayload,
+    @Param('toolId') toolId: string,
+  ): Promise<LinkedProjectCountResponseDto> {
+    return this.libraryService.countProjectsLinkedToTool(currentUser.id, toolId);
   }
 
   @Get('projects/:projectId/yarn-links')
