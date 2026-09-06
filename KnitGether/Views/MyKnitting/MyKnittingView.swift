@@ -110,6 +110,7 @@ struct MyKnittingView: View {
                 onSave: { formData in
                     await viewModel.updateProject(project, with: formData)
                 },
+                saveFailureMessage: { viewModel.errorMessage },
                 onDelete: {
                     await viewModel.deleteProject(project)
                 },

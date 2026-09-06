@@ -112,6 +112,7 @@ struct ProjectWorkspaceView: View {
                 onSave: { formData in
                     await viewModel.updateProject(with: formData)
                 },
+                saveFailureMessage: { viewModel.errorMessage },
                 onDelete: {
                     let didDelete = await viewModel.deleteProject()
 

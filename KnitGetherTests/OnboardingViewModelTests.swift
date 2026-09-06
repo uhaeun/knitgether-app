@@ -4,9 +4,11 @@ import Testing
 
 @MainActor
 struct OnboardingViewModelTests {
+    /// 단위 선택 단계는 2026-09-06에 제거됐다(DEF-26, DEF-29). 어느 값을 골라도 앱 동작이
+    /// 같아서 선택 자체를 없앴다. 그래서 6단계가 5단계가 됐다.
     @Test func onboardingStepsIncludeAccountAndSkillTestPrompts() async throws {
-        #expect(OnboardingViewModel.Step.allCases.count == 6)
-        #expect(OnboardingViewModel.Step.ready.progressText == "6 / 6")
+        #expect(OnboardingViewModel.Step.allCases.count == 5)
+        #expect(OnboardingViewModel.Step.ready.progressText == "5 / 5")
     }
 
     @Test func loadExistingProfilePopulatesForm() async throws {

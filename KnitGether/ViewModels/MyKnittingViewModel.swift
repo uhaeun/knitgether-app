@@ -28,7 +28,9 @@ final class MyKnittingViewModel: ObservableObject {
     private static let projectLoadErrorMessage = "프로젝트를 불러오지 못했어요."
     private static let patternLoadErrorMessage = "프로젝트 도안 목록을 불러오지 못했어요."
     private static let materialLoadErrorMessage = "프로젝트 재료를 불러오지 못했어요."
-    private static let projectConflictMessage = "다른 기기에서 수정된 내용이 있어요. 서버에 저장된 최신 내용을 다시 불러왔으니 확인 후 다시 시도해 주세요."
+    /// 편집 시트는 저장에 실패해도 닫히지 않아 입력값이 그대로 남는다. 그래서 여기서는
+    /// 재시도가 실제로 성립한다. 재시도가 무엇을 뜻하는지(이 기기 내용으로 저장) 밝힌다(DEF-24).
+    private static let projectConflictMessage = "다른 기기에서 먼저 수정돼서 저장하지 못했어요. 입력하신 내용은 그대로 있어요. 다시 저장하면 이 기기의 내용으로 저장돼요."
 
     /// 프로젝트 목록 필터 선택. 화면을 떠났다 돌아와도 앱 세션 동안 유지되고,
     /// 앱을 재시작하면 초기화된다(메모리에만 저장).

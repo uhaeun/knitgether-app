@@ -21,6 +21,8 @@ struct EditProjectView: View {
     let availableYarns: [Yarn]
     let availableNeedles: [Needle]
     let onSave: (ProjectFormData) async -> Bool
+    /// 저장 실패 시 화면이 판단한 안내 문구. 없으면 일반 문구를 쓴다.
+    let saveFailureMessage: (() -> String?)?
     let onDelete: (() async -> Bool)?
     let onCreateYarn: ((YarnFormData) async -> Yarn?)?
     let onCreateNeedle: ((NeedleFormData) async -> Needle?)?
@@ -30,6 +32,7 @@ struct EditProjectView: View {
         availableYarns: [Yarn] = [],
         availableNeedles: [Needle] = [],
         onSave: @escaping (ProjectFormData) async -> Bool,
+        saveFailureMessage: (() -> String?)? = nil,
         onDelete: (() async -> Bool)? = nil,
         onCreateYarn: ((YarnFormData) async -> Yarn?)? = nil,
         onCreateNeedle: ((NeedleFormData) async -> Needle?)? = nil
@@ -38,6 +41,7 @@ struct EditProjectView: View {
         self.availableYarns = availableYarns
         self.availableNeedles = availableNeedles
         self.onSave = onSave
+        self.saveFailureMessage = saveFailureMessage
         self.onDelete = onDelete
         self.onCreateYarn = onCreateYarn
         self.onCreateNeedle = onCreateNeedle
@@ -119,7 +123,12 @@ struct EditProjectView: View {
                         submissionErrorMessage = nil
                         dismiss()
                     } else {
-                        submissionErrorMessage = "프로젝트 변경사항을 저장하지 못했어요. 입력값과 서버 연결을 확인해 주세요."
+                        // 시트가 모달이라 뒤의 오류 배너가 가려진다. 화면이 아는 실제 원인을
+                        // 넘겨받아 그대로 보여준다(DEF-24). 예전에는 원인과 무관하게
+                        // "입력값과 서버 연결을 확인해 주세요"라고 했는데, 다른 기기와의
+                        // 저장 충돌은 입력값 문제도 연결 문제도 아니다.
+                        submissionErrorMessage = saveFailureMessage?()
+                            ?? "프로젝트 변경사항을 저장하지 못했어요. 입력값과 서버 연결을 확인해 주세요."
                     }
                 }
             } label: {

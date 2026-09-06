@@ -7,6 +7,115 @@ import UIKit
 
 @MainActor
 struct ProjectWorkspaceViewModelTests {
+    /// DEF-24. 저장 충돌이 나면 사용자가 친 메모가 화면에서 사라지면서
+    /// "다시 시도해 주세요"라고 안내했다. 다시 시도할 재료를 그 복구가 지운 것이다.
+    ///
+    /// 서버 메모를 함께 확인하는 것이 이 케이스의 핵심이다. 뒤 조건이 없으면
+    /// 서버 값을 그대로 덮어쓰는 구현도 "메모가 비어 있지 않다"는 앞 조건만으로 통과한다.
+    @Test func projectSaveConflictKeepsUnsavedMemoInsteadOfServerValue() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.projects = [project.copy(memo: "다른 기기가 쓴 메모")]
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        #expect(viewModel.memoText == "저장 직전에 친 내용")
+        #expect(viewModel.memoText != "다른 기기가 쓴 메모")
+        #expect(viewModel.project.memo == "다른 기기가 쓴 메모")
+    }
+
+    /// 충돌 복구는 서버 본을 다시 받아야 한다. RemoteProjectRepository가 fetch 시점의
+    /// 서버 updatedAt을 낙관적 잠금 기준값으로 기록하므로, 이 호출이 없으면 재시도가
+    /// 낡은 기준값으로 나가 409를 다시 맞는다. 안내 문구가 약속한 재시도가 성립하지 않는다.
+    @Test func projectSaveConflictRefetchesServerProjectToRefreshLockBaseline() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+        let callCountBeforeSave = repository.fetchProjectCallCount
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        #expect(repository.fetchProjectCallCount > callCountBeforeSave)
+    }
+
+    /// DEF-24 조사 중 발견. 저장 실패 안내가 후속 조회에 지워지던 것.
+    ///
+    /// saveMemo는 persist 뒤에 loadRelatedSkills를 부르는데, 그 조회가 성공하면
+    /// errorMessage를 nil로 되돌린다. 그래서 메모 저장이 충돌로 실패해도 사용자에게는
+    /// 아무 안내가 뜨지 않았다. 문구가 모순인 것보다 나쁘다. 사용자는 저장된 줄 안다.
+    @Test func failedMemoSaveKeepsErrorMessageVisibleAfterFollowUpLoad() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        #expect(viewModel.errorMessage != nil)
+    }
+
+    /// 충돌 안내가 "다시 시도"를 요구하면서 무엇이 남았는지 말하지 않으면
+    /// 사용자는 자기 입력이 사라졌다고 읽는다. 문구가 동작을 설명하는지 본다.
+    @Test func projectSaveConflictMessageSaysInputIsKept() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        let message = try #require(viewModel.errorMessage)
+        #expect(message.contains("입력하신 내용은 그대로 있어요"))
+        #expect(!message.contains("다시 불러왔으니"))
+    }
+
     @Test func resetCurrentRowPersistsZeroAndKeepsCounterMetadata() async throws {
         let project = Self.makeProject(currentRow: 12, targetRow: 40, rowInstructions: [
             Self.makeInstruction(rowNumber: 12, text: "K all", skillTags: "K")
