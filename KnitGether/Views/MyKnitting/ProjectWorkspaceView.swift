@@ -422,7 +422,8 @@ struct ProjectWorkspaceView: View {
         .task {
             sectionNameText = viewModel.rowCounter.sectionName ?? ""
             counterMemoText = viewModel.rowCounter.memo ?? ""
-            viewModel.startWorkSession()
+            // 수동 정지한 프로젝트는 화면에 다시 들어와도 켜지 않는다(원 기획 §13, #10).
+            viewModel.startWorkSessionIfAllowed()
             await viewModel.loadRelatedSkills()
             await viewModel.loadDrawingData()
             await viewModel.loadYarnUsage()
@@ -541,7 +542,7 @@ struct ProjectWorkspaceView: View {
                             },
                             finishAction: {
                                 Task {
-                                    await viewModel.finishWorkSession()
+                                    await viewModel.stopWorkSessionManually()
                                 }
                             },
                             showSessionsAction: {

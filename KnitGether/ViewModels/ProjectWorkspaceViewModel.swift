@@ -103,6 +103,8 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     private let gaugeRecordRepository: (any GaugeRecordRepository)?
     private let progressPhotoRepository: (any ProjectProgressPhotoRepository)?
     private var sessionStartedAt: Date?
+    /// 수동 정지를 화면 수명 밖에서 기억한다(원 기획 §13, #10).
+    private let workTimerSuppressionStore: WorkTimerSuppressionStore
     private let minimumWorkSessionDuration: TimeInterval = 10
     /// 화면을 열어둔 채 방치한 세션의 상한(4시간). 초과분은 잘라서 저장하고 세션 메모로 남긴다.
     private let maximumWorkSessionDuration: TimeInterval = 4 * 60 * 60
@@ -115,7 +117,8 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         skillRepository: any SkillRepository,
         libraryRepository: any LibraryRepository,
         gaugeRecordRepository: (any GaugeRecordRepository)? = nil,
-        progressPhotoRepository: (any ProjectProgressPhotoRepository)? = nil
+        progressPhotoRepository: (any ProjectProgressPhotoRepository)? = nil,
+        workTimerSuppressionStore: WorkTimerSuppressionStore = .shared
     ) {
         self.project = project
         self.projectRepository = projectRepository
@@ -124,6 +127,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         self.libraryRepository = libraryRepository
         self.gaugeRecordRepository = gaugeRecordRepository
         self.progressPhotoRepository = progressPhotoRepository
+        self.workTimerSuppressionStore = workTimerSuppressionStore
         displayMode = project.workspaceDisplayMode ?? .patternAndCounter
         sheetPosition = Self.resolvedSheetPosition(for: project)
         memoText = project.memo
@@ -783,7 +787,25 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
     }
 
+    /// 사용자가 직접 시작한 경우. 억제를 푼다.
     func startWorkSession(at now: Date = Date()) {
+        workTimerSuppressionStore.allowAutoStart(forProjectId: project.id)
+        beginWorkSession(at: now)
+    }
+
+    /// 화면 진입과 앱 복귀의 자동 시작. 수동 정지한 프로젝트는 켜지 않는다(원 기획 §13, #10).
+    ///
+    /// 예전에는 화면 진입이 조건 없이 startWorkSession을 불렀다. 그래서 정지 버튼을 눌러도
+    /// 화면을 나갔다 돌아오면 다시 돌았고, 사용자가 세지 않기로 한 시간이 작업 시간에 들어갔다.
+    func startWorkSessionIfAllowed(at now: Date = Date()) {
+        guard !workTimerSuppressionStore.isAutoStartSuppressed(forProjectId: project.id) else {
+            return
+        }
+
+        beginWorkSession(at: now)
+    }
+
+    private func beginWorkSession(at now: Date) {
         guard sessionStartedAt == nil, !isDeleted else {
             return
         }
@@ -791,6 +813,12 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         sessionStartedAt = now
         currentSessionElapsed = 0
         isTrackingTime = true
+    }
+
+    /// 사용자가 정지 버튼을 누른 경우. 세션을 끝내고 자동 시작을 막는다(원 기획 §13, #10).
+    func stopWorkSessionManually(at now: Date = Date()) async {
+        workTimerSuppressionStore.suppressAutoStart(forProjectId: project.id)
+        await finishWorkSession(at: now)
     }
 
     func refreshCurrentSessionElapsed(at now: Date = Date()) {
@@ -807,11 +835,11 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         await finishWorkSession(at: now)
     }
 
-    /// 앱이 다시 활성화되면 세션을 새로 시작한다. 진행 중인 세션이 있으면
-    /// `startWorkSession`의 가드가 걸려 아무 일도 하지 않으므로,
-    /// 백그라운드를 거치지 않은 활성화(알림 배너, 앱 전환기)는 세션을 건드리지 않는다.
+    /// 앱이 다시 활성화되면 세션을 새로 시작한다. 진행 중인 세션이 있으면 가드가 걸려
+    /// 아무 일도 하지 않으므로, 백그라운드를 거치지 않은 활성화(알림 배너, 앱 전환기)는
+    /// 세션을 건드리지 않는다. 수동 정지한 프로젝트는 켜지 않는다(#10).
     func handleAppActivated(at now: Date = Date()) {
-        startWorkSession(at: now)
+        startWorkSessionIfAllowed(at: now)
     }
 
     func finishWorkSession(at now: Date = Date()) async {

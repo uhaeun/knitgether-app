@@ -532,6 +532,108 @@ struct ProjectWorkspaceViewModelTests {
         #expect(viewModel.project.workSessions.isEmpty)
     }
 
+    // 원 기획 §13, GitHub #10. 수동 정지한 타이머가 화면 재진입에서 다시 돌던 것.
+
+    /// 이 케이스의 핵심은 뷰모델을 새로 만드는 것이다. 화면을 나갔다 들어오면
+    /// @StateObject가 새로 생기므로, 뷰모델 안에만 기억해 두면 정확히 막아야 할
+    /// 그 순간에 억제가 사라진다. 같은 뷰모델로 확인하면 그 구현도 통과한다.
+    @Test func manualStopKeepsTimerOffWhenScreenIsReopened() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let firstVisit = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        firstVisit.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await firstVisit.stopWorkSessionManually(at: Date(timeIntervalSince1970: 1_800_000_300))
+        #expect(!firstVisit.isTrackingTime)
+
+        let secondVisit = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+        secondVisit.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_001_000))
+
+        #expect(!secondVisit.isTrackingTime)
+    }
+
+    /// 억제가 모든 자동 시작을 영구히 막아 버리면 타이머를 쓸 수 없게 된다.
+    /// 사용자가 직접 시작하면 풀려야 한다.
+    @Test func manualStartClearsSuppressionForLaterAutoStart() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await viewModel.stopWorkSessionManually(at: Date(timeIntervalSince1970: 1_800_000_300))
+        viewModel.startWorkSession(at: Date(timeIntervalSince1970: 1_800_000_400))
+
+        #expect(viewModel.isTrackingTime)
+        #expect(!store.isAutoStartSuppressed(forProjectId: project.id))
+    }
+
+    /// 화면 이탈로 끝난 세션은 수동 정지가 아니다. 다시 들어오면 평소대로 시작해야 한다.
+    /// 둘을 구분하지 않으면 화면을 한 번 나가는 것만으로 타이머가 영영 꺼진다.
+    @Test func leavingScreenDoesNotSuppressAutoStartOnReturn() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await viewModel.finishWorkSession(at: Date(timeIntervalSince1970: 1_800_000_300))
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_001_000))
+
+        #expect(viewModel.isTrackingTime)
+    }
+
+    /// 수동 정지 후 앱을 백그라운드에 보냈다 돌아와도 켜지지 않아야 한다.
+    @Test func manualStopKeepsTimerOffAfterAppReturnsFromBackground() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await viewModel.stopWorkSessionManually(at: Date(timeIntervalSince1970: 1_800_000_300))
+        await viewModel.handleAppBackgrounded(at: Date(timeIntervalSince1970: 1_800_000_400))
+        viewModel.handleAppActivated(at: Date(timeIntervalSince1970: 1_800_000_900))
+
+        #expect(!viewModel.isTrackingTime)
+    }
+
     @Test func backgroundEndsSessionAndActivationStartsANewOne() async throws {
         let project = Self.makeProject()
         let repository = ProjectRepositorySpy(project: project)
