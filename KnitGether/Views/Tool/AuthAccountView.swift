@@ -147,7 +147,6 @@ struct AuthAccountView: View {
                     .overlay(AppTheme.Color.warmDivider)
 
                 infoRow(title: "사용자 ID", value: session.profile.id, systemImage: "person.text.rectangle")
-                infoRow(title: "기본 단위", value: session.profile.preferredUnits, systemImage: "ruler")
 
                 Text(session.profile.syncStatus.detailText)
                     .font(.caption)
@@ -323,19 +322,6 @@ struct AuthAccountView: View {
 
             fieldDivider
 
-            HStack(spacing: 12) {
-                Image(systemName: "ruler")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(AppTheme.Color.accent)
-                    .frame(width: 28)
-
-                Picker("기본 단위", selection: $viewModel.formData.preferredUnits) {
-                    Text("Metric").tag("Metric")
-                    Text("Imperial").tag("Imperial")
-                }
-                .pickerStyle(.segmented)
-            }
-            .padding(.vertical, 12)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 6)

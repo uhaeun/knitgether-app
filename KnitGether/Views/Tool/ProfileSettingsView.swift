@@ -60,20 +60,6 @@ struct ProfileSettingsView: View {
                     .textInputAutocapitalization(.words)
                 }
 
-                AppFormSection(
-                    title: "단위",
-                    description: "게이지와 길이 입력에서 사용할 기본 단위예요.",
-                    systemImage: "ruler",
-                    tint: AppTheme.Color.sage
-                ) {
-                    Picker("기본 단위", selection: $viewModel.formData.preferredUnits) {
-                        Text("Metric").tag("Metric")
-                        Text("Imperial").tag("Imperial")
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.vertical, 12)
-                }
-
                 if let profile = viewModel.profile {
                     AppFormSection(
                         title: "계정 저장",

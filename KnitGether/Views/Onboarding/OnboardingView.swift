@@ -80,8 +80,6 @@ struct OnboardingView: View {
             accountStep
         case .profile:
             profileStep
-        case .preferences:
-            preferencesStep
         case .skillTest:
             skillTestStep
         case .ready:
@@ -161,23 +159,6 @@ struct OnboardingView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .appCard()
-        }
-    }
-
-    private var preferencesStep: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            stepHeader(
-                systemImage: "ruler",
-                title: "단위",
-                subtitle: "게이지와 치수 입력 기준"
-            )
-
-            Picker("단위", selection: $viewModel.formData.preferredUnits) {
-                ForEach(viewModel.unitOptions, id: \.self) { unit in
-                    Text(unit).tag(unit)
-                }
-            }
-            .pickerStyle(.segmented)
         }
     }
 
