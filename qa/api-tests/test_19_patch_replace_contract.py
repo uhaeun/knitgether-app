@@ -74,6 +74,9 @@ def test_api_28_project_patch_accepts_full_body(account_a):
     body = dict(payload)
     body["id"] = project_id
     body["name"] = "전체로 보내면 바뀐다"
+    # 수정에는 낙관적 잠금 기준값도 필요하다(GitHub #14). 전체 교체 계약과 별개 조건이라
+    # 여기서 함께 붙여야 "필수 필드 누락" 하나만 남는다.
+    body["baseUpdatedAt"] = account_a.api.get(f"/projects/{project_id}").json()["updatedAt"]
 
     updated = account_a.api.patch(f"/projects/{project_id}", json=body)
     assert updated.status_code == 200, updated.text

@@ -56,7 +56,7 @@ def test_child_failure_rolls_back_parent_update(account_a, db):
         _row_instruction(counter_id, dup_id, 1),
         _row_instruction(counter_id, dup_id, 2),   # 동일 PK → createMany 실패
     ]
-    r = account_a.api.patch(f"/projects/{pid}", json=bad)
+    r = account_a.api.patch_project(pid, bad)
 
     # 200이면 안 됨(자식 저장 실패가 삼켜졌거나 주입이 작동하지 않는다는 뜻).
     assert r.status_code >= 400, (
@@ -92,7 +92,7 @@ def test_injection_actually_injects(account_a):
         _row_instruction(counter_id, str(uuid.uuid4()), 1),
         _row_instruction(counter_id, str(uuid.uuid4()), 2),
     ]
-    r = account_a.api.patch(f"/projects/{pid}", json=ok)
+    r = account_a.api.patch_project(pid, ok)
     assert r.status_code == 200, (
         f"서로 다른 id 2건이 {r.status_code}로 거부됐다: {r.text[:160]}. "
         "거부 사유가 중복 PK가 아니므로 원자성 테스트의 주입이 작동하지 않는다"
@@ -126,7 +126,7 @@ def test_unknown_row_counter_id_is_rejected_without_mutation(account_a, db):
     bad["rowCounter"]["rowInstructions"] = [
         _row_instruction(stale_counter, str(uuid.uuid4()), 1),
     ]
-    r = account_a.api.patch(f"/projects/{pid}", json=bad)
+    r = account_a.api.patch_project(pid, bad)
 
     assert r.status_code == 400, f"없는 rowCounter id가 {r.status_code}로 처리됐다: {r.text}"
     assert r.json().get("code") == "VALIDATION_FAILED"

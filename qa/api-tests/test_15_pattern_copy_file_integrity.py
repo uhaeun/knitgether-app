@@ -173,7 +173,7 @@ def test_api_24_pattern_replace_severs_db_reference_but_leaves_old_file(account_
         "localCopyPath": None,
         "copiedAt": "2026-08-31T01:00:00.000Z",
     }
-    replaced = account_a.api.patch(f"/projects/{pid}", json=replace_payload)
+    replaced = account_a.api.patch_project(pid, replace_payload)
     assert replaced.status_code == 200, replaced.text
     assert replaced.json()["patternCopy"]["sourcePatternDocumentId"] == pattern_b
 

@@ -511,6 +511,64 @@ struct RemoteProjectRepositoryTests {
         )
     }
 
+    /// 기준값을 하나도 모르는 상태에서 저장할 때, 서버에 먼저 물어 되찾는지(GitHub #14).
+    ///
+    /// 서버는 기준값 없는 수정을 400으로 거부한다. 거부 자체는 옳지만, 기준값을 잃은 것이
+    /// 사용자 잘못은 아니므로 오류를 보이기 전에 스스로 되찾아야 한다. 되찾지 못하면
+    /// 사용자는 저장할 수 없는 화면에 갇힌다.
+    ///
+    /// 저장 요청에 값이 실렸는지와 그 전에 GET이 나갔는지를 함께 본다. 앞 조건만 보면
+    /// 아무 값이나 지어내 채우는 구현도 통과한다.
+    @Test func saveFetchesBaseUpdatedAtWhenNoneIsKnown() async throws {
+        let project = Self.project(syncStatus: .synced)
+        let serverUpdatedAt = "2026-07-03T09:00:00.123Z"
+        let responseJSON = Self.projectResponseJSON.replacingOccurrences(
+            of: "\"updatedAt\": \"2026-07-03T09:00:00.000Z\"",
+            with: "\"updatedAt\": \"\(serverUpdatedAt)\""
+        )
+
+        let suiteName = "KnitGetherTests.\(UUID().uuidString)"
+        let store = try #require(UserDefaults(suiteName: suiteName))
+        defer {
+            UserDefaults.standard.removePersistentDomain(forName: suiteName)
+        }
+
+        let sentBaseUpdatedAt = SentValueRecorder()
+        let methodOrder = SentValueRecorder()
+        let session = MockURLProtocol.makeSession { request in
+            methodOrder.record(request.httpMethod)
+
+            if request.httpMethod == "PATCH" {
+                let body = try Self.bodyData(from: request)
+                let object = try #require(
+                    JSONSerialization.jsonObject(with: body) as? [String: Any]
+                )
+                sentBaseUpdatedAt.record(object["baseUpdatedAt"] as? String)
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(responseJSON.utf8))
+        }
+
+        // 조회 없이 곧바로 저장한다. 기억하고 있는 기준값이 없는 상태다.
+        let repository = Self.makeRepository(session: session, serverUpdatedAtStore: store)
+        try await repository.saveProject(project)
+
+        #expect(
+            sentBaseUpdatedAt.value == serverUpdatedAt,
+            "기준값 없이 저장이 나갔다. 서버가 400으로 거부해 사용자는 저장할 수 없다"
+        )
+        #expect(
+            methodOrder.recorded.first == "GET",
+            "저장 전에 서버에서 기준값을 읽지 않았다. 값을 지어냈다는 뜻이다"
+        )
+    }
+
     @Test func deleteProjectRequestsProjectDeleteEndpoint() async throws {
         let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let session = MockURLProtocol.makeSession { request in
@@ -1310,9 +1368,23 @@ private final class SentValueRecorder: @unchecked Sendable {
         return _value
     }
 
+    /// 마지막 값만이 아니라 순서도 봐야 하는 케이스가 있다(GitHub #14).
+    /// 저장 전에 조회가 나갔는지 같은 것은 마지막 값으로는 확인되지 않는다.
+    private var _recorded: [String] = []
+
+    var recorded: [String] {
+        lock.lock()
+        defer { lock.unlock() }
+        return _recorded
+    }
+
     func record(_ newValue: String?) {
         lock.lock()
         defer { lock.unlock() }
         _value = newValue
+
+        if let newValue {
+            _recorded.append(newValue)
+        }
     }
 }

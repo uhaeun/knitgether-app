@@ -71,7 +71,7 @@ final class RemoteProjectRepository: ProjectRepository {
         if project.syncStatus == .synced {
             let body = SaveProjectRequest(
                 project: project,
-                baseUpdatedAt: lastKnownServerUpdatedAt(forProjectId: project.id)
+                baseUpdatedAt: await resolvedBaseUpdatedAt(forProjectId: project.id)
             )
             let savedProject: KnittingProject = try await apiClient.send(
                 "projects/\(project.id.uuidString.lowercased())",
@@ -99,6 +99,23 @@ final class RemoteProjectRepository: ProjectRepository {
         }
         lastKnownServerUpdatedAtByProjectId[project.id] = project.updatedAt
         persistServerUpdatedAtLocked()
+    }
+
+    /// 저장에 쓸 낙관적 잠금 기준값. 기억하고 있는 값이 없으면 서버에서 한 번 읽어 온다.
+    ///
+    /// 서버는 기준값 없는 수정을 400으로 거부한다(GitHub #14). 거부 자체는 옳다. 예전처럼
+    /// 그냥 통과시키면 다른 기기의 수정을 무통보로 덮어쓰기 때문이다. 다만 기준값을 잃은
+    /// 것이 사용자 잘못은 아니므로, 사용자에게 오류를 보이기 전에 스스로 되찾아 본다.
+    ///
+    /// 읽기에 실패하면 nil 그대로 보낸다. 그 경우 서버가 거부하고, 그것이 조용히 덮어쓰는
+    /// 것보다 낫다.
+    private func resolvedBaseUpdatedAt(forProjectId id: UUID) async -> Date? {
+        if let known = lastKnownServerUpdatedAt(forProjectId: id) {
+            return known
+        }
+
+        _ = try? await fetchProject(id: id)
+        return lastKnownServerUpdatedAt(forProjectId: id)
     }
 
     private func lastKnownServerUpdatedAt(forProjectId id: UUID) -> Date? {

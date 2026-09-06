@@ -71,7 +71,7 @@ def test_api_25_update_moves_last_worked_at(account_a, db):
         work_session(pid, started_at=LATER, ended_at=LATER_END),
     ]
     later["lastWorkedAt"] = LATER
-    assert account_a.api.patch(f"/projects/{pid}", json=later).status_code == 200
+    assert account_a.api.patch_project(pid, later).status_code == 200
 
     stored = _db_last_worked_at(db, pid)
     assert stored.isoformat().startswith("2026-08-25T10:00:00"), (

@@ -65,7 +65,7 @@ def test_api_18_partial_payload_does_not_delete_existing_sessions(account_a, db)
     partial["workSessions"] = [
         work_session(pid, session_id=a, started_at=S1[0], ended_at=S1[1])
     ]
-    assert account_a.api.patch(f"/projects/{pid}", json=partial).status_code == 200
+    assert account_a.api.patch_project(pid, partial).status_code == 200
 
     live = _live_sessions(db, pid)
     assert b in live, (
@@ -89,7 +89,7 @@ def test_api_18_resend_does_not_duplicate_or_drop(account_a, db):
         work_session(pid, session_id=a, started_at=S1[0], ended_at=S1[1]),
         work_session(pid, session_id=b, started_at=S2[0], ended_at=S2[1]),
     ]
-    assert account_a.api.patch(f"/projects/{pid}", json=resend).status_code == 200
+    assert account_a.api.patch_project(pid, resend).status_code == 200
 
     after = _live_sessions(db, pid)
     assert after == before, f"재전송으로 세션 집합이 바뀌었다. 전 {before}, 후 {after}"
@@ -114,7 +114,7 @@ def test_api_19_rejected_request_preserves_server_state(account_a, db):
         work_session(pid, session_id=a, started_at=S1[0], ended_at=S1[1]),
         work_session(pid, session_id=uid(), started_at="말이 안 되는 시각", ended_at=None),
     ]
-    r = account_a.api.patch(f"/projects/{pid}", json=bad)
+    r = account_a.api.patch_project(pid, bad)
     assert r.status_code == 400, f"잘못된 시각이 {r.status_code}로 통과했다: {r.text}"
 
     assert _live_sessions(db, pid) == before_sessions, (
@@ -138,7 +138,7 @@ def test_api_20_rejected_update_does_not_discard_previous_value(account_a, db):
 
     bad = project_payload(pid, name="API20-바뀐이름")
     bad["startDate"] = "이건 날짜가 아니다"
-    r = account_a.api.patch(f"/projects/{pid}", json=bad)
+    r = account_a.api.patch_project(pid, bad)
     assert r.status_code == 400, f"잘못된 날짜가 {r.status_code}로 통과했다: {r.text}"
 
     assert _name(db, pid) == "API20-원본이름", (
@@ -163,7 +163,7 @@ def test_api_20_rejected_update_keeps_children_intact(account_a, db):
     bad["workSessions"] = [
         work_session(pid, session_id=uid(), started_at=S1[0], ended_at=S1[1])
     ]
-    r = account_a.api.patch(f"/projects/{pid}", json=bad)
+    r = account_a.api.patch_project(pid, bad)
     assert r.status_code == 400, f"음수 currentRow가 {r.status_code}로 통과했다: {r.text}"
 
     assert _live_sessions(db, pid) == before, (

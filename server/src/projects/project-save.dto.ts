@@ -277,9 +277,13 @@ export class SaveProjectDto {
   @Type(() => SaveWorkSessionDto)
   workSessions!: SaveWorkSessionDto[];
 
-  // 낙관적 잠금 기준 시각. 클라이언트가 마지막으로 본 서버 updatedAt을 보내면
-  // 서버 updatedAt이 그보다 뒤일 때 409(PROJECT_CONFLICT)로 거부한다.
-  // 보내지 않으면 기존 last-write-wins 동작을 유지한다(하위 호환).
+  // 낙관적 잠금 기준 시각. 클라이언트가 마지막으로 본 서버 updatedAt이다.
+  // 서버 updatedAt이 그보다 뒤면 409(PROJECT_CONFLICT)로 거부한다.
+  //
+  // 수정(PATCH)에서는 필수다. 없으면 400 BASE_UPDATED_AT_REQUIRED다(GitHub #14).
+  // 타입이 optional인 것은 생성(POST)이 같은 DTO를 쓰기 때문이다. 서버에 아직 없는
+  // 프로젝트의 기준 시각은 정의될 수 없으므로 생성에는 요구하지 않는다.
+  // 요구 여부는 ProjectsService.assertBaseUpdatedAtPresent가 경로별로 판정한다.
   @IsOptional()
   @IsISO8601()
   baseUpdatedAt?: string | null;
