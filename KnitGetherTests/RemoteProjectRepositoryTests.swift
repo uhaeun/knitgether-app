@@ -456,6 +456,61 @@ struct RemoteProjectRepositoryTests {
         try await repository.saveProject(project)
     }
 
+    /// GitHub #14. 마지막으로 확인한 서버 updatedAt이 앱 재시작을 넘겨 남는지 본다.
+    ///
+    /// 이 값이 메모리에만 있으면 재시작 직후 첫 저장이 baseUpdatedAt 없이 나가고, 서버는
+    /// 그 요청을 last-write-wins로 통과시킨다. 다른 기기가 고친 것을 만나는 상황은 대개 앱을
+    /// 다시 켰을 때이므로 보호가 가장 필요한 순간에 꺼진다.
+    ///
+    /// 앞의 케이스와 갈리는 지점은 조회를 한 인스턴스와 저장을 하는 인스턴스가 다르다는 것이다.
+    /// 같은 인스턴스에서 이어서 저장하면 메모리 값만으로도 통과해 이 결함이 보이지 않는다.
+    @Test func baseUpdatedAtSurvivesRepositoryRecreation() async throws {
+        let project = Self.project(syncStatus: .synced)
+        let serverUpdatedAt = "2026-07-03T09:00:00.123Z"
+        let responseJSON = Self.projectResponseJSON.replacingOccurrences(
+            of: "\"updatedAt\": \"2026-07-03T09:00:00.000Z\"",
+            with: "\"updatedAt\": \"\(serverUpdatedAt)\""
+        )
+
+        let suiteName = "KnitGetherTests.\(UUID().uuidString)"
+        let store = try #require(UserDefaults(suiteName: suiteName))
+        defer {
+            UserDefaults.standard.removePersistentDomain(forName: suiteName)
+        }
+
+        let sentBaseUpdatedAt = SentValueRecorder()
+        let session = MockURLProtocol.makeSession { request in
+            if request.httpMethod == "PATCH" {
+                let body = try Self.bodyData(from: request)
+                let object = try #require(
+                    JSONSerialization.jsonObject(with: body) as? [String: Any]
+                )
+                sentBaseUpdatedAt.record(object["baseUpdatedAt"] as? String)
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(responseJSON.utf8))
+        }
+
+        // 앱 실행 1. 조회만 하고 끝난다.
+        let firstLaunch = Self.makeRepository(session: session, serverUpdatedAtStore: store)
+        _ = try await firstLaunch.fetchProject(id: project.id)
+
+        // 앱 실행 2. 조회 없이 곧바로 저장한다.
+        let secondLaunch = Self.makeRepository(session: session, serverUpdatedAtStore: store)
+        try await secondLaunch.saveProject(project)
+
+        #expect(
+            sentBaseUpdatedAt.value == serverUpdatedAt,
+            "재시작 후 첫 저장이 baseUpdatedAt 없이 나갔다. 서버가 last-write-wins로 통과시킨다"
+        )
+    }
+
     @Test func deleteProjectRequestsProjectDeleteEndpoint() async throws {
         let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let session = MockURLProtocol.makeSession { request in
@@ -698,7 +753,8 @@ struct RemoteProjectRepositoryTests {
 
     private static func makeRepository(
         session: URLSession,
-        cacheRootURL: URL? = nil
+        cacheRootURL: URL? = nil,
+        serverUpdatedAtStore: UserDefaults = .standard
     ) -> RemoteProjectRepository {
         RemoteProjectRepository(
             apiClient: APIClient(
@@ -711,7 +767,8 @@ struct RemoteProjectRepositoryTests {
             fileStore: LocalPatternFileStore(
                 fileManager: .default,
                 rootDirectoryURL: cacheRootURL
-            )
+            ),
+            serverUpdatedAtStore: serverUpdatedAtStore
         )
     }
 
@@ -1239,4 +1296,23 @@ struct RemoteProjectRepositoryTests {
       \(projectWithPatternCopyDrawingResponseJSON)
     ]
     """
+}
+
+/// 요청 본문에서 뽑은 값을 테스트 본체로 넘긴다.
+/// MockURLProtocol 핸들러가 다른 스레드에서 돌아 잠금을 쓴다.
+private final class SentValueRecorder: @unchecked Sendable {
+    private let lock = NSLock()
+    private var _value: String?
+
+    var value: String? {
+        lock.lock()
+        defer { lock.unlock() }
+        return _value
+    }
+
+    func record(_ newValue: String?) {
+        lock.lock()
+        defer { lock.unlock() }
+        _value = newValue
+    }
 }

@@ -6,16 +6,47 @@ final class RemoteProjectRepository: ProjectRepository {
 
     /// 프로젝트별로 마지막으로 확인한 서버 updatedAt.
     /// 저장(PATCH) 시 baseUpdatedAt으로 함께 보내 낙관적 잠금(409 PROJECT_CONFLICT)의 기준이 된다.
-    /// 앱 세션 동안만 유지되며, 없으면 baseUpdatedAt을 생략한다(서버는 생략 시 기존 last-write-wins).
+    ///
+    /// 앱 재시작을 넘겨 보존한다(GitHub #14). 메모리에만 두면 재시작 직후 첫 저장이
+    /// baseUpdatedAt 없이 나가고 서버는 그 요청을 last-write-wins로 통과시킨다. 다른 기기가
+    /// 고친 것을 만나는 상황은 대개 앱을 다시 켰을 때이므로, 보호가 가장 필요한 순간에 꺼져
+    /// 있게 된다. 보존한 값이 낡았더라도 서버 updatedAt이 그보다 뒤일 때만 409가 나므로,
+    /// 그동안 서버가 바뀌지 않았다면 저장은 그대로 통과한다.
     private let serverUpdatedAtLock = NSLock()
     private var lastKnownServerUpdatedAtByProjectId: [UUID: Date] = [:]
+    private let serverUpdatedAtStore: UserDefaults
+    private static let serverUpdatedAtKey = "KnitGether.remote.lastKnownServerUpdatedAt"
 
     init(
         apiClient: APIClient,
-        fileStore: LocalPatternFileStore = LocalPatternFileStore()
+        fileStore: LocalPatternFileStore = LocalPatternFileStore(),
+        serverUpdatedAtStore: UserDefaults = .standard
     ) {
         self.apiClient = apiClient
         self.fileStore = fileStore
+        self.serverUpdatedAtStore = serverUpdatedAtStore
+        self.lastKnownServerUpdatedAtByProjectId = Self.loadServerUpdatedAt(from: serverUpdatedAtStore)
+    }
+
+    private static func loadServerUpdatedAt(from store: UserDefaults) -> [UUID: Date] {
+        guard let raw = store.dictionary(forKey: serverUpdatedAtKey) as? [String: Double] else {
+            return [:]
+        }
+
+        return raw.reduce(into: [:]) { result, entry in
+            guard let id = UUID(uuidString: entry.key) else {
+                return
+            }
+            result[id] = Date(timeIntervalSince1970: entry.value)
+        }
+    }
+
+    /// 잠금을 쥔 상태에서만 호출한다.
+    private func persistServerUpdatedAtLocked() {
+        let raw = lastKnownServerUpdatedAtByProjectId.reduce(into: [String: Double]()) { result, entry in
+            result[entry.key.uuidString] = entry.value.timeIntervalSince1970
+        }
+        serverUpdatedAtStore.set(raw, forKey: Self.serverUpdatedAtKey)
     }
 
     func fetchProjects() async throws -> [KnittingProject] {
@@ -67,6 +98,7 @@ final class RemoteProjectRepository: ProjectRepository {
             serverUpdatedAtLock.unlock()
         }
         lastKnownServerUpdatedAtByProjectId[project.id] = project.updatedAt
+        persistServerUpdatedAtLocked()
     }
 
     private func lastKnownServerUpdatedAt(forProjectId id: UUID) -> Date? {
