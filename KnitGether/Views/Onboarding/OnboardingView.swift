@@ -147,7 +147,8 @@ struct OnboardingView: View {
                 NavigationLink {
                     AuthAccountView(
                         authRepository: repositories.authRepository,
-                        sessionStore: repositories.authSessionStore
+                        sessionStore: repositories.authSessionStore,
+                        repositories: repositories
                     )
                 } label: {
                     Label("계정 만들기 / 로그인", systemImage: "person.crop.circle.badge.plus")

@@ -314,3 +314,10 @@ final class OfflineFirstPatternRepository: PatternRepository {
         throw error
     }
 }
+
+extension OfflineFirstPatternRepository: OfflineSyncFlushable {
+    func flushPendingChanges() async -> Int {
+        await syncPendingChanges()
+        return await local.pendingPatternsForSync().count
+    }
+}

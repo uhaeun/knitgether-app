@@ -695,3 +695,13 @@ final class OfflineFirstLibraryRepository: LibraryRepository {
         )
     }
 }
+
+extension OfflineFirstLibraryRepository: OfflineSyncFlushable {
+    func flushPendingChanges() async -> Int {
+        await syncPendingChanges()
+        let yarns = await local.pendingYarnsForSync().count
+        let needles = await local.pendingNeedlesForSync().count
+        let tools = await local.pendingToolsForSync().count
+        return yarns + needles + tools
+    }
+}

@@ -43,7 +43,8 @@ struct SettingsView: View {
                         ) {
                             AuthAccountView(
                                 authRepository: repositories.authRepository,
-                                sessionStore: repositories.authSessionStore
+                                sessionStore: repositories.authSessionStore,
+                                repositories: repositories
                             )
                         }
                         .accessibilityIdentifier(AppAccessibilityID.Settings.accountCard)

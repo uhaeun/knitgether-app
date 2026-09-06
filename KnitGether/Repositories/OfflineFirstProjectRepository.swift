@@ -439,3 +439,10 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         )
     }
 }
+
+extension OfflineFirstProjectRepository: OfflineSyncFlushable {
+    func flushPendingChanges() async -> Int {
+        await syncPendingChanges()
+        return await local.pendingProjectsForSync().count
+    }
+}

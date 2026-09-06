@@ -19,10 +19,18 @@ struct AuthAccountView: View {
     @State private var mode: Mode = .login
     @State private var isSubmitting = false
     @State private var isShowingSignOutFailureAlert = false
+    @State private var isSigningOut = false
+    @State private var unsyncedCountBeforeSignOut = 0
+    @State private var isShowingUnsyncedSignOutConfirmation = false
+
+    /// 로그아웃 시 미동기화 항목을 올리고 계정 로컬 저장소를 지우는 데 쓴다.
+    /// 온보딩처럼 아직 컨테이너를 넘길 수 없는 자리에서는 nil이고, 그때는 캐시 삭제를 건너뛴다.
+    private let repositories: AppRepositoryContainer?
 
     init(
         authRepository: any AuthRepository,
-        sessionStore: AuthSessionStore
+        sessionStore: AuthSessionStore,
+        repositories: AppRepositoryContainer? = nil
     ) {
         _viewModel = StateObject(
             wrappedValue: AuthAccountViewModel(
@@ -30,6 +38,7 @@ struct AuthAccountView: View {
                 sessionStore: sessionStore
             )
         )
+        self.repositories = repositories
     }
 
     var body: some View {
@@ -148,33 +157,74 @@ struct AuthAccountView: View {
             .appCard(cornerRadius: 20)
 
             Button(role: .destructive) {
-                attemptSignOut()
+                startSignOut()
             } label: {
-                Label("로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
+                Label(isSigningOut ? "정리하는 중" : "로그아웃", systemImage: "rectangle.portrait.and.arrow.right")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
             .controlSize(.large)
+            .disabled(isSigningOut)
             .accessibilityIdentifier(AppAccessibilityID.Auth.logoutButton)
             .alert("로그아웃하지 못했어요", isPresented: $isShowingSignOutFailureAlert) {
                 Button("다시 시도") {
-                    attemptSignOut()
+                    startSignOut()
                 }
 
                 Button("닫기", role: .cancel) {}
             } message: {
                 Text("저장된 로그인 정보를 삭제하지 못해 로그인 세션이 아직 남아 있어요. 잠시 후 다시 시도해 주세요.")
             }
+            .alert("올리지 못한 작업이 있어요", isPresented: $isShowingUnsyncedSignOutConfirmation) {
+                Button("그래도 로그아웃", role: .destructive) {
+                    finishSignOut()
+                }
+
+                Button("취소", role: .cancel) {}
+            } message: {
+                Text("이 기기에만 있는 작업 \(unsyncedCountBeforeSignOut)개를 서버에 올리지 못했어요. 지금 로그아웃하면 그 작업은 사라져요. 네트워크를 확인하고 잠시 후 다시 시도할 수 있어요.")
+            }
+        }
+    }
+
+    /// 로그아웃 절차. 지우기 전에 올린다.
+    ///
+    /// 계정 로컬 저장소에는 서버에서 받아온 항목과 아직 올리지 못한 항목이 함께 있다.
+    /// 그냥 지우면 계정 노출(DEF-05~07)은 닫히지만 사용자가 만든 작업이 무통보로 사라진다.
+    /// 올릴 수 있는 것을 먼저 올리고, 그러고도 남는 것이 있으면 사용자에게 개수를 알린다.
+    private func startSignOut() {
+        guard !isSigningOut else {
+            return
+        }
+
+        isSigningOut = true
+        Task {
+            let remaining = await repositories?.flushPendingChanges() ?? 0
+            unsyncedCountBeforeSignOut = remaining
+
+            if remaining > 0 {
+                isSigningOut = false
+                isShowingUnsyncedSignOutConfirmation = true
+                return
+            }
+
+            finishSignOut()
         }
     }
 
     /// Keychain 삭제 실패를 무통보로 삼키지 않는다. 세션이 남아 있음을 알리고 재시도를 제공한다.
-    private func attemptSignOut() {
+    /// 캐시 삭제는 세션을 지우기 전에 소유자 id를 읽어야 하므로 순서를 지킨다.
+    private func finishSignOut() {
+        let ownerId = viewModel.currentSession.map { $0.profile.ownerId ?? $0.profile.id }
+
         do {
             try viewModel.signOut()
+            AppRepositoryContainer.removeCachedData(for: ownerId)
         } catch {
             isShowingSignOutFailureAlert = true
         }
+
+        isSigningOut = false
     }
 
     private var brandHeader: some View {

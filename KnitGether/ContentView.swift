@@ -61,7 +61,8 @@ struct ContentView: View {
 
                 AuthAccountView(
                     authRepository: repositoryStore.container.authRepository,
-                    sessionStore: authSessionStore
+                    sessionStore: authSessionStore,
+                    repositories: repositoryStore.container
                 )
             }
             .warmScreenBackground()
