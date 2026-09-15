@@ -50,6 +50,12 @@ model UserAccount {
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
 
+  // 로그인 시도 제한(SPEC AUTH-08). 연속 실패를 세고 상한을 넘으면 일정 시간 잠근다.
+  // 메모리가 아니라 행에 두는 이유는 두 가지다. 서버를 다시 띄우면 메모리 카운터는
+  // 초기화되어 재시작만으로 제한이 풀리고, 인스턴스가 늘면 카운터가 갈라진다.
+  failedLoginCount Int       @default(0)
+  lockedUntil      DateTime?
+
   profile UserProfile @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@index([email, deletedAt])

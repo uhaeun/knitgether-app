@@ -22,6 +22,9 @@ type StoredAccount = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
+  // 로그인 시도 제한(SPEC AUTH-08)
+  failedLoginCount: number;
+  lockedUntil: Date | null;
   profile?: StoredProfile;
 };
 
@@ -138,6 +141,87 @@ describe('Auth routes', () => {
       });
   });
 
+  // SPEC AUTH-08 로그인 시도 제한. OBS-4-01 승격분.
+  // 제한이 없으면 무제한 비밀번호 추측이 가능하다(security_review B-3).
+
+  async function registerFor(email: string) {
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/register')
+      .send({ email, password: 'password-1234', displayName: 'Yuha' })
+      .expect(201);
+  }
+
+  async function failLogin(email: string, expectedCode: string) {
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/login')
+      .send({ email, password: 'wrong-password' })
+      .expect(401)
+      .expect(({ body }) => {
+        expect(body.code).toBe(expectedCode);
+      });
+  }
+
+  it('locks the account after five consecutive failed logins', async () => {
+    const email = 'lockout@example.com';
+    await registerFor(email);
+
+    // 5회째까지는 자격증명 오류다. 잠금이 그보다 일찍 걸리면 사용자가 비밀번호를
+    // 몇 번 잘못 기억하는 것만으로 막힌다.
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await failLogin(email, 'INVALID_CREDENTIALS');
+    }
+
+    // 6회째부터 잠금이다.
+    await failLogin(email, 'LOGIN_TEMPORARILY_LOCKED');
+  });
+
+  it('rejects the correct password while the account is locked', async () => {
+    const email = 'lockout-correct@example.com';
+    await registerFor(email);
+
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await failLogin(email, 'INVALID_CREDENTIALS');
+    }
+
+    // 맞는 비밀번호도 막혀야 제한이 의미가 있다. 이 조건이 없으면 틀린 비밀번호만
+    // 세고 맞으면 통과시키는 구현도 앞 케이스를 통과하는데, 그러면 대입을 막지 못한다.
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/login')
+      .send({ email, password: 'password-1234' })
+      .expect(401)
+      .expect(({ body }) => {
+        expect(body.code).toBe('LOGIN_TEMPORARILY_LOCKED');
+      });
+  });
+
+  it('clears the failure count after a successful login', async () => {
+    const email = 'lockout-reset@example.com';
+    await registerFor(email);
+
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      await failLogin(email, 'INVALID_CREDENTIALS');
+    }
+
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/login')
+      .send({ email, password: 'password-1234' })
+      .expect(200);
+
+    // 성공이 카운터를 지우지 않으면 정상 사용자가 오래 쓸수록 실패가 누적돼
+    // 어느 날 갑자기 잠긴다.
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await failLogin(email, 'INVALID_CREDENTIALS');
+    }
+  });
+
+  it('does not reveal account existence through the lock response', async () => {
+    // 없는 계정을 여섯 번 두드려도 잠금 코드가 나오면 안 된다. 잠금 여부로
+    // 계정의 존재를 알 수 있게 되어 열거가 가능해진다.
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      await failLogin('nobody@example.com', 'INVALID_CREDENTIALS');
+    }
+  });
+
   it('rejects login with an invalid password', async () => {
     await request(app.getHttpServer())
       .post('/api/v1/auth/register')
@@ -200,10 +284,33 @@ function createMockPrisma() {
           createdAt: data.createdAt ?? new Date('2026-07-09T00:00:00.000Z'),
           updatedAt: data.updatedAt ?? new Date('2026-07-09T00:00:00.000Z'),
           deletedAt: data.deletedAt ?? null,
+          failedLoginCount: data.failedLoginCount ?? 0,
+          lockedUntil: data.lockedUntil ?? null,
         };
         accountsByEmail.set(account.email, account);
         return withProfile(account);
       }),
+      // 로그인 시도 제한이 실패 횟수와 잠금을 기록한다(SPEC AUTH-08).
+      update: jest.fn(
+        async ({
+          where,
+          data,
+        }: {
+          where: { id: string };
+          data: Partial<StoredAccount>;
+        }) => {
+          const account = Array.from(accountsByEmail.values()).find(
+            (candidate) => candidate.id === where.id,
+          );
+
+          if (!account) {
+            throw new Error(`account not found: ${where.id}`);
+          }
+
+          Object.assign(account, data);
+          return withProfile(account);
+        },
+      ),
     },
     userProfile: {
       create: jest.fn(async ({ data }: { data: StoredProfile }) => {
