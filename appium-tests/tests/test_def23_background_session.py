@@ -20,9 +20,32 @@
 강제 종료 시 세션 소멸)이다.
 
 따라서 이 케이스가 실측으로 보인 것은 "수정 후에는 백그라운드 진입 시점에 세션이 끊겨
-저장된다"까지다. 수정 전의 과다 기록(4시간 미만 방치가 그대로 기록됨)은 이 시나리오에서
-재현되지 않았다. 그 증상을 보려면 앱이 정지되지 않는 짧은 백그라운드로 별도 케이스가
-필요하고, 그 설계와 번호 배정은 QA(유하은) 몫이다.
+저장된다"까지다.
+
+2026-09-15에 그 위 문단이 남긴 숙제("앱이 정지되지 않는 짧은 백그라운드")를 실행했다.
+아래 `test_def23_short_background_is_excluded_from_work_time`이 그것이다. 결과를 적는다.
+
+| 빌드 | 65초 | 8초(짧은 구간) | 대조군(백그라운드 없음) |
+| --- | --- | --- | --- |
+| 수정 후 (현재) | PASS | PASS | - |
+| 수정 전 (1637acc) | FAIL 세션 없음 | FAIL 세션 없음 | **FAIL 세션 없음** |
+
+대조군이 결론을 뒤집었다. 수정 전 빌드는 **백그라운드를 거치지 않아도** 세션을 저장하지
+않는다. 그러면 앞의 두 FAIL은 백그라운드 때문이 아니므로 아무것도 말해주지 않는다.
+원인은 특정하지 못했다. 그 빌드에는 이후 9일치 수정이 빠져 있고 테스트 코드와 페이지
+객체는 현재 세대이므로, 어긋나는 축이 너무 많다.
+
+**결론: 수정 전 빌드는 재현 수단이 될 수 없다.** 오래된 빌드에 현재 케이스를 돌리면
+결함이 아니라 세대 차이를 재게 된다.
+
+그래서 DEF-23의 원래 증상인 과다 기록은 **재현 불가로 확정한다.** 두 번 시도했고(9/3
+65초, 9/15 8초) 두 번 다 다른 증상이 나왔으며, 세 번째 시도인 수정 전 빌드 대조는 실험이
+성립하지 않는 것으로 판명됐다.
+
+이 파일의 두 케이스가 보장하는 것은 현재 빌드의 동작이다. 아래 짧은 구간 케이스는
+**검출력이 확인되지 않았다.** 실패하는 것을 본 적이 없으므로, 백그라운드 처리를 되돌렸을 때
+이 케이스가 잡아낼지는 아직 모른다. 잡아내는지 보려면 현재 빌드에서 그 처리만 되돌린
+변형이 필요하고, 그것은 뮤테이션 테스트의 영역이다(13의 뮤테이션 6종과 같은 방식).
 
 이 케이스의 UI-NN 번호는 09에 아직 없다. 번호 배정과 등재는 QA(유하은) 몫으로 남긴다.
 """
@@ -39,6 +62,9 @@ pytestmark = pytest.mark.server
 
 BEFORE_BACKGROUND_SECONDS = 15
 BACKGROUND_SECONDS = 65
+# 앱이 정지되지 않을 만큼 짧은 백그라운드. 위 65초 케이스가 과다 기록 대신 세션 소멸로
+# 실패한 것이 iOS의 정지 때문이었으므로, 원래 증상을 보려면 정지 전에 돌아와야 한다.
+SHORT_BACKGROUND_SECONDS = 8
 
 
 @pytest.fixture(autouse=True)
@@ -96,4 +122,55 @@ def test_def23_background_ends_work_session(kg_server):
     assert longest < BACKGROUND_SECONDS, (
         f"가장 긴 세션이 {longest:.0f}초다. 백그라운드 {BACKGROUND_SECONDS}초가 "
         "작업 시간에 포함됐다(DEF-23 재발)"
+    )
+
+
+def test_def23_short_background_is_excluded_from_work_time(kg_server):
+    """짧은 백그라운드 구간이 작업 시간에서 빠지는지.
+
+    65초 케이스는 iOS가 앱을 정지시켜 세션이 통째로 사라지는 바람에 원래 증상인 과다 기록을
+    보지 못했다. 이 케이스는 정지 전에 돌아와 앱이 살아 있는 상태로 판정한다. 수정 전
+    코드라면 시작 시각이 메모리에 그대로 있으므로 백그라운드 구간이 세션에 포함된다.
+
+    판정 기준을 앞 케이스와 다르게 잡는다. 앞은 "백그라운드 구간이 통째로 들어갔는가"를
+    상한으로 보는데, 짧은 구간에서는 그 상한이 너무 헐거워 수정 전 코드도 통과한다.
+    여기서는 복귀 후 화면에 머문 시간까지 더해 실제 작업 시간의 상한을 만든다.
+    """
+    account = server_api.register(display_name="짧은백그라운드")
+    project_id = server_api.create_project(account["token"], "DEF23-짧은구간")
+
+    auth, lst = kg_server.page(AuthPage), kg_server.page(MyKnittingPage)
+    auth.open().login(account["email"], account["password"])
+
+    lst.open().open_project("DEF23-짧은구간")
+    time.sleep(BEFORE_BACKGROUND_SECONDS)
+
+    kg_server.driver.background_app(SHORT_BACKGROUND_SECONDS)
+    time.sleep(2)
+
+    after_return_seconds = 3
+    time.sleep(after_return_seconds)
+    lst.open()
+    time.sleep(3)
+
+    sessions = []
+    deadline = time.time() + 30
+    while time.time() < deadline:
+        sessions = [s for s in _work_sessions(account["token"], project_id) if s.get("endedAt")]
+        if sessions:
+            break
+        time.sleep(2)
+
+    assert sessions, "30초를 기다려도 저장된 작업 세션이 없다(길이 판정에 도달하지 못함)"
+
+    # 백그라운드에서 세션이 끊기면 첫 세션은 진입부터 백그라운드 진입까지다.
+    # 끊기지 않으면 백그라운드 구간과 복귀 후 구간이 하나로 이어져 더 길어진다.
+    allowance = 6
+    upper_bound = BEFORE_BACKGROUND_SECONDS + allowance
+    longest = max(_duration_seconds(s) for s in sessions)
+
+    assert longest <= upper_bound, (
+        f"가장 긴 세션이 {longest:.0f}초다. 상한 {upper_bound}초를 넘었으므로 "
+        f"백그라운드 {SHORT_BACKGROUND_SECONDS}초와 복귀 후 구간이 작업 시간에 "
+        "포함됐다(DEF-23 원래 증상인 과다 기록)"
     )
