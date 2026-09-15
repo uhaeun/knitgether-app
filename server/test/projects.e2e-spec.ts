@@ -1921,7 +1921,10 @@ describe('Projects route', () => {
     expect(prisma.project.create).not.toHaveBeenCalled();
   });
 
-  it('still saves an existing project when the owner is at the project limit', async () => {
+  // 생성(POST)이 기존 행을 만나면 409다(GitHub #14). 상한 검사는 그 전에 걸리지 않는다는
+  // 것이 이 케이스의 확인 대상이며, 기존 프로젝트를 고치는 길이 상한 때문에 막히지는
+  // 않는다는 사실은 PATCH 쪽 케이스가 담당한다.
+  it('rejects an existing project on create without consulting the project limit', async () => {
     prisma.project.findFirst.mockResolvedValueOnce(userAProject);
     prisma.project.count.mockResolvedValueOnce(200);
 
@@ -1929,10 +1932,13 @@ describe('Projects route', () => {
       .post('/api/v1/projects')
       .set('Authorization', 'Bearer dev-token')
       .send(saveProjectBody)
-      .expect(201);
+      .expect(409)
+      .expect(({ body }) => {
+        expect(body.code).toBe('PROJECT_ALREADY_EXISTS');
+      });
 
     expect(prisma.project.count).not.toHaveBeenCalled();
-    expect(prisma.project.update).toHaveBeenCalled();
+    expect(prisma.project.update).not.toHaveBeenCalled();
     expect(prisma.project.create).not.toHaveBeenCalled();
   });
 
@@ -1961,7 +1967,7 @@ describe('Projects route', () => {
     prisma.project.findFirst.mockResolvedValueOnce(userAProject);
 
     await request(app.getHttpServer())
-      .post('/api/v1/projects')
+      .patch('/api/v1/projects/11111111-1111-4111-8111-111111111111')
       .set('Authorization', 'Bearer dev-token')
       .send({
         ...saveProjectBody,
@@ -1983,13 +1989,13 @@ describe('Projects route', () => {
     prisma.project.findFirst.mockResolvedValueOnce(userAProject);
 
     await request(app.getHttpServer())
-      .post('/api/v1/projects')
+      .patch('/api/v1/projects/11111111-1111-4111-8111-111111111111')
       .set('Authorization', 'Bearer dev-token')
       .send({
         ...saveProjectBody,
         baseUpdatedAt: '2026-07-03T09:00:00.000Z',
       })
-      .expect(201);
+      .expect(200);
 
     expect(prisma.project.update).toHaveBeenCalled();
   });
@@ -2005,7 +2011,7 @@ describe('Projects route', () => {
     });
 
     await request(app.getHttpServer())
-      .post('/api/v1/projects')
+      .patch('/api/v1/projects/11111111-1111-4111-8111-111111111111')
       .set('Authorization', 'Bearer dev-token')
       .send({
         ...saveProjectBody,
@@ -2028,13 +2034,13 @@ describe('Projects route', () => {
     });
 
     await request(app.getHttpServer())
-      .post('/api/v1/projects')
+      .patch('/api/v1/projects/11111111-1111-4111-8111-111111111111')
       .set('Authorization', 'Bearer dev-token')
       .send({
         ...saveProjectBody,
         baseUpdatedAt: '2026-07-03T09:00:00.123Z',
       })
-      .expect(201);
+      .expect(200);
 
     expect(prisma.project.update).toHaveBeenCalled();
   });

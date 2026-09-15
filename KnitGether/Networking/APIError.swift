@@ -38,4 +38,11 @@ nonisolated enum APIError: Error, Equatable {
     var isProjectConflict: Bool {
         statusCode == 409 && code == "PROJECT_CONFLICT"
     }
+
+    /// 생성(POST)이 이미 서버에 있는 프로젝트를 만난 경우(GitHub #14).
+    /// 서버는 업서트로 덮어쓰지 않고 이 코드를 돌려준다. 클라이언트는 서버 본을 조회해
+    /// 기준값을 얻은 뒤 수정(PATCH)으로 다시 보내야 하며, 그때 낙관적 잠금이 판정한다.
+    var isProjectAlreadyExists: Bool {
+        statusCode == 409 && code == "PROJECT_ALREADY_EXISTS"
+    }
 }

@@ -80,12 +80,7 @@ final class RemoteProjectRepository: ProjectRepository {
             )
             recordServerUpdatedAt(savedProject)
         } else {
-            let savedProject: KnittingProject = try await apiClient.send(
-                "projects",
-                method: "POST",
-                body: SaveProjectRequest(project: project, baseUpdatedAt: nil)
-            )
-            recordServerUpdatedAt(savedProject)
+            try await createProjectFallingBackToUpdate(project)
         }
 
         try await uploadDirectPatternCopyFileIfNeeded(for: project)
@@ -99,6 +94,39 @@ final class RemoteProjectRepository: ProjectRepository {
         }
         lastKnownServerUpdatedAtByProjectId[project.id] = project.updatedAt
         persistServerUpdatedAtLocked()
+    }
+
+    /// 생성을 보내되, 서버에 이미 있으면 수정으로 다시 보낸다(GitHub #14).
+    ///
+    /// 서버는 기존 행에 대한 POST를 409 PROJECT_ALREADY_EXISTS로 거부한다. 예전에는
+    /// 업서트로 통과시켰고, 그 사이 다른 기기가 고친 내용이 무통보로 사라졌다.
+    ///
+    /// 거부를 받으면 서버 본을 조회해 기준값을 얻고 수정으로 다시 보낸다. 그 사이 아무도
+    /// 고치지 않았다면 그대로 저장되고, 다른 기기가 고쳤다면 낙관적 잠금이 409를 돌려주어
+    /// 사용자가 알게 된다. 재전송의 목적인 "내 생성을 서버에 반영한다"는 그대로 달성되고,
+    /// 조용히 덮어쓰는 경로만 사라진다.
+    private func createProjectFallingBackToUpdate(_ project: KnittingProject) async throws {
+        do {
+            let savedProject: KnittingProject = try await apiClient.send(
+                "projects",
+                method: "POST",
+                body: SaveProjectRequest(project: project, baseUpdatedAt: nil)
+            )
+            recordServerUpdatedAt(savedProject)
+            return
+        } catch let error as APIError where error.isProjectAlreadyExists {
+            // 아래에서 수정으로 다시 보낸다.
+        }
+
+        let savedProject: KnittingProject = try await apiClient.send(
+            "projects/\(project.id.uuidString.lowercased())",
+            method: "PATCH",
+            body: SaveProjectRequest(
+                project: project,
+                baseUpdatedAt: await resolvedBaseUpdatedAt(forProjectId: project.id)
+            )
+        )
+        recordServerUpdatedAt(savedProject)
     }
 
     /// 수정(PATCH)으로 보낼지 생성(POST)으로 보낼지 정한다.

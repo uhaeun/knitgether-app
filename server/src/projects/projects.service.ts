@@ -145,12 +145,26 @@ export class ProjectsService {
       });
 
       if (existingProject) {
-        this.assertNoSaveConflict(existingProject, body, ownerId);
+        // 생성(POST)이 이미 있는 행을 만나면 거부한다(GitHub #14).
+        //
+        // 예전에는 여기서 그대로 전체 갱신을 했다. POST는 baseUpdatedAt을 싣지 않으므로
+        // 낙관적 잠금을 거치지 않고, 그 사이 다른 기기가 고친 내용이 무통보로 사라졌다.
+        // 응답만 유실된 생성 재전송이라면 대개 안전하지만, 그 창에서 다른 기기가 같은
+        // 프로젝트를 받아 수정했다면 그 수정이 조용히 없어진다.
+        //
+        // 서버가 스스로 판정할 재료는 없다. 순서를 비교하려면 클라이언트가 보낸 시각이
+        // 필요한데 SaveProjectDto에는 baseUpdatedAt뿐이고, 기준값을 가진 저장은 애초에
+        // PATCH로 온다. 그래서 검사 대신 경로를 바꾼다. 409를 돌려주면 클라이언트가
+        // 서버 본을 조회해 기준값을 얻고 PATCH로 다시 보내며, 그때는 낙관적 잠금이 판정한다.
+        //
+        // 멱등성은 유지된다. 행은 여전히 하나이고, 재전송의 목적인 "내 생성이 서버에
+        // 반영되게 한다"는 PATCH 경로로 달성된다.
         this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
-        await transaction.project.update({
-          where: { id: body.id },
-          data: this.toProjectUpdateInput(ownerId, body),
-          include: this.projectInclude(ownerId),
+
+        throw new ConflictException({
+          code: 'PROJECT_ALREADY_EXISTS',
+          message:
+            'Project already exists. Fetch it and send the update with baseUpdatedAt.',
         });
       } else {
         // 프로젝트 개수 상한. 활성(deletedAt null) 프로젝트가 200개 이상이면

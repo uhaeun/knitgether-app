@@ -675,6 +675,73 @@ struct RemoteProjectRepositoryTests {
         )
     }
 
+    /// 생성이 409를 받으면 수정으로 다시 보내는지(GitHub #14).
+    ///
+    /// 서버는 기존 행에 대한 POST를 PROJECT_ALREADY_EXISTS로 거부한다. 클라이언트가 여기서
+    /// 멈추면 사용자의 생성이 영영 서버에 반영되지 않는다. 응답만 유실된 재전송이 바로 그
+    /// 경우이므로, 거부를 받으면 기준값을 얻어 수정으로 다시 보내야 한다.
+    ///
+    /// 재요청이 PATCH인지와 기준값을 실었는지를 함께 본다. 기준값 없이 보내면 서버가
+    /// 400으로 거부하므로 사용자는 여전히 저장할 수 없다.
+    @Test func createRetriesAsUpdateWhenServerSaysProjectAlreadyExists() async throws {
+        let project = Self.project(syncStatus: .localOnly)
+        let serverUpdatedAt = "2026-07-03T09:00:00.123Z"
+        let responseJSON = Self.projectResponseJSON.replacingOccurrences(
+            of: "\"updatedAt\": \"2026-07-03T09:00:00.000Z\"",
+            with: "\"updatedAt\": \"\(serverUpdatedAt)\""
+        )
+
+        let suiteName = "KnitGetherTests.\(UUID().uuidString)"
+        let store = try #require(UserDefaults(suiteName: suiteName))
+        defer {
+            UserDefaults.standard.removePersistentDomain(forName: suiteName)
+        }
+
+        let methodOrder = SentValueRecorder()
+        let sentBaseUpdatedAt = SentValueRecorder()
+        let session = MockURLProtocol.makeSession { request in
+            methodOrder.record(request.httpMethod)
+
+            if request.httpMethod == "POST" {
+                let response = HTTPURLResponse(
+                    url: request.url!,
+                    statusCode: 409,
+                    httpVersion: nil,
+                    headerFields: ["Content-Type": "application/json"]
+                )!
+                return (response, Data("{\"code\":\"PROJECT_ALREADY_EXISTS\"}".utf8))
+            }
+
+            if request.httpMethod == "PATCH" {
+                let body = try Self.bodyData(from: request)
+                let object = try #require(
+                    JSONSerialization.jsonObject(with: body) as? [String: Any]
+                )
+                sentBaseUpdatedAt.record(object["baseUpdatedAt"] as? String)
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(responseJSON.utf8))
+        }
+
+        let repository = Self.makeRepository(session: session, serverUpdatedAtStore: store)
+        try await repository.saveProject(project)
+
+        #expect(
+            methodOrder.recorded.contains("PATCH"),
+            "409를 받고 멈췄다. 사용자의 생성이 서버에 반영되지 않는다"
+        )
+        #expect(
+            sentBaseUpdatedAt.value == serverUpdatedAt,
+            "재요청이 기준값 없이 나갔다. 서버가 400으로 거부해 여전히 저장할 수 없다"
+        )
+    }
+
     @Test func deleteProjectRequestsProjectDeleteEndpoint() async throws {
         let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let session = MockURLProtocol.makeSession { request in
