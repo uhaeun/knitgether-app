@@ -68,7 +68,7 @@ final class RemoteProjectRepository: ProjectRepository {
     }
 
     func saveProject(_ project: KnittingProject) async throws {
-        if project.syncStatus == .synced {
+        if await shouldUpdateExistingProject(project) {
             let body = SaveProjectRequest(
                 project: project,
                 baseUpdatedAt: await resolvedBaseUpdatedAt(forProjectId: project.id)
@@ -99,6 +99,32 @@ final class RemoteProjectRepository: ProjectRepository {
         }
         lastKnownServerUpdatedAtByProjectId[project.id] = project.updatedAt
         persistServerUpdatedAtLocked()
+    }
+
+    /// 수정(PATCH)으로 보낼지 생성(POST)으로 보낼지 정한다.
+    ///
+    /// 예전에는 syncStatus가 synced인 경우만 PATCH였다. 그래서 충돌로 표시된 프로젝트를
+    /// 사용자가 다시 수정하면 POST로 나갔고, POST는 서버에서 업서트로 동작하면서
+    /// baseUpdatedAt을 싣지 않아 낙관적 잠금을 통째로 건너뛰었다. 충돌을 보고 고치려 드는
+    /// 것은 자연스러운 행동인데 고치는 순간 보호가 꺼지는 셈이었다(GitHub #14 잔존).
+    ///
+    /// conflict는 두 곳에서 생기고 서로 다르다. SYNC-09는 서버에 존재한 적 없는 localOnly가
+    /// 거부된 것이고, SYNC-10은 서버에 있는 것을 고치다 거부된 것이다. 상태값만으로는
+    /// 둘을 가를 수 없다.
+    ///
+    /// 그래서 상태 대신 기준값의 유무로 가른다. 서버 updatedAt을 알고 있다는 것은 그
+    /// 프로젝트를 서버에서 본 적이 있다는 뜻이다. 모르면 서버에 한 번 물어보고, 그래도
+    /// 없으면 서버에 없는 것으로 보고 POST로 만든다.
+    private func shouldUpdateExistingProject(_ project: KnittingProject) async -> Bool {
+        if project.syncStatus == .synced {
+            return true
+        }
+
+        guard project.syncStatus == .conflict else {
+            return false
+        }
+
+        return await resolvedBaseUpdatedAt(forProjectId: project.id) != nil
     }
 
     /// 저장에 쓸 낙관적 잠금 기준값. 기억하고 있는 값이 없으면 서버에서 한 번 읽어 온다.

@@ -569,6 +569,112 @@ struct RemoteProjectRepositoryTests {
         )
     }
 
+    /// #14 잔존. 충돌 뒤 다시 수정하면 낙관적 잠금이 꺼지던 것.
+    ///
+    /// 예전에는 syncStatus가 synced인 경우만 PATCH였다. 충돌로 표시된 프로젝트를 사용자가
+    /// 다시 수정하면 POST로 나갔고, POST는 업서트로 동작하면서 baseUpdatedAt을 싣지 않아
+    /// 다른 기기의 수정을 무통보로 덮어썼다. 충돌을 보고 고치려 드는 것은 자연스러운
+    /// 행동인데 고치는 순간 보호가 꺼졌다.
+    ///
+    /// 요청 방식과 기준값 동봉을 함께 본다. PATCH로만 나가고 기준값이 없으면 서버가
+    /// 400으로 거부하므로 사용자는 저장할 수 없다.
+    @Test func conflictedProjectKnownToServerIsSentAsUpdateWithBaseline() async throws {
+        let project = Self.project(syncStatus: .conflict)
+        let serverUpdatedAt = "2026-07-03T09:00:00.123Z"
+        let responseJSON = Self.projectResponseJSON.replacingOccurrences(
+            of: "\"updatedAt\": \"2026-07-03T09:00:00.000Z\"",
+            with: "\"updatedAt\": \"\(serverUpdatedAt)\""
+        )
+
+        let suiteName = "KnitGetherTests.\(UUID().uuidString)"
+        let store = try #require(UserDefaults(suiteName: suiteName))
+        defer {
+            UserDefaults.standard.removePersistentDomain(forName: suiteName)
+        }
+
+        let methodOrder = SentValueRecorder()
+        let sentBaseUpdatedAt = SentValueRecorder()
+        let session = MockURLProtocol.makeSession { request in
+            methodOrder.record(request.httpMethod)
+
+            if request.httpMethod == "PATCH" {
+                let body = try Self.bodyData(from: request)
+                let object = try #require(
+                    JSONSerialization.jsonObject(with: body) as? [String: Any]
+                )
+                sentBaseUpdatedAt.record(object["baseUpdatedAt"] as? String)
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(responseJSON.utf8))
+        }
+
+        let repository = Self.makeRepository(session: session, serverUpdatedAtStore: store)
+        try await repository.saveProject(project)
+
+        #expect(
+            !methodOrder.recorded.contains("POST"),
+            "충돌 뒤 수정이 POST로 나갔다. 업서트라 낙관적 잠금을 건너뛴다"
+        )
+        #expect(methodOrder.recorded.contains("PATCH"))
+        #expect(
+            sentBaseUpdatedAt.value == serverUpdatedAt,
+            "PATCH로 나갔지만 기준값이 없다. 서버가 400으로 거부해 사용자는 저장할 수 없다"
+        )
+    }
+
+    /// 서버에 존재한 적 없는 항목이 충돌로 표시된 경우(SYNC-09)는 POST여야 한다.
+    ///
+    /// conflict는 두 곳에서 생긴다. 이 케이스가 없으면 conflict를 전부 PATCH로 보내는
+    /// 구현도 앞 케이스만으로 통과하고, 그러면 서버에 없는 항목이 404를 맞아 유일한
+    /// 원본을 올릴 수 없게 된다. SYNC-09가 보존하려던 바로 그 데이터다.
+    @Test func conflictedProjectUnknownToServerIsSentAsCreate() async throws {
+        let project = Self.project(syncStatus: .conflict)
+
+        let suiteName = "KnitGetherTests.\(UUID().uuidString)"
+        let store = try #require(UserDefaults(suiteName: suiteName))
+        defer {
+            UserDefaults.standard.removePersistentDomain(forName: suiteName)
+        }
+
+        let methodOrder = SentValueRecorder()
+        let session = MockURLProtocol.makeSession { request in
+            methodOrder.record(request.httpMethod)
+
+            // 기준값을 되찾으려는 조회에 서버가 없다고 답한다.
+            if request.httpMethod == "GET" {
+                let response = HTTPURLResponse(
+                    url: request.url!,
+                    statusCode: 404,
+                    httpVersion: nil,
+                    headerFields: ["Content-Type": "application/json"]
+                )!
+                return (response, Data("{\"code\":\"PROJECT_NOT_FOUND\"}".utf8))
+            }
+
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(Self.projectResponseJSON.utf8))
+        }
+
+        let repository = Self.makeRepository(session: session, serverUpdatedAtStore: store)
+        try await repository.saveProject(project)
+
+        #expect(
+            methodOrder.recorded.contains("POST"),
+            "서버에 없는 충돌 항목이 PATCH로 나갔다. 404를 맞아 유일한 원본을 올릴 수 없다"
+        )
+    }
+
     @Test func deleteProjectRequestsProjectDeleteEndpoint() async throws {
         let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
         let session = MockURLProtocol.makeSession { request in
