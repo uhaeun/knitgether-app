@@ -38,7 +38,7 @@
 | --- | --- | --- |
 | [08_automation_comparison](08_automation_comparison.md) | XCUITest와 Appium 비교. 왜 이 도구인가 | 실행 숫자 확보. 장시간 세션 저하 부채는 9/6 해소. 3절 항목 1건 추가와 문체 정리 남음 |
 | [09_test_case_master](09_test_case_master.md) | TC1~16, UI-01~78, API-01~25 전체 카탈로그 | 자동/수동 열과 판정 근거 열 초안 기입 (8/30). QA 검토 전 |
-| [10_defect_catalog](10_defect_catalog.md) | DEF-01~29 + SPEC-PROJ-01 30건, 원인 계열 4개 | 심각도 전건 기입. 9/6 잔존 결함 일괄 정리는 7절. **1절 범주표와 2-1절 요약이 8/29 집계에서 멈춤** |
+| [10_defect_catalog](10_defect_catalog.md) | DEF-01~29 + SPEC-PROJ-01 30건, 원인 계열 4개 | 확정. 심각도 전건 기입, 상태 칸은 커밋 해시로 갱신. 9/6 일괄 정리는 7절. 1절(발견 시점)과 2-1절(심각도)은 수정 여부와 무관한 집계라 갱신 대상이 아니다 |
 | [11_execution_results](11_execution_results.md) | 1차 21건 케이스별 판정 원장, 종료 기준 대조 | 확정. 5차 전량 회귀와 세션 저하 원인 규명은 9절 |
 | [12_quality_metrics](12_quality_metrics.md) | 스코어카드 | 8/30 스냅샷(1~7절) + 9/1(8절) + 9/6(9절). **9/15 작업(#14 잔존 2건, AUTH-08, 실행 수치 변동) 미반영** |
 | [13_automation_showcase](13_automation_showcase.md) | Appium 78, XCUITest, 뮤테이션 6종, CI 게이트 | 실행 증거 확보 (아래 8/29 실행 증거 참조) |
