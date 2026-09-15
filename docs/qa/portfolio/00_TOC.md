@@ -20,9 +20,9 @@
 
 | 문서 | 내용 | 상태 |
 | --- | --- | --- |
-| [02_functional_spec](02_functional_spec.md) | 검증 기준선 SPEC 47건, 코드 일치 5단계 판정 | v2.3 확정 |
+| [02_functional_spec](02_functional_spec.md) | 검증 기준선 SPEC 48건, 코드 일치 5단계 판정 | v2.5 확정. AUTH-08 승격(2026-09-15)으로 명세 공백 6번 해소 |
 | [03_quality_risk_map](03_quality_risk_map.md) | 결함 클래스 RC-01~08, 영향도 × 발생가능성 등급화 | v1.0 확정 |
-| [04_test_strategy](04_test_strategy.md) | 범위, 기법, 자동화 투자 판단, 종료와 중단 기준, 도구 선택 근거 | v1.1 + 2차 전략 |
+| [04_test_strategy](04_test_strategy.md) | 범위, 기법, 자동화 투자 판단, 종료와 중단 기준, 도구 선택 근거 | v1.1 + 2차 전략 + **잔존 결함 허용 정책 (2026-09-15 신설)** |
 | [05_test_cases](05_test_cases.md) | 1차 사이클 TC 21건 설계와 RTM | 확정 |
 
 ### 실행 (06~07) — 실제로 무엇이 나왔는가
@@ -40,10 +40,10 @@
 | [09_test_case_master](09_test_case_master.md) | TC1~16, UI-01~78, API-01~25 전체 카탈로그 | 자동/수동 열과 판정 근거 열 초안 기입 (8/30). QA 검토 전 |
 | [10_defect_catalog](10_defect_catalog.md) | DEF-01~29 + SPEC-PROJ-01 30건, 원인 계열 4개 | 심각도 전건 기입. 9/6 잔존 결함 일괄 정리는 7절. **1절 범주표와 2-1절 요약이 8/29 집계에서 멈춤** |
 | [11_execution_results](11_execution_results.md) | 1차 21건 케이스별 판정 원장, 종료 기준 대조 | 확정. 5차 전량 회귀와 세션 저하 원인 규명은 9절 |
-| [12_quality_metrics](12_quality_metrics.md) | 스코어카드 | 확정. 8/30 스냅샷(1~7절) + 9/1 갱신(8절) + 9/6 갱신(9절). 측정 시점이 다른 숫자를 한 표에 섞지 않는다 |
+| [12_quality_metrics](12_quality_metrics.md) | 스코어카드 | 8/30 스냅샷(1~7절) + 9/1(8절) + 9/6(9절). **9/15 작업(#14 잔존 2건, AUTH-08, 실행 수치 변동) 미반영** |
 | [13_automation_showcase](13_automation_showcase.md) | Appium 78, XCUITest, 뮤테이션 6종, CI 게이트 | 실행 증거 확보 (아래 8/29 실행 증거 참조) |
 | [14_observations](14_observations.md) | 관찰 39 + OBS-3 5건, 스펙 승격 이력, 오탐 정정 | 확정 |
-| [15_release_decision](15_release_decision.md) | 릴리즈 판정문 | 사실은 9/6까지 갱신. **판정 칸은 비어 있다.** 잔존 Critical은 0건이 됐으나 허용 정책이 04에 없어 판정이 서지 않는다 |
+| [15_release_decision](15_release_decision.md) | 릴리즈 판정문 | **확정 (2026-09-15). 판정 Go.** 04에 허용 정책을 신설하고 적용해 조건부 Go를 낸 뒤 해제 조건 3건을 같은 날 처리했다. 남은 한계 4가지는 릴리즈 노트 기재 사항에 있다 |
 
 ### 번호 밖 (2026-09-01 추가) — 기준 문서와 대상 설명
 
