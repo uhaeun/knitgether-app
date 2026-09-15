@@ -30,17 +30,17 @@
 | 문서 | 내용 | 상태 |
 | --- | --- | --- |
 | [06_manual_execution](06_manual_execution.md) | 1차 수동 실행 서술 정본. 결함 15건 + 3차 발견 4건 | 확정 |
-| [07_api_and_network](07_api_and_network.md) | 검증 층위 3단, API 계약 25건, 이관 3건 실증, 네트워크 열화 | 초안. 1, 2, 6, 7절 본문 검수 필요 |
+| [07_api_and_network](07_api_and_network.md) | 검증 층위 3단, API 계약 29건, 이관 3건 실증, 네트워크 열화 | 실행 기록(3~5절) 확정, 스위트 구성 9/15까지 갱신. **1, 2, 6, 7절은 하은의 문장으로 다시 쓸 자리** |
 
 ### 2차 사이클 (09~14) — 자동화와 회귀
 
 | 문서 | 내용 | 상태 |
 | --- | --- | --- |
-| [08_automation_comparison](08_automation_comparison.md) | XCUITest와 Appium 비교. 왜 이 도구인가 | 실행 숫자 확보. 장시간 세션 저하 부채는 9/6 해소. 3절 항목 1건 추가와 문체 정리 남음 |
-| [09_test_case_master](09_test_case_master.md) | TC1~16, UI-01~78, API-01~25 전체 카탈로그 | 자동/수동 열과 판정 근거 열 초안 기입 (8/30). QA 검토 전 |
+| [08_automation_comparison](08_automation_comparison.md) | XCUITest와 Appium 비교. 왜 이 도구인가 | 확정. 장시간 세션 저하 부채는 9/6 해소, 3절에 세션 생존 판정 항목 추가 |
+| [09_test_case_master](09_test_case_master.md) | TC1~16, UI-01~78, API-01~29 전체 카탈로그 | API 대조표 9/15까지 갱신(덮임 28, 부분 1, 미커버 0). **UI 번호 미배정 2건과 자동/수동 열은 QA 검토 전** |
 | [10_defect_catalog](10_defect_catalog.md) | DEF-01~29 + SPEC-PROJ-01 30건, 원인 계열 4개 | 확정. 심각도 전건 기입, 상태 칸은 커밋 해시로 갱신. 9/6 일괄 정리는 7절. 1절(발견 시점)과 2-1절(심각도)은 수정 여부와 무관한 집계라 갱신 대상이 아니다 |
 | [11_execution_results](11_execution_results.md) | 1차 21건 케이스별 판정 원장, 종료 기준 대조 | 확정. 5차 전량 회귀와 세션 저하 원인 규명은 9절 |
-| [12_quality_metrics](12_quality_metrics.md) | 스코어카드 | 8/30 스냅샷(1~7절) + 9/1(8절) + 9/6(9절). **9/15 작업(#14 잔존 2건, AUTH-08, 실행 수치 변동) 미반영** |
+| [12_quality_metrics](12_quality_metrics.md) | 스코어카드 | 확정. 8/30 스냅샷(1~7절) + 9/1(8절) + 9/6(9절) + 9/15(10절). 측정 시점이 다른 숫자를 한 표에 섞지 않는다 |
 | [13_automation_showcase](13_automation_showcase.md) | Appium 78, XCUITest, 뮤테이션 6종, CI 게이트 | 실행 증거 확보 (아래 8/29 실행 증거 참조) |
 | [14_observations](14_observations.md) | 관찰 39 + OBS-3 5건, 스펙 승격 이력, 오탐 정정 | 확정 |
 | [15_release_decision](15_release_decision.md) | 릴리즈 판정문 | **확정 (2026-09-15). 판정 Go.** 04에 허용 정책을 신설하고 적용해 조건부 Go를 낸 뒤 해제 조건 3건을 같은 날 처리했다. 남은 한계 4가지는 릴리즈 노트 기재 사항에 있다 |
