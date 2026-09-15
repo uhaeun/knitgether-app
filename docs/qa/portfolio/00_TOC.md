@@ -14,13 +14,13 @@
 | 문서 | 내용 | 상태 |
 | --- | --- | --- |
 | [00_project_background](00_project_background.md) | 기획자가 자기 제품을 QA하는 구조와 편향 통제 5원칙 | 확정 |
-| [01_test_target_analysis](01_test_target_analysis.md) | 치명도 5단계, CUJ 3개, 넓이와 깊이 투자 원칙 | 확정 (2026-09-01 CUJ 재분류) |
+| [01_test_target_analysis](01_test_target_analysis.md) | 치명도 5단계, CUJ 3개, 넓이와 깊이의 배분 | 확정 (2026-09-01 CUJ 재분류) |
 
 ### 설계 (02~05) — 무엇이 맞는 동작이고 어떻게 확인하는가
 
 | 문서 | 내용 | 상태 |
 | --- | --- | --- |
-| [02_functional_spec](02_functional_spec.md) | 검증 기준선 SPEC 42건, 코드 일치 5단계 판정 | v2.1 확정 |
+| [02_functional_spec](02_functional_spec.md) | 검증 기준선 SPEC 47건, 코드 일치 5단계 판정 | v2.3 확정 |
 | [03_quality_risk_map](03_quality_risk_map.md) | 결함 클래스 RC-01~08, 영향도 × 발생가능성 등급화 | v1.0 확정 |
 | [04_test_strategy](04_test_strategy.md) | 범위, 기법, 자동화 투자 판단, 종료와 중단 기준, 도구 선택 근거 | v1.1 + 2차 전략 |
 | [05_test_cases](05_test_cases.md) | 1차 사이클 TC 21건 설계와 RTM | 확정 |
@@ -37,12 +37,31 @@
 | 문서 | 내용 | 상태 |
 | --- | --- | --- |
 | [08_automation_comparison](08_automation_comparison.md) | XCUITest와 Appium 비교. 왜 이 도구인가 | 실행 숫자 확보. 3절 항목 1건 추가와 문체 정리 남음 |
-| [09_test_case_master](09_test_case_master.md) | TC1~16, UI-01~78, API-01~25 전체 카탈로그 | 자동/수동 열 미기입 |
-| [10_defect_catalog](10_defect_catalog.md) | DEF-01~19 + SPEC-PROJ-01, 원인 계열 4개 | 심각도 열 미기입 |
-| [11_execution_results](11_execution_results.md) | 1차 21건 케이스별 판정 원장, 종료 기준 대조 | TC-CUJ3-01 판정 공백 |
-| 12_quality_metrics | 스코어카드 | **미작성** (심각도 부여 선행 필요) |
+| [09_test_case_master](09_test_case_master.md) | TC1~16, UI-01~78, API-01~25 전체 카탈로그 | 자동/수동 열과 판정 근거 열 초안 기입 (8/30). QA 검토 전 |
+| [10_defect_catalog](10_defect_catalog.md) | DEF-01~29 + SPEC-PROJ-01 30건, 원인 계열 4개 | 심각도 전건 기입. 1절 범주표와 2-1절 요약이 8/29 집계에서 멈춤 |
+| [11_execution_results](11_execution_results.md) | 1차 21건 케이스별 판정 원장, 종료 기준 대조 | 확정. TC-CUJ3-01은 8/30 복원, 9/1 정합성 심층으로 재분류 |
+| [12_quality_metrics](12_quality_metrics.md) | 스코어카드 | 작성 완료 (8/30 기준). 9/1 결함 7건과 4차 회귀 미반영 |
 | [13_automation_showcase](13_automation_showcase.md) | Appium 78, XCUITest, 뮤테이션 6종, CI 게이트 | 실행 증거 확보 (아래 8/29 실행 증거 참조) |
 | [14_observations](14_observations.md) | 관찰 39 + OBS-3 5건, 스펙 승격 이력, 오탐 정정 | 확정 |
+| [15_release_decision](15_release_decision.md) | 릴리즈 판정문 | 미검토 |
+
+### 번호 밖 (2026-09-01 추가) — 기준 문서와 대상 설명
+
+번호 사슬에 넣지 않았다. 00~15는 한 사이클의 시간 순서인데 아래 네 편은 사이클이 끝날 무렵에 썼고, 앞 문서의 판정 근거가 되는 관계도 아니다. 다만 02와 10, 14가 본문에서 인용하므로 근거로는 살아 있다.
+
+| 문서 | 성격 | 어느 문서가 인용하는가 |
+| --- | --- | --- |
+| [원본_v2.2](../../spec/원본_v2.2.md) | 기준 (개발 전) | 2026-07-29 기획서. 29장, 화면 구성과 데이터 모델. 유일하게 개발에 선행한 문서 |
+| [기능정의서_MVP](../../spec/기능정의서_MVP.md) | 기준 | 02 SPEC 원천 (온보딩, 내 뜨개, 창고, 계정) |
+| [기능정의서_도구_설정_홈](../../spec/기능정의서_도구_설정_홈.md) | 기준 | 02 v2.3, 10 DEF-24~29, 12 8절, 14 OBS-4-05 |
+| [spec_drift_f93aacc](../../spec/spec_drift_f93aacc.md) | 기준 | 02 v2.2 확정 근거, 10 4절 |
+| [architecture](../../architecture.md) | 대상 설명 | 01 검증 대상 범위 |
+| [modes](../../modes.md) | 대상 설명 | 01 두 경로, 03 위험 축, 14 OBS-4-04 |
+| [security_review](../../security_review.md) | 검증 결과 | 02 명세 공백 6번, 14 OBS-4-01 |
+
+기능정의서 두 편이 갈린 이유는 화면 분할이다. MVP 쪽이 온보딩·내 뜨개·창고·계정, 도구/설정/홈 쪽이 나머지 8화면이다. 둘을 합치지 않은 것은 작성 시점과 기준 코드가 다르기 때문이고, 합칠 경우 각 항목의 대조 시점을 잃는다.
+
+이 여섯 편은 노션 대응 페이지가 없다. 00~14는 노션에서 다듬어 레포로 옮겼지만 이 편들은 코드 대조에서 바로 나온 사실 기록이라 레포에서 직접 썼다.
 
 ### 참조
 
