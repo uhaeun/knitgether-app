@@ -10,6 +10,7 @@ import { UploadedPatternFile } from '../patterns/uploaded-pattern-file';
 import { ProjectYarnUsageResponseDto } from '../projects/project-response.dto';
 import {
   NeedleResponseDto,
+  LinkedProjectCountResponseDto,
   ProjectNeedleLinkResponseDto,
   ProjectYarnLinkResponseDto,
   ToolItemResponseDto,
@@ -410,6 +411,86 @@ export class LibraryService {
 
   // LINK-02 v1.4: 실/바늘 다중 연결. 연결 시점 스냅샷을 링크에 저장하고,
   // 목록은 원본 생존 여부와 무관하게 링크 스냅샷을 반환한다(LINK-04/05).
+  /// 창고 항목이 현재 연결된 프로젝트 수(DEF-25). 삭제 확인창의 고지에 쓴다.
+  ///
+  /// 삭제된 프로젝트에 걸린 링크는 세지 않는다. 세면 사용자가 찾을 수 없는 개수를
+  /// 고지하게 된다. 링크 자체가 해제(deletedAt)된 것도 제외한다.
+  ///
+  /// 실은 사용 기록(ProjectYarnUsage)이 아니라 연결(ProjectYarnLink)을 센다. 예전에는
+  /// 사용 기록 기준이었는데, 연결만 해두고 아직 쓰지 않은 실이 "사용 중 아님"으로 나와
+  /// 삭제 고지 없이 지워졌다. 바늘과 도구는 고지가 아예 없었다. 셋을 연결 기준으로 맞춘다.
+  async countProjectsLinkedToYarn(
+    ownerId: string,
+    yarnId: string,
+  ): Promise<LinkedProjectCountResponseDto> {
+    await this.findActiveYarn(ownerId, yarnId);
+
+    const links = await this.prisma.projectYarnLink.findMany({
+      where: {
+        ownerId,
+        yarnId,
+        deletedAt: null,
+        project: {
+          deletedAt: null,
+        },
+      },
+      select: {
+        projectId: true,
+      },
+      distinct: ['projectId'],
+    });
+
+    return { projectCount: links.length };
+  }
+
+  async countProjectsLinkedToNeedle(
+    ownerId: string,
+    needleId: string,
+  ): Promise<LinkedProjectCountResponseDto> {
+    await this.findActiveNeedle(ownerId, needleId);
+
+    const links = await this.prisma.projectNeedleLink.findMany({
+      where: {
+        ownerId,
+        needleId,
+        deletedAt: null,
+        project: {
+          deletedAt: null,
+        },
+      },
+      select: {
+        projectId: true,
+      },
+      distinct: ['projectId'],
+    });
+
+    return { projectCount: links.length };
+  }
+
+  async countProjectsLinkedToTool(
+    ownerId: string,
+    toolId: string,
+  ): Promise<LinkedProjectCountResponseDto> {
+    await this.findActiveTool(ownerId, toolId);
+
+    const links = await this.prisma.projectToolLink.findMany({
+      where: {
+        ownerId,
+        toolId,
+        deletedAt: null,
+        project: {
+          deletedAt: null,
+        },
+      },
+      select: {
+        projectId: true,
+      },
+      distinct: ['projectId'],
+    });
+
+    return { projectCount: links.length };
+  }
+
   async listProjectYarnLinks(
     ownerId: string,
     projectId: string,

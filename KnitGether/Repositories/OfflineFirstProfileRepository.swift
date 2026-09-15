@@ -134,3 +134,10 @@ final class OfflineFirstProfileRepository: ProfileRepository {
         throw error
     }
 }
+
+extension OfflineFirstProfileRepository: OfflineSyncFlushable {
+    func flushPendingChanges() async -> Int {
+        await syncPendingChanges()
+        return await local.pendingProfileForSync() == nil ? 0 : 1
+    }
+}

@@ -55,6 +55,60 @@ final class AppRepositoryContainer {
         self.profileRequiresAuthentication = profileRequiresAuthentication
     }
 
+    /// 로그아웃 직전에 부른다. 올릴 수 있는 것은 올리고, 그러고도 이 기기에만 남는 개수를 돌려준다.
+    /// 0이면 로컬을 지워도 잃을 것이 없다.
+    func flushPendingChanges() async -> Int {
+        let flushables: [any OfflineSyncFlushable] = [
+            projectRepository,
+            patternRepository,
+            libraryRepository,
+            skillRepository,
+            dictionaryRepository,
+            profileRepository,
+        ].compactMap { $0 as? any OfflineSyncFlushable }
+
+        var remaining = 0
+        for flushable in flushables {
+            remaining += await flushable.flushPendingChanges()
+        }
+        return remaining
+    }
+
+    /// 로그아웃한 계정의 로컬 저장소를 지운다.
+    ///
+    /// 이름은 캐시지만 그 안에는 아직 올리지 못한 항목도 있으므로, 반드시
+    /// `flushPendingChanges()`로 남은 개수를 확인하고 사용자 동의를 받은 뒤에만 부른다.
+    /// 로그아웃 후에도 이 폴더가 남으면 기기에 물리 접근한 사람이 이전 계정의 작업을 읽을 수
+    /// 있고, 다음 계정 로그인 시 유입 경로가 된다(DEF-05, DEF-06, DEF-07).
+    @discardableResult
+    static func removeCachedData(
+        for userId: String?,
+        environment: [String: String] = ProcessInfo.processInfo.environment,
+        fileManager: FileManager = .default
+    ) -> Bool {
+        guard let baseURL = apiBaseURL(from: environment) else {
+            return false
+        }
+
+        let directoryURL = remoteCacheDirectoryURL(
+            from: environment,
+            baseURL: baseURL,
+            userId: userId,
+            fileManager: fileManager
+        )
+
+        guard fileManager.fileExists(atPath: directoryURL.path) else {
+            return true
+        }
+
+        do {
+            try fileManager.removeItem(at: directoryURL)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     static func makeDefault(
         environment: [String: String] = ProcessInfo.processInfo.environment,
         session: URLSession = .shared

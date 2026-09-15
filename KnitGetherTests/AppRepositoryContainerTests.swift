@@ -604,6 +604,75 @@ struct AppRepositoryContainerTests {
         return directory
     }
 
+    /// DEF-05, DEF-06, DEF-07. 로그아웃한 계정의 로컬 저장소가 실제로 사라지는지 본다.
+    ///
+    /// 이 폴더가 남으면 기기에 물리 접근한 사람이 이전 계정의 작업을 읽을 수 있고, 다음 계정
+    /// 로그인 시 유입 경로가 된다. 화면에서 안 보이는 것과 디스크에서 사라진 것은 다른 사실이라
+    /// 파일 존재 여부로 판정한다.
+    @Test func removeCachedDataDeletesOnlyTheSignedOutAccountDirectory() throws {
+        let cacheRootDirectory = try Self.makeTempCacheDirectory()
+        defer { try? FileManager.default.removeItem(at: cacheRootDirectory) }
+
+        let environment = Self.apiEnvironment(cacheRootDirectory: cacheRootDirectory)
+        let signedOut = "user-a"
+        let other = "user-b"
+
+        let signedOutDirectory = try Self.seedCacheDirectory(
+            for: signedOut,
+            environment: environment,
+            cacheRootDirectory: cacheRootDirectory
+        )
+        let otherDirectory = try Self.seedCacheDirectory(
+            for: other,
+            environment: environment,
+            cacheRootDirectory: cacheRootDirectory
+        )
+
+        #expect(FileManager.default.fileExists(atPath: signedOutDirectory.path))
+        #expect(FileManager.default.fileExists(atPath: otherDirectory.path))
+
+        let removed = AppRepositoryContainer.removeCachedData(
+            for: signedOut,
+            environment: environment
+        )
+
+        #expect(removed)
+        #expect(
+            !FileManager.default.fileExists(atPath: signedOutDirectory.path),
+            "로그아웃한 계정의 로컬 저장소가 디스크에 남아 있다"
+        )
+        #expect(
+            FileManager.default.fileExists(atPath: otherDirectory.path),
+            "로그아웃과 무관한 계정의 저장소까지 지웠다"
+        )
+    }
+
+    /// 서버 주소를 모르면 어느 폴더를 지워야 할지 정할 수 없다. 그때는 아무것도 지우지 않는다.
+    @Test func removeCachedDataDoesNothingWithoutAPIBaseURL() {
+        #expect(!AppRepositoryContainer.removeCachedData(for: "user-a", environment: [:]))
+    }
+
+    /// 계정 폴더를 만들고 파일 하나를 넣는다. 폴더 경로는 컨테이너가 쓰는 규칙을 그대로 따른다.
+    private static func seedCacheDirectory(
+        for userId: String,
+        environment: [String: String],
+        cacheRootDirectory: URL
+    ) throws -> URL {
+        _ = environment
+
+        let host = cacheRootDirectory.appendingPathComponent(
+            "https-api-knitgether-test--api-v1",
+            isDirectory: true
+        )
+        let directory = host.appendingPathComponent(userId, isDirectory: true)
+        try FileManager.default.createDirectory(
+            at: directory,
+            withIntermediateDirectories: true
+        )
+        try Data("[]".utf8).write(to: directory.appendingPathComponent("projects.json"))
+        return directory
+    }
+
     private static func apiEnvironment(
         baseURL: String = "https://api.knitgether.test/api/v1",
         cacheDirectory: URL

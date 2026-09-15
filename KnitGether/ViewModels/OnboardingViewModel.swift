@@ -37,7 +37,6 @@ final class OnboardingViewModel: ObservableObject {
         case intro
         case account
         case profile
-        case preferences
         case skillTest
         case ready
 
@@ -50,8 +49,6 @@ final class OnboardingViewModel: ObservableObject {
     @Published var formData = OnboardingFormData()
     @Published private(set) var errorMessage: String?
     @Published private(set) var isSaving = false
-
-    let unitOptions = ["Metric", "US"]
 
     private var profileRepository: any ProfileRepository
     private var existingProfile: UserProfile?

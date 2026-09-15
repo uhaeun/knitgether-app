@@ -48,6 +48,27 @@ final class RemoteLibraryRepository: LibraryRepository {
         try await apiClient.get("library/yarns/\(yarnId.uuidString.lowercased())/usages")
     }
 
+    func linkedProjectCount(forYarnId yarnId: UUID) async throws -> Int {
+        let response: LinkedProjectCountResponse = try await apiClient.get(
+            "library/yarns/\(yarnId.uuidString.lowercased())/linked-project-count"
+        )
+        return response.projectCount
+    }
+
+    func linkedProjectCount(forNeedleId needleId: UUID) async throws -> Int {
+        let response: LinkedProjectCountResponse = try await apiClient.get(
+            "library/needles/\(needleId.uuidString.lowercased())/linked-project-count"
+        )
+        return response.projectCount
+    }
+
+    func linkedProjectCount(forToolId toolId: UUID) async throws -> Int {
+        let response: LinkedProjectCountResponse = try await apiClient.get(
+            "library/tools/\(toolId.uuidString.lowercased())/linked-project-count"
+        )
+        return response.projectCount
+    }
+
     func recordYarnUsage(_ usage: ProjectYarnUsage) async throws -> ProjectYarnUsage {
         try await apiClient.send(
             "projects/\(usage.projectId.uuidString.lowercased())/yarn-usages",
@@ -278,4 +299,9 @@ private struct SaveProjectYarnUsageRequest: Encodable {
         memo = usage.memo
         usedAt = usage.usedAt
     }
+}
+
+/// 창고 항목 삭제 확인창의 연결 고지 응답(DEF-25).
+struct LinkedProjectCountResponse: Decodable {
+    let projectCount: Int
 }

@@ -4,6 +4,85 @@ import Testing
 
 @MainActor
 struct LibraryItemViewModelTests {
+    // DEF-25. 창고 삭제 고지를 연결 기준으로 통일했다. 예전에는 실만 사용 기록 기준으로
+    // 고지했고 바늘과 도구는 아무 말 없이 지워졌다.
+
+    /// 셋이 같은 기준으로 답하는지. 하나라도 빠지면 그 창고는 고지 없이 지워진다.
+    @Test func allLibraryKindsReportLinkedProjectCountForDeletionNotice() async throws {
+        let yarn = Self.makeYarn(name: "Soft Merino DK")
+        let needle = Self.makeNeedle(name: "5.0mm 대바늘")
+        let tool = Self.makeTool(name: "마커")
+        let repository = FakeLibraryRepository(yarns: [yarn], needles: [needle], tools: [tool])
+        repository.linkedProjectCounts = [yarn.id: 2, needle.id: 3, tool.id: 1]
+
+        let yarnViewModel = YarnLibraryViewModel(libraryRepository: repository)
+        let needleViewModel = NeedleLibraryViewModel(libraryRepository: repository)
+        let toolViewModel = ToolLibraryViewModel(libraryRepository: repository)
+
+        await yarnViewModel.loadLinkedProjectCount(for: yarn)
+        await needleViewModel.loadLinkedProjectCount(for: needle)
+        await toolViewModel.loadLinkedProjectCount(for: tool)
+
+        #expect(yarnViewModel.linkedProjectCount(for: yarn) == 2)
+        #expect(needleViewModel.linkedProjectCount(for: needle) == 3)
+        #expect(toolViewModel.linkedProjectCount(for: tool) == 1)
+    }
+
+    /// 연결 수를 세지 못했을 때 고지 문장을 붙이지 않는지.
+    /// 0을 "연결 없음"으로 단정해 "0개 프로젝트에 연결돼 있어요"라고 쓰면 거짓말이 된다.
+    @Test func deletionMessageOmitsLinkNoticeWhenCountIsZero() async throws {
+        let yarn = Self.makeYarn(name: "Soft Merino DK")
+        let needle = Self.makeNeedle(name: "5.0mm 대바늘")
+        let tool = Self.makeTool(name: "마커")
+
+        let yarnMessage = YarnLibraryView.deletionMessage(for: yarn, linkedProjectCount: 0)
+        let needleMessage = NeedleLibraryView.deletionMessage(for: needle, linkedProjectCount: 0)
+        let toolMessage = ToolLibraryView.deletionMessage(for: tool, linkedProjectCount: 0)
+
+        #expect(!yarnMessage.contains("연결돼 있어요"))
+        #expect(!needleMessage.contains("연결돼 있어요"))
+        #expect(!toolMessage.contains("연결돼 있어요"))
+        #expect(yarnMessage.contains("Soft Merino DK"))
+        #expect(needleMessage.contains("5.0mm 대바늘"))
+        #expect(toolMessage.contains("마커"))
+    }
+
+    /// 셋이 같은 문장으로 고지하는지. 창고마다 다른 말을 쓰면 사용자가 기준이 다르다고 읽는다.
+    @Test func deletionMessageUsesSameLinkNoticeAcrossLibraryKinds() async throws {
+        let yarnMessage = YarnLibraryView.deletionMessage(
+            for: Self.makeYarn(name: "Soft Merino DK"),
+            linkedProjectCount: 2
+        )
+        let needleMessage = NeedleLibraryView.deletionMessage(
+            for: Self.makeNeedle(name: "5.0mm 대바늘"),
+            linkedProjectCount: 2
+        )
+        let toolMessage = ToolLibraryView.deletionMessage(
+            for: Self.makeTool(name: "마커"),
+            linkedProjectCount: 2
+        )
+
+        for message in [yarnMessage, needleMessage, toolMessage] {
+            #expect(message.contains("현재 2개 프로젝트에 연결돼 있어요"))
+            // 기준을 연결로 바꿨으므로 "사용 중" 표현은 남아 있으면 안 된다.
+            #expect(!message.contains("사용 중"))
+        }
+    }
+
+    /// 서버 조회가 실패해도 화면이 막히지 않고, 고지만 생략되는지.
+    @Test func linkedProjectCountFallsBackToZeroWhenServerFails() async throws {
+        let yarn = Self.makeYarn(name: "Soft Merino DK")
+        let repository = FakeLibraryRepository(yarns: [yarn])
+        repository.shouldFailLinkedProjectCount = true
+        let viewModel = YarnLibraryViewModel(libraryRepository: repository)
+
+        await viewModel.loadLinkedProjectCount(for: yarn)
+
+        #expect(viewModel.linkedProjectCount(for: yarn) == 0)
+        #expect(repository.linkedProjectCountRequests == [yarn.id])
+        #expect(viewModel.errorMessage == nil)
+    }
+
     @Test func addYarnSavesTrimmedFormAndReloadsYarns() async throws {
         let repository = FakeLibraryRepository()
         let viewModel = YarnLibraryViewModel(libraryRepository: repository)
@@ -510,6 +589,10 @@ private final class FakeLibraryRepository: LibraryRepository {
     var deletedNeedleIDs: [UUID] = []
     var deletedToolIDs: [UUID] = []
     var requestedYarnUsageIDs: [UUID] = []
+    /// DEF-25. 창고 삭제 고지의 연결 수. 서버만 아는 값이라 스텁이 대신 답한다.
+    var linkedProjectCounts: [UUID: Int] = [:]
+    var linkedProjectCountRequests: [UUID] = []
+    var shouldFailLinkedProjectCount = false
     var shouldFailDeleteYarn = false
     var shouldFailDeleteNeedle = false
     var shouldFailDeleteTool = false
@@ -524,6 +607,28 @@ private final class FakeLibraryRepository: LibraryRepository {
         self.needles = needles
         self.tools = tools
         self.yarnUsages = yarnUsages
+    }
+
+    func linkedProjectCount(forYarnId yarnId: UUID) async throws -> Int {
+        try recordLinkedProjectCountRequest(yarnId)
+    }
+
+    func linkedProjectCount(forNeedleId needleId: UUID) async throws -> Int {
+        try recordLinkedProjectCountRequest(needleId)
+    }
+
+    func linkedProjectCount(forToolId toolId: UUID) async throws -> Int {
+        try recordLinkedProjectCountRequest(toolId)
+    }
+
+    private func recordLinkedProjectCountRequest(_ id: UUID) throws -> Int {
+        linkedProjectCountRequests.append(id)
+
+        if shouldFailLinkedProjectCount {
+            throw APIError.requestFailed(statusCode: 500, code: nil, message: nil)
+        }
+
+        return linkedProjectCounts[id] ?? 0
     }
 
     func fetchYarns() async throws -> [Yarn] {

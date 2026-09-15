@@ -281,3 +281,10 @@ final class OfflineFirstSkillRepository: SkillRepository {
         throw error
     }
 }
+
+extension OfflineFirstSkillRepository: OfflineSyncFlushable {
+    func flushPendingChanges() async -> Int {
+        await syncPendingChanges()
+        return await local.pendingSkillsForSync().count
+    }
+}

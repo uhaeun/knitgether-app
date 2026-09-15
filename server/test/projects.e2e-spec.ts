@@ -1648,7 +1648,8 @@ describe('Projects route', () => {
     const response = await request(app.getHttpServer())
       .patch('/api/v1/projects/11111111-1111-4111-8111-111111111111')
       .set('Authorization', 'Bearer dev-token')
-      .send(saveProjectBody)
+      // 수정에는 낙관적 잠금 기준값이 필수다(GitHub #14).
+      .send({ ...saveProjectBody, baseUpdatedAt: userAProject.updatedAt.toISOString() })
       .expect(200);
 
     expect(prisma.project.findFirst).toHaveBeenCalledWith({
@@ -1690,6 +1691,7 @@ describe('Projects route', () => {
           rowInstructions: [],
         },
         workSessions: [],
+        baseUpdatedAt: userAProject.updatedAt.toISOString(),
       })
       .expect(200);
 

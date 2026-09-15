@@ -7,6 +7,115 @@ import UIKit
 
 @MainActor
 struct ProjectWorkspaceViewModelTests {
+    /// DEF-24. 저장 충돌이 나면 사용자가 친 메모가 화면에서 사라지면서
+    /// "다시 시도해 주세요"라고 안내했다. 다시 시도할 재료를 그 복구가 지운 것이다.
+    ///
+    /// 서버 메모를 함께 확인하는 것이 이 케이스의 핵심이다. 뒤 조건이 없으면
+    /// 서버 값을 그대로 덮어쓰는 구현도 "메모가 비어 있지 않다"는 앞 조건만으로 통과한다.
+    @Test func projectSaveConflictKeepsUnsavedMemoInsteadOfServerValue() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.projects = [project.copy(memo: "다른 기기가 쓴 메모")]
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        #expect(viewModel.memoText == "저장 직전에 친 내용")
+        #expect(viewModel.memoText != "다른 기기가 쓴 메모")
+        #expect(viewModel.project.memo == "다른 기기가 쓴 메모")
+    }
+
+    /// 충돌 복구는 서버 본을 다시 받아야 한다. RemoteProjectRepository가 fetch 시점의
+    /// 서버 updatedAt을 낙관적 잠금 기준값으로 기록하므로, 이 호출이 없으면 재시도가
+    /// 낡은 기준값으로 나가 409를 다시 맞는다. 안내 문구가 약속한 재시도가 성립하지 않는다.
+    @Test func projectSaveConflictRefetchesServerProjectToRefreshLockBaseline() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+        let callCountBeforeSave = repository.fetchProjectCallCount
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        #expect(repository.fetchProjectCallCount > callCountBeforeSave)
+    }
+
+    /// DEF-24 조사 중 발견. 저장 실패 안내가 후속 조회에 지워지던 것.
+    ///
+    /// saveMemo는 persist 뒤에 loadRelatedSkills를 부르는데, 그 조회가 성공하면
+    /// errorMessage를 nil로 되돌린다. 그래서 메모 저장이 충돌로 실패해도 사용자에게는
+    /// 아무 안내가 뜨지 않았다. 문구가 모순인 것보다 나쁘다. 사용자는 저장된 줄 안다.
+    @Test func failedMemoSaveKeepsErrorMessageVisibleAfterFollowUpLoad() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        #expect(viewModel.errorMessage != nil)
+    }
+
+    /// 충돌 안내가 "다시 시도"를 요구하면서 무엇이 남았는지 말하지 않으면
+    /// 사용자는 자기 입력이 사라졌다고 읽는다. 문구가 동작을 설명하는지 본다.
+    @Test func projectSaveConflictMessageSaysInputIsKept() async throws {
+        let project = Self.makeProject().copy(memo: "내가 쓰던 메모")
+        let repository = ProjectRepositorySpy(project: project)
+        repository.saveError = APIError.requestFailed(
+            statusCode: 409,
+            code: "PROJECT_CONFLICT",
+            message: "Project was modified by another device."
+        )
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        viewModel.memoText = "저장 직전에 친 내용"
+        await viewModel.saveMemo()
+
+        let message = try #require(viewModel.errorMessage)
+        #expect(message.contains("입력하신 내용은 그대로 있어요"))
+        #expect(!message.contains("다시 불러왔으니"))
+    }
+
     @Test func resetCurrentRowPersistsZeroAndKeepsCounterMetadata() async throws {
         let project = Self.makeProject(currentRow: 12, targetRow: 40, rowInstructions: [
             Self.makeInstruction(rowNumber: 12, text: "K all", skillTags: "K")
@@ -421,6 +530,135 @@ struct ProjectWorkspaceViewModelTests {
         #expect(viewModel.currentSessionElapsed == 0)
         #expect(repository.savedProjects.isEmpty)
         #expect(viewModel.project.workSessions.isEmpty)
+    }
+
+    // 원 기획 §13, GitHub #10. 수동 정지한 타이머가 화면 재진입에서 다시 돌던 것.
+
+    /// 이 케이스의 핵심은 뷰모델을 새로 만드는 것이다. 화면을 나갔다 들어오면
+    /// @StateObject가 새로 생기므로, 뷰모델 안에만 기억해 두면 정확히 막아야 할
+    /// 그 순간에 억제가 사라진다. 같은 뷰모델로 확인하면 그 구현도 통과한다.
+    @Test func manualStopKeepsTimerOffWhenScreenIsReopened() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let firstVisit = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        firstVisit.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await firstVisit.stopWorkSessionManually(at: Date(timeIntervalSince1970: 1_800_000_300))
+        #expect(!firstVisit.isTrackingTime)
+
+        let secondVisit = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+        secondVisit.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_001_000))
+
+        #expect(!secondVisit.isTrackingTime)
+    }
+
+    /// 억제가 모든 자동 시작을 영구히 막아 버리면 타이머를 쓸 수 없게 된다.
+    /// 사용자가 직접 시작하면 풀려야 한다.
+    @Test func manualStartClearsSuppressionForLaterAutoStart() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await viewModel.stopWorkSessionManually(at: Date(timeIntervalSince1970: 1_800_000_300))
+        viewModel.startWorkSession(at: Date(timeIntervalSince1970: 1_800_000_400))
+
+        #expect(viewModel.isTrackingTime)
+        #expect(!store.isAutoStartSuppressed(forProjectId: project.id))
+    }
+
+    /// 화면 이탈로 끝난 세션은 수동 정지가 아니다. 다시 들어오면 평소대로 시작해야 한다.
+    /// 둘을 구분하지 않으면 화면을 한 번 나가는 것만으로 타이머가 영영 꺼진다.
+    @Test func leavingScreenDoesNotSuppressAutoStartOnReturn() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await viewModel.finishWorkSession(at: Date(timeIntervalSince1970: 1_800_000_300))
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_001_000))
+
+        #expect(viewModel.isTrackingTime)
+    }
+
+    /// 수동 정지 후 앱을 백그라운드에 보냈다 돌아와도 켜지지 않아야 한다.
+    @Test func manualStopKeepsTimerOffAfterAppReturnsFromBackground() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let store = WorkTimerSuppressionStore()
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(),
+            workTimerSuppressionStore: store
+        )
+
+        viewModel.startWorkSessionIfAllowed(at: Date(timeIntervalSince1970: 1_800_000_000))
+        await viewModel.stopWorkSessionManually(at: Date(timeIntervalSince1970: 1_800_000_300))
+        await viewModel.handleAppBackgrounded(at: Date(timeIntervalSince1970: 1_800_000_400))
+        viewModel.handleAppActivated(at: Date(timeIntervalSince1970: 1_800_000_900))
+
+        #expect(!viewModel.isTrackingTime)
+    }
+
+    @Test func backgroundEndsSessionAndActivationStartsANewOne() async throws {
+        let project = Self.makeProject()
+        let repository = ProjectRepositorySpy(project: project)
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+        let startedAt = Date(timeIntervalSince1970: 1_800_000_000)
+        let backgroundedAt = startedAt.addingTimeInterval(30)
+
+        viewModel.startWorkSession(at: startedAt)
+        await viewModel.handleAppBackgrounded(at: backgroundedAt)
+
+        let storedSession = repository.savedProjects.last?.workSessions.last
+        #expect(!viewModel.isTrackingTime)
+        #expect(storedSession?.startedAt == startedAt)
+        #expect(storedSession?.endedAt == backgroundedAt)
+
+        viewModel.handleAppActivated(at: backgroundedAt.addingTimeInterval(5))
+
+        #expect(viewModel.isTrackingTime)
+        #expect(viewModel.currentSessionElapsed == 0)
     }
 
     @Test func recordingWorkSessionCreatesLocalOnlySessionForSyncedProject() throws {

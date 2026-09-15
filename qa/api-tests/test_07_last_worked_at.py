@@ -19,6 +19,11 @@ from helpers import project_payload, work_session
 
 WORKED = "2026-08-20T10:00:00.000Z"
 LATER = "2026-08-25T10:00:00.000Z"
+# 세션 종료 시각. f93aacc(2026-09-01)가 교차 필드 검증을 배선한 뒤로 서버는
+# endedAt <= startedAt을 400으로 거부한다. 이 두 케이스가 판정하는 것은 세션 길이가
+# 아니라 lastWorkedAt이므로 길이는 임의의 10분으로 둔다.
+WORKED_END = "2026-08-20T10:10:00.000Z"
+LATER_END = "2026-08-25T10:10:00.000Z"
 
 
 def _db_last_worked_at(db, pid):
@@ -62,11 +67,11 @@ def test_api_25_update_moves_last_worked_at(account_a, db):
 
     later = project_payload(pid, name="API25-갱신")
     later["workSessions"] = [
-        work_session(pid, started_at=WORKED, ended_at=WORKED),
-        work_session(pid, started_at=LATER, ended_at=LATER),
+        work_session(pid, started_at=WORKED, ended_at=WORKED_END),
+        work_session(pid, started_at=LATER, ended_at=LATER_END),
     ]
     later["lastWorkedAt"] = LATER
-    assert account_a.api.patch(f"/projects/{pid}", json=later).status_code == 200
+    assert account_a.api.patch_project(pid, later).status_code == 200
 
     stored = _db_last_worked_at(db, pid)
     assert stored.isoformat().startswith("2026-08-25T10:00:00"), (
@@ -103,7 +108,7 @@ def test_api_25_server_does_not_derive_from_sessions(account_a, db):
     """
     payload = project_payload(name="API25-파생없음")
     pid = payload["id"]
-    payload["workSessions"] = [work_session(pid, started_at=LATER, ended_at=LATER)]
+    payload["workSessions"] = [work_session(pid, started_at=LATER, ended_at=LATER_END)]
     payload["lastWorkedAt"] = None
 
     assert account_a.api.create_project(payload).status_code == 201

@@ -196,27 +196,22 @@ final class SkillTestViewModel: ObservableObject {
         }
     }
 
+    /// 저장 실패 문구. 사용자가 취할 수 있는 행동만 남긴다(DEF-28).
+    /// 개발 환경 안내(Local Device 설정, Xcode 콘솔, 서버 Terminal 로그)와 상태 코드 숫자는
+    /// 최종 사용자가 할 수 있는 조치가 아니라 뺐다. 진단에 필요한 원본 오류는 debugLog가 남긴다.
     private static func saveErrorMessage(for error: Error) -> String {
         if error is URLError {
-            return "서버에 연결하지 못했어요. 같은 Wi-Fi와 Local Device 설정을 확인해 주세요."
+            return "서버에 연결하지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요."
         }
 
         if let apiError = error as? APIError {
             switch apiError.statusCode {
-            case 400:
-                return "스킬 테스트 값이 서버 형식과 맞지 않아요. Xcode 콘솔을 확인해 주세요."
             case 401:
                 return "로그인 정보가 만료됐어요. 다시 로그인해 주세요."
             case 404:
-                return "서버에서 해당 스킬을 찾지 못했어요. 스킬 목록을 새로고침해 주세요."
-            case let statusCode? where statusCode >= 500:
-                return "서버에서 문제가 발생했어요. 서버 Terminal 로그를 확인해 주세요."
-            case let statusCode?:
-                return "스킬 테스트 저장 요청이 실패했어요. 상태 코드 \(statusCode)."
-            case nil:
-                if case .decodingFailed = apiError {
-                    return "서버 응답을 앱이 읽지 못했어요. Xcode 콘솔을 확인해 주세요."
-                }
+                return "해당 스킬을 찾지 못했어요. 스킬 목록을 새로고침해 주세요."
+            default:
+                break
             }
         }
 

@@ -44,6 +44,12 @@ type MockPrismaService = {
     update: jest.Mock;
     updateMany: jest.Mock;
   };
+  projectToolLink: {
+    findMany: jest.Mock;
+  };
+  toolItem: {
+    findFirst: jest.Mock;
+  };
   $transaction: jest.Mock;
 };
 
@@ -54,6 +60,13 @@ describe('Library route', () => {
 
   const yarnId = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
   const needleId = 'dddddddd-dddd-4ddd-8ddd-dddddddddddd';
+  const toolId = 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
+  const activeTool = {
+    id: toolId,
+    ownerId: 'user-a',
+    name: 'Stitch marker',
+    deletedAt: null,
+  };
   const activeYarn = {
     id: yarnId,
     ownerId: 'user-a',
@@ -190,6 +203,12 @@ describe('Library route', () => {
         update: jest.fn(),
         updateMany: jest.fn(),
       },
+      projectToolLink: {
+        findMany: jest.fn(),
+      },
+      toolItem: {
+        findFirst: jest.fn(),
+      },
       $transaction: jest.fn(async (callback) => callback(prisma)),
     };
 
@@ -227,6 +246,10 @@ describe('Library route', () => {
     prisma.projectNeedleLink.create.mockReset();
     prisma.projectNeedleLink.update.mockReset();
     prisma.projectNeedleLink.updateMany.mockReset();
+    prisma.projectToolLink.findMany.mockReset();
+    prisma.projectToolLink.findMany.mockResolvedValue([]);
+    prisma.toolItem.findFirst.mockReset();
+    prisma.toolItem.findFirst.mockResolvedValue(activeTool);
     prisma.$transaction.mockReset();
     prisma.$transaction.mockImplementation(async (callback) => callback(prisma));
     prisma.userProfile.upsert.mockResolvedValue(undefined);
@@ -541,6 +564,101 @@ describe('Library route', () => {
         deletedAt: null,
       }),
     });
+  });
+
+  // DEF-25. 창고 삭제 고지를 연결 기준으로 통일하면서 신설한 역방향 조회.
+  // 실은 사용 기록 기준이었고 바늘과 도구는 고지가 아예 없었다.
+  it('counts only live projects linked to a yarn', async () => {
+    prisma.projectYarnLink.findMany.mockResolvedValue([
+      { projectId: projectId },
+      { projectId: '22222222-2222-4222-8222-222222222222' },
+    ]);
+
+    const response = await request(app.getHttpServer())
+      .get(`/api/v1/library/yarns/${yarnId}/linked-project-count`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200);
+
+    expect(response.body).toEqual({ projectCount: 2 });
+    // 삭제된 프로젝트에 걸린 링크를 세면 사용자가 찾을 수 없는 개수를 고지하게 된다.
+    // 이 조건이 없으면 전부 세는 구현도 개수만 맞으면 통과한다.
+    expect(prisma.projectYarnLink.findMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        yarnId,
+        deletedAt: null,
+        project: {
+          deletedAt: null,
+        },
+      },
+      select: {
+        projectId: true,
+      },
+      distinct: ['projectId'],
+    });
+  });
+
+  it('counts only live projects linked to a needle', async () => {
+    prisma.projectNeedleLink.findMany.mockResolvedValue([
+      { projectId: projectId },
+    ]);
+
+    const response = await request(app.getHttpServer())
+      .get(`/api/v1/library/needles/${needleId}/linked-project-count`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200);
+
+    expect(response.body).toEqual({ projectCount: 1 });
+    expect(prisma.projectNeedleLink.findMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        needleId,
+        deletedAt: null,
+        project: {
+          deletedAt: null,
+        },
+      },
+      select: {
+        projectId: true,
+      },
+      distinct: ['projectId'],
+    });
+  });
+
+  it('counts only live projects linked to a tool', async () => {
+    prisma.projectToolLink.findMany.mockResolvedValue([
+      { projectId: projectId },
+    ]);
+
+    const response = await request(app.getHttpServer())
+      .get(`/api/v1/library/tools/${toolId}/linked-project-count`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(200);
+
+    expect(response.body).toEqual({ projectCount: 1 });
+    expect(prisma.projectToolLink.findMany).toHaveBeenCalledWith({
+      where: {
+        ownerId: 'user-a',
+        toolId,
+        deletedAt: null,
+        project: {
+          deletedAt: null,
+        },
+      },
+      select: {
+        projectId: true,
+      },
+      distinct: ['projectId'],
+    });
+  });
+
+  it('returns 404 when counting links for a yarn that does not exist', async () => {
+    prisma.yarn.findFirst.mockResolvedValue(null);
+
+    await request(app.getHttpServer())
+      .get(`/api/v1/library/yarns/${yarnId}/linked-project-count`)
+      .set('Authorization', 'Bearer dev-token')
+      .expect(404);
   });
 
   it('lists project yarn links regardless of yarn liveness', async () => {

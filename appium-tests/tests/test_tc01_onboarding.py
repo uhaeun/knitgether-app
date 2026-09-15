@@ -9,8 +9,13 @@ from pages.onboarding_page import OnboardingPage
 DISPLAY_NAME = "자동화니터"
 
 
-def test_ui_01_complete_six_pages(onboarding):
-    """UI-01 온보딩 6페이지를 완주하면 메인 하단 탭바가 보이는지."""
+def test_ui_01_complete_five_pages(onboarding):
+    """UI-01 온보딩 5페이지를 완주하면 메인 하단 탭바가 보이는지.
+
+    단위 선택 단계는 2026-09-06에 제거됐다(DEF-26, DEF-29). Metric과 US, Imperial 중
+    무엇을 골라도 앱 동작이 같았고, 게이지 계산기와 상세 측정 어디에도 그 값을 읽는 코드가
+    없었다. 선택지만 있고 효과가 없는 설정이라 없애고 cm로 고정했다.
+    """
     page = OnboardingPage(onboarding.driver)
 
     page.tap_next()                       # 1 → 2
@@ -18,7 +23,6 @@ def test_ui_01_complete_six_pages(onboarding):
     page.enter_name(DISPLAY_NAME)
     page.tap_next()                       # 3 → 4
     page.tap_next()                       # 4 → 5
-    page.tap_next()                       # 5 → 6
 
     assert page.is_name_shown(DISPLAY_NAME), "마지막 페이지에 입력한 이름이 없음"
     page.tap_start()

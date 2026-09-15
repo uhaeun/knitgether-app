@@ -90,3 +90,21 @@ class Api:
     # 편의: 프로젝트 생성 후 응답 반환
     def create_project(self, payload: dict) -> requests.Response:
         return self.post("/projects", json=payload)
+
+    def patch_project(self, project_id: str, payload: dict) -> requests.Response:
+        """수정에 필요한 낙관적 잠금 기준값을 서버에서 읽어 붙여 보낸다(GitHub #14).
+
+        수정(PATCH)은 baseUpdatedAt이 없으면 400이다. 다른 기기가 먼저 고친 것을
+        모르고 덮어쓰는 요청을 서버가 통과시키지 않기 위해서다.
+
+        여기서 기준값을 직접 읽는 이유는, 이 헬퍼를 쓰는 케이스들이 충돌을 검증하려는
+        것이 아니라 각자의 다른 것을 보려 하기 때문이다. 충돌 자체를 보는 케이스는
+        기준값을 손으로 만들어 보낸다(test_17, test_19).
+        """
+        current = self.get(f"/projects/{project_id}")
+        body = dict(payload)
+
+        if current.status_code == 200:
+            body["baseUpdatedAt"] = current.json()["updatedAt"]
+
+        return self.patch(f"/projects/{project_id}", json=body)

@@ -1,0 +1,328 @@
+.....................
+[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_20_rename_keeps_yarn_link_long_press_path.png
+F...
+[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_24_target_date_shows_and_persists.png
+FE.................s........................... [ 87%]
+..........                                                               [100%]
+==================================== ERRORS ====================================
+__________________ ERROR at setup of test_ui_25_dday_boundary __________________
+
+_pool = <conftest.DriverPool object at 0x108073230>
+request = <SubRequest 'kg' for <Function test_ui_25_dday_boundary>>
+
+    @pytest.fixture
+    def kg(_pool, request):
+        """로컬 모드 세션. 대부분의 케이스가 이걸 쓴다."""
+>       driver = _pool.get("local")
+                 ^^^^^^^^^^^^^^^^^^
+
+conftest.py:293: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+conftest.py:203: in get
+    self._driver = webdriver.Remote(APPIUM_SERVER, options=_options(**options))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py:249: in __init__
+    super().__init__(
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py:291: in __init__
+    self.start_session(capabilities)
+.venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py:343: in start_session
+    response = self.execute(RemoteCommand.NEW_SESSION, w3c_caps)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py:503: in execute
+    self.error_handler.check_response(response)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x1082a9b50>
+response = {'status': 500, 'value': '{"value":{"error":"unknown error","message":"Unable to start WebDriverAgent session. Origina...ts:174:3)\\n    at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5"}}'}
+
+    def check_response(self, response: dict[str, Any]) -> None:
+        """Check that a JSON response from the WebDriver does not have an error.
+    
+        Args:
+            response: The JSON response from the WebDriver server as a dictionary
+                object.
+    
+        Raises:
+            WebDriverException: If the response contains an error message.
+        """
+        status = response.get("status", None)
+        if not status or status == ErrorCode.SUCCESS:
+            return
+        value = None
+        message = response.get("message", "")
+        screen: str = response.get("screen", "")
+        stacktrace = None
+        if isinstance(status, int):
+            value_json = response.get("value", None)
+            if value_json and isinstance(value_json, str):
+                try:
+                    value = json.loads(value_json)
+                    if isinstance(value, dict):
+                        if len(value) == 1:
+                            value = value["value"]
+                        status = value.get("error", None)
+                        if not status:
+                            status = value.get("status", ErrorCode.UNKNOWN_ERROR)
+                            message = value.get("value") or value.get("message")
+                            if not isinstance(message, str):
+                                value = message
+                                message = message.get("message") if isinstance(message, dict) else None
+                        else:
+                            message = value.get("message", None)
+                except ValueError:
+                    pass
+    
+        exception_class: type[WebDriverException]
+        e = ErrorCode()
+        error_codes = [item for item in dir(e) if not item.startswith("__")]
+        for error_code in error_codes:
+            error_info = getattr(ErrorCode, error_code)
+            if isinstance(error_info, list) and status in error_info:
+                exception_class = getattr(ExceptionMapping, error_code, WebDriverException)
+                break
+        else:
+            exception_class = WebDriverException
+    
+        if not value:
+            value = response["value"]
+        if isinstance(value, str):
+            raise exception_class(value)
+        if message == "" and "message" in value:
+            message = value["message"]
+    
+        screen = None  # type: ignore[assignment]
+        if "screen" in value:
+            screen = value["screen"]
+    
+        stacktrace = None
+        st_value = value.get("stackTrace") or value.get("stacktrace")
+        if st_value:
+            if isinstance(st_value, str):
+                stacktrace = st_value.split("\n")
+            else:
+                stacktrace = []
+                try:
+                    for frame in st_value:
+                        line = frame.get("lineNumber", "")
+                        file = frame.get("fileName", "<anonymous>")
+                        if line:
+                            file = f"{file}:{line}"
+                        meth = frame.get("methodName", "<anonymous>")
+                        if "className" in frame:
+                            meth = f"{frame['className']}.{meth}"
+                        msg = "    at %s (%s)"
+                        msg = msg % (meth, file)
+                        stacktrace.append(msg)
+                except TypeError:
+                    pass
+        if exception_class == UnexpectedAlertPresentException:
+            alert_text = None
+            if "data" in value:
+                alert_text = value["data"].get("text")
+            elif "alert" in value:
+                alert_text = value["alert"].get("text")
+            raise exception_class(message, screen, stacktrace, alert_text)
+>       raise exception_class(message, screen, stacktrace)
+E       selenium.common.exceptions.WebDriverException: Message: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:8100
+E       Stacktrace:
+E       UnknownError: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:8100
+E           at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/errors.ts:1103:34)
+E           at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/protocol.ts:507:57)
+E       The above error is caused by
+E       Error: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:8100
+E           at establishProxySession (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:327:11)
+E           at processTicksAndRejections (node:internal/process/task_queues:104:5)
+E           at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:254:25
+E           at wrapped (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:208:13)
+E           at retry (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:178:13)
+E           at retryInterval (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:218:10)
+E           at runStartupWithRetries (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:241:3)
+E           at startUnderSynchronizationLock (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:174:3)
+E           at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5
+
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/errorhandler.py:232: WebDriverException
+=================================== FAILURES ===================================
+______________ test_ui_20_rename_keeps_yarn_link_long_press_path _______________
+
+kg = <conftest.AppSession object at 0x108338050>
+
+    def test_ui_20_rename_keeps_yarn_link_long_press_path(kg):
+        """UI-20 롱프레스 수정 경로에서도 연결이 유지되는지. 기법: 시나리오, 상태 전이"""
+        s = Seed(); y = s.yarn("롱프레스실"); s.project("롱프레스전", yarn=y)
+        kg.launch(s)
+        lst, _, form, _ = _pages(kg)
+    
+        lst.open().long_press_menu("롱프레스전", T.EDIT)
+        assert form.linked_material_shown("롱프레스실")
+        form.enter_name("롱프레스후").save()
+    
+        lst.long_press_menu("롱프레스후", T.EDIT)
+        assert form.linked_material_shown("롱프레스실"), "롱프레스 경로 저장 후 실 연결이 사라짐"
+>       form.cancel()
+
+tests/test_tc05_project_edit.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pages/project_form_page.py:32: in cancel
+    self.tap_button(T.CANCEL)
+pages/base_page.py:73: in tap_button
+    self.tap(self.button(label), PRED)
+pages/base_page.py:67: in tap
+    self.find(value, by, timeout).click()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pages/base_page.py:34: in find
+    return WebDriverWait(self.driver, timeout).until(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="7545a9f1-3792-4df5-97e9-67a43378c209")>
+method = <function presence_of_element_located.<locals>._predicate at 0x1082fd2d0>
+message = ''
+
+    def until(self, method: Callable[[D], Literal[False] | T], message: str = "") -> T:
+        """Wait until the method returns a value that is not False.
+    
+        Calls the method provided with the driver as an argument until the
+        return value does not evaluate to ``False``.
+    
+        Args:
+            method: A callable object that takes a WebDriver instance as an
+                argument.
+            message: Optional message for TimeoutException.
+    
+        Returns:
+            The result of the last call to `method`.
+    
+        Raises:
+            TimeoutException: If 'method' does not return a truthy value within
+                the WebDriverWait object's timeout.
+    
+        Example:
+            >>> from selenium.webdriver.common.by import By
+            >>> from selenium.webdriver.support.wait import WebDriverWait
+            >>> from selenium.webdriver.support import expected_conditions as EC
+            >>>
+            >>> # Wait until an element is visible on the page
+            >>> wait = WebDriverWait(driver, 10)
+            >>> element = wait.until(EC.visibility_of_element_located((By.ID, "exampleId")))
+            >>> print(element.text)
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            if time.monotonic() > end_time:
+                break
+            time.sleep(self._poll)
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       NoSuchElementError: An element could not be located on the page using the given search parameters.
+E           at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+E           at processTicksAndRejections (node:internal/process/task_queues:104:5)
+E           at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+E           at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+E           at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
+E           at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
+
+.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: TimeoutException
+__________________ test_ui_24_target_date_shows_and_persists ___________________
+
+kg = <conftest.AppSession object at 0x1082ddb70>
+
+    def test_ui_24_target_date_shows_and_persists(kg):
+        """UI-24 목표일 설정이 정보 탭과 목록 카드 양쪽에 반영되고 재실행 후 유지되는지.
+    
+        기법: 시나리오
+        """
+        s = Seed(); s.project("목표일대상")
+        kg.launch(s)
+        lst, ws, form, info = _pages(kg)
+        target = date.today() + timedelta(days=3)
+    
+        lst.open().open_project("목표일대상")
+>       ws.open_edit_form()
+
+tests/test_tc05_project_edit.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pages/workspace_page.py:13: in open_edit_form
+    self.tap_until("workspace.project.edit", lambda: self.has_text(T.FORM_EDIT_TITLE, 1))
+pages/base_page.py:121: in tap_until
+    self.tap(value, by)
+pages/base_page.py:67: in tap
+    self.find(value, by, timeout).click()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pages/base_page.py:34: in find
+    return WebDriverWait(self.driver, timeout).until(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="768843d4-9c14-4599-804e-9f3923fb837e")>
+method = <function presence_of_element_located.<locals>._predicate at 0x1082ca8d0>
+message = ''
+
+    def until(self, method: Callable[[D], Literal[False] | T], message: str = "") -> T:
+        """Wait until the method returns a value that is not False.
+    
+        Calls the method provided with the driver as an argument until the
+        return value does not evaluate to ``False``.
+    
+        Args:
+            method: A callable object that takes a WebDriver instance as an
+                argument.
+            message: Optional message for TimeoutException.
+    
+        Returns:
+            The result of the last call to `method`.
+    
+        Raises:
+            TimeoutException: If 'method' does not return a truthy value within
+                the WebDriverWait object's timeout.
+    
+        Example:
+            >>> from selenium.webdriver.common.by import By
+            >>> from selenium.webdriver.support.wait import WebDriverWait
+            >>> from selenium.webdriver.support import expected_conditions as EC
+            >>>
+            >>> # Wait until an element is visible on the page
+            >>> wait = WebDriverWait(driver, 10)
+            >>> element = wait.until(EC.visibility_of_element_located((By.ID, "exampleId")))
+            >>> print(element.text)
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            if time.monotonic() > end_time:
+                break
+            time.sleep(self._poll)
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       NoSuchElementError: An element could not be located on the page using the given search parameters.
+E           at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+E           at processTicksAndRejections (node:internal/process/task_queues:104:5)
+E           at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+E           at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+E           at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
+E           at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
+
+.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: TimeoutException
+=========================== short test summary info ============================
+FAILED tests/test_tc05_project_edit.py::test_ui_20_rename_keeps_yarn_link_long_press_path
+FAILED tests/test_tc05_project_edit.py::test_ui_24_target_date_shows_and_persists
+ERROR tests/test_tc05_project_edit.py::test_ui_25_dday_boundary - selenium.co...
+2 failed, 78 passed, 1 skipped, 1 error in 4161.91s (1:09:21)

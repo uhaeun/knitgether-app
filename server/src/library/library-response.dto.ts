@@ -254,3 +254,8 @@ export function toProjectNeedleLinkResponse(
     syncStatus: 'Synced',
   };
 }
+
+/// 창고 항목이 현재 연결돼 있는 프로젝트 수. 삭제 확인창의 연결 고지에 쓴다(DEF-25).
+export type LinkedProjectCountResponseDto = {
+  projectCount: number;
+};

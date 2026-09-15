@@ -176,6 +176,8 @@ final class YarnLibraryViewModel: ObservableObject {
     @Published private(set) var yarns: [Yarn] = []
     @Published private(set) var errorMessage: String?
     @Published private(set) var yarnUsagesByYarnID: [UUID: [ProjectYarnUsage]] = [:]
+    /// 삭제 확인창의 연결 고지에 쓰는 프로젝트 수(DEF-25).
+    @Published private(set) var linkedProjectCountByYarnID: [UUID: Int] = [:]
     @Published private(set) var isRetryingSync = false
     @Published var searchText = ""
 
@@ -229,10 +231,21 @@ final class YarnLibraryViewModel: ObservableObject {
         yarnUsageRecords(for: yarn).reduce(0) { $0 + $1.quantityUsed }
     }
 
-    /// 이 실이 사용 기록(ProjectYarnUsage)으로 연결된 프로젝트 수.
-    /// 삭제 확인창의 연결 고지에 쓴다. 사용 기록을 아직 불러오지 않았으면 0을 반환한다.
+    /// 이 실이 현재 연결된 프로젝트 수. 삭제 확인창의 고지에 쓴다(DEF-25).
+    ///
+    /// 예전에는 사용 기록(ProjectYarnUsage) 기준이었다. 그래서 프로젝트에 연결만 해두고
+    /// 아직 쓰지 않은 실은 "사용 중 아님"으로 나와 고지 없이 지워졌다. 바늘과 도구는
+    /// 고지가 아예 없었다. 셋을 연결(link) 기준으로 맞춘다.
+    ///
+    /// 아직 세지 않았으면 0을 반환한다. 0은 "연결 없음"이 아니라 "고지할 근거 없음"이다.
     func linkedProjectCount(for yarn: Yarn) -> Int {
-        Set(yarnUsageRecords(for: yarn).map(\.projectId)).count
+        linkedProjectCountByYarnID[yarn.id] ?? 0
+    }
+
+    /// 삭제 확인창을 띄우기 전에 호출한다. 서버에만 있는 정보라 실패하면 0으로 둔다.
+    func loadLinkedProjectCount(for yarn: Yarn) async {
+        linkedProjectCountByYarnID[yarn.id] =
+            (try? await libraryRepository.linkedProjectCount(forYarnId: yarn.id)) ?? 0
     }
 
     func addYarn(from formData: YarnFormData) async -> Bool {
@@ -362,6 +375,9 @@ final class YarnLibraryViewModel: ObservableObject {
 
 @MainActor
 final class NeedleLibraryViewModel: ObservableObject {
+    /// 삭제 확인창의 연결 고지에 쓰는 프로젝트 수(DEF-25). 실, 바늘, 도구가 같은 기준을 쓴다.
+    @Published private(set) var linkedProjectCountByItemID: [UUID: Int] = [:]
+
     @Published private(set) var needles: [Needle] = []
     @Published private(set) var errorMessage: String?
     @Published private(set) var isRetryingSync = false
@@ -379,6 +395,19 @@ final class NeedleLibraryViewModel: ObservableObject {
 
     var hasNeedlesNeedingSync: Bool {
         needles.contains { $0.syncStatus.needsSync }
+    }
+
+
+    /// 이 항목이 현재 연결된 프로젝트 수. 아직 세지 않았으면 0이다.
+    /// 0은 "연결 없음"이 아니라 "고지할 근거 없음"이다.
+    func linkedProjectCount(for item: Needle) -> Int {
+        linkedProjectCountByItemID[item.id] ?? 0
+    }
+
+    /// 삭제 확인창을 띄우기 전에 호출한다. 서버에만 있는 정보라 실패하면 0으로 둔다.
+    func loadLinkedProjectCount(for item: Needle) async {
+        linkedProjectCountByItemID[item.id] =
+            (try? await libraryRepository.linkedProjectCount(forNeedleId: item.id)) ?? 0
     }
 
     func loadNeedles() async {
@@ -525,6 +554,9 @@ final class NeedleLibraryViewModel: ObservableObject {
 
 @MainActor
 final class ToolLibraryViewModel: ObservableObject {
+    /// 삭제 확인창의 연결 고지에 쓰는 프로젝트 수(DEF-25). 실, 바늘, 도구가 같은 기준을 쓴다.
+    @Published private(set) var linkedProjectCountByItemID: [UUID: Int] = [:]
+
     @Published private(set) var tools: [ToolItem] = []
     @Published private(set) var errorMessage: String?
     @Published private(set) var isRetryingSync = false
@@ -542,6 +574,19 @@ final class ToolLibraryViewModel: ObservableObject {
 
     var hasToolsNeedingSync: Bool {
         tools.contains { $0.syncStatus.needsSync }
+    }
+
+
+    /// 이 항목이 현재 연결된 프로젝트 수. 아직 세지 않았으면 0이다.
+    /// 0은 "연결 없음"이 아니라 "고지할 근거 없음"이다.
+    func linkedProjectCount(for item: ToolItem) -> Int {
+        linkedProjectCountByItemID[item.id] ?? 0
+    }
+
+    /// 삭제 확인창을 띄우기 전에 호출한다. 서버에만 있는 정보라 실패하면 0으로 둔다.
+    func loadLinkedProjectCount(for item: ToolItem) async {
+        linkedProjectCountByItemID[item.id] =
+            (try? await libraryRepository.linkedProjectCount(forToolId: item.id)) ?? 0
     }
 
     func loadTools() async {

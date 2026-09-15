@@ -43,7 +43,8 @@ struct SettingsView: View {
                         ) {
                             AuthAccountView(
                                 authRepository: repositories.authRepository,
-                                sessionStore: repositories.authSessionStore
+                                sessionStore: repositories.authSessionStore,
+                                repositories: repositories
                             )
                         }
                         .accessibilityIdentifier(AppAccessibilityID.Settings.accountCard)
@@ -51,7 +52,9 @@ struct SettingsView: View {
                         AppNavigationListRow(
                             item: NavigationRowItem(
                                 title: "프로필 편집",
-                                subtitle: "이름 / 단위",
+                                // 단위 선택은 2026-09-06에 제거됐다(DEF-26, DEF-29).
+                                // 화면에 없는 것을 메뉴가 안내하고 있었다.
+                                subtitle: "표시 이름",
                                 systemImage: "person.crop.circle",
                                 tint: AppTheme.Color.lavender
                             ),

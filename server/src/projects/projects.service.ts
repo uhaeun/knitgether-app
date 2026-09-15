@@ -146,6 +146,7 @@ export class ProjectsService {
 
       if (existingProject) {
         this.assertNoSaveConflict(existingProject, body, ownerId);
+        this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
         await transaction.project.update({
           where: { id: body.id },
           data: this.toProjectUpdateInput(ownerId, body),
@@ -236,7 +237,9 @@ export class ProjectsService {
         });
       }
 
+      this.assertBaseUpdatedAtPresent(body);
       this.assertNoSaveConflict(existingProject, body, ownerId);
+      this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
 
       await transaction.project.update({
         where: { id },
@@ -1422,6 +1425,29 @@ export class ProjectsService {
     }
   }
 
+  /// 수정(PATCH)은 낙관적 잠금 기준값을 반드시 요구한다(GitHub #14).
+  ///
+  /// 예전에는 baseUpdatedAt이 없으면 충돌 검사를 건너뛰고 그냥 저장했다. 그래서 서버가
+  /// 최후 방어선이 아니었다. 앱이 값을 보내주면 막고, 안 보내면 안 막았다. 보호가 필요한
+  /// 쪽은 값을 보내지 않는 클라이언트인데 바로 그 경우에 꺼졌다.
+  ///
+  /// 생성(POST)에는 요구하지 않는다. 두 가지 이유다. 첫째, 서버에 아직 없는 프로젝트의
+  /// "마지막으로 본 서버 시각"은 정의될 수 없다. 둘째, POST가 기존 프로젝트에 업서트되는
+  /// 경우는 오프라인 클라이언트가 성공한 줄 모르고 생성을 재전송하는 경로다. 그쪽은
+  /// 클라이언트가 기준값을 가질 수 없는 것이 정상이고, 재전송 보호는 DEF-02에서 따로
+  /// 다뤘다. 그 경로가 아직 last-write-wins인 것은 알려진 남은 간격이다.
+  private assertBaseUpdatedAtPresent(body: SaveProjectDto): void {
+    if (body.baseUpdatedAt) {
+      return;
+    }
+
+    throw new BadRequestException({
+      code: 'BASE_UPDATED_AT_REQUIRED',
+      message:
+        'baseUpdatedAt is required when updating a project. Send the server updatedAt you last read.',
+    });
+  }
+
   // 낙관적 잠금. 클라이언트가 baseUpdatedAt을 보낸 경우에만 동작하며,
   // 서버 updatedAt이 그보다 뒤면 409와 함께 서버 최신 본을 details.latest로 돌려준다.
   private assertNoSaveConflict(
@@ -1464,6 +1490,27 @@ export class ProjectsService {
       ...this.toProjectScalarInput(body),
       deletedAt: null,
     };
+  }
+
+  // 카운터는 projectId 기준 upsert로 1:1 유지하므로 본문이 보낸 새 id는 저장되지 않는다.
+  // 행 지시가 그 저장되지 않은 id를 참조하면 외래키 위반(P2003)이 500으로 새어 나온다(DEF-20).
+  // 막을 지점은 그 참조 경로뿐이다. 행 지시가 없으면 기존대로 저장된 카운터를 갱신하고 통과시킨다.
+  // 불일치 자체를 계약 위반으로 막으면 로컬 id가 어긋난 기기의 저장이 영구히 거부되고,
+  // 앱은 서버 거부를 SYNC-10대로 무통보 폐기하므로 유실 경로가 생긴다.
+  private assertStoredRowCounterIdentity(
+    storedRowCounter: { id: string } | null,
+    body: SaveProjectDto,
+  ): void {
+    if ((body.rowCounter.rowInstructions?.length ?? 0) === 0) {
+      return;
+    }
+
+    if (!storedRowCounter || body.rowCounter.id !== storedRowCounter.id) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'Row counter ID must match the stored project row counter.',
+      });
+    }
   }
 
   private toProjectUpdateInput(

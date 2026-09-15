@@ -201,3 +201,10 @@ final class OfflineFirstDictionaryRepository: DictionaryRepository {
         throw error
     }
 }
+
+extension OfflineFirstDictionaryRepository: OfflineSyncFlushable {
+    func flushPendingChanges() async -> Int {
+        await syncPendingChanges()
+        return await local.pendingTermsForSync().count
+    }
+}

@@ -101,7 +101,7 @@ struct NeedleLibraryView: View {
                 }
             }
         } message: { needle in
-            Text("\(needle.name)을 바늘 창고에서 삭제합니다.")
+            Text(Self.deletionMessage(for: needle, linkedProjectCount: viewModel.linkedProjectCount(for: needle)))
         }
         .task {
             await viewModel.loadNeedles()
@@ -110,6 +110,18 @@ struct NeedleLibraryView: View {
             await viewModel.loadNeedles()
         }
         .warmScreenBackground()
+    }
+
+    /// 삭제 확인창 본문. 프로젝트에 연결돼 있으면 함께 고지한다(DEF-25).
+    /// 실, 바늘, 도구가 같은 기준(연결)과 같은 문장 구조를 쓴다.
+    static func deletionMessage(for item: Needle, linkedProjectCount: Int) -> String {
+        let base = "\(item.name)을 바늘 창고에서 삭제합니다."
+
+        guard linkedProjectCount > 0 else {
+            return base
+        }
+
+        return base + " 현재 \(linkedProjectCount)개 프로젝트에 연결돼 있어요. 삭제해도 프로젝트에 남긴 기록과 스냅샷은 유지돼요."
     }
 
     private var needleList: some View {
@@ -141,7 +153,12 @@ struct NeedleLibraryView: View {
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
                         needlePendingDeletion = needle
-                        isShowingDeleteConfirmation = true
+                        // 확인창에 연결된 프로젝트 수를 고지하기 위해 먼저 세어 둔다(DEF-25).
+                        // 실만 고지하고 바늘은 아무 말 없이 지워지던 것을 맞춘다.
+                        Task {
+                            await viewModel.loadLinkedProjectCount(for: needle)
+                            isShowingDeleteConfirmation = true
+                        }
                     } label: {
                         Label("삭제", systemImage: "trash")
                     }

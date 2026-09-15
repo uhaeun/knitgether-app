@@ -103,6 +103,8 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     private let gaugeRecordRepository: (any GaugeRecordRepository)?
     private let progressPhotoRepository: (any ProjectProgressPhotoRepository)?
     private var sessionStartedAt: Date?
+    /// 수동 정지를 화면 수명 밖에서 기억한다(원 기획 §13, #10).
+    private let workTimerSuppressionStore: WorkTimerSuppressionStore
     private let minimumWorkSessionDuration: TimeInterval = 10
     /// 화면을 열어둔 채 방치한 세션의 상한(4시간). 초과분은 잘라서 저장하고 세션 메모로 남긴다.
     private let maximumWorkSessionDuration: TimeInterval = 4 * 60 * 60
@@ -115,7 +117,8 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         skillRepository: any SkillRepository,
         libraryRepository: any LibraryRepository,
         gaugeRecordRepository: (any GaugeRecordRepository)? = nil,
-        progressPhotoRepository: (any ProjectProgressPhotoRepository)? = nil
+        progressPhotoRepository: (any ProjectProgressPhotoRepository)? = nil,
+        workTimerSuppressionStore: WorkTimerSuppressionStore = .shared
     ) {
         self.project = project
         self.projectRepository = projectRepository
@@ -124,6 +127,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         self.libraryRepository = libraryRepository
         self.gaugeRecordRepository = gaugeRecordRepository
         self.progressPhotoRepository = progressPhotoRepository
+        self.workTimerSuppressionStore = workTimerSuppressionStore
         displayMode = project.workspaceDisplayMode ?? .patternAndCounter
         sheetPosition = Self.resolvedSheetPosition(for: project)
         memoText = project.memo
@@ -783,30 +787,67 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
     }
 
-    func startWorkSession() {
+    /// 사용자가 직접 시작한 경우. 억제를 푼다.
+    func startWorkSession(at now: Date = Date()) {
+        workTimerSuppressionStore.allowAutoStart(forProjectId: project.id)
+        beginWorkSession(at: now)
+    }
+
+    /// 화면 진입과 앱 복귀의 자동 시작. 수동 정지한 프로젝트는 켜지 않는다(원 기획 §13, #10).
+    ///
+    /// 예전에는 화면 진입이 조건 없이 startWorkSession을 불렀다. 그래서 정지 버튼을 눌러도
+    /// 화면을 나갔다 돌아오면 다시 돌았고, 사용자가 세지 않기로 한 시간이 작업 시간에 들어갔다.
+    func startWorkSessionIfAllowed(at now: Date = Date()) {
+        guard !workTimerSuppressionStore.isAutoStartSuppressed(forProjectId: project.id) else {
+            return
+        }
+
+        beginWorkSession(at: now)
+    }
+
+    private func beginWorkSession(at now: Date) {
         guard sessionStartedAt == nil, !isDeleted else {
             return
         }
 
-        sessionStartedAt = Date()
+        sessionStartedAt = now
         currentSessionElapsed = 0
         isTrackingTime = true
     }
 
-    func refreshCurrentSessionElapsed() {
+    /// 사용자가 정지 버튼을 누른 경우. 세션을 끝내고 자동 시작을 막는다(원 기획 §13, #10).
+    func stopWorkSessionManually(at now: Date = Date()) async {
+        workTimerSuppressionStore.suppressAutoStart(forProjectId: project.id)
+        await finishWorkSession(at: now)
+    }
+
+    func refreshCurrentSessionElapsed(at now: Date = Date()) {
         guard let sessionStartedAt else {
             return
         }
 
-        currentSessionElapsed = Date().timeIntervalSince(sessionStartedAt)
+        currentSessionElapsed = now.timeIntervalSince(sessionStartedAt)
     }
 
-    func finishWorkSession() async {
+    /// 앱이 백그라운드로 들어간 시점에 진행 중인 세션을 종료한다(TIME-02, DEF-23).
+    /// 종료 지점이 화면 이탈 하나뿐이면 홈으로 나가 방치한 시간이 작업 시간으로 기록된다.
+    func handleAppBackgrounded(at now: Date = Date()) async {
+        await finishWorkSession(at: now)
+    }
+
+    /// 앱이 다시 활성화되면 세션을 새로 시작한다. 진행 중인 세션이 있으면 가드가 걸려
+    /// 아무 일도 하지 않으므로, 백그라운드를 거치지 않은 활성화(알림 배너, 앱 전환기)는
+    /// 세션을 건드리지 않는다. 수동 정지한 프로젝트는 켜지 않는다(#10).
+    func handleAppActivated(at now: Date = Date()) {
+        startWorkSessionIfAllowed(at: now)
+    }
+
+    func finishWorkSession(at now: Date = Date()) async {
         guard let sessionStartedAt, !isDeleted else {
             return
         }
 
-        var endedAt = Date()
+        var endedAt = now
         var clampMemo: String?
 
         // 화면을 열어둔 채 방치한 세션은 4시간으로 절단해 저장한다.
@@ -1035,7 +1076,12 @@ final class ProjectWorkspaceViewModel: ObservableObject {
 
     func saveMemo() async {
         let updatedProject = project.updatingMemo(to: memoText)
-        await persist(updatedProject, errorMessage: "작업 메모를 저장하지 못했어요.")
+        // 저장에 실패했으면 후속 조회를 하지 않는다(DEF-24). loadRelatedSkills가 성공하면
+        // errorMessage를 nil로 되돌리기 때문에, 그대로 두면 저장 실패 안내가 표시되기도 전에
+        // 지워져 사용자는 메모가 저장된 것으로 읽는다.
+        guard await persist(updatedProject, errorMessage: "작업 메모를 저장하지 못했어요.") else {
+            return
+        }
         await loadRelatedSkills()
     }
 
@@ -1070,7 +1116,10 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         do {
             let patternCopy = try await patternRepository.importPattern(pattern, forProjectId: project.id)
             let updatedProject = project.copy(patternCopy: patternCopy)
-            await persist(updatedProject, errorMessage: "도안을 Library에서 가져오지 못했어요.")
+            // 저장 실패 안내가 후속 조회에 지워지지 않도록 성공했을 때만 이어간다(DEF-24).
+            guard await persist(updatedProject, errorMessage: "도안을 Library에서 가져오지 못했어요.") else {
+                return
+            }
             drawingData = nil
             await loadRelatedSkills()
         } catch {
@@ -1386,8 +1435,16 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
     }
 
-    /// 다른 기기에서 먼저 수정돼 서버가 409(PROJECT_CONFLICT)를 돌려준 경우,
-    /// 서버 본을 다시 받아 화면에 반영하고 충돌 안내를 표시한다(SPEC-SYNC-11 후속).
+    /// 다른 기기에서 먼저 수정돼 서버가 409(PROJECT_CONFLICT)를 돌려준 경우(SPEC-SYNC-11 후속).
+    ///
+    /// 서버 본을 다시 받되 사용자가 입력 중이던 값은 덮어쓰지 않는다(DEF-24).
+    /// 예전에는 서버 본으로 화면을 통째로 교체하면서 "다시 시도해 주세요"라고 안내했는데,
+    /// 다시 시도할 재료인 사용자 입력을 그 교체가 지워 버렸다. 방금 친 메모나 그린 획이
+    /// 사라진 자리에서 재시도는 성립하지 않는다.
+    ///
+    /// 서버 본을 다시 받는 것 자체는 필요하다. RemoteProjectRepository가 fetch 시점의
+    /// 서버 updatedAt을 낙관적 잠금 기준값으로 기록하므로, 이 갱신이 있어야 재시도가
+    /// 409를 다시 맞지 않고 통과한다.
     private func handleProjectSaveFailure(_ error: Error, fallbackMessage: String) async {
         guard (error as? APIError)?.isProjectConflict == true else {
             errorMessage = fallbackMessage
@@ -1395,10 +1452,9 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
 
         if let refreshedProject = try? await projectRepository.fetchProject(id: project.id) {
-            applyProjectState(refreshedProject)
-            await loadDrawingData()
+            applyProjectState(refreshedProject, preservingUserEdits: true)
         }
-        errorMessage = "다른 기기에서 수정된 내용이 있어요. 서버에 저장된 최신 내용을 다시 불러왔으니 확인 후 다시 시도해 주세요."
+        errorMessage = "다른 기기에서 먼저 수정돼서 저장하지 못했어요. 입력하신 내용은 그대로 있어요. 다시 저장하면 이 기기의 내용으로 저장돼요."
     }
 
     private func latestProjectState(afterSaving updatedProject: KnittingProject) async -> KnittingProject {
@@ -1426,12 +1482,17 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
     }
 
-    private func applyProjectState(_ updatedProject: KnittingProject) {
+    /// - Parameter preservingUserEdits: 아직 저장되지 않은 사용자 입력을 서버 값으로
+    ///   덮어쓰지 않는다. 저장 충돌 복구에서 쓴다(DEF-24). 편집 중인 값을 지우면
+    ///   사용자가 다시 시도할 재료가 없어진다.
+    private func applyProjectState(_ updatedProject: KnittingProject, preservingUserEdits: Bool = false) {
         project = updatedProject
         displayMode = updatedProject.workspaceDisplayMode ?? displayMode
         sheetPosition = Self.resolvedSheetPosition(for: updatedProject)
-        memoText = updatedProject.memo
-        currentRow = updatedProject.rowCounter.currentRow
+        if !preservingUserEdits {
+            memoText = updatedProject.memo
+            currentRow = updatedProject.rowCounter.currentRow
+        }
         refreshAttachedPatternFileURL()
         refreshAttachedNeedle()
     }

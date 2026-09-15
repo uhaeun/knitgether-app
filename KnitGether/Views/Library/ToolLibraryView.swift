@@ -101,7 +101,7 @@ struct ToolLibraryView: View {
                 }
             }
         } message: { tool in
-            Text("\(tool.name)을 도구 창고에서 삭제합니다.")
+            Text(Self.deletionMessage(for: tool, linkedProjectCount: viewModel.linkedProjectCount(for: tool)))
         }
         .task {
             await viewModel.loadTools()
@@ -110,6 +110,18 @@ struct ToolLibraryView: View {
             await viewModel.loadTools()
         }
         .warmScreenBackground()
+    }
+
+    /// 삭제 확인창 본문. 프로젝트에 연결돼 있으면 함께 고지한다(DEF-25).
+    /// 실, 바늘, 도구가 같은 기준(연결)과 같은 문장 구조를 쓴다.
+    static func deletionMessage(for item: ToolItem, linkedProjectCount: Int) -> String {
+        let base = "\(item.name)을 도구 창고에서 삭제합니다."
+
+        guard linkedProjectCount > 0 else {
+            return base
+        }
+
+        return base + " 현재 \(linkedProjectCount)개 프로젝트에 연결돼 있어요. 삭제해도 프로젝트에 남긴 기록과 스냅샷은 유지돼요."
     }
 
     private var toolList: some View {
@@ -141,7 +153,12 @@ struct ToolLibraryView: View {
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
                         toolPendingDeletion = tool
-                        isShowingDeleteConfirmation = true
+                        // 확인창에 연결된 프로젝트 수를 고지하기 위해 먼저 세어 둔다(DEF-25).
+                        // 실만 고지하고 도구은 아무 말 없이 지워지던 것을 맞춘다.
+                        Task {
+                            await viewModel.loadLinkedProjectCount(for: tool)
+                            isShowingDeleteConfirmation = true
+                        }
                     } label: {
                         Label("삭제", systemImage: "trash")
                     }
