@@ -10,7 +10,18 @@
     },
     {
       "key": "token",
-      "value": "dev-token"
+      "value": "dev-token",
+      "description": "NODE_ENV가 development 또는 test일 때만 서버가 받는 공개 기본값(server/src/auth/api-auth.guard.ts). 비밀값이 아니다."
+    },
+    {
+      "key": "testEmail",
+      "value": "",
+      "description": "로컬 테스트 계정. Postman 환경 변수로 넣는다. 저장소에 커밋하지 않는다."
+    },
+    {
+      "key": "testPassword",
+      "value": "",
+      "description": "로컬 테스트 계정 비밀번호. Postman 환경 변수로 넣는다. 저장소에 커밋하지 않는다."
     }
   ],
   "auth": {
@@ -43,7 +54,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"yuha@example.com\",\n  \"password\": \"password123\"\n}"
+          "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}"
         },
         "url": "{{baseUrl}}/auth/login"
       }
