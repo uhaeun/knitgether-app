@@ -4,8 +4,8 @@
 
 ## 비교 대상
 
-- MVP 원본: `/Users/yuha/Desktop/Projects/knitgether-mvp/KnitGether`
-- 현재 개발 브랜치: `/Users/yuha/Desktop/Projects/KnitGether/.worktrees/ios-sync-api-project-list`
+- MVP 원본: `~/Desktop/Projects/knitgether-mvp/KnitGether`
+- 현재 개발 브랜치: `~/Desktop/Projects/KnitGether/.worktrees/ios-sync-api-project-list`
 
 ## 결론
 

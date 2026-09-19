@@ -33,7 +33,7 @@
 | PASSWORD | appium-pass-1234, pytest-pass-1234 (테스트 코드) | 테스트 계정. 위험 없음 |
 | .env 추적 | server/.env.example만 추적. server/.env는 이력에 없음 | 양호 |
 
-public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보로 볼 수 있는 값이 있다. 판단은 하은. `haeun.local`(개발용 Mac 호스트명, docs/09와 스킴), `/Users/yuha/...` 절대 경로(문서 일부), 시뮬레이터 UDID(docs/06). 사내 정보는 아니다.
+public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보로 볼 수 있는 값이 있다. 판단은 하은. `haeun.local`(개발용 Mac 호스트명, docs/09와 스킴), `~/...` 절대 경로(문서 일부), 시뮬레이터 UDID(docs/06). 사내 정보는 아니다.
 
 ## 3. B. 서버 인증과 권한
 

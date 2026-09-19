@@ -1,7 +1,7 @@
 ============================= test session starts ==============================
-platform darwin -- Python 3.14.6, pytest-9.1.1, pluggy-1.6.0 -- /Users/yuha/Projects/KnitGether/appium-tests/.venv/bin/python
+platform darwin -- Python 3.14.6, pytest-9.1.1, pluggy-1.6.0 -- ~/Projects/KnitGether/appium-tests/.venv/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/yuha/Projects/KnitGether/appium-tests
+rootdir: ~/Projects/KnitGether/appium-tests
 collecting ... collected 80 items
 
 tests/test_tc01_onboarding.py::test_ui_01_complete_six_pages PASSED      [  1%]
@@ -29,7 +29,7 @@ tests/test_tc05_project_edit.py::test_ui_22_editing_one_project_leaves_others PA
 tests/test_tc05_project_edit.py::test_ui_23_cancel_discards_changes PASSED [ 28%]
 tests/test_tc05_project_edit.py::test_ui_24_target_date_shows_and_persists PASSED [ 30%]
 tests/test_tc05_project_edit.py::test_ui_25_dday_boundary 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_25_dday_boundary.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_25_dday_boundary.png
 FAILED         [ 31%]
 tests/test_tc05_project_edit.py::test_ui_26_status_transitions_persist PASSED [ 32%]
 tests/test_tc05_project_edit.py::test_ui_27_completion_updates_home_counts PASSED [ 33%]
@@ -37,19 +37,19 @@ tests/test_tc06_project_delete.py::test_ui_28_delete_from_edit_form_with_cancel 
 tests/test_tc06_project_delete.py::test_ui_29_delete_via_long_press PASSED [ 36%]
 tests/test_tc06_project_delete.py::test_ui_30_delete_via_swipe PASSED    [ 37%]
 tests/test_tc06_project_delete.py::test_ui_31_delete_two_of_three_keeps_rest 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_31_delete_two_of_three_keeps_rest.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_31_delete_two_of_three_keeps_rest.png
 FAILED [ 38%]
 tests/test_tc07_project_limit.py::test_ui_32_bulk_create_thirty 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_32_bulk_create_thirty.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_32_bulk_create_thirty.png
 FAILED   [ 40%]
 tests/test_tc08_sort_filter.py::test_ui_33_recent_work_moves_to_top 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_33_recent_work_moves_to_top.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_33_recent_work_moves_to_top.png
 FAILED [ 41%]
 tests/test_tc08_sort_filter.py::test_ui_34_start_date_desc_without_history 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_34_start_date_desc_without_history.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_34_start_date_desc_without_history.png
 FAILED [ 42%]
 tests/test_tc08_sort_filter.py::test_ui_35_relative_order_between_histories 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_35_relative_order_between_histories.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_35_relative_order_between_histories.png
 FAILED [ 43%]
 tests/test_tc08_sort_filter.py::test_ui_36_status_filter PASSED          [ 45%]
 tests/test_tc09_favorite.py::test_ui_37_favorite_pins_to_top PASSED      [ 46%]
@@ -62,30 +62,30 @@ tests/test_tc10a_workspace_pattern.py::test_ui_42b_document_scan_on_device SKIPP
 tests/test_tc10a_workspace_pattern.py::test_ui_43_link_from_library PASSED [ 55%]
 tests/test_tc10a_workspace_pattern.py::test_ui_44_manual_pattern PASSED  [ 56%]
 tests/test_tc10a_workspace_pattern.py::test_ui_46_unlink_pattern 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_46_unlink_pattern.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_46_unlink_pattern.png
 FAILED  [ 57%]
 tests/test_tc10a_workspace_pattern.py::test_ui_45_replace_warns_and_clears_drawing 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_45_replace_warns_and_clears_drawing.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_45_replace_warns_and_clears_drawing.png
 FAILED [ 58%]
 tests/test_tc10a_workspace_pattern.py::test_ui_47_draw_on_pattern PASSED [ 60%]
 tests/test_tc10a_workspace_pattern.py::test_ui_48_drawing_survives_relaunch 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_48_drawing_survives_relaunch.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_48_drawing_survives_relaunch.png
 FAILED [ 61%]
 tests/test_tc10a_workspace_pattern.py::test_ui_49_drawing_visible_in_viewer_mode PASSED [ 62%]
 tests/test_tc10a_workspace_pattern.py::test_ui_50_delete_drawing_with_cancel 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_50_delete_drawing_with_cancel.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_50_delete_drawing_with_cancel.png
 FAILED [ 63%]
 tests/test_tc10a_workspace_pattern.py::test_ui_51_step3_page_kept_after_lookup 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_51_step3_page_kept_after_lookup.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_51_step3_page_kept_after_lookup.png
 FAILED [ 65%]
 tests/test_tc10a_workspace_pattern.py::test_ui_51_step2_page_kept_after_tab_round_trip 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_51_step2_page_kept_after_tab_round_trip.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_51_step2_page_kept_after_tab_round_trip.png
 FAILED [ 66%]
 tests/test_tc10b_workspace_counter.py::test_ui_52_simple_mode_increment_and_decrement 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_52_simple_mode_increment_and_decrement.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_52_simple_mode_increment_and_decrement.png
 FAILED [ 67%]
 tests/test_tc10b_workspace_counter.py::test_ui_53_row_guide_mode 
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_53_row_guide_mode.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_53_row_guide_mode.png
 FAILED  [ 68%]
 tests/test_tc10b_workspace_counter.py::test_ui_54_lower_bound_stays_at_start PASSED [ 70%]
 tests/test_tc10b_workspace_counter.py::test_ui_55_direct_input_boundaries PASSED [ 71%]
@@ -117,137 +117,137 @@ tests/test_tc16_offline_sync.py::test_ui_78_offline_create_then_sync_on_recovery
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.InvalidSessionIdException: Message: Session does not exist; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception
     Stacktrace:
     ProxyRequestError: Request failed with status code 404
-        at JWProxy.proxy (/Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:284:13)
+        at JWProxy.proxy (~/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:284:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at JWProxy.proxyCommand (/Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:308:14)
-        at JWProxy.command (/Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:322:32)
-        at XCUITestDriver.proxyCommand (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/proxy-helper.ts:96:13)
-        at XCUITestDriver.mobileSwipe (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/gesture.ts:225:3)
+        at JWProxy.proxyCommand (~/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:308:14)
+        at JWProxy.command (~/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:322:32)
+        at XCUITestDriver.proxyCommand (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/proxy-helper.ts:96:13)
+        at XCUITestDriver.mobileSwipe (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/gesture.ts:225:3)
         at XCUITestDriver.executeMethod (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/execute.ts:61:12)
-        at XCUITestDriver.execute (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/execute.ts:23:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/appium/webdriver/errorhandler.py:125: selenium.common.exceptions.InvalidSessionIdException: Message: Session does not exist; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception
+        at XCUITestDriver.execute (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/execute.ts:23:12)
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/appium/webdriver/errorhandler.py:125: selenium.common.exceptions.InvalidSessionIdException: Message: Session does not exist; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   AssertionError: 메뉴 항목 선택 실패: workspace.pattern.unlink
-/Users/yuha/Projects/KnitGether/appium-tests/pages/pattern_panel_page.py:81: AssertionError: 메뉴 항목 선택 실패: workspace.pattern.unlink
+~/Projects/KnitGether/appium-tests/pages/pattern_panel_page.py:81: AssertionError: 메뉴 항목 선택 실패: workspace.pattern.unlink
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 E   selenium.common.exceptions.TimeoutException: Message: 
     Stacktrace:
     NoSuchElementError: An element could not be located on the page using the given search parameters.
-        at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+        at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
         at processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-        at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+        at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+        at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
         at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
         at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
-/Users/yuha/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
+~/Projects/KnitGether/appium-tests/.venv/lib/python3.14/site-packages/selenium/webdriver/support/wait.py:121: selenium.common.exceptions.TimeoutException: Message:
 =========================== short test summary info ============================
 FAILED tests/test_tc05_project_edit.py::test_ui_25_dday_boundary - selenium.c...
 FAILED tests/test_tc06_project_delete.py::test_ui_31_delete_two_of_three_keeps_rest

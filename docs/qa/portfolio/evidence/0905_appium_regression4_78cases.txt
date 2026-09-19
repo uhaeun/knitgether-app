@@ -1,7 +1,7 @@
 .....................
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_20_rename_keeps_yarn_link_long_press_path.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_20_rename_keeps_yarn_link_long_press_path.png
 F...
-[실패 스크린샷] /Users/yuha/Projects/KnitGether/appium-tests/failures/test_ui_24_target_date_shows_and_persists.png
+[실패 스크린샷] ~/Projects/KnitGether/appium-tests/failures/test_ui_24_target_date_shows_and_persists.png
 FE.................s........................... [ 87%]
 ..........                                                               [100%]
 ==================================== ERRORS ====================================
@@ -33,7 +33,7 @@ conftest.py:203: in get
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 self = <selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x1082a9b50>
-response = {'status': 500, 'value': '{"value":{"error":"unknown error","message":"Unable to start WebDriverAgent session. Origina...ts:174:3)\\n    at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5"}}'}
+response = {'status': 500, 'value': '{"value":{"error":"unknown error","message":"Unable to start WebDriverAgent session. Origina...ts:174:3)\\n    at file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5"}}'}
 
     def check_response(self, response: dict[str, Any]) -> None:
         """Check that a JSON response from the WebDriver does not have an error.
@@ -130,15 +130,15 @@ E           at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/nod
 E           at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/protocol.ts:507:57)
 E       The above error is caused by
 E       Error: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:8100
-E           at establishProxySession (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:327:11)
+E           at establishProxySession (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:327:11)
 E           at processTicksAndRejections (node:internal/process/task_queues:104:5)
-E           at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:254:25
-E           at wrapped (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:208:13)
-E           at retry (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:178:13)
-E           at retryInterval (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:218:10)
-E           at runStartupWithRetries (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:241:3)
-E           at startUnderSynchronizationLock (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:174:3)
-E           at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5
+E           at file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:254:25
+E           at wrapped (file://~/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:208:13)
+E           at retry (file://~/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:178:13)
+E           at retryInterval (file://~/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:218:10)
+E           at runStartupWithRetries (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:241:3)
+E           at startUnderSynchronizationLock (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:174:3)
+E           at file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5
 
 .venv/lib/python3.14/site-packages/selenium/webdriver/remote/errorhandler.py:232: WebDriverException
 =================================== FAILURES ===================================
@@ -224,10 +224,10 @@ message = ''
 E       selenium.common.exceptions.TimeoutException: Message: 
 E       Stacktrace:
 E       NoSuchElementError: An element could not be located on the page using the given search parameters.
-E           at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+E           at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
 E           at processTicksAndRejections (node:internal/process/task_queues:104:5)
-E           at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-E           at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+E           at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+E           at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
 E           at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
 E           at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
 
@@ -313,10 +313,10 @@ message = ''
 E       selenium.common.exceptions.TimeoutException: Message: 
 E       Stacktrace:
 E       NoSuchElementError: An element could not be located on the page using the given search parameters.
-E           at XCUITestDriver.doNativeFind (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
+E           at XCUITestDriver.doNativeFind (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:210:13)
 E           at processTicksAndRejections (node:internal/process/task_queues:104:5)
-E           at XCUITestDriver.findNativeElementOrElements (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
-E           at XCUITestDriver.findElOrEls (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
+E           at XCUITestDriver.findNativeElementOrElements (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:130:7)
+E           at XCUITestDriver.findElOrEls (file://~/.appium/node_modules/appium-xcuitest-driver/lib/commands/find.ts:55:7)
 E           at XCUITestDriver.findElOrElsWithProcessing (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:60:12)
 E           at XCUITestDriver.findElement (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/find.ts:75:12)
 

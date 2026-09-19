@@ -1,6 +1,6 @@
 # 14_관찰과 개선 제안
 
-> 출처: 06_manual_execution.md (1차 39건), 구글시트 [KnitGether 관찰과 개선 제안 대장 (3차, 자동화 준비)](https://docs.google.com/spreadsheets/d/1AzYQZ6KWrT0go0rgSxz_KcCDOuToKLEYiPVdRlt7WUI/) (2026-08-23), 02_functional_spec.md 문서 이력.
+> 출처: 06_manual_execution.md (1차 39건), 구글시트 [KnitGether 관찰과 개선 제안 대장 (3차, 자동화 준비) (CSV 스냅샷)](evidence/sheets/observations_cycle3.csv) (2026-08-23), 02_functional_spec.md 문서 이력.
 > 1차 39건의 시각과 근거 원문은 06 부록과 노션 관찰 로그가 정본이다.
 
 ---

@@ -2,7 +2,7 @@
 
 > 원본: Notion `05_테스트케이스` (최종 갱신 2026-08-24) / repo 이관 2026-08-27
 
-> 2차 사이클(자동화)의 케이스 설계와 실행 추적 정본은 구글 시트다: [케이스 설계 시트](https://docs.google.com/spreadsheets/d/1EjP0M0_BcFdMvJmjDk8-u-56_toANB4j084Hs7Bh4mI/). 1차 21건과의 계보는 시트의 1차 사이클 결과 탭에 있다. (2026-08-24 추가)
+> 2차 사이클(자동화)의 케이스 설계와 실행 추적 정본은 구글 시트다: [케이스 설계 시트 (CSV 스냅샷)](evidence/sheets/). 1차 21건과의 계보는 시트의 1차 사이클 결과 탭에 있다. (2026-08-24 추가)
 #### \[확정\] 트랙별 TC 목록 (2026-08-03 승인)
 총 22건으로 60건 한도 안이라 컷 없음. 아래 목록 기준으로 상세와 RTM을 이어 작성한다.
 #### 트랙 A. CUJ 시나리오 (4건)
@@ -45,7 +45,7 @@
 1. 규칙 충돌. 회귀 대상 4건 중 3건(타이머 중복 저장, 정렬 의존, 10초 미만 세션)은 02 SPEC에 걸리지 않는다. 02 범위가 5개 영역으로 좁혀지면서 작업시간과 행안내 정렬 영역엔 SPEC이 없다. 판정: (a) 채택. 02 명세 공백 3번(8/3 당시 번호. 현 02에는 이 행이 없다, 2026-09-19 정정)으로 기록했고 차기 사이클 회귀 대상이다. 06 실행 중 관련 화면의 이상 징후는 탐색적 확인으로 기록한다.
 2. 미커버 1건. SYNC-03(POST/PATCH 분기)은 화면에서 판정 불가한 API 계층 분기라 07 Postman 검증으로 이관 승인. 07 설계 시 psql로 생성/갱신 구분 확인을 포함한다. AUTH-01도 같은 사유로 07 이관한다. CUJ의 확인점은 재실행 후 재로그인 없이 진입이며, 이는 세션 유지 동작 확인이지 AUTH-01(저장 위치, 만료 설정) 검증이 아니다.
 ## TC 상세
-공통 사전 조건: 기준 커밋 bf2b001 빌드. PostgreSQL은 Docker Compose로 기동하고 NestJS API는 호스트에서 `npm run start:dev`로 실행하며, DB는 사이클 시작 시 초기화한다. API만 중단할 때는 NestJS 프로세스를 `Ctrl+C`로 종료하고 PostgreSQL 컨테이너는 유지한다. psql 접속은 `docker exec -it <postgres 컨테이너> psql -U <user> -d <db>` 기준. 로컬 파일 경로는 `xcrun simctl get_app_container booted <번들ID> data` 결과 아래 `Library/Application Support/KnitGether/projects.json`. `projects.json`의 `syncStatus` rawValue는 `Local Only`, `Pending Upload`, `Synced`, `Pending Delete` 문자열이다. Charles 기반 TC 실행 전 Local Simulator 스킴의 base URL을 `http://192.168.219.111:3000/api/v1`로 설정하고 Charles GUI에서 요청 캡처를 1회 확인한다. 통신은 HTTP 평문이므로 SSL Proxying 설정은 필요 없다. Wi-Fi 재연결 또는 네트워크 변경 후에는 `ipconfig getifaddr en0`으로 맥 LAN IP를 재확인하고, 주소가 달라졌으면 스킴 환경값도 갱신한다.
+공통 사전 조건: 기준 커밋 bf2b001 빌드. PostgreSQL은 Docker Compose로 기동하고 NestJS API는 호스트에서 `npm run start:dev`로 실행하며, DB는 사이클 시작 시 초기화한다. API만 중단할 때는 NestJS 프로세스를 `Ctrl+C`로 종료하고 PostgreSQL 컨테이너는 유지한다. psql 접속은 `docker exec -it <postgres 컨테이너> psql -U <user> -d <db>` 기준. 로컬 파일 경로는 `xcrun simctl get_app_container booted <번들ID> data` 결과 아래 `Library/Application Support/KnitGether/projects.json`. `projects.json`의 `syncStatus` rawValue는 `Local Only`, `Pending Upload`, `Synced`, `Pending Delete` 문자열이다. Charles 기반 TC 실행 전 Local Simulator 스킴의 base URL을 `http://<맥 LAN IP>:3000/api/v1`로 설정하고 Charles GUI에서 요청 캡처를 1회 확인한다. 통신은 HTTP 평문이므로 SSL Proxying 설정은 필요 없다. Wi-Fi 재연결 또는 네트워크 변경 후에는 `ipconfig getifaddr en0`으로 맥 LAN IP를 재확인하고, 주소가 달라졌으면 스킴 환경값도 갱신한다.
 ### 트랙 A. CUJ 시나리오
 #### TC-CUJ1-01 첫 사용 경로 동등성
 - 관련 SPEC: PAT-01 후단, LINK-02 (RC-05)
@@ -927,7 +927,7 @@ shasum -a 256 "<원본 PDF>" "<앱 내부 PDF>"
 | 일자 | TC ID | 판정 | 변경 내용 | 근거 |
 | --- | --- | --- | --- | --- |
 | 2026-08-04 | TC-SYNC08-01 / TC-SYNC01-01 / TC-SYNC09-01 / TC-SYNC10-01 / TC-AUTH05-01 | 실행 절차 정정 | API 중단 방식을 NestJS `npm run start:dev` 프로세스의 `Ctrl+C` 종료로 확정하고 PostgreSQL 컨테이너 유지 조건을 명시했다. `projects.json`의 syncStatus 판정값을 rawValue 문자열로 교체하고 서버 메모 실측 컬럼을 `Project.memo`로 확정했다. | 실행 환경·직렬화 값·DB 스키마 실측 |
-| 2026-08-04 | Charles 기반 TC 공통 환경 | base URL·프록시 조건 정정 | `haeun.local`은 `*.local` 프록시 bypass와 127.0.0.1 해석으로 Charles 관찰 경로에 부적합해 Local Simulator base URL을 맥 LAN IP `192.168.219.111`로 변경했다. HTTP 평문이므로 SSL Proxying 요구를 제거하고, Wi-Fi 재연결 시 `ipconfig getifaddr en0` 재확인 조건을 추가했다. | 실측된 프록시 경로와 DHCP 환경 |
+| 2026-08-04 | Charles 기반 TC 공통 환경 | base URL·프록시 조건 정정 | `haeun.local`은 `*.local` 프록시 bypass와 127.0.0.1 해석으로 Charles 관찰 경로에 부적합해 Local Simulator base URL을 맥 LAN IP `<맥 LAN IP>`로 변경했다. HTTP 평문이므로 SSL Proxying 요구를 제거하고, Wi-Fi 재연결 시 `ipconfig getifaddr en0` 재확인 조건을 추가했다. | 실측된 프록시 경로와 DHCP 환경 |
 | 2026-08-04 | TC-PAT02-01 | 회귀 오라클 강화·22건 검토 완료 | 단순 원본 삭제 후 열람 절차를 A 앱 내부 복사본 생성, B 콜드 런치 재열람, C 원본·서버 동시 부재 재열람으로 분리했다. 앱 컨테이너 경로·해시·재다운로드 부재를 포함해 외부 참조와 서버 fallback의 거짓 PASS를 차단했다. 이 변경으로 전체 22개 TC의 상세 검토를 완료했다. | PAT-02 |
 | 2026-08-04 | TC-AUTH02-01 | 절차·오라클 강화 | 단순 90초 대기 절차를 A 실제 JWT 만료와 401 증명, B 세션 제거·로컬 보존·콜드 런치·재로그인 복구로 분리했다. `iat/exp`, Charles 200·401, `projects.json` 전후 대조와 RETRY_REQUIRED 기준을 추가했다. | AUTH-02 |
 | 2026-08-04 | TC-LINK05-01 | 오라클 강화 | 세 화면의 단순 동일성만 보던 절차를 A 기존 프로젝트 비전파와 B 수정 후 신규 프로젝트 최신값 반영으로 분리하고, 실·바늘 스냅샷과 화면·DB 정합성을 함께 검증하도록 보강했다. | LINK-05, RC-03 |
@@ -989,4 +989,4 @@ shasum -a 256 "<원본 PDF>" "<앱 내부 PDF>"
 | 버전 | 일자 | 변경 |
 | --- | --- | --- |
 | 2.0 | 2026-08-10 | 2차 사이클 TC 15건 설계(트랙 D 신규 기능 11건, 트랙 E 결함 수정 회귀 4건). 02 v2.0의 신규 SPEC 10건에 대응. 상세 절차는 2차 기준 커밋 확인 후 작성 |
-<page url="https://app.notion.com/p/3b89090f49c5815ab87bc66477a1417f">결함/관찰 전수 처분표와 확인 TC 설계 초안 (Claude 작성, 반영 전)</page>
+결함/관찰 전수 처분표와 확인 TC 설계 초안 (Claude 작성, 반영 전) (노션, 비공개)

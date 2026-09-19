@@ -1,0 +1,23 @@
+1차 사이클 실행 결과,기준 빌드: bf2b001 (트랙 A) / UX 개편 빌드 (트랙 B C). 실행 8/4~5. 전문은 05 06 문서 정본,,,,,
+케이스 ID (05),트랙,검증 대상 (02 SPEC),시나리오 요약,판정,발견 결함,현재 담당 (2차)
+TC-CUJ1-01,A (CUJ 넓이),PAT-01 외,첫 사용 2경로(프로젝트 우선/창고 우선) 동등성. psql 3종 대조,PASS,,수동 유지 (여정 전문은 05 정본)
+TC-CUJ2-01,A (CUJ 넓이),AUTH SYNC CNT,재방문 작업 재개. 재로그인 없이 진입과 보존,PASS,,UI-64
+TC-CUJ4-01,A (CUJ 넓이),PAT-05 CNT-02,모르는 기술 만남. 스킬 태그 이탈 후 복귀 맥락 유지,PASS,,UI-51 (스텝 3)
+TC-CNT01-01,C (표준),CNT-01,카운터 하한과 증가 정확성 경계값,FAIL 후 수정 재실행 PASS,DEF-15,"UI-39, UI-54 (자동화 + CI)"
+TC-CNT02-01,C (표준),CNT-02,탭당 개별 카운터와 강제 종료 후 3자 일치,PASS,,"UI-52, API-16"
+TC-CNT03-01,C (표준),CNT-03,서버 자식 레코드 부재 시 목록 격리 (psql 주입),FAIL,DEF-08,API-21
+TC-SYNC01-01,C (표준),SYNC-01 02 04 07,완전 단절 중 생성과 복구 동기화,PASS,,UI-78
+TC-SYNC06-01,C (표준),SYNC-06 07,오프라인 삭제 tombstone과 재개,PASS,,API-11
+TC-SYNC08-01,B (P1 심층),SYNC-08,다중 기기 충돌 시 자식 레코드 보존,FAIL,DEF-01,API-18
+TC-SYNC08-02,B (P1 심층),SYNC-08,단일 기기 stale PATCH 재전송 (Charles Breakpoint),FAIL,DEF-02,API-18
+TC-SYNC09-01,B (P1 심층),SYNC-09,서버 거부 시 localOnly 보존,FAIL,DEF-03,API-19
+TC-SYNC10-01,B (P1 심층),SYNC-10,수정본 거부 시 무통보 폐기 금지,FAIL,DEF-04,API-20
+TC-AUTH02-01,C (표준),AUTH-02,토큰 만료 시 세션만 제거하고 로컬 보존,PASS,,수동 유지 (토큰 만료 설정 필요)
+TC-AUTH04-01,B (P1 심층),AUTH-04,계정 전환 시 타 소유자 데이터 비노출,FAIL,DEF-05 06,"UI-77, API-06"
+TC-AUTH05-01,B (P1 심층),AUTH-05,타 계정 localOnly의 오업로드 금지,FAIL (부분),DEF-07,UI-77
+TC-LINK01-01,C (표준),LINK-01 PAT-03,도안 교체 시 기존 드로잉 보호,FAIL,DEF-10,UI-45
+TC-LINK03-01,C (표준),LINK-03,삭제된 스킬의 표시 제외,FAIL,DEF-09,API-22
+TC-LINK05-01,C (표준),LINK-05,연결 스냅샷 불변과 원본 수정 비전파,PASS,,"UI-70, UI-71, UI-74"
+TC-PAT02-01,C (표준),PAT-02,외부 PDF 독립 복사와 원본 부재 시 열람,PASS,,"UI-40, UI-41"
+TC-PAT05-01,C (표준),PAT-05,직접 검색 이탈 후 복귀 맥락 유지,PASS,,UI-51 (스텝 3)
+비고,,,"06 집계: 실행 21건 PASS 12 FAIL 9 (SYNC-05는 단위 테스트 통과 확인으로 대체). 트랙 A 나머지 1건과 실행 기록 전문은 06 문서가 정본. 현재 담당 열이 과거 케이스와 현역 스위트(UI/API 탭)를 잇는 계보이며, 수동 유지 항목은 자동화 비용 판단에 따른 것",,,

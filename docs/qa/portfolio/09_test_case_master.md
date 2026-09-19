@@ -1,6 +1,6 @@
 # 09_테스트 케이스 마스터
 
-> 2차 사이클 케이스 카탈로그. 원본은 구글시트 [뜨개더 TC 설계](https://docs.google.com/spreadsheets/d/1EjP0M0_BcFdMvJmjDk8-u-56_toANB4j084Hs7Bh4mI/) (최종 갱신 2026-08-24).
+> 2차 사이클 케이스 카탈로그. 원본은 구글시트 [뜨개더 TC 설계 (CSV 스냅샷)](evidence/sheets/) (최종 갱신 2026-08-24).
 > 이 문서는 카탈로그다. 케이스별 스텝, Given/When/Then 전문은 시트가 정본이다.
 > 1차 사이클(TC-CUJ, TC-SYNC 계열 21건)은 05와 06이 정본이며, 여기에는 계보만 싣는다.
 

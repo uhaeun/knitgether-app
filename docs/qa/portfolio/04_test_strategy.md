@@ -64,7 +64,7 @@
 00의 기준 커밋 고정 원칙에 테스트 가능성(testability) 확보를 위한 최소 변경만 예외로 허용한다. 모든 변경은 기능 수정과 분리한 별도 커밋으로 관리하고 수정 내역을 관련 문서에 기록한다.
 
 - UI 자동화 식별자: XCUITest가 요소를 안정적으로 식별할 수 있도록 `accessibilityIdentifier`를 추가할 수 있다.
-- Charles 관찰용 base URL: Local Simulator 스킴의 `http://127.0.0.1:3000/api/v1`은 loopback 트래픽이라 macOS 프록시를 통과하지 않는다. `haeun.local`도 시스템 프록시 bypass 목록의 `*.local`에 해당하고 127.0.0.1로 해석되므로 사용하지 않는다. 서버가 `0.0.0.0`에 바인드되어 있으므로, 2026-08-04~08 사이클의 Local Simulator 스킴 환경값은 맥 LAN IP를 사용한 `http://192.168.219.111:3000/api/v1`로 변경한다. `.xcscheme`은 커밋 대상이므로 별도 testability 커밋으로 분리한다.
+- Charles 관찰용 base URL: Local Simulator 스킴의 `http://127.0.0.1:3000/api/v1`은 loopback 트래픽이라 macOS 프록시를 통과하지 않는다. `haeun.local`도 시스템 프록시 bypass 목록의 `*.local`에 해당하고 127.0.0.1로 해석되므로 사용하지 않는다. 서버가 `0.0.0.0`에 바인드되어 있으므로, 2026-08-04~08 사이클의 Local Simulator 스킴 환경값은 맥 LAN IP를 사용한 `http://<맥 LAN IP>:3000/api/v1`로 변경한다. `.xcscheme`은 커밋 대상이므로 별도 testability 커밋으로 분리한다.
 - DHCP 변동 확인: Wi-Fi 재연결 또는 네트워크 변경 후 Charles 기반 TC를 실행하기 전에 `ipconfig getifaddr en0`으로 맥 LAN IP를 재확인한다. IP가 달라졌으면 Local Simulator 스킴 환경값도 같은 주소로 갱신하고 별도 testability 변경 이력에 남긴다.
 - 실행 전 확인: 통신은 HTTP 평문이므로 Charles SSL Proxying 설정은 필요 없다. Charles GUI에서 LAN IP 요청이 실제 캡처되는지 1회 확인하고, 확인 전에는 Charles 기반 TC를 실행하지 않는다.
 
