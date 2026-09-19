@@ -15,8 +15,8 @@
 | XCUITest QA 타깃 (`KnitGetherQAUITests/`) | QA (직접 작성) | 실테스트 1(`testDEF15`), POM 3 | **예** |
 | 뮤테이션 도구 (`qa/mutation/`) | QA (직접 작성) | 주입 6종 | **예** |
 | XCUITest 개발 타깃 (`KnitGetherUITests/`) | AI (개발 단계) | 메서드 23, 파일 20 | 아니오 (회귀 장치로만 활용) |
-| Swift 단위 테스트 (`KnitGetherTests/`) | AI (개발 단계) | `@Test` 329, 파일 42 | 아니오 (CI 게이트 회귀 장치) |
-| 서버 e2e (`server/test/`) | AI (개발 단계) | `it()` 117, 스펙 13 | 아니오 (CI 게이트 회귀 장치) |
+| Swift 단위 테스트 (`KnitGetherTests/`) | AI (개발 단계) | `@Test` 329, 파일 41 (2026-09-19 정정) | 아니오 (CI 게이트 회귀 장치) |
+| 서버 e2e (`server/test/`) | AI (개발 단계) | `it()` 117, 스펙 12 (2026-09-19 정정) | 아니오 (CI 게이트 회귀 장치) |
 | pytest API (`qa/api-tests/`) | AI (개발 단계) | 파일 6 | 아니오 |
 | Postman 컬렉션 | QA | 최상위 요청 12 | 예 (07 도구) |
 
@@ -32,7 +32,7 @@
 
 | 구성 | 수 | 위치 |
 | --- | --- | --- |
-| 테스트 함수 | 78 (`test_ui_01` ~ `test_ui_78`) | `appium-tests/tests/` |
+| 테스트 함수 | 78 (`test_ui_01` ~ `test_ui_78`). UI-04~06은 함수 1개, UI-42와 UI-51은 각 2개. pytest 실행 항목은 80 | `appium-tests/tests/` |
 | 테스트 파일 | 18 (`test_tc01` ~ `test_tc16`, TC10은 a/b/c 분할) | 같음 |
 | Page 객체 | 12 | `appium-tests/pages/` |
 | support 모듈 | 6 | `appium-tests/support/` |
@@ -115,7 +115,7 @@ QA 타깃 `KnitGetherQAUITests/`의 실제 테스트는 `testDEF15` 한 건이�
 - **왜 XCUITest인가**: CI에서 돌릴 것이므로 별도 런타임(Appium 서버, Python 환경) 없이 `xcodebuild` 한 줄로 끝나야 한다
 - **왜 나머지는 Appium인가**: 78건은 로컬 실행이고, POM 재사용과 Python 시딩·네트워크 제어가 필요하다
 
-같은 DEF-15 경로를 XCUITest와 Appium 양쪽으로 구현했다. 도구 비교 실측을 위한 것이며, 시트 기록상 XCUITest 37.3초, Appium 32.6초다.
+같은 DEF-15 경로를 XCUITest와 Appium 양쪽으로 구현했다. 도구 비교 실측을 위한 것이며, 시트 기록상 XCUITest 37.3초, Appium 32.6초다. 측정 조건이 기록되지 않아 이 숫자를 비교 근거로 쓰지 않는다(08의 2절, 2026-09-19 정정).
 
 ---
 

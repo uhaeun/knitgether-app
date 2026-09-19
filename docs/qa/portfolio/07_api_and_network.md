@@ -90,8 +90,6 @@ assert path.exists()
 
 ### 3-3. 실행 코드 구성
 
-| 파일 | 담당 | 건수 |
-| --- | --- | --- |
 1차 구성 (2026-08 기준, 37건)
 
 | 파일 | 담당 | 건수 |
@@ -115,24 +113,27 @@ assert path.exists()
 
 | 파일 | 담당 | 건수 | 추가 시점 |
 | --- | --- | --- | --- |
-| `test_12_library_crud` | 창고 CRUD | 1 | 9/1 커버리지 보강 |
+| `test_12_library_crud` | 창고 CRUD (실, 바늘, 도구 파라미터 3종) | 3 | 9/1 커버리지 보강 |
 | `test_13_row_counter_isolation` | API-21 카운터 격리 | 1 | 9/1 |
 | `test_14_skill_soft_delete` | API-22 스킬 소프트 삭제 | 1 | 9/1 |
 | `test_15_pattern_copy_file_integrity` | API-23, 24 도안 파일 | 2 | 9/1 |
-| `test_16_coverage_promotions` | 미커버 승격분 | 6 | 9/1 |
-| `test_17_conflict_timestamp_precision` | API-26 밀리초 정밀도 | 2 | 9/2 |
-| `test_18_library_input_limits` | API-27 창고 입력 상한 | 1 | 9/6 |
-| `test_19_patch_replace_contract` | API-28 전체 교체 계약 | 4 | 9/6 |
+| `test_16_coverage_promotions` | 부분 4건(API-01, 07, 12, 15) 단언 보강 | 6 | 9/1 |
+| `test_17_conflict_timestamp_precision` | API-26 밀리초 정밀도 | 2 | 9/3 |
+| `test_18_library_input_limits` | API-27 창고 입력 상한 (파라미터 4종) | 4 | 9/3 |
+| `test_19_patch_replace_contract` | API-28 전체 교체 계약 (1건은 파라미터 3종) | 6 | 9/6 |
+| `test_02` 재작성 | #14 충돌 감지 계약 반영, 1건에서 3건 | +2 | 9/6 |
 | `test_20_login_attempt_limit` | API-29 로그인 시도 제한 | 4 | 9/15 |
-| `test_02`, `03`, `05` 재작성 | 계약 변경 반영 | +5 | 9/15 |
+| `test_03` 재작성 | #14 기존 id 생성 409 반영, 1건에서 2건 | +1 | 9/15 |
 | | 합계 | 69 | |
+
+건수는 pytest가 모으는 단위(파라미터 조합 포함)로 셌다. 추가 시점은 커밋일이다. 9/3과 9/6 분은 main에 2026-09-15(`a2de722`)에 들어갔다. `test_05`도 9/3, 9/6에 단언을 고쳤지만 건수는 3건 그대로다(2026-09-19 정정).
 
 최종 실행 결과는 **69 passed**다. 스킵은 남아 있지 않다. Issue #15(시간 역전 세션)가
 서버 수정으로 해소되면서 특성화 케이스가 계약 검증으로 바뀌었기 때문이다.
 
 `test_02`는 성격이 한 번 뒤집혔다. 원래 "충돌을 감지하지 않는다"를 증명하는 negative
 test였고 문서에 "수정되면 이 테스트는 FAIL 해야 하며 그때가 곧 회귀 알림"이라고 적혀
-있었다. 2026-09-15에 실제로 그렇게 됐고, 같은 시나리오를 새 계약으로 다시 썼다.
+있었다. 2026-09-06(`afd76f8`)에 실제로 그렇게 됐고, 같은 시나리오를 새 계약으로 다시 썼다(2026-09-19 정정).
 
 ### 3-4. 설계에서 신경 쓴 두 가지
 

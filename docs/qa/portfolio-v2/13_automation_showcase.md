@@ -17,8 +17,8 @@ ISTQB 4.0 테스트 프로세스의 구현 활동 산출물이다. 구현 활동
 | 결함 주입 도구 (`qa/mutation/`) | QA | 주입 6종 | 예 |
 | Postman 컬렉션 | QA | 최상위 요청 12 | 예 (07의 도구) |
 | XCUITest 개발 타깃 (`KnitGetherUITests/`) | AI (개발 단계) | 메서드 23, 파일 20 | 아니오. 회귀 장치로만 쓴다 |
-| Swift 단위 테스트 (`KnitGetherTests/`) | AI (개발 단계) | `@Test` 329, 파일 42 | 아니오. CI 게이트 회귀 장치 |
-| 서버 e2e (`server/test/`) | AI (개발 단계) | `it()` 117, 스펙 13 | 아니오. CI 게이트 회귀 장치 |
+| Swift 단위 테스트 (`KnitGetherTests/`) | AI (개발 단계) | `@Test` 329, 파일 41 | 아니오. CI 게이트 회귀 장치 |
+| 서버 e2e (`server/test/`) | AI (개발 단계) | `it()` 117, 스펙 12 | 아니오. CI 게이트 회귀 장치 |
 | pytest API (`qa/api-tests/`) | AI (개발 단계) | 파일 6 | 아니오 |
 
 04가 "단위 테스트는 재작성하지 않고 CI 게이트에서 회귀 장치로 활용한다"고 선언했고, 이 표가 그 선언의 실제 모습이다. AI가 만든 것을 QA 실적으로 세지 않되 버리지도 않는다.
@@ -29,7 +29,7 @@ ISTQB 4.0 테스트 프로세스의 구현 활동 산출물이다. 구현 활동
 
 | 구성 | 수 | 위치 |
 | --- | --- | --- |
-| 테스트 함수 | 78 (`test_ui_01`~`test_ui_78`) | `appium-tests/tests/` |
+| 테스트 함수 | 78 (`test_ui_01`~`test_ui_78`). UI-04~06은 함수 1개, UI-42와 UI-51은 각 2개. pytest 실행 항목은 80 | `appium-tests/tests/` |
 | 테스트 파일 | 18 (`test_tc01`~`test_tc16`, TC10은 a, b, c로 분할) | 같은 곳 |
 | Page 객체 | 12 | `appium-tests/pages/` |
 | support 모듈 | 6 | `appium-tests/support/` |
@@ -164,10 +164,7 @@ QA 타깃 `KnitGetherQAUITests/`의 실제 테스트는 `testDEF15` 한 건이�
 | 4 | 부채 2~4의 처리 여부와 우선순위 | 3은 해소, 2와 4는 미해소 |
 
 <!--
-원본 간 차이 기록 (2026-09-18)
-1. Appium 테스트 함수 수: 원본 13과 08은 78개, appium_suite_worklog 1절(8/29)은 "80개"(UI-42, UI-51 분할). 2026-09-18 실측 test_tc*.py 함수 78개. 실행 단위 80건은 UI-04~06 parametrize 3분기(08 원본 설명)로 맞는다. 원본 13 기준을 유지했다.
-2. 단위 테스트와 서버 e2e 규모: 원본 13(8/27 실측)은 @Test 329/파일 42, it() 117/스펙 13. 레포 CLAUDE.md(bf2b001 실측)는 41파일, e2e 115건. 측정 시점이 달라 13 원본 값을 8/27 실측으로 표기했다. 이후 실행 건수는 fix_cycle 워크로그 5-9절 기준 앱 단위 335 passed, 서버 e2e 139 passed.
-3. DEF-15 수행 시간: 원본 13 3절은 "시트 기록상 XCUITest 37.3초, Appium 32.6초", 원본 08 2절은 측정 조건 미기록으로 숫자를 싣지 않음. 숫자는 시트 기록으로만 옮기고 비교 근거로 쓰지 않았다.
-4. 8절 부채 표의 경과 열 가운데 2, 3, 4, 5번은 원본 문서가 아니라 2026-09-18 리포지토리 확인(run_mutation.py 21~24행, conftest.py git status, test_tc02_signup.py 44~49행, origin 대비 커밋 차이)에서 왔다.
-5. 원본 13 6절 2번의 UDID 앞자리 값은 옮기지 않았다.
+출처 메모
+1. 8절 부채 표의 경과 열 가운데 2, 3, 4, 5번은 원본 문서가 아니라 2026-09-18 리포지토리 확인(run_mutation.py 21~24행, conftest.py git status, test_tc02_signup.py 44~49행, origin 대비 커밋 차이)에서 왔다.
+2. 원본 13 6절 2번의 UDID 앞자리 값은 옮기지 않았다.
 -->
