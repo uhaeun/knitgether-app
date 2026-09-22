@@ -133,7 +133,7 @@ XCUITest는 앱 안에서 보고, Appium은 앱 밖에서 본다. 오프라인 �
 
 비용은 재활용 1회당 약 12초다. 69분 실행이면 3회로 36초다. 스위트를 쪼개거나 CI에서 분할하는 방향도 검토했다. 원인이 세션 수명이라면 쪼개는 것은 같은 효과를 더 비싸게 얻는 방법이라 택하지 않았다. 판정과 검증은 11의 8절에 있다.
 
-소스는 `appium-tests/`, `KnitGetherQAUITests/`, `qa/mutation/`이다.
+소스는 `qa/appium/`, `KnitGetherQAUITests/`, `qa/mutation/`이다.
 
 <!--
 원본 간 불일치 (2026-09-19 갱신)

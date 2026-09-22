@@ -23,7 +23,7 @@ SCHEME = "KnitGether Local Offline"
 APP = os.path.expanduser(
     "~/Library/Developer/Xcode/DerivedData/KnitGether-bqtdpqvqguybtqcutrziolwflksh/"
     "Build/Products/Debug-iphonesimulator/KnitGether.app")
-TESTS = os.path.join(ROOT, "appium-tests")
+TESTS = os.path.join(ROOT, "qa/appium")
 
 # 어떤 고장에도 영향받지 않아야 하는 대표 케이스. 영역이 겹치지 않게 골랐다.
 CONTROL = [

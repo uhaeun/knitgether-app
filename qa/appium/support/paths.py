@@ -5,8 +5,8 @@
 """
 import os
 
-# 이 파일 위치: <repo>/appium-tests/support/paths.py  ->  두 단계 위가 레포 루트
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
+# 이 파일 위치: <repo>/qa/appium/support/paths.py  ->  세 단계 위가 레포 루트
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, os.pardir))
 
 SAMPLE_PATTERNS_DIR = os.path.join(REPO_ROOT, "KnitGether", "Resources", "SamplePatterns")
 QA_EVIDENCE_DIR = os.path.join(REPO_ROOT, "docs", "qa", "portfolio", "evidence")

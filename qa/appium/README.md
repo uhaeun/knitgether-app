@@ -1,4 +1,4 @@
-# appium-tests
+# qa/appium
 
 KnitGether iOS 앱을 iOS 시뮬레이터에서 Appium(XCUITest 드라이버)으로 조작하는 UI 회귀 스위트다. 테스트 파일 18개, 테스트 함수 78건이며 pytest로 돈다. 세션은 스위트 전체에서 하나를 재사용하고, 케이스 간 격리는 시뮬레이터 컨테이너의 저장 파일을 지우고 다시 쓰는 방식으로 한다. 이 스위트는 CI(`.github/workflows/`)에 포함되지 않으며 로컬에서만 실행한다.
 
@@ -21,7 +21,7 @@ KnitGether iOS 앱을 iOS 시뮬레이터에서 Appium(XCUITest 드라이버)으
 ## 실행
 
 ```bash
-cd appium-tests && source .venv/bin/activate   # 또는 pip install -r requirements.txt
+cd qa/appium && source .venv/bin/activate   # 또는 pip install -r requirements.txt
 pytest tests/ -v                               # 전체 78건
 pytest tests/test_tc08_sort_filter.py -v       # 파일 하나
 pytest tests/ -v --empty-given                 # 음성 대조: Given 주입을 끄고 돈다. FAIL이 정상

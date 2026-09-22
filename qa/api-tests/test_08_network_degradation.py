@@ -1,6 +1,6 @@
 """07 네트워크 열화. 회선이 나빠질 때 서버 계약과 데이터 정합성이 버티는가.
 
-Charles 대신 `appium-tests/support/netgate.py` TCP 프록시를 쓴다. GUI 도구는
+Charles 대신 `qa/appium/support/netgate.py` TCP 프록시를 쓴다. GUI 도구는
 증거가 스크린샷으로만 남고 CI에 넣을 수 없는데, 여기 조건은 코드로 기록되고
 그대로 다시 돌아간다.
 
@@ -17,7 +17,7 @@ from pathlib import Path
 import pytest
 import requests
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "appium-tests"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qa/appium"))
 from support.netgate import NetGate  # noqa: E402
 
 from helpers import Api, project_payload  # noqa: E402

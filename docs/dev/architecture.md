@@ -1,6 +1,6 @@
 # KnitGether 아키텍처: 전환 전, 전환 후, 바꾼 이유
 
-작성 2026-09-01. 기준은 브랜치 fix/qa-cycle-defects 커밋 f93aacc의 코드와 git 이력, docs/superpowers/specs의 설계 문서, docs/spec/원본_v2.2.md다. 코드에서 확인한 사실과 문서에 적힌 결정은 그대로 적고, 문서에 없는 이유는 추정이라고 표시했다. 추정은 마지막 절에 질문으로 모았다.
+작성 2026-09-01. 기준은 브랜치 fix/qa-cycle-defects 커밋 f93aacc의 코드와 git 이력, docs/dev/specs의 설계 문서, docs/spec/원본_v2.2.md다. 코드에서 확인한 사실과 문서에 적힌 결정은 그대로 적고, 문서에 없는 이유는 추정이라고 표시했다. 추정은 마지막 절에 질문으로 모았다.
 작성: Claude (사실 조사). 판단과 답변은 하은.
 
 ## 결론
@@ -27,7 +27,7 @@ iOS 앱 (SwiftUI)
       → LocalFileStorageService → server/storage/ (PDF, 사진, 드로잉)
 ```
 
-조립은 AppRepositoryContainer.makeDefault 한 곳에서 한다. 환경변수 KNITGETHER_API_BASE_URL이 있으면 위 구조를, 없으면 Local*Repository만 꽂는다(로컬 모드. 자세한 비교는 docs/modes.md). 로그인, 로그아웃, 계정 전환 시 AppRepositoryStore가 컨테이너를 다시 만들어 캐시 디렉토리를 계정 스코프로 바꾼다.
+조립은 AppRepositoryContainer.makeDefault 한 곳에서 한다. 환경변수 KNITGETHER_API_BASE_URL이 있으면 위 구조를, 없으면 Local*Repository만 꽂는다(로컬 모드. 자세한 비교는 docs/dev/modes.md). 로그인, 로그아웃, 계정 전환 시 AppRepositoryStore가 컨테이너를 다시 만들어 캐시 디렉토리를 계정 스코프로 바꾼다.
 
 ### 계층별 책임
 
@@ -77,13 +77,13 @@ iOS 앱 (SwiftUI)
 
 | 변경 | 이유 | 근거 |
 | --- | --- | --- |
-| 로컬 전용 → 서버 동기화 | 기획서가 "추후 확장"으로 미뤄둔 동기화를 구현. 계정 단위 데이터, 파일 업로드와 다운로드, 프로젝트 상태 동기화가 목표 | docs/superpowers/specs/2026-07-04-ios-sync-api-server-design.md Purpose |
+| 로컬 전용 → 서버 동기화 | 기획서가 "추후 확장"으로 미뤄둔 동기화를 구현. 계정 단위 데이터, 파일 업로드와 다운로드, 프로젝트 상태 동기화가 목표 | docs/dev/specs/2026-07-04-ios-sync-api-server-design.md Purpose |
 | 서버 프레임워크 NestJS | 첫 서버는 웹앱이 아니라 구조화된 API 서비스가 필요하다. 모듈, 검증, 인증, 파일 처리, 유지보수성에서 Next.js보다 적합 | 같은 문서 Decision |
 | Repository 프로토콜 유지 | 이미 데이터 접근이 프로토콜 뒤에 있으므로 원격 구현체를 옆에 추가하면 화면과 뷰모델을 다시 쓰지 않아도 된다 | 같은 문서 Purpose, iOS Integration |
 | OfflineFirst 계층 | 설계서는 "오프라인 우선 저장은 나중에 추가 가능"으로 열어 두었고, 7/11 커밋 f426a96에서 구현 | 같은 문서 Open Decisions, 커밋 f426a96 |
 | UI, API, DB 3층 검증 | QA 포트폴리오의 차별점으로 처음부터 합의. DB QA 경력과 이어지는 지점 | docs/qa/portfolio/PROJECT_HISTORY.md 0절 |
-| 작업 공간 2탭 분리 | 한 세로 스크롤에 12개 섹션이 쌓여 정보 과부하. 뜨는 중 쓰는 것(카운터, 도안, 행안내, 타이머)과 정보를 분리 | docs/superpowers/specs/2026-07-27-workspace-two-tab-design.md |
-| 캐시 디렉토리를 계정별로 분리 | 계정 간 데이터 노출 방지 | docs/06_architecture_audit 갱신 항목 |
+| 작업 공간 2탭 분리 | 한 세로 스크롤에 12개 섹션이 쌓여 정보 과부하. 뜨는 중 쓰는 것(카운터, 도안, 행안내, 타이머)과 정보를 분리 | docs/dev/specs/2026-07-27-workspace-two-tab-design.md |
+| 캐시 디렉토리를 계정별로 분리 | 계정 간 데이터 노출 방지 | docs/dev/06_architecture_audit 갱신 항목 |
 
 ### 문서에 없어 추정인 것
 
@@ -140,6 +140,6 @@ iOS 앱 (SwiftUI)
 | server/src/ | auth, profile, projects, patterns, library, skills, dictionary, gauge-records, gauge-targets, storage, health, database |
 | server/prisma/schema.prisma | 모델 25개 |
 | server/test/ | e2e 14 파일 (AI 작성, 회귀 장치로만 사용) |
-| docs/superpowers/specs/ | 설계서 5편 (7/4 서버, 7/5 프로젝트 CRUD, 7/6 도안 파일, 7/7 작업 공간 UX, 7/27 2탭) |
-| docs/06_architecture_audit_2026-07-09.md | 서버 전환 직후 감사. API 목록과 남은 리스크 |
-| docs/07_mvp_feature_parity_2026-07-10.md | 1세대와 3세대 화면 1:1 대조 |
+| docs/dev/specs/ | 설계서 5편 (7/4 서버, 7/5 프로젝트 CRUD, 7/6 도안 파일, 7/7 작업 공간 UX, 7/27 2탭) |
+| docs/dev/06_architecture_audit_2026-07-09.md | 서버 전환 직후 감사. API 목록과 남은 리스크 |
+| docs/dev/07_mvp_feature_parity_2026-07-10.md | 1세대와 3세대 화면 1:1 대조 |

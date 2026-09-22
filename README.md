@@ -35,7 +35,7 @@
 
 이 저장소에는 QA가 직접 작성한 테스트와 AI가 개발 단계에서 생성한 테스트가 섞여 있다. 섞어서 세면 숫자가 부풀려지므로 가른다.
 
-- **QA 직접 작성** — `appium-tests/`(함수 78, POM 12), `KnitGetherQAUITests/`, `qa/mutation/`(주입 6종)
+- **QA 직접 작성** — `qa/appium/`(함수 78, POM 12), `KnitGetherQAUITests/`, `qa/mutation/`(주입 6종)
 - **AI 생성, 회귀 장치로만 활용** — `KnitGetherTests/`(단위 329), `KnitGetherUITests/`, `server/test/`(e2e 117). 판정 근거로 쓰지 않는다 — AI가 쓴 단위 테스트 하나가 실제로 데이터 유실 동작(DEF-03)을 정상으로 단언하고 있었다.
 
 상세 구분과 그 이유는 [13_automation_showcase §0](docs/qa/portfolio/13_automation_showcase.md)에 있다.
@@ -54,7 +54,7 @@
 docs/qa/portfolio/   QA 포트폴리오 문서 00~15 (읽는 순서·의존관계는 00_TOC)
 docs/spec/           화면 기능정의서 2편, 기획서 v2.2 원본, 커밋 대조표
 docs/                아키텍처 전환 기록, 로컬/온라인 방식, 보안 점검
-appium-tests/        Appium UI 회귀 스위트 — tests/(TC01~16), pages/(POM), support/
+qa/appium/        Appium UI 회귀 스위트 — tests/(TC01~16), pages/(POM), support/
 qa/mutation/         결함 주입 도구 — 테스트 스위트의 검출력 검증
 qa/api-tests/        pytest API 계약·DB 대조·네트워크 검증 스위트
 qa/api-probes/       초기 API 스모크·회귀 셸 스크립트
@@ -66,7 +66,7 @@ server/              동기화 백엔드 (Node/Prisma)
 ## Appium 스위트 실행
 
 ```bash
-cd appium-tests
+cd qa/appium
 pip install -r requirements.txt
 # 시뮬레이터·Appium 서버 기동 후
 pytest tests/ -v          # 테스트 함수 78개; 9/19 7차 실행 항목 83개(82 passed, 1 skipped)

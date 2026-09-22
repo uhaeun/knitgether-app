@@ -23,7 +23,7 @@
 ### 구조
 
 ```
-appium-tests/
+qa/appium/
   conftest.py          드라이버 풀, 격리, 실패 스크린샷
   support/             simctl, seed, texts, server_api, netgate, paths
   pages/               base + 화면별 11개
@@ -180,7 +180,7 @@ xcrun simctl boot <UDID>
 전체 실행은 세션이 오래 유지되면 WebDriverAgent가 버티지 못하므로 파일 단위 분할을 권한다.
 
 ```bash
-cd appium-tests
+cd qa/appium
 for f in tests/test_tc*.py; do ./.venv/bin/python -m pytest "$f" -q; done
 ```
 

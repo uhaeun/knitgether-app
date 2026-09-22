@@ -85,7 +85,7 @@ DEF-22는 `@IsDefined()` 추가로 닫았다. 두 회귀 테스트는 결함을 
 ### 3-2. 재현 케이스와 두 빌드 대조
 
 10 대장이 적어둔 검증 방법(작업 공간 진입, 홈, 대기, 복귀, 이탈)을 Appium
-`background_app`으로 자동화했다. 파일은 `appium-tests/tests/test_def23_background_session.py`
+`background_app`으로 자동화했다. 파일은 `qa/appium/tests/test_def23_background_session.py`
 이며 UI 번호는 배정하지 않았다.
 
 | 빌드 | 결과 |

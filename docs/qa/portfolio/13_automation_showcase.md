@@ -12,7 +12,7 @@ ISTQB 4.0 테스트 프로세스의 구현 활동 산출물이다. 구현 활동
 
 | 테스트웨어 | 작성 주체 | 규모 (8/27 실측) | 포트폴리오 대상 |
 | --- | --- | --- | --- |
-| Appium 스위트 (`appium-tests/`) | QA | 함수 78, POM 12, support 6 | 예 |
+| Appium 스위트 (`qa/appium/`) | QA | 함수 78, POM 12, support 6 | 예 |
 | XCUITest QA 타깃 (`KnitGetherQAUITests/`) | QA | 실테스트 1(`testDEF15`), POM 3 | 예 |
 | 결함 주입 도구 (`qa/mutation/`) | QA | 주입 6종 | 예 |
 | Postman 컬렉션 | QA | 최상위 요청 12 | 예 (07의 도구) |
@@ -29,11 +29,11 @@ ISTQB 4.0 테스트 프로세스의 구현 활동 산출물이다. 구현 활동
 
 | 구성 | 수 | 위치 |
 | --- | --- | --- |
-| 테스트 함수 | 78 (`test_ui_01`~`test_ui_78`). UI-04~06은 함수 1개, UI-42와 UI-51은 각 2개. pytest 실행 항목은 80 | `appium-tests/tests/` |
+| 테스트 함수 | 78 (`test_ui_01`~`test_ui_78`). UI-04~06은 함수 1개, UI-42와 UI-51은 각 2개. pytest 실행 항목은 80 | `qa/appium/tests/` |
 | 테스트 파일 | 18 (`test_tc01`~`test_tc16`, TC10은 a, b, c로 분할) | 같은 곳 |
-| Page 객체 | 12 | `appium-tests/pages/` |
-| support 모듈 | 6 | `appium-tests/support/` |
-| 픽스처 | 6 | `appium-tests/conftest.py` |
+| Page 객체 | 12 | `qa/appium/pages/` |
+| support 모듈 | 6 | `qa/appium/support/` |
+| 픽스처 | 6 | `qa/appium/conftest.py` |
 
 파일 이름이 TC 그룹(`test_tc08_sort_filter.py`)이고 함수 이름이 케이스 ID(`test_ui_33_recent_work_moves_to_top`)다. 09 카탈로그의 케이스와 코드가 이름으로 직접 추적된다. 케이스 설계 시트 UI-01~UI-78 전건을 옮겼다.
 
@@ -148,9 +148,9 @@ QA 타깃 `KnitGetherQAUITests/`의 실제 테스트는 `testDEF15` 한 건이�
 
 | # | 8/27 부채 | 경과 | 근거 |
 | --- | --- | --- | --- |
-| 1 | 실행 증거가 없다. `appium-tests/failures/`가 비어 있고 실행 리포트가 없다 | 해소. 8/29 분할 실행 3회 동일 결과, 8/30 재실행 스크린샷 | appium 워크로그 2절, 위 증거 |
+| 1 | 실행 증거가 없다. `qa/appium/failures/`가 비어 있고 실행 리포트가 없다 | 해소. 8/29 분할 실행 3회 동일 결과, 8/30 재실행 스크린샷 | appium 워크로그 2절, 위 증거 |
 | 2 | `qa/mutation/run_mutation.py`에 UDID와 DerivedData 해시 경로가 하드코딩돼 있다. `27aed16`이 `injections.py`와 `paths.py`만 루트 기준으로 바꿨다 | 미해소. 다른 기계에서 돌아가지 않는다 | 2026-09-18 파일 확인 |
-| 3 | `appium-tests/conftest.py`에 미커밋 변경(최신 빌드 선택)이 있다 | 해소. 커밋 이력에 포함됐다 | `git log` |
+| 3 | `qa/appium/conftest.py`에 미커밋 변경(최신 빌드 선택)이 있다 | 해소. 커밋 이력에 포함됐다 | `git log` |
 | 4 | UI-04, 05, 06이 함수 하나(`test_ui_04_05_06_submit_disabled_on_invalid_input`)로 합쳐져 실패 시 어느 케이스인지 구분되지 않는다 | 미해소. `parametrize` 3분기로 실행 단위는 나뉘지만 함수는 하나다 | 2026-09-18 파일 확인 |
 | 5 | 미푸시 커밋 10건. 스위트 전체가 로컬에만 있다 | 해소. 원격 브랜치와 차이 0건 | 2026-09-18 `git rev-list` |
 | 6 | (8/27 이후 추가) `full_reset=False`에서 스위트가 앱을 설치하지 않아 예전 바이너리를 검증했다 | 해소. 검증할 바이너리를 특정하게 바꿨다(`a1dcc18`) | fix_cycle 워크로그 4절, 5-5절 |

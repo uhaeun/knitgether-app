@@ -52,7 +52,7 @@ assert path.exists()
 | API 스위트 | `qa/api-tests/`, pytest와 requests. 판정마다 psql 조회를 포함한다 |
 | Postman 컬렉션 | `docs/qa/postman/knitgether-local.postman_collection.json`. Health, Auth Login, Projects List, Projects Create, Patterns, Library(실, 바늘, 도구), Skills, Dictionary Terms, Gauge(기록, 타깃) 순으로 스모크 요청을 보낸다. 수동 요청 후 같은 id를 psql로 조회하는 데 쓴다(4-1) |
 | Charles | 앱 트래픽 관찰과 Breakpoint. 시뮬레이터가 macOS 프록시를 따르지 않는 경우가 있어 Reverse Proxy(로컬 3998을 서버 3000으로 전달)로 앱을 통과시켰다 |
-| 장애 주입 | 파이썬 TCP 프록시 `appium-tests/support/netgate.py` (6절) |
+| 장애 주입 | 파이썬 TCP 프록시 `qa/appium/support/netgate.py` (6절) |
 
 Charles로 트래픽을 볼 때의 확인 지점은 스모크 점검표에 있다.
 
@@ -209,7 +209,7 @@ Postman으로 POST를 보내 201을 받은 뒤 같은 id를 psql로 조회했다
 
 6-1. Charles 대신 코드로 만든 이유
 
-06의 DEF-02는 Charles Breakpoint로 PATCH를 멈춰 재현했다. 이 문서의 열화 조건은 GUI 도구가 아니라 파이썬 TCP 프록시(`appium-tests/support/netgate.py`)로 만들었다. 이유는 셋이다.
+06의 DEF-02는 Charles Breakpoint로 PATCH를 멈춰 재현했다. 이 문서의 열화 조건은 GUI 도구가 아니라 파이썬 TCP 프록시(`qa/appium/support/netgate.py`)로 만들었다. 이유는 셋이다.
 
 | 이유 | 내용 |
 | --- | --- |
