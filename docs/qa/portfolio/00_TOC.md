@@ -67,7 +67,6 @@
 
 | 문서 | 내용 |
 | --- | --- |
-| [GUIDE_how_to_write](GUIDE_how_to_write.md) | 문서 작성 기준 |
 | [PROJECT_HISTORY](PROJECT_HISTORY.md) | 전체 경과, 아키텍처, 발견 결함 상세 |
 | [evidence/](evidence/) | 스크린샷, 엘리먼트 트리, 1회차 스모크 리포트(0719) |
 
