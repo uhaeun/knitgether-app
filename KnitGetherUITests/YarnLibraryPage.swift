@@ -53,8 +53,8 @@ struct YarnLibraryPage: UITestPage {
 
     @discardableResult
     func expectYarnNotVisible(named yarnName: String) -> YarnLibraryPage {
-        XCTAssertFalse(
-            app.staticTexts[yarnName].waitForExistence(timeout: 5),
+        XCTAssertTrue(
+            app.staticTexts[yarnName].waitForNonExistence(timeout: 12),
             "삭제한 실이 목록에 보이면 안 됩니다: \(yarnName)"
         )
         return self

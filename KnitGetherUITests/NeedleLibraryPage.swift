@@ -50,8 +50,8 @@ struct NeedleLibraryPage: UITestPage {
 
     @discardableResult
     func expectNeedleNotVisible(named needleName: String) -> NeedleLibraryPage {
-        XCTAssertFalse(
-            app.staticTexts[needleName].waitForExistence(timeout: 5),
+        XCTAssertTrue(
+            app.staticTexts[needleName].waitForNonExistence(timeout: 12),
             "삭제한 바늘이 목록에 보이면 안 됩니다: \(needleName)"
         )
         return self

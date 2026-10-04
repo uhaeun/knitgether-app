@@ -24,7 +24,14 @@ struct MyKnittingPage {
         saveButton.tap()
 
         let projectRow = app.staticTexts[name]
+        // A favorite or an existing record may appear above the new project.
+        // Scroll the list to the actual saved row before opening it.
+        for _ in 0..<5 {
+            if projectRow.exists && projectRow.isHittable { break }
+            app.swipeUp()
+        }
         XCTAssertTrue(projectRow.waitForExistence(timeout: 5))
+        XCTAssertTrue(projectRow.isHittable)
         projectRow.tap()
 
         return WorkspacePage(app: app)

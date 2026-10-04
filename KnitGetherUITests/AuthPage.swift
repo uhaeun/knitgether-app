@@ -139,16 +139,30 @@ struct AuthPage: UITestPage {
     }
 
     func returnToOnboarding() -> OnboardingPage {
-        dismissSystemPasswordPromptIfNeeded()
-        tap(app.navigationBars.buttons.element(boundBy: 0))
+        returnFromAccountScreen()
         return OnboardingPage(app: app)
     }
 
     @discardableResult
     func returnToSettings() -> SettingsPage {
-        dismissSystemPasswordPromptIfNeeded()
-        tap(app.navigationBars.buttons.element(boundBy: 0))
+        returnFromAccountScreen()
         return SettingsPage(app: app)
+    }
+
+    private func returnFromAccountScreen() {
+        let backButton = app.navigationBars.buttons.element(boundBy: 0)
+        let deadline = Date().addingTimeInterval(20)
+        // Password UI can appear after the success message in a fresh simulator.
+        // Wait for the underlying navigation to be usable instead of scrolling it.
+        while Date() < deadline {
+            dismissSystemPasswordPromptIfNeeded(timeout: 1)
+            if backButton.exists && backButton.isHittable {
+                backButton.tap()
+                return
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+        }
+        XCTFail("암호 저장 창을 닫은 뒤 계정 화면에서 돌아갈 수 있어야 합니다.")
     }
 
     private func reopenAccountFormIfNeeded(

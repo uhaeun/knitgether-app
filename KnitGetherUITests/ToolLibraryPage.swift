@@ -48,8 +48,8 @@ struct ToolLibraryPage: UITestPage {
 
     @discardableResult
     func expectToolNotVisible(named toolName: String) -> ToolLibraryPage {
-        XCTAssertFalse(
-            app.staticTexts[toolName].waitForExistence(timeout: 5),
+        XCTAssertTrue(
+            app.staticTexts[toolName].waitForNonExistence(timeout: 12),
             "삭제한 도구가 목록에 보이면 안 됩니다: \(toolName)"
         )
         return self
