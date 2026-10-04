@@ -32,7 +32,7 @@ CW = W - M * 2
 BASE = 'https://github.com/uhaeun/knitgether-app/blob/main/'
 
 styles = {
-    'body': ParagraphStyle('body', fontName='Korean', fontSize=10.3, leading=15.8,
+    'body': ParagraphStyle('body', fontName='Korean', fontSize=10, leading=15,
                            wordWrap=None, textColor=colors.HexColor(INK), spaceAfter=7),
 }
 def style(name, **kw):
@@ -41,8 +41,8 @@ style('title', fontName='KoreanBold', fontSize=24, leading=32, spaceAfter=12, te
 style('chapter', fontName='KoreanBold', fontSize=18, leading=26, spaceBefore=0, spaceAfter=15, keepWithNext=True)
 style('section', fontName='KoreanBold', fontSize=12.4, leading=19, spaceBefore=8, spaceAfter=5,
       textColor=colors.HexColor(TEAL), keepWithNext=True)
-style('cell', fontSize=9.3, leading=14.3, spaceAfter=0)
-style('headcell', fontName='KoreanBold', fontSize=9.5, leading=14.5, spaceAfter=0, textColor=colors.white)
+style('cell', fontSize=10, leading=15, spaceAfter=0)
+style('headcell', fontName='KoreanBold', fontSize=10, leading=15, spaceAfter=0, textColor=colors.white)
 style('caption', fontSize=8.5, leading=12.5, spaceAfter=5, textColor=colors.HexColor(MUTED))
 style('link', fontSize=8.6, leading=13, spaceAfter=4, textColor=colors.HexColor(TEAL))
 style('bullet', leftIndent=12, firstLineIndent=-10, spaceAfter=5)
@@ -102,7 +102,7 @@ def table(lines, photo_width=165):
             if match:
                 out.append(LinkedImage(match[1], photo_width))
             else:
-                out.append(p(cell, 'headcell' if i==0 else 'caption' if image_table else 'cell'))
+                out.append(p(cell, 'headcell' if i==0 else 'cell'))
         data.append(out)
     t=Table(data, colWidths=widths, repeatRows=1, hAlign='LEFT')
     ts=[('BACKGROUND',(0,0),(-1,0),colors.HexColor(TEAL)),
