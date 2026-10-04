@@ -1,8 +1,8 @@
 {
   "conclusion": "success",
-  "headSha": "8f22e34542db2f023b3e8ae37615936428b9b66e",
+  "headSha": "fa70457f9671eb80776caed315c09fe32445a30e",
   "status": "completed",
-  "url": "https://github.com/uhaeun/knitgether-app/actions/runs/37197112333",
+  "url": "https://github.com/uhaeun/knitgether-app/actions/runs/37198691147",
   "jobs": [
     {
       "name": "Server Build And Test",
@@ -42,88 +42,6 @@
         },
         {
           "name": "Run server tests",
-          "conclusion": "success"
-        },
-        {
-          "name": "Post Set up Node",
-          "conclusion": "success"
-        },
-        {
-          "name": "Post Checkout",
-          "conclusion": "success"
-        },
-        {
-          "name": "Stop containers",
-          "conclusion": "success"
-        },
-        {
-          "name": "Complete job",
-          "conclusion": "success"
-        }
-      ]
-    },
-    {
-      "name": "API Contract, Network Degradation, DB Integrity",
-      "conclusion": "success",
-      "steps": [
-        {
-          "name": "Set up job",
-          "conclusion": "success"
-        },
-        {
-          "name": "Initialize containers",
-          "conclusion": "success"
-        },
-        {
-          "name": "Checkout",
-          "conclusion": "success"
-        },
-        {
-          "name": "Set up Node",
-          "conclusion": "success"
-        },
-        {
-          "name": "Set up Python",
-          "conclusion": "success"
-        },
-        {
-          "name": "Install API test dependencies",
-          "conclusion": "success"
-        },
-        {
-          "name": "Install server dependencies",
-          "conclusion": "success"
-        },
-        {
-          "name": "Generate Prisma Client",
-          "conclusion": "success"
-        },
-        {
-          "name": "Apply database migrations",
-          "conclusion": "success"
-        },
-        {
-          "name": "Build server",
-          "conclusion": "success"
-        },
-        {
-          "name": "Start API server",
-          "conclusion": "success"
-        },
-        {
-          "name": "Run API tests",
-          "conclusion": "success"
-        },
-        {
-          "name": "Upload API diagnostics",
-          "conclusion": "success"
-        },
-        {
-          "name": "Stop API server",
-          "conclusion": "success"
-        },
-        {
-          "name": "Post Set up Python",
           "conclusion": "success"
         },
         {
@@ -222,6 +140,88 @@
         },
         {
           "name": "Post Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "API Contract, Network Degradation, DB Integrity",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Initialize containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install API test dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install server dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Generate Prisma Client",
+          "conclusion": "success"
+        },
+        {
+          "name": "Apply database migrations",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start API server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run API tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload API diagnostics",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop API server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop containers",
           "conclusion": "success"
         },
         {
