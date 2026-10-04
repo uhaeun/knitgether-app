@@ -8,7 +8,7 @@
 
 | 자료 | 내용 |
 |---|---|
-| **[QA 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf)** | 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고. 총 21쪽 |
+| **[QA 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf)** | 프로젝트와 역할, 테스트 전략, 대표 사례 2개와 추가 사례 3개, 결과와 회고. 총 11쪽 |
 | [GitHub에서 본문 읽기](docs/qa/submission/portfolio.md) | PDF와 같은 본문 및 검증 화면 8장. 사진을 누르면 원본 확인 가능 |
 | [추가 검증 화면과 실행 기록](docs/qa/submission/evidence/2026-10-04/README.md) | 도안 교체와 페이지 복귀를 Appium으로 다시 확인한 기록 |
 | [상세 QA 기록](docs/qa/portfolio/README.md) | 테스트 설계, 수동 실행, 결함 및 수정 후 확인 이력 |

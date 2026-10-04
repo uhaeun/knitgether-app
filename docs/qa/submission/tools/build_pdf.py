@@ -194,80 +194,82 @@ class NumberedCanvas(Canvas):
         super().save()
 
 def build():
-    lines=SOURCE.read_text().splitlines(); story=[]; i=0; chapter=''; photo_width=165; photo_page=False
-    case_title=''; photo_title=''; photo_tables=0
-    while i<len(lines):
-        line=lines[i].strip();i+=1
-        if not line or line=='---': continue
-        if line.startswith('# '):
-            story.append(Spacer(1,95))
-            story.append(p(line[2:],'title')); continue
-        if line.startswith('## '):
-            txt=line[3:]
-            if txt.startswith('01 '):
-                story.append(Spacer(1,70))
-                story.append(p('문서 구성','section'))
-                for item in ['01  프로젝트와 역할', '02  테스트 전략과 설계',
-                             '03  주요 검증 사례 5개', '04  결과와 회고']:
-                    story.append(p(item))
+    lines = SOURCE.read_text().splitlines()
+    story = []
+    i = 0
+    photo_width = 165
+    page_heading = False
+    while i < len(lines):
+        line = lines[i].strip()
+        i += 1
+        if not line or line == '---':
+            continue
+        if line == '<!-- pagebreak -->':
             story.append(PageBreak())
-            chapter=txt[:2]
-            photo_page=False;photo_width=165
-            if txt.startswith('03 '):
-                story.append(p(txt,'section'))
-            else: story.append(p(txt,'chapter'))
+            page_heading = True
+            photo_width = 165
+            continue
+        photo_setting = re.fullmatch(r'<!-- photo-width: (\d+) -->', line)
+        if photo_setting:
+            photo_width = int(photo_setting[1])
+            continue
+        if line.startswith('# '):
+            story.append(p(line[2:], 'title'))
+            continue
+        if line.startswith('## '):
+            txt = line[3:]
+            if not txt.startswith('01 '):
+                story.append(PageBreak())
+            photo_width = 165
+            page_heading = False
+            story.append(p(txt, 'section' if txt.startswith('03 ') else 'chapter'))
             continue
         if line.startswith('### 03-'):
-            if not line.startswith('### 03-1'):story.append(PageBreak())
-            photo_page=False;photo_width=165
-            case_title=line[4:]
-            story.append(p(case_title,'chapter'));continue
-        if line.startswith(('### ','#### ')):
-            txt=re.sub(r'^#+\s*','',line)
-            if txt == '담당 역할':
-                story.extend([PageBreak(),p('01 프로젝트와 역할','chapter')])
-            elif txt in ['테스트 범위와 케이스 구성','대표 테스트 조건과 기대 결과']:
-                story.extend([PageBreak(),p('02 테스트 전략과 설계','chapter')])
-            elif txt == '후속 조치와 재검증' and case_title:
-                story.extend([PageBreak(),p(case_title,'chapter')])
-            story.append(p(txt,'section'));continue
+            if not page_heading and not line.startswith('### 03-1'):
+                story.append(PageBreak())
+            story.append(p(line[4:], 'chapter'))
+            page_heading = False
+            photo_width = 165
+            continue
+        if line.startswith(('### ', '#### ')):
+            txt = re.sub(r'^#+\s*', '', line)
+            story.append(p(txt, 'chapter' if page_heading else 'section'))
+            page_heading = False
+            continue
         if line.startswith('|'):
-            block=[line]
-            while i<len(lines) and lines[i].strip().startswith('|'):
-                block.append(lines[i].strip());i+=1
-            if photo_page and photo_tables:
-                story.extend([PageBreak(),p(photo_title,'chapter')])
-            story.extend([table(block,photo_width),Spacer(1,4 if photo_page else 8)])
-            if photo_page:photo_tables+=1
+            block = [line]
+            while i < len(lines) and lines[i].strip().startswith('|'):
+                block.append(lines[i].strip())
+                i += 1
+            story.extend([table(block, photo_width), Spacer(1, 6)])
             continue
-        if re.match(r'^(- |\d+\. )',line):
-            if chapter == '04' and line.startswith('3. **자동화 결과'):
-                story.extend([PageBreak(),p('04 결과와 회고','chapter'),
-                              p('프로젝트를 통해 배운 점 (계속)','section')])
-            text=line.replace('- ','- ',1)
-            story.append(p(text,'bullet'));continue
+        if re.match(r'^(- |\d+\. )', line):
+            story.append(p(line, 'bullet'))
+            continue
         if line.startswith('**') and line.endswith('**'):
-            if '추가 재검증 화면' in line:
-                story.append(PageBreak());photo_page=True
-                photo_width=165;photo_tables=0;photo_title=line.strip('*')
-                story.append(p(photo_title,'chapter'))
-            else:story.append(p(line.strip('*'),'section'))
+            story.append(p(line.strip('*'), 'section'))
             continue
-        if re.fullmatch(r'\[[^\]]+\]\([^)]+\)',line):
-            links=[line]
-            while i<len(lines):
-                j=i
-                while j<len(lines) and not lines[j].strip():j+=1
-                if j<len(lines) and re.fullmatch(r'\[[^\]]+\]\([^)]+\)',lines[j].strip()):
-                    links.append(lines[j].strip());i=j+1
-                else:break
-            story.append(p(' / '.join(links),'link'));continue
-        block=[line]
-        while i<len(lines) and lines[i].strip() and not re.match(r'^(#|\||---|\d+\. |- )',lines[i]):
-            block.append(lines[i].strip());i+=1
-        txt=' '.join(block)
-        typ='caption' if txt.startswith(('촬영:','테스트 데이터를 준비해')) else 'body'
-        story.append(p(txt,typ))
+        if re.fullmatch(r'\[[^\]]+\]\([^)]+\)', line):
+            links = [line]
+            while i < len(lines):
+                j = i
+                while j < len(lines) and not lines[j].strip():
+                    j += 1
+                if j < len(lines) and re.fullmatch(r'\[[^\]]+\]\([^)]+\)', lines[j].strip()):
+                    links.append(lines[j].strip())
+                    i = j + 1
+                else:
+                    break
+            story.append(p(' / '.join(links), 'link'))
+            continue
+        block = [line]
+        while (i < len(lines) and lines[i].strip()
+               and not re.match(r'^(#|\||---|<!--|\d+\. |- )', lines[i])):
+            block.append(lines[i].strip())
+            i += 1
+        txt = ' '.join(block)
+        typ = 'caption' if txt.startswith(('촬영:', '테스트 데이터를 준비해')) else 'body'
+        story.append(p(txt, typ))
     OUT.parent.mkdir(parents=True,exist_ok=True)
     doc=BaseDocTemplate(str(OUT), pagesize=A4, leftMargin=M, rightMargin=M,
                           topMargin=M,bottomMargin=M,title='뜨개더 iOS 앱 QA | 유하은', author='유하은')
