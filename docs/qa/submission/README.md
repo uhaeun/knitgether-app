@@ -2,7 +2,7 @@
 
 ## 읽는 순서
 
-1. **[포트폴리오 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)**: 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고를 담은 12쪽 문서입니다.
+1. **[포트폴리오 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)**: 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고를 담은 21쪽 문서입니다.
 2. **[웹 본문](portfolio.md)**: PDF와 같은 내용을 GitHub에서 읽을 수 있습니다. 사진을 누르면 원본이 열립니다.
 3. **[추가 검증 증거](evidence/2026-10-04/README.md)**: Appium으로 촬영한 원본 화면, 검사 결과와 실행 환경입니다.
 4. **[상세 QA 기록](../portfolio/README.md)**: 테스트 조건, 수행 결과, 결함과 수정 이력입니다.
@@ -15,7 +15,9 @@ PDF와 본문에는 사진 8장이 포함돼 있습니다. PDF는 읽기 순서�
 
 ## PDF 갱신
 
-본문의 정본은 `portfolio.md`입니다. `tools/build_pdf.py`는 이 파일을 읽어 PDF를 생성하며 본문을 덮어쓰지 않습니다. Python과 ReportLab이 필요합니다. 저장소에 포함된 나눔스퀘어 Regular와 Bold를 사용하며, PDF에 글꼴을 포함합니다. 글꼴 출처와 라이선스는 `fonts/LICENSE.txt`에 기록했습니다. 다른 글꼴을 사용할 경우 `KG_KOREAN_FONT`와 `KG_KOREAN_FONT_BOLD`에 각 글꼴 경로를 지정합니다.
+본문의 정본은 `portfolio.md`입니다. `tools/build_pdf.py`는 이 파일을 읽어 PDF를 생성하며 본문을 덮어쓰지 않습니다. Python과 ReportLab이 필요합니다. 저장소에 포함된 Pretendard Regular, SemiBold, Bold를 사용하며, PDF에 글꼴과 한글 텍스트의 유니코드 정보를 포함해 선택과 검색이 가능합니다. 글꼴 출처와 라이선스는 `fonts/LICENSE.txt`에 기록했습니다.
+
+A4 세로형이며 상하좌우 여백은 20mm입니다. 머리말과 쪽 번호도 이 여백 안에 배치합니다. 표지 제목은 32pt Bold, 페이지 제목은 22pt Bold, 소제목은 14pt SemiBold, 본문과 표 내용은 11pt Regular, 캡션은 9pt입니다. 본문은 왼쪽 정렬, 줄간격 17.05pt(155%), 기본 자간(0%)을 사용합니다. 표지 제목과 페이지 제목에만 -1% 자간을 적용합니다. 긴 내용은 글자를 축소하지 않고 페이지를 나눕니다.
 
 저장소 루트에서 실행합니다.
 
