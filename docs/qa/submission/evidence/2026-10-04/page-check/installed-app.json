@@ -1,0 +1,10 @@
+{
+  "udid": "AFB649CF-A45E-405D-AC70-08D8E8240049",
+  "version": "1.0",
+  "build": "1",
+  "binary_sha256": "07dad2c232f3b3718e63169caab4717e3c885b7b66602bee06f0ff93790d6f9b",
+  "source_commit": "Not established for the installed binary; repository HEAD is a reference only.",
+  "device": "iPhone 17 Pro Max",
+  "os": "iOS 26.5",
+  "capture_method": "Appium driver.save_screenshot; original PNG, no pixel editing"
+}

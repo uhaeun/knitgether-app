@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppiumAUT>
+  <XCUIElementTypeApplication type="XCUIElementTypeApplication" name="KnitGether" label="KnitGether" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="" processId="71183" bundleId="com.uhaeun.KnitGether">
+    <XCUIElementTypeWindow type="XCUIElementTypeWindow" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" name="tab.library" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                            <XCUIElementTypeNavigationBar type="XCUIElementTypeNavigationBar" name="창고" enabled="true" visible="true" accessible="false" x="0" y="62" width="440" height="54" index="0" traits="">
+                              <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="창고" name="창고" label="창고" enabled="true" visible="true" accessible="true" x="205" y="73" width="30" height="22" index="0" traits="Header"/>
+                            </XCUIElementTypeNavigationBar>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="1" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                    <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="171" index="0" traits=""/>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="808" width="440" height="148" index="1" traits=""/>
+                                      </XCUIElementTypeOther>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="1" traits=""/>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="116" width="440" height="469" index="2" traits="">
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="창고" name="창고" label="창고" enabled="true" visible="true" accessible="true" x="20" y="134" width="52" height="36" index="0" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="도안과 재료를 프로젝트에 바로 연결해요" name="도안과 재료를 프로젝트에 바로 연결해요" label="도안과 재료를 프로젝트에 바로 연결해요" enabled="true" visible="true" accessible="true" x="20" y="174" width="237" height="18" index="1" traits="StaticText"/>
+                                        <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="내 창고" name="내 창고" label="내 창고" enabled="true" visible="true" accessible="true" x="20" y="210" width="35" height="15" index="2" traits="StaticText"/>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="도안 창고, 6개 도안" label="도안 창고, 6개 도안" enabled="true" visible="true" accessible="true" x="20" y="242" width="400" height="64" index="3" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="doc.text.fill" label="Plain Text Document" enabled="true" visible="true" accessible="false" x="46" y="264" width="15" height="19" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="도안 창고" name="도안 창고" label="도안 창고" enabled="true" visible="true" accessible="false" x="83" y="255" width="56" height="19" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="6개 도안" name="6개 도안" label="6개 도안" enabled="true" visible="true" accessible="false" x="83" y="276" width="43" height="15" index="2" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="chevron.right" label="Forward" enabled="true" visible="true" accessible="false" x="397" y="267" width="8" height="12" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="실 창고, 1개 실" label="실 창고, 1개 실" enabled="true" visible="true" accessible="true" x="20" y="305" width="400" height="64" index="4" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="circle.hexagongrid.fill" label="circle.hexagongrid.fill" enabled="true" visible="true" accessible="false" x="44" y="328" width="19" height="17" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="실 창고" name="실 창고" label="실 창고" enabled="true" visible="true" accessible="false" x="83" y="318" width="43" height="19" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="1개 실" name="1개 실" label="1개 실" enabled="true" visible="true" accessible="false" x="83" y="339" width="30" height="15" index="2" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="chevron.right" label="Forward" enabled="true" visible="true" accessible="false" x="397" y="331" width="8" height="11" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="바늘 창고, 1개 바늘" label="바늘 창고, 1개 바늘" enabled="true" visible="true" accessible="true" x="20" y="368" width="400" height="64" index="5" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="ruler.fill" label="ruler.fill" enabled="true" visible="true" accessible="false" x="43" y="395" width="20" height="9" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="바늘 창고" name="바늘 창고" label="바늘 창고" enabled="true" visible="true" accessible="false" x="83" y="381" width="56" height="19" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="1개 바늘" name="1개 바늘" label="1개 바늘" enabled="true" visible="true" accessible="false" x="83" y="402" width="41" height="15" index="2" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="chevron.right" label="Forward" enabled="true" visible="true" accessible="false" x="397" y="394" width="8" height="11" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="도구 창고, 0개 도구" label="도구 창고, 0개 도구" enabled="true" visible="true" accessible="true" x="20" y="431" width="400" height="64" index="6" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="wrench.and.screwdriver.fill" label="wrench.and.screwdriver.fill" enabled="true" visible="true" accessible="false" x="43" y="452" width="21" height="21" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="도구 창고" name="도구 창고" label="도구 창고" enabled="true" visible="true" accessible="false" x="83" y="444" width="56" height="19" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="0개 도구" name="0개 도구" label="0개 도구" enabled="true" visible="true" accessible="false" x="83" y="465" width="43" height="15" index="2" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="chevron.right" label="Forward" enabled="true" visible="true" accessible="false" x="397" y="457" width="8" height="11" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                        <XCUIElementTypeButton type="XCUIElementTypeButton" name="스킬 창고, 6개 스킬" label="스킬 창고, 6개 스킬" enabled="true" visible="true" accessible="true" x="20" y="494" width="400" height="63" index="7" traits="Button">
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="graduationcap.fill" label="Itunes U" enabled="true" visible="true" accessible="false" x="42" y="515" width="22" height="21" index="0" traits="Image"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="스킬 창고" name="스킬 창고" label="스킬 창고" enabled="true" visible="true" accessible="false" x="83" y="507" width="56" height="19" index="1" traits="StaticText"/>
+                                          <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="6개 스킬" name="6개 스킬" label="6개 스킬" enabled="true" visible="true" accessible="false" x="83" y="528" width="43" height="15" index="2" traits="StaticText"/>
+                                          <XCUIElementTypeImage type="XCUIElementTypeImage" name="chevron.right" label="Forward" enabled="true" visible="true" accessible="false" x="397" y="520" width="8" height="11" index="3" traits="Image"/>
+                                        </XCUIElementTypeButton>
+                                      </XCUIElementTypeOther>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 1 page" label="Vertical scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="407" y="116" width="30" height="757" index="3" traits="Adjustable">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="434" y="407" width="3" height="463" index="0" traits=""/>
+                                      </XCUIElementTypeOther>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 1 page" label="Vertical scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="407" y="116" width="30" height="757" index="4" traits="Adjustable">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="434" y="407" width="3" height="463" index="0" traits=""/>
+                                      </XCUIElementTypeOther>
+                                    </XCUIElementTypeScrollView>
+                                  </XCUIElementTypeOther>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                            </XCUIElementTypeOther>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="2" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits=""/>
+                            </XCUIElementTypeOther>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="1" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                    <XCUIElementTypeTabBar type="XCUIElementTypeTabBar" name="Tab Bar" label="Tab Bar" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="21" y="873" width="398" height="62" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="21" y="873" width="85" height="54" index="0" traits=""/>
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="21" y="873" width="398" height="62" index="1" traits="">
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="house.fill" label="홈" enabled="true" visible="true" accessible="true" x="25" y="877" width="85" height="54" index="0" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="house.fill" label="home" enabled="true" visible="true" accessible="false" x="51" y="883" width="34" height="28" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="heart.text.square.fill" label="내 뜨개" enabled="true" visible="true" accessible="true" x="101" y="877" width="85" height="54" index="1" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="heart.text.square.fill" label="heart.text.square.fill" enabled="true" visible="true" accessible="false" x="130" y="884" width="28" height="26" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" value="1" name="books.vertical.fill" label="창고" enabled="true" visible="true" accessible="true" x="177" y="877" width="86" height="54" index="2" traits="Selected, Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="books.vertical.fill" label="Bookshelf" enabled="true" visible="true" accessible="false" x="203" y="882" width="35" height="30" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="wrench.and.screwdriver.fill" label="도구" enabled="true" visible="true" accessible="true" x="254" y="877" width="85" height="54" index="3" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="wrench.and.screwdriver.fill" label="wrench.and.screwdriver.fill" enabled="true" visible="true" accessible="false" x="280" y="881" width="33" height="32" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                          <XCUIElementTypeButton type="XCUIElementTypeButton" name="gearshape.fill" label="설정" enabled="true" visible="true" accessible="true" x="330" y="877" width="85" height="54" index="4" traits="Button">
+                            <XCUIElementTypeImage type="XCUIElementTypeImage" name="gearshape.fill" label="gearshape.fill" enabled="true" visible="true" accessible="false" x="358" y="883" width="29" height="28" index="0" traits="Image"/>
+                          </XCUIElementTypeButton>
+                        </XCUIElementTypeOther>
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="2" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="0" traits="">
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="0" traits=""/>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="1" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="0" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="0" traits="">
+                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="0" traits=""/>
+                                </XCUIElementTypeOther>
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="1" traits=""/>
+                              </XCUIElementTypeOther>
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="177" y="877" width="86" height="54" index="1" traits=""/>
+                            </XCUIElementTypeOther>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeTabBar>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="1" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits="">
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits=""/>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="1" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="873" width="440" height="83" index="0" traits=""/>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+        </XCUIElementTypeOther>
+      </XCUIElementTypeOther>
+    </XCUIElementTypeWindow>
+    <XCUIElementTypeWindow type="XCUIElementTypeWindow" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="1" traits="">
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits=""/>
+      </XCUIElementTypeOther>
+    </XCUIElementTypeWindow>
+  </XCUIElementTypeApplication>
+</AppiumAUT>

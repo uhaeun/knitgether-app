@@ -1,76 +1,50 @@
-# KnitGether — iOS 앱 QA 실증 프로젝트
+# 뜨개더 KnitGether | iOS QA 포트폴리오
 
-뜨개질 초보자를 위한 iOS 작업 관리 앱 **KnitGether**와, 이 앱을 대상으로 수행한 **QA 전체 기록**이다.
+뜨개더는 도안, 단수, 작업 기록과 뜨개 재료를 한 프로젝트에서 관리하는 SwiftUI 기반 iOS 앱입니다. DB QA 경험을 모바일 앱의 데이터 정합성 검증으로 확장한 개인 프로젝트입니다.
 
-산출물은 앱이 아니라 QA다. 기획 명세 작성부터 리스크 기반 테스트 설계, 수동 실행, 결함 리포트, Appium 자동화, 뮤테이션을 통한 테스트 검출력 검증, CI 회귀 게이트까지 한 사이클을 1인 QA로 돌렸다.
+앱 기획과 테스트 시나리오 설계, 수동 테스트 및 자동화 결과 확인 과정을 정리했습니다. 앱과 API 서버 구현에는 AI 도구를 활용했습니다. 담당 역할과 검증 범위는 포트폴리오 본문에서 확인할 수 있습니다.
 
-구현은 AI 바이브코딩으로 진행했다. 따라서 이 기록은 **사람이 리뷰하지 않은 AI 생성 코드에서 무엇이 깨지는지**를 문서화된 기준선과 실측으로 확인한 실전 기록이기도 하다. 기획자가 자기 제품을 검증하는 편향을 줄이기 위해 5가지 원칙을 세웠고, 실행 중 지키지 못한 원칙도 기록했다([00_project_background](docs/qa/portfolio/00_project_background.md)).
+## 먼저 읽을 자료
 
-<p>
-<img src="docs/qa/portfolio/evidence/0830_app_home.png" width="220" alt="홈 화면">
-<img src="docs/qa/portfolio/evidence/0727_manual_verification/02_library_hub.png" width="220" alt="창고 허브">
-<img src="docs/qa/portfolio/evidence/0727_manual_verification/12_work_statistics.png" width="220" alt="작업시간 통계">
-</p>
+| 자료 | 내용 |
+|---|---|
+| **[제출용 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf)** | 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고. 총 12쪽 |
+| [GitHub에서 본문 읽기](docs/qa/submission/portfolio.md) | PDF와 같은 본문 및 검증 화면 8장. 사진을 누르면 원본 확인 가능 |
+| [추가 검증 화면과 실행 기록](docs/qa/submission/evidence/2026-10-04/README.md) | 도안 교체와 페이지 복귀를 Appium으로 다시 확인한 기록 |
+| [상세 QA 기록](docs/qa/portfolio/00_project_background.md) | 테스트 설계, 수동 실행, 결함 및 수정 후 확인 이력 |
 
-## 숫자로 보는 범위
+## 주요 검증 사례
 
-| 항목 | 규모 | 근거 문서 |
+| 사례 | 검증 관점 | 주요 도구 또는 방법 |
 |---|---|---|
-| 검증 기준선 | 기능 스펙 48건(2026-09-15), 화면 기능정의서 2편 | [02_functional_spec](docs/qa/portfolio/02_functional_spec.md), [docs/spec](docs/spec) |
-| 테스트 케이스 | TC 16그룹 · UI 78건 · API 계약 29건(2026-09-15, 덮임 27·부분 2) | [09_test_case_master](docs/qa/portfolio/09_test_case_master.md) |
-| 결함 | DEF 29건 (Critical 13, Major 8, Minor 6, 축 제외 2) + 스펙 신설 1건, 원인 계열 4개. 9/1 정적 점검분 8건은 실행 재현 전 | [10_defect_catalog](docs/qa/portfolio/10_defect_catalog.md) |
-| 자동화 | Appium 테스트 함수 78 · Page 객체 12 | [13_automation_showcase](docs/qa/portfolio/13_automation_showcase.md) |
-| 테스트의 테스트 | 뮤테이션 주입 6종으로 스위트 검출력 검증 | [13_automation_showcase](docs/qa/portfolio/13_automation_showcase.md) |
-| 회귀 게이트 | GitHub Actions 워크플로 2본 | `.github/workflows/` |
+| 도안 교체 시 드로잉 유실 | 취소하면 보존하고 승인하면 삭제하는지 확인 | 수동 확인, Appium |
+| 단수 정보 누락으로 목록 조회 실패 | 오류 항목 한 건이 정상 프로젝트 조회에 미치는 영향 확인 | API 응답 비교, PostgreSQL, pytest |
+| 다른 탭에서 복귀하면 도안 페이지 초기화 | 이동 경로별 기대 결과를 정하고 같은 페이지로 복귀하는지 확인 | 수동 확인, Appium |
+| 계정 변경 후 이전 계정의 프로젝트 노출 | 서버 응답과 앱에 남은 데이터를 비교해 원인 구분 | API와 저장 데이터 대조, Appium, Swift Testing |
+| 앱 강제 종료 후 단수 기록 복구 | 저장 응답 전후의 종료 시점을 나누고 최종 기록 보존 확인 | Charles, SQL, 앱 화면과 내부 저장값 확인 |
 
-최종 QA 판정은 **Go**다(2026-09-15). 9/19의 7차 전량 회귀 결과와 남은 한계는 [15_release_decision](docs/qa/portfolio/15_release_decision.md)에 기록했다. 실제 배포 이력은 없다.
+## 결과를 읽는 기준
 
-## 어디부터 읽으면 되나
-
-전체 지도는 **[docs/qa/portfolio/00_TOC.md](docs/qa/portfolio/00_TOC.md)** 다. 문서는 번호순으로 읽으며, 각 문서는 앞 문서를 판정 근거로 삼는다.
-
-시간이 5분이라면 이 셋만: [00_project_background](docs/qa/portfolio/00_project_background.md)(셀프 QA 편향 통제) → [10_defect_catalog](docs/qa/portfolio/10_defect_catalog.md)(무엇이 깨졌나) → [13_automation_showcase](docs/qa/portfolio/13_automation_showcase.md)(무엇을 어떻게 자동화했나).
-
-## 무엇이 QA 산출물이고 무엇이 아닌가
-
-이 저장소에는 QA가 직접 작성한 테스트와 AI가 개발 단계에서 생성한 테스트가 섞여 있다. 섞어서 세면 숫자가 부풀려지므로 가른다.
-
-- **QA 직접 작성** — `qa/appium/`(함수 78, POM 12), `KnitGetherQAUITests/`, `qa/mutation/`(주입 6종)
-- **AI 생성, 회귀 장치로만 활용** — `KnitGetherTests/`(단위 329), `KnitGetherUITests/`, `server/test/`(e2e 117). 판정 근거로 쓰지 않는다 — AI가 쓴 단위 테스트 하나가 실제로 데이터 유실 동작(DEF-03)을 정상으로 단언하고 있었다.
-
-상세 구분과 그 이유는 [13_automation_showcase §0](docs/qa/portfolio/13_automation_showcase.md)에 있다.
-
-## AI 사용 범위
-
-커밋의 `Co-Authored-By: Claude` 서명은 AI 코딩 에이전트(Claude Code)와 함께 작업한 범위를 그대로 남긴 것이다. 지우지 않았다.
-
-- **AI가 한 것** — 앱과 서버 코드 구현, 개발 단계 단위·e2e 테스트 생성, 문서 초안과 표 정리, 자동화 코드 타이핑
-- **사람이 한 것** — 검증 기준선(SPEC) 확정, 리스크 클래스와 우선순위, 테스트 케이스 선정과 조건 설계, 결함 재현과 심각도 판정, 원인 계열 분류, 종료 기준과 릴리즈 판정
-- **경계를 둔 이유** — AI가 만든 테스트가 통과해도 기대 동작의 증거가 아니었다(DEF-03). 판정 기준은 코드 밖 문서에 두고 사람이 쥔다
+- 사용 흐름과 예외 상황을 다룬 설계 묶음은 22건이며, 수동 실행 결과가 기록된 케이스는 21건입니다. 이후 추가한 UI 및 API 자동화 항목은 별도로 관리합니다.
+- 과거 실행 결과는 당시 환경과 빌드의 기록입니다. 상세 결과는 [회차별 실행 기록](docs/qa/portfolio/11_execution_results.md)을 참고합니다.
+- 2026-10-04 추가 촬영은 설치된 시뮬레이터 앱에서 Codex가 Appium으로 수행했습니다. 사용자의 기존 수행 이력과 구분하며, 검증 범위와 빌드 정보는 [촬영 기록](docs/qa/submission/evidence/2026-10-04/README.md)에 있습니다.
 
 ## 저장소 구조
 
-```
-docs/qa/portfolio/   QA 포트폴리오 문서 00~15 (읽는 순서·의존관계는 00_TOC)
-docs/spec/           화면 기능정의서 2편, 기획서 v2.2 원본, 커밋 대조표
-docs/                아키텍처 전환 기록, 로컬/온라인 방식, 보안 점검
-qa/appium/        Appium UI 회귀 스위트 — tests/(TC01~16), pages/(POM), support/
-qa/mutation/         결함 주입 도구 — 테스트 스위트의 검출력 검증
-qa/api-tests/        pytest API 계약·DB 대조·네트워크 검증 스위트
-qa/api-probes/       초기 API 스모크·회귀 셸 스크립트
-KnitGether/          iOS 앱 소스 (SwiftUI)
-KnitGetherQAUITests/ XCUITest QA 타깃
-server/              동기화 백엔드 (Node/Prisma)
-```
+| 경로 | 내용 |
+|---|---|
+| `docs/qa/submission/` | 제출용 본문과 추가 검증 증거 |
+| `output/pdf/` | 제출용 PDF |
+| `docs/qa/portfolio/` | 상세 QA 설계, 실행, 결함과 회고 |
+| `docs/spec/` | 기획서와 기능 정의 |
+| `docs/dev/` | 앱 구조와 개발 환경 |
+| `qa/appium/` | iOS 화면 자동화 |
+| `qa/api-tests/` | API 응답과 DB 대조 테스트 |
+| `qa/mutation/` | 결함 주입 실험 도구 |
+| `KnitGether/` | SwiftUI 앱 |
+| `KnitGetherTests/` | 앱 내부 기능 테스트 |
+| `KnitGetherQAUITests/` | QA 회귀용 XCUITest |
+| `KnitGetherUITests/` | 개발 단계 XCUITest |
+| `server/` | NestJS API 서버와 PostgreSQL 데이터 모델 |
 
-## Appium 스위트 실행
-
-```bash
-cd qa/appium
-pip install -r requirements.txt
-# 시뮬레이터·Appium 서버 기동 후
-pytest tests/ -v          # 테스트 함수 78개; 9/19 7차 실행 항목 83개(82 passed, 1 skipped)
-pytest tests/test_tc16_offline_sync.py -v   # 오프라인 동기화만
-```
-
-파일 이름은 TC 그룹(`test_tc08_sort_filter.py`), 함수 이름은 케이스 ID(`test_ui_33_...`)로, [09 카탈로그](docs/qa/portfolio/09_test_case_master.md)와 코드가 이름으로 직접 대응된다.
+실행 방법은 [Appium 안내](qa/appium/README.md)와 [API 테스트 안내](qa/api-tests/README.md)를 참고합니다.

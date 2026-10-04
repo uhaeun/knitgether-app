@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppiumAUT>
+  <XCUIElementTypeApplication type="XCUIElementTypeApplication" name="KnitGether" label="KnitGether" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="" processId="68519" bundleId="com.uhaeun.KnitGether">
+    <XCUIElementTypeWindow type="XCUIElementTypeWindow" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" name="tab.my_knitting" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                            <XCUIElementTypeNavigationBar type="XCUIElementTypeNavigationBar" name="SwiftUI.PlatformAlert" enabled="true" visible="false" accessible="false" x="0" y="62" width="440" height="54" index="0" traits="">
+                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="BackButton" label="나의 뜨개" enabled="true" visible="false" accessible="true" x="20" y="62" width="44" height="44" index="0" traits="Button"/>
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="142" y="73" width="156" height="22" index="1" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="142" y="73" width="156" height="22" index="0" traits="">
+                                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="드로잉 보존 검증" name="드로잉 보존 검증" label="드로잉 보존 검증" enabled="true" visible="false" accessible="true" x="142" y="73" width="112" height="22" index="0" traits="StaticText"/>
+                                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="WIP" name="WIP" label="WIP" enabled="true" visible="false" accessible="true" x="267" y="77" width="23" height="14" index="1" traits="StaticText"/>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" name="workspace.project.edit" label="프로젝트 수정" enabled="true" visible="false" accessible="false" x="380" y="66" width="36" height="36" index="2" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="380" y="66" width="36" height="36" index="0" traits="">
+                                  <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.project.edit" label="프로젝트 수정" enabled="true" visible="false" accessible="true" x="384" y="66" width="28" height="36" index="0" traits="Button"/>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                            </XCUIElementTypeNavigationBar>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="1" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits="">
+                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="드로잉 보존 검증" name="드로잉 보존 검증" label="드로잉 보존 검증" enabled="true" visible="false" accessible="true" x="28" y="137" width="117" height="22" index="0" traits="StaticText"/>
+                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="WIP" name="WIP" label="WIP" enabled="true" visible="false" accessible="true" x="165" y="141" width="23" height="14" index="1" traits="StaticText"/>
+                                    <XCUIElementTypeImage type="XCUIElementTypeImage" name="iphone" label="서버 저장 상태: 이 기기에만 있음" enabled="true" visible="false" accessible="false" x="217" y="141" width="9" height="14" index="2" traits="Image"/>
+                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="서버 저장 상태: 이 기기에만 있음" name="서버 저장 상태: 이 기기에만 있음" label="서버 저장 상태: 이 기기에만 있음" enabled="true" visible="false" accessible="true" x="207" y="136" width="109" height="23" index="3" traits="StaticText"/>
+                                    <XCUIElementTypeImage type="XCUIElementTypeImage" name="star" label="즐겨찾기 아님" enabled="true" visible="false" accessible="true" x="388" y="137" width="22" height="22" index="4" traits="Image"/>
+                                    <XCUIElementTypeImage type="XCUIElementTypeImage" name="arrow.triangle.2.circlepath" label="Syncing" enabled="true" visible="false" accessible="false" x="27" y="172" width="16" height="13" index="5" traits="Image"/>
+                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="아직 이 기기에만 저장되어 있어요." name="아직 이 기기에만 저장되어 있어요." label="아직 이 기기에만 저장되어 있어요." enabled="true" visible="false" accessible="true" x="27" y="172" width="186" height="15" index="6" traits="StaticText"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="다시 시도" label="다시 시도" enabled="true" visible="false" accessible="true" x="346" y="171" width="66" height="16" index="7" traits="Button">
+                                      <XCUIElementTypeImage type="XCUIElementTypeImage" name="arrow.clockwise" label="Refresh" enabled="true" visible="false" accessible="false" x="347" y="172" width="12" height="14" index="0" traits="Image"/>
+                                      <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="다시 시도" name="다시 시도" label="다시 시도" enabled="true" visible="false" accessible="false" x="346" y="171" width="66" height="16" index="1" traits="StaticText"/>
+                                    </XCUIElementTypeButton>
+                                    <XCUIElementTypeSegmentedControl type="XCUIElementTypeSegmentedControl" name="workspace.tab" enabled="true" visible="false" accessible="false" x="16" y="212" width="408" height="32" index="8" traits="">
+                                      <XCUIElementTypeButton type="XCUIElementTypeButton" value="1" name="뜨는 중" label="뜨는 중" enabled="true" visible="false" accessible="true" x="16" y="212" width="204" height="33" index="0" traits="Selected, Button"/>
+                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="프로젝트 정보" label="프로젝트 정보" enabled="true" visible="false" accessible="true" x="220" y="212" width="204" height="33" index="1" traits="Button"/>
+                                    </XCUIElementTypeSegmentedControl>
+                                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="259" width="440" height="551" index="9" traits="">
+                                      <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="259" width="440" height="551" index="0" traits="">
+                                        <XCUIElementTypeTextView type="XCUIElementTypeTextView" value="PATTERN A&#10;PAGE 01 / 04&#10;KnitGether QA - drawing and page retention&#10;Unique page marker: PATTERN A-01&#10;TEST INPUT ONLY - not a knitting instruction&#10;Draw here, then cancel or confirm PDF replacement.&#10;PATTERN A&#10;PAGE 02 / 04&#10;KnitGether QA - drawing and page retention&#10;Unique page marker: PATTERN A-02&#10;TEST INPUT ONLY - not a knitting instruction&#10;Draw here, then cancel or confirm PDF replacement.&#10;PATTERN A&#10;PAGE 03 / 04&#10;KnitGether QA - drawing and page retention&#10;Unique page marker: PATTERN A-03&#10;TEST INPUT ONLY - not a" enabled="true" visible="false" accessible="false" x="0" y="259" width="440" height="2483" index="0" traits="">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="4" y="264" width="432" height="612" index="0" traits="">
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="292" width="289" height="517" index="0" traits="">
+                                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="292" width="289" height="517" index="0" traits="">
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="292" width="204" height="76" index="0" traits="">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="PATTERN A" label="PATTERN A" enabled="true" visible="false" accessible="false" x="32" y="292" width="148" height="26" index="0" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="PATTERN A" name="PATTERN A" label="PATTERN A" enabled="true" visible="false" accessible="true" x="32" y="292" width="148" height="26" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="PAGE 01 / 04" label="PAGE 01 / 04" enabled="true" visible="false" accessible="false" x="32" y="334" width="204" height="34" index="1" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="PAGE 01 / 04" name="PAGE 01 / 04" label="PAGE 01 / 04" enabled="true" visible="false" accessible="true" x="32" y="334" width="204" height="34" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="405" width="282" height="44" index="1" traits="">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="KnitGether QA - drawing and page retention" label="KnitGether QA - drawing and page retention" enabled="true" visible="false" accessible="false" x="32" y="405" width="282" height="16" index="0" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="KnitGether QA - drawing and page retention" name="KnitGether QA - drawing and page retention" label="KnitGether QA - drawing and page retention" enabled="true" visible="false" accessible="true" x="32" y="405" width="282" height="16" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="Unique page marker: PATTERN A-01" label="Unique page marker: PATTERN A-01" enabled="true" visible="false" accessible="false" x="32" y="434" width="241" height="15" index="1" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Unique page marker: PATTERN A-01" name="Unique page marker: PATTERN A-01" label="Unique page marker: PATTERN A-01" enabled="true" visible="false" accessible="true" x="32" y="434" width="241" height="15" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="771" width="289" height="38" index="2" traits="">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="TEST INPUT ONLY - not a knitting instruction" label="TEST INPUT ONLY - not a knitting instruction" enabled="true" visible="false" accessible="false" x="32" y="771" width="251" height="13" index="0" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="TEST INPUT ONLY - not a knitting instruction" name="TEST INPUT ONLY - not a knitting instruction" label="TEST INPUT ONLY - not a knitting instruction" enabled="true" visible="false" accessible="true" x="32" y="771" width="251" height="13" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="Draw here, then cancel or confirm PDF replacement." label="Draw here, then cancel or confirm PDF replacement." enabled="true" visible="false" accessible="false" x="32" y="795" width="289" height="14" index="1" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Draw here, then cancel or confirm PDF replacement." name="Draw here, then cancel or confirm PDF replacement." label="Draw here, then cancel or confirm PDF replacement." enabled="true" visible="false" accessible="true" x="32" y="795" width="289" height="14" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                              </XCUIElementTypeOther>
+                                            </XCUIElementTypeOther>
+                                          </XCUIElementTypeOther>
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="4" y="884" width="432" height="612" index="1" traits="">
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="912" width="289" height="517" index="0" traits="">
+                                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="912" width="289" height="517" index="0" traits="">
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="912" width="204" height="77" index="0" traits="">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="PATTERN A" label="PATTERN A" enabled="true" visible="false" accessible="false" x="32" y="912" width="148" height="27" index="0" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="PATTERN A" name="PATTERN A" label="PATTERN A" enabled="true" visible="false" accessible="true" x="32" y="912" width="148" height="27" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="PAGE 02 / 04" label="PAGE 02 / 04" enabled="true" visible="false" accessible="false" x="32" y="955" width="204" height="34" index="1" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="PAGE 02 / 04" name="PAGE 02 / 04" label="PAGE 02 / 04" enabled="true" visible="false" accessible="true" x="32" y="955" width="204" height="34" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="1026" width="282" height="44" index="1" traits="">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="KnitGether QA - drawing and page retention" label="KnitGether QA - drawing and page retention" enabled="true" visible="false" accessible="false" x="32" y="1026" width="282" height="15" index="0" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="KnitGether QA - drawing and page retention" name="KnitGether QA - drawing and page retention" label="KnitGether QA - drawing and page retention" enabled="true" visible="false" accessible="true" x="32" y="1026" width="282" height="15" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="Unique page marker: PATTERN A-02" label="Unique page marker: PATTERN A-02" enabled="true" visible="false" accessible="false" x="32" y="1054" width="241" height="16" index="1" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Unique page marker: PATTERN A-02" name="Unique page marker: PATTERN A-02" label="Unique page marker: PATTERN A-02" enabled="true" visible="false" accessible="true" x="32" y="1054" width="241" height="16" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="32" y="1391" width="289" height="38" index="2" traits="">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="TEST INPUT ONLY - not a knitting instruction" label="TEST INPUT ONLY - not a knitting instruction" enabled="true" visible="false" accessible="false" x="32" y="1391" width="251" height="13" index="0" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="TEST INPUT ONLY - not a knitting instruction" name="TEST INPUT ONLY - not a knitting instruction" label="TEST INPUT ONLY - not a knitting instruction" enabled="true" visible="false" accessible="true" x="32" y="1391" width="251" height="13" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" name="Draw here, then cancel or confirm PDF replacement." label="Draw here, then cancel or confirm PDF replacement." enabled="true" visible="false" accessible="false" x="32" y="1416" width="289" height="13" index="1" traits="">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Draw here, then cancel or confirm PDF replacement." name="Draw here, then cancel or confirm PDF replacement." label="Draw here, then cancel or confirm PDF replacement." enabled="true" visible="false" accessible="true" x="32" y="1416" width="289" height="13" index="0" traits="StaticText"/>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                              </XCUIElementTypeOther>
+                                            </XCUIElementTypeOther>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeTextView>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 5 pages" label="Vertical scroll bar, 5 pages" enabled="true" visible="false" accessible="false" x="407" y="259" width="30" height="551" index="1" traits="Adjustable">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="434" y="262" width="3" height="101" index="0" traits=""/>
+                                        </XCUIElementTypeOther>
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 5 pages" label="Vertical scroll bar, 5 pages" enabled="true" visible="false" accessible="false" x="407" y="259" width="30" height="551" index="2" traits="Adjustable">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="434" y="262" width="3" height="101" index="0" traits=""/>
+                                        </XCUIElementTypeOther>
+                                      </XCUIElementTypeScrollView>
+                                    </XCUIElementTypeOther>
+                                    <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="false" accessible="false" x="0" y="259" width="440" height="551" index="10" traits="">
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" name="Pen, red" label="Pen, red" enabled="true" visible="false" accessible="true" x="118" y="486" width="184" height="125" index="0" traits=""/>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 1 page" label="Vertical scroll bar, 1 page" enabled="true" visible="false" accessible="false" x="407" y="259" width="30" height="551" index="1" traits="Adjustable">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="434" y="799" width="3" height="8" index="0" traits=""/>
+                                      </XCUIElementTypeOther>
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Horizontal scroll bar, 1 page" label="Horizontal scroll bar, 1 page" enabled="true" visible="false" accessible="false" x="0" y="776" width="440" height="31" index="2" traits="Adjustable">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="430" y="803" width="7" height="4" index="0" traits=""/>
+                                      </XCUIElementTypeOther>
+                                    </XCUIElementTypeScrollView>
+                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="검증용 도안 A" name="검증용 도안 A" label="검증용 도안 A" enabled="true" visible="false" accessible="true" x="22" y="279" width="67" height="15" index="11" traits="StaticText"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.pattern.focus.mode_toggle" label="뷰어 모드" enabled="true" visible="false" accessible="true" x="314" y="269" width="34" height="35" index="12" traits="Button"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.pattern.focus.mode_toggle" label="그리기 모드" enabled="true" visible="false" accessible="true" x="352" y="269" width="34" height="35" index="13" traits="Button"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.pattern.focus.menu" label="More" enabled="true" visible="false" accessible="true" x="394" y="269" width="34" height="35" index="14" traits="Button">
+                                      <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="false" accessible="false" x="394" y="269" width="34" height="35" index="0" traits="Button">
+                                        <XCUIElementTypeImage type="XCUIElementTypeImage" name="ellipsis" label="More" enabled="true" visible="false" accessible="false" x="403" y="284" width="16" height="5" index="0" traits="Image"/>
+                                      </XCUIElementTypeButton>
+                                    </XCUIElementTypeButton>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.counter.sheet_toggle" label="카운터 시트 펼치기" enabled="true" visible="false" accessible="true" x="0" y="803" width="440" height="17" index="15" traits="Button"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.counter.previous" label="단수 내리기" enabled="false" visible="false" accessible="true" x="12" y="820" width="68" height="92" index="16" traits="NotEnabled, Button"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.counter.next" label="단수 올리기" enabled="true" visible="false" accessible="true" x="81" y="820" width="290" height="92" index="17" traits="Button"/>
+                                    <XCUIElementTypeButton type="XCUIElementTypeButton" name="workspace.counter.edit_current" label="단수 직접 입력" enabled="true" visible="false" accessible="true" x="372" y="820" width="56" height="92" index="18" traits="Button"/>
+                                  </XCUIElementTypeOther>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                            </XCUIElementTypeOther>
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="2" traits="">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits=""/>
+                            </XCUIElementTypeOther>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="873" width="440" height="83" index="1" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="0" traits=""/>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="873" width="440" height="83" index="1" traits=""/>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+        </XCUIElementTypeOther>
+      </XCUIElementTypeOther>
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="1" traits="">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="440" height="956" index="0" traits=""/>
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="0" y="0" width="440" height="956" index="1" traits=""/>
+        <XCUIElementTypeAlert type="XCUIElementTypeAlert" name="기존 도안을 교체할까요?" label="기존 도안을 교체할까요?" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="2" traits="">
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="0" traits="">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="0" traits="">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="60" y="396" width="320" height="192" index="0" traits=""/>
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="1" traits="">
+                <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="112" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="112" index="0" traits="">
+                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="기존 도안을 교체할까요?" name="기존 도안을 교체할까요?" label="기존 도안을 교체할까요?" enabled="true" visible="true" accessible="true" x="90" y="418" width="260" height="21" index="0" traits="StaticText"/>
+                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="기존 도안이 있어요. 교체하면 기존 도안에 작성한 드로잉이 삭제돼요. 그래도 교체할까요?" name="기존 도안이 있어요. 교체하면 기존 도안에 작성한 드로잉이 삭제돼요. 그래도 교체할까요?" label="기존 도안이 있어요. 교체하면 기존 도안에 작성한 드로잉이 삭제돼요. 그래도 교체할까요?" enabled="true" visible="true" accessible="true" x="90" y="445" width="260" height="59" index="1" traits="StaticText"/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="506" width="320" height="2" index="1" traits=""/>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 2 pages" label="Vertical scroll bar, 2 pages" enabled="true" visible="true" accessible="false" x="347" y="396" width="30" height="112" index="2" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="374" y="357" width="3" height="36" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Horizontal scroll bar, 1 page" label="Horizontal scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="60" y="475" width="320" height="30" index="3" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="21" y="502" width="36" height="3" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 2 pages" label="Vertical scroll bar, 2 pages" enabled="true" visible="true" accessible="false" x="347" y="396" width="30" height="112" index="4" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="374" y="357" width="3" height="36" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Horizontal scroll bar, 1 page" label="Horizontal scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="60" y="475" width="320" height="30" index="5" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="21" y="502" width="36" height="3" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeScrollView>
+                <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="true" accessible="false" x="60" y="508" width="320" height="80" index="1" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="508" width="320" height="80" index="0" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="76" y="524" width="288" height="48" index="0" traits="">
+                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="취소" label="취소" enabled="true" visible="true" accessible="true" x="76" y="524" width="140" height="48" index="0" traits="Button"/>
+                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="교체" label="교체" enabled="true" visible="true" accessible="true" x="224" y="524" width="140" height="48" index="1" traits="Button"/>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 1 page" label="Vertical scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="347" y="508" width="30" height="80" index="1" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="374" y="598" width="3" height="7" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Horizontal scroll bar, 1 page" label="Horizontal scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="60" y="555" width="320" height="30" index="2" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="150" y="582" width="7" height="3" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Vertical scroll bar, 1 page" label="Vertical scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="347" y="508" width="30" height="80" index="3" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="false" accessible="false" x="374" y="598" width="3" height="7" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="Horizontal scroll bar, 1 page" label="Horizontal scroll bar, 1 page" enabled="true" visible="true" accessible="false" x="60" y="555" width="320" height="30" index="4" traits="Adjustable">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="150" y="582" width="7" height="3" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeScrollView>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="1" traits="">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="0" traits="">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="0" traits="">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="0" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="0" traits="">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="440" height="956" index="0" traits=""/>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="320" height="192" index="1" traits="">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="60" y="396" width="440" height="956" index="0" traits=""/>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+        </XCUIElementTypeAlert>
+      </XCUIElementTypeOther>
+    </XCUIElementTypeWindow>
+  </XCUIElementTypeApplication>
+</AppiumAUT>

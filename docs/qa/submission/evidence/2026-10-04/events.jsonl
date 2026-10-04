@@ -1,0 +1,26 @@
+{"time": "2026-10-04T05:55:27.740195+00:00", "kind": "run_start", "repository_reference_commit": "ba091be40a140db3e6edf2f1db0919b666dc3d91", "udid": "AFB649CF-A45E-405D-AC70-08D8E8240049", "mode": "local repository, no API server", "actor": "Codex executed Appium capture on user request", "build_provenance": "Installed app; see installed-app.json for binary hash, not a new source build", "fixture": "Generated test PDFs, not commercial knitting patterns"}
+{"time": "2026-10-04T05:57:08.004652+00:00", "kind": "screenshot", "file": "01_workspace.png", "meaning": "앱 소개용 작업 화면, 테스트 데이터", "sha256": "c4fe3d1471ca4695ce88d08224d371f0170a48bde5211770ccc061aa4b35e562"}
+{"time": "2026-10-04T05:57:20.612957+00:00", "kind": "assertion", "name": "교체 전 드로잉 존재", "passed": true, "actual": null}
+{"time": "2026-10-04T05:57:22.462994+00:00", "kind": "screenshot", "file": "02_drawing_before.png", "meaning": "기존 도안 A에 드로잉 존재", "sha256": "7170ef69abbcb6f19dfeae94073818cd10142103e87b24f00b0d27608aacec90"}
+{"time": "2026-10-04T05:57:50.179833+00:00", "kind": "assertion", "name": "교체 확인창과 드로잉 삭제 안내", "passed": true, "actual": null}
+{"time": "2026-10-04T05:57:52.104521+00:00", "kind": "screenshot", "file": "03_replace_warning.png", "meaning": "드로잉 삭제 안내와 취소 및 교체 선택", "sha256": "0ead3f702efee467f01b5019d899da5110a4eabf455d1bc6dcf6df41c9926241"}
+{"time": "2026-10-04T05:58:01.083119+00:00", "kind": "assertion", "name": "취소 후 드로잉 유지", "passed": true, "actual": null}
+{"time": "2026-10-04T05:58:01.276701+00:00", "kind": "assertion", "name": "취소 후 도안 A 유지", "passed": true, "actual": null}
+{"time": "2026-10-04T05:58:03.110227+00:00", "kind": "screenshot", "file": "04_cancel_preserved.png", "meaning": "교체 취소 후 도안 A와 드로잉 유지", "sha256": "2da1f947de903416a9fb72c1578e89e0af9d3a06a51aaaa4f004635bfb79854c"}
+{"time": "2026-10-04T05:58:37.356790+00:00", "kind": "assertion", "name": "승인 후 드로잉 제거", "passed": true, "actual": null}
+{"time": "2026-10-04T05:58:37.571135+00:00", "kind": "assertion", "name": "승인 후 도안 B 파일명 표시", "passed": true, "actual": null}
+{"time": "2026-10-04T05:58:39.450992+00:00", "kind": "screenshot", "file": "05_confirm_replaced.png", "meaning": "교체 승인 후 도안 B 표시와 이전 드로잉 제거", "sha256": "566fb83180f9afd292e13806f2384d5370a103dc7e5765a42115d2e0c7ad07a3"}
+{"time": "2026-10-04T05:59:02.156438+00:00", "kind": "assertion", "name": "재실행 후 드로잉 없음", "passed": true, "actual": null}
+{"time": "2026-10-04T05:59:02.358799+00:00", "kind": "assertion", "name": "재실행 후 도안 B 파일명 유지", "passed": true, "actual": null}
+{"time": "2026-10-04T05:59:04.196129+00:00", "kind": "screenshot", "file": "06_relaunch_replaced.png", "meaning": "재실행 후 교체한 도안과 드로잉 제거 상태 유지", "sha256": "f3bc00e0353cd5e120bdfab88527f4f562692c7ef02e8b1baa735b9046fa8512"}
+{"time": "2026-10-04T05:59:04.196602+00:00", "kind": "case_complete", "case": "UI-45 direct PDF replacement + relaunch", "result": "PASS"}
+{"time": "2026-10-04T05:59:27.638719+00:00", "kind": "assertion", "name": "페이지 이동으로 본문 변화", "passed": false, "actual": []}
+{"time": "2026-10-04T05:59:27.640320+00:00", "kind": "run_failed", "error": "AssertionError", "message": "페이지 이동으로 본문 변화"}
+{"time": "2026-10-04T05:59:29.993455+00:00", "kind": "screenshot", "file": "failure.png", "meaning": "실패 당시 화면, 성공 증거로 사용하지 않음", "sha256": "3b0737535ea64436a023aaec041acf63e4cff6be906a9bb04d2d71fdc6230269"}
+{"time": "2026-10-04T06:00:53.140756+00:00", "kind": "run_start", "repository_reference_commit": "ba091be40a140db3e6edf2f1db0919b666dc3d91", "udid": "AFB649CF-A45E-405D-AC70-08D8E8240049", "mode": "local repository, no API server", "actor": "Codex executed Appium capture on user request", "build_provenance": "Installed app; see installed-app.json for binary hash, not a new source build", "fixture": "Generated test PDFs, not commercial knitting patterns"}
+{"time": "2026-10-04T06:01:34.824363+00:00", "kind": "assertion", "name": "1페이지에서 3페이지로 이동", "passed": true, "actual": {"initial": [{"label": "Unique page marker: PATTERN A-01", "y": 434.0}], "before": [{"label": "Unique page marker: PATTERN A-03", "y": 333.0}]}}
+{"time": "2026-10-04T06:01:37.775816+00:00", "kind": "screenshot", "file": "07_page_before.png", "meaning": "홈 이동 전 도안 본문 위치", "sha256": "3a5441c23569c1527b2f27b898db5b8b5eb568cc5dbd3fa18b233c08a0368d50"}
+{"time": "2026-10-04T06:01:44.570329+00:00", "kind": "screenshot", "file": "08_home_between.png", "meaning": "프로젝트 목록을 나와 홈 탭에 진입", "sha256": "7b3b153fa8dc1b2f515350f6f9f1628a5edbff89a91616046f2b5a1b3cafdc9a"}
+{"time": "2026-10-04T06:01:53.154399+00:00", "kind": "assertion", "name": "홈 복귀 후 도안 본문 일치", "passed": false, "actual": {"before": [{"label": "Unique page marker: PATTERN A-03", "y": 333.0}], "after": [{"label": "Unique page marker: PATTERN A-03", "y": 429.0}]}}
+{"time": "2026-10-04T06:01:53.155023+00:00", "kind": "run_failed", "error": "AssertionError", "message": "홈 복귀 후 도안 본문 일치"}
+{"time": "2026-10-04T06:01:55.275662+00:00", "kind": "screenshot", "file": "failure.png", "meaning": "실패 당시 화면, 성공 증거로 사용하지 않음", "sha256": "b7a7b46c378ba23d465801a8aac9f03ae9b6f525bf908d0858991ac51e85d5ca"}
