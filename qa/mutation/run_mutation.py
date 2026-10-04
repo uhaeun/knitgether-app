@@ -13,16 +13,21 @@
 import os
 import subprocess
 import sys
+import tempfile
+import time
+import urllib.request
+from pathlib import Path
 from xml.etree import ElementTree
 
 sys.path.insert(0, os.path.dirname(__file__))
 from injections import INJECTIONS, ROOT
 
-UDID = "3E4280D4-3E27-42E0-9C35-E84B24E08BD1"
+UDID = os.environ.get("KG_UDID", "")
 SCHEME = "KnitGether Local Offline"
-APP = os.path.expanduser(
-    "~/Library/Developer/Xcode/DerivedData/KnitGether-bqtdpqvqguybtqcutrziolwflksh/"
-    "Build/Products/Debug-iphonesimulator/KnitGether.app")
+APP = os.environ.get("KG_APP_PATH", "")
+_BACKUPS = {}
+_SERVER = None
+_SERVER_LOG = None
 TESTS = os.path.join(ROOT, "qa/appium")
 
 # 어떤 고장에도 영향받지 않아야 하는 대표 케이스. 영역이 겹치지 않게 골랐다.
@@ -52,57 +57,97 @@ def edits_of(inj):
 
 def ensure_clean(inj):
     for path, _, _ in edits_of(inj):
-        if run(["git", "status", "--porcelain", path], cwd=ROOT).stdout.strip():
+        state = run(["git", "status", "--porcelain", path], cwd=ROOT)
+        if state.returncode or state.stdout.strip():
             raise SystemExit(f"대상 파일에 이미 변경이 있다: {path}")
 
 
 def patch(inj):
+    # Validate every replacement before writing any file.
+    pending = {}
     for rel, find, replace in edits_of(inj):
-        path = os.path.join(ROOT, rel)
-        src = open(path, encoding="utf-8").read()
+        path = Path(ROOT) / rel
+        src = pending.get(path, path.read_text(encoding="utf-8"))
         if src.count(find) != 1:
             raise SystemExit(f"매칭 실패: {rel}")
-        open(path, "w", encoding="utf-8").write(src.replace(find, replace, 1))
+        pending[path] = src.replace(find, replace, 1)
+    try:
+        for path, src in pending.items():
+            _BACKUPS[path] = path.read_bytes()
+            path.write_text(src, encoding="utf-8")
+    except BaseException:
+        restore(inj)
+        raise
 
 
 def restore(inj):
+    # Only restore bytes this process actually changed; never reset a user's files.
     for rel, _, _ in edits_of(inj):
-        run(["git", "checkout", "--", rel], cwd=ROOT)
+        path = Path(ROOT) / rel
+        if path in _BACKUPS:
+            path.write_bytes(_BACKUPS[path])
+            del _BACKUPS[path]
 
 
 def build_app():
+    if not UDID or not APP:
+        raise SystemExit("전용 시뮬레이터 KG_UDID와 KG_APP_PATH를 지정해야 합니다")
     r = run(["xcodebuild", "build", "-project", "KnitGether.xcodeproj",
              "-scheme", SCHEME, "-destination", f"id={UDID}"], cwd=ROOT)
     if r.returncode != 0:
         print(r.stdout[-2000:])
         raise SystemExit("빌드 실패")
-    run(["xcrun", "simctl", "install", UDID, APP])
+    installed = run(["xcrun", "simctl", "install", UDID, APP])
+    if installed.returncode:
+        raise SystemExit("앱 설치 실패")
+
+
+def stop_server():
+    global _SERVER, _SERVER_LOG
+    if _SERVER is not None:
+        if _SERVER.poll() is None:
+            _SERVER.terminate()
+            try:
+                _SERVER.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                _SERVER.kill()
+                _SERVER.wait()
+        _SERVER = None
+    if _SERVER_LOG is not None:
+        _SERVER_LOG.close()
+        _SERVER_LOG = None
 
 
 def restart_server():
-    """서버를 새 소스로 다시 띄운다.
-
-    프로세스 이름으로 죽이면 안 된다. 실제로 3000 포트를 쥐고 있는 것은
-    `node dist/src/main.js` 라서 'nest start' 패턴에 걸리지 않았고, 새 서버가
-    EADDRINUSE 로 죽는 동안 원본 서버가 계속 응답해 주입이 반영되지 않았다.
-    포트 기준으로 죽이고, dist 를 다시 빌드해야 소스 변경이 실제로 반영된다.
-    """
-    server_dir = os.path.join(ROOT, "server")
-    run("lsof -ti tcp:3000 | xargs kill -9 2>/dev/null || true")
-    run("sleep 2")
-
-    built = run("npm run build", cwd=server_dir)
+    """Start an owned test server; never kill another process on port 3000."""
+    global _SERVER, _SERVER_LOG
+    stop_server()
+    probe = run(["lsof", "-nP", "-tiTCP:3000", "-sTCP:LISTEN"])
+    if probe.returncode not in (0, 1) or probe.stdout.strip():
+        raise SystemExit("3000 포트를 비운 전용 테스트 환경에서 실행해야 합니다")
+    server_dir = Path(ROOT) / "server"
+    built = run(["npm", "run", "build"], cwd=server_dir)
     if built.returncode != 0:
-        print(built.stdout[-1500:])
         raise SystemExit("서버 빌드 실패")
-
-    subprocess.Popen("node dist/src/main.js > /tmp/kg_server.log 2>&1",
-                     cwd=server_dir, shell=True)
-    for _ in range(60):
-        if run("curl -s --max-time 2 http://127.0.0.1:3000/api/v1/health").stdout.strip():
-            return
-        run("sleep 2")
-    raise SystemExit("서버가 뜨지 않음")
+    entry = next((p for p in [server_dir / "dist/main.js", server_dir / "dist/src/main.js"]
+                  if p.exists()), None)
+    if entry is None:
+        raise SystemExit("서버 빌드 산출물 없음")
+    _SERVER_LOG = tempfile.TemporaryFile(mode="w+")
+    env = dict(os.environ, PORT="3000", NODE_ENV="test")
+    _SERVER = subprocess.Popen(["node", str(entry)], cwd=server_dir, env=env,
+                               stdout=_SERVER_LOG, stderr=subprocess.STDOUT)
+    for _ in range(30):
+        if _SERVER.poll() is not None:
+            raise SystemExit("테스트 서버 시작 실패")
+        try:
+            with urllib.request.urlopen("http://127.0.0.1:3000/api/v1/health", timeout=2) as r:
+                if r.status == 200:
+                    return
+        except OSError:
+            pass
+        time.sleep(1)
+    raise SystemExit("테스트 서버 응답 없음")
 
 
 def apply_target(inj):
@@ -116,22 +161,28 @@ def pytest_run(names):
     FAILED 가 테스트 이름과 다른 줄로 밀린다. 그 탓에 실패를 통째로 못 읽고
     전부 통과로 집계한 적이 있다. junit XML 로 읽는다.
     """
-    report = "/tmp/kg_mutation_report.xml"
-    args = [os.path.join(TESTS, ".venv/bin/python"), "-m", "pytest", "tests/",
-            "-q", "--tb=no", "--runxfail", "-k", " or ".join(names),
-            f"--junitxml={report}"]
-    subprocess.run(args, cwd=TESTS, capture_output=True, text=True)
+    with tempfile.TemporaryDirectory(prefix="kg-mutation-") as directory:
+        report = Path(directory) / "report.xml"
+        args = [os.path.join(TESTS, ".venv/bin/python"), "-m", "pytest", "tests/",
+                "-q", "--tb=no", "--runxfail", "-k", " or ".join(names),
+                f"--junitxml={report}"]
+        result = subprocess.run(args, cwd=TESTS, capture_output=True, text=True,
+                                env=dict(os.environ, KG_API_BASE_URL="http://127.0.0.1:3000/api/v1"))
+        if result.returncode not in (0, 1) or not report.exists():
+            raise RuntimeError("pytest 실행이 완료되지 않아 결함 검출을 판정할 수 없음")
+        return parse_results(report)
 
+
+def parse_results(report):
     results = {}
-    tree = ElementTree.parse(report)
-    for case in tree.iter("testcase"):
+    for case in ElementTree.parse(report).iter("testcase"):
         name = case.get("name", "").split("[")[0]
-        state = "PASSED"
-        for child in case:
-            if child.tag in ("failure", "error"):
-                state = "FAILED"
-            elif child.tag == "skipped":
-                state = "SKIPPED"
+        state = ("ERROR" if case.find("error") is not None else
+                 "FAILED" if case.find("failure") is not None else
+                 "SKIPPED" if case.find("skipped") is not None else "PASSED")
+        # Mixed parameter results must never hide an error or an unexpected pass.
+        if name in results and results[name] != state:
+            state = "MIXED"
         results[name] = state
     return results
 
@@ -148,23 +199,30 @@ def check(name):
         apply_target(inj)
         results = pytest_run(expected + controls)
     finally:
+        stop_server()
         restore(inj)
+        if inj["대상"] == "app":
+            build_app()
+        else:
+            rebuilt = run(["npm", "run", "build"], cwd=Path(ROOT) / "server")
+            if rebuilt.returncode:
+                raise RuntimeError("원본 서버 코드의 재빌드 실패: 실행 전에 다시 빌드해야 합니다")
 
     caught, missed, collateral = [], [], []
     for t in expected:
-        (caught if results.get(t) in ("FAILED", "ERROR") else missed).append(t)
+        (caught if results.get(t) == "FAILED" else missed).append(t)
     for c in controls:
-        if results.get(c) in ("FAILED", "ERROR"):
+        if results.get(c) != "PASSED":
             collateral.append(c)
 
     print(f"  잡음   {len(caught)}/{len(expected)}")
     for t in caught:
         print(f"    O {t}")
     for t in missed:
-        print(f"    X {t}  <- 고장을 심었는데 통과했다. 검출력 없음")
+        print(f"    X {t}  <- 기대한 assertion 실패가 아님. 결과 또는 실행 환경 확인")
     if collateral:
         for c in collateral:
-            print(f"    ! {c}  <- 무관한데 같이 터졌다. 과잉 결합")
+            print(f"    ! {c}  <- 대조 케이스가 통과하지 않음. 실패, 오류, 누락 여부 확인")
     else:
         print(f"  통제군 {len(controls)}건 모두 정상")
     return {"name": name, "caught": caught, "missed": missed, "collateral": collateral}
@@ -178,23 +236,22 @@ def main():
         return
 
     names = list(INJECTIONS) if arg == "--all" else [arg]
-    summary = []
-    try:
-        for name in names:
-            summary.append(check(name))
-    finally:
-        print("\n원상복구 후 재빌드 중...")
-        for name in names:
-            restore(INJECTIONS[name])
-        build_app()
-        restart_server()
-        print("복구 완료")
+    if any(name not in INJECTIONS for name in names):
+        raise SystemExit("알 수 없는 주입 이름입니다. --list를 확인하세요")
+    if not UDID or not APP or not Path(APP).is_dir():
+        raise SystemExit("전용 시뮬레이터 KG_UDID와 빌드한 앱 KG_APP_PATH를 지정하세요")
+    for name in names:
+        ensure_clean(INJECTIONS[name])
+    summary = [check(name) for name in names]
 
     print(f"\n{'=' * 62}\n음성 대조 종합\n{'=' * 62}")
     for s in summary:
         state = "통과" if not s["missed"] and not s["collateral"] else "확인 필요"
         print(f"  {s['name']:24s} 잡음 {len(s['caught'])}건  "
               f"놓침 {len(s['missed'])}건  과잉 {len(s['collateral'])}건  {state}")
+
+    if any(s["missed"] or s["collateral"] for s in summary):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

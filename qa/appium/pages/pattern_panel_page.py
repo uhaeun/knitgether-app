@@ -197,8 +197,12 @@ class PatternPanelPage(WorkspacePage):
     def viewer_signature(self):
         """지금 보이는 도안 본문 텍스트. 페이지 인디케이터가 없어 이걸 위치 지표로 쓴다."""
         sv = self._scroll_view()
-        return [self.label_of(e)[:40]
-                for e in sv.find_elements(PRED, 'type == "XCUIElementTypeStaticText"')][:5]
+        labels = [self.label_of(e).strip() for e in
+                  sv.find_elements(PRED, 'type == "XCUIElementTypeStaticText"')
+                  if e.is_displayed()]
+        signature = [label for label in labels if label][:5]
+        assert signature, "도안 본문을 읽지 못해 위치 유지를 판정할 수 없음"
+        return signature
 
     def scroll_pages(self, count):
         """도안을 아래로 넘긴다. 뷰어가 세로 스크롤이라 페이지 이동도 스크롤이다."""
@@ -265,5 +269,4 @@ class PatternPanelPage(WorkspacePage):
                            until=lambda: self.alert_shown(T.DELETE_DRAWING_TITLE, timeout=1))
         self.alert_tap(T.DELETE if confirm else T.CANCEL)
         time.sleep(1.5)
-
 

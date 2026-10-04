@@ -1,5 +1,8 @@
 # Workspace UX Restoration Design
 
+> 작성 당시의 설계 또는 코드 대조 기록입니다. 본문의 기준 날짜와 커밋을 확인해 주세요. 이후 QA 수정 내용과 현재 제출 범위는 [QA 안내](../../qa/portfolio/README.md)를 따릅니다.
+
+
 ## Context
 
 The current server-client branch has restored the project workspace enough to compile and sync project, pattern copy, drawing, row counter, and row guide data. However, the workspace still feels different from the earlier app because several user-facing affordances from the old CoreData workspace are either missing, too flat, or hidden inside one large view file.

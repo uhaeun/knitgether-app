@@ -78,10 +78,24 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"QA Cardigan\",\n  \"status\": \"co\",\n  \"memo\": \"Postman smoke project\"\n}"
+          "raw": "{\n  \"id\": \"{{projectId}}\",\n  \"name\": \"QA Cardigan\",\n  \"status\": \"WIP\",\n  \"isFavorite\": false,\n  \"memo\": \"Postman smoke project\",\n  \"startDate\": \"{{startDate}}\",\n  \"relatedSkillIds\": [],\n  \"rowCounter\": {\n    \"id\": \"{{rowCounterId}}\",\n    \"projectId\": \"{{projectId}}\",\n    \"name\": \"메인\",\n    \"currentRow\": 0\n  },\n  \"workSessions\": []\n}"
         },
-        "url": "{{baseUrl}}/projects"
-      }
+        "url": "{{baseUrl}}/projects",
+        "description": "테스트용 프로젝트를 생성한다. 현재 SaveProjectDto 필수값을 포함한다. 매 요청마다 새 UUID를 생성하므로 재전송 멱등성 검증에는 별도 고정 ID 요청이 필요하다."
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.variables.set(\"projectId\", pm.variables.replaceIn(\"{{$guid}}\"));",
+              "pm.variables.set(\"rowCounterId\", pm.variables.replaceIn(\"{{$guid}}\"));",
+              "pm.variables.set(\"startDate\", new Date().toISOString());"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "Patterns List",

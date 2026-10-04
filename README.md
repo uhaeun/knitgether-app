@@ -11,7 +11,7 @@
 | **[제출용 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf)** | 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고. 총 12쪽 |
 | [GitHub에서 본문 읽기](docs/qa/submission/portfolio.md) | PDF와 같은 본문 및 검증 화면 8장. 사진을 누르면 원본 확인 가능 |
 | [추가 검증 화면과 실행 기록](docs/qa/submission/evidence/2026-10-04/README.md) | 도안 교체와 페이지 복귀를 Appium으로 다시 확인한 기록 |
-| [상세 QA 기록](docs/qa/portfolio/00_project_background.md) | 테스트 설계, 수동 실행, 결함 및 수정 후 확인 이력 |
+| [상세 QA 기록](docs/qa/portfolio/README.md) | 테스트 설계, 수동 실행, 결함 및 수정 후 확인 이력 |
 
 ## 주요 검증 사례
 
@@ -48,3 +48,5 @@
 | `server/` | NestJS API 서버와 PostgreSQL 데이터 모델 |
 
 실행 방법은 [Appium 안내](qa/appium/README.md)와 [API 테스트 안내](qa/api-tests/README.md)를 참고합니다.
+
+문서와 테스트 도구의 최근 점검 내용은 [저장소 검토 기록](docs/qa/repository-review/README.md)에 정리했습니다.

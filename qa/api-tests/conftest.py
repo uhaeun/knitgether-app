@@ -1,11 +1,8 @@
 """
 산출물 3 — API 정합성 테스트 하네스 (conftest).
 
-★ 미션: 기존 서버 e2e(Jest)는 12개 중 9개가 mock Prisma(인메모리)라
-  실 DB 정합성(ownerId 격리·soft delete·cascade·트랜잭션 원자성·제약)을
-  아무도 검증하지 않는다. 이 계층은 **실행 중인 서버 + 실 Postgres**를
-  black-box HTTP로 때려 그 공백을 메운다. 각 테스트는 v2.3 스펙 조항을
-  docstring에 명시하고, 실패는 결함 후보로 '보고'한다(여기서 고치지 않음).
+실행 중인 서버에 HTTP 요청을 보내고, 필요한 케이스는 psycopg2로 실제 DB를
+조회한다. 모든 케이스가 DB를 직접 조회하는 것은 아니다.
 
 전제:
 - 서버가 API_BASE_URL(기본 http://127.0.0.1:3000/api/v1)에서 기동 중

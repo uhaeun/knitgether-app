@@ -300,13 +300,16 @@ def test_ui_51_step3_page_kept_after_lookup(kg):
 
     lst.open().open_project("검색이탈")
     pat.set_mode(T.MODE_VIEWER)
+    initial = pat.viewer_signature()
     pat.scroll_pages(3)
     before = pat.viewer_signature()
+    assert before != initial, "도안 위치가 이동하지 않아 복귀 후 유지 여부를 판정할 수 없음"
 
     pat.menu("workspace.pattern.lookup", expect="사전")
     time.sleep(2)
-    ws.go_back()
+    pat.tap_button("완료")
     time.sleep(2)
+    assert not pat.has_text("도안 보며 찾아보기", timeout=1), "사전 화면이 닫히지 않음"
 
     assert pat.viewer_signature() == before, "검색에서 돌아오니 보던 위치가 달라짐"
 
@@ -325,8 +328,10 @@ def test_ui_51_step2_page_kept_after_tab_round_trip(kg):
 
     lst.open().open_project("탭복귀")
     pat.set_mode(T.MODE_VIEWER)
+    initial = pat.viewer_signature()
     pat.scroll_pages(3)
     before = pat.viewer_signature()
+    assert before != initial, "도안 위치가 이동하지 않아 복귀 후 유지 여부를 판정할 수 없음"
 
     ws.go_back()
     pat.go_tab("홈")

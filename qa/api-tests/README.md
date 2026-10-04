@@ -1,40 +1,58 @@
-# API 정합성 테스트 (산출물 3)
+# API와 DB 검증
 
-실행 중인 KnitGether 서버 + 실 Postgres를 **black-box HTTP + 직접 DB 조회**로
-검증하는 pytest 스위트.
+실행 중인 API 서버에 `requests`로 요청을 보내고 `pytest`로 결과를 판정합니다. 저장 데이터 확인이 필요한 케이스는 `psycopg2`로 PostgreSQL을 직접 조회합니다. 모든 케이스가 SQL을 실행하는 것은 아닙니다.
 
-## 왜 별도 계층인가
-기존 서버 e2e(Jest)는 12개 스펙 중 9개가 mock Prisma(인메모리)라 **실 DB 정합성**
-—ownerId 격리, soft delete, cascade, 트랜잭션 원자성, DB 제약—을 검증하지 못한다.
-이 스위트가 그 공백을 메운다. 계약(contract)은 Jest, 정합성(integrity)은 pytest.
+2026-10-04 코드 수집 기준 **20개 테스트 파일, 69개 실행 항목**입니다. 파라미터별 항목을 포함하며 통과 건수가 아닙니다. 과거 수행 결과는 [실행 기록](../../docs/qa/portfolio/11_execution_results.md)에 있습니다.
 
-## 테스트 6종
-| 파일 | 검증 | 근거 조항 |
-|---|---|---|
-| test_01_ownership_isolation | ownerId 격리(A↔B) + DB 무변경 | §C-1 유저 격리 |
-| test_02_last_write_wins | 동시수정 충돌 미감지(통과=결함 존재) | §C-1, **Issue #14** |
-| test_03_create_idempotency | 동일 id 재생성 멱등(upsert) | §A-3 |
-| test_04_delete_cascade | 삭제의 soft-cascade(자식 deletedAt) | §B 프로젝트 CRUD |
-| test_05_transaction_atomicity | 자식 실패 시 부모 롤백 | §A-3 $transaction |
-| test_06_auth_and_boundaries | 토큰 경계 + currentRow/시간역전 경계값 | §C-2, §B |
+## 파일별 확인 대상
 
-## 실행
+| 파일 번호 | 확인 대상 |
+|---|---|
+| 01 | 다른 계정의 접근 차단과 DB 무변경 |
+| 02 | 수정 기준 시각 누락 거부, 오래된 수정의 충돌 감지, 선행 값 보존 |
+| 03 | 중복 생성 거부와 수정 경로를 통한 재전송 |
+| 04 | 프로젝트 삭제 시 자식 데이터의 삭제 표시 |
+| 05 | 자식 저장 실패 시 부모 변경 취소와 잘못된 카운터 참조 거부 |
+| 06 | 인증 토큰, 단수와 작업 시간의 경계값 |
+| 07 | 마지막 작업 시각 저장과 정렬 |
+| 08 | 네트워크 지연, 차단, 응답 중단과 재시도 |
+| 09 | 생성과 수정 경로, 토큰 만료, 서버 파일 잔존 |
+| 10 | 가입, 로그인과 잘못된 요청 필드 거부 |
+| 11 | 세션 보존, 재전송, 거부된 요청의 서버 데이터 보존 |
+| 12 | 실, 바늘과 도구 창고의 생성, 조회, 수정과 삭제 |
+| 13 | 단수 정보가 없는 항목을 제외하고 정상 프로젝트 조회 |
+| 14 | 삭제된 스킬의 조회 제외 |
+| 15 | 도안 파일 연결과 교체 후 드로잉 참조 정리 |
+| 16 | 필수값 누락과 조회 결과의 DB 대조 |
+| 17 | 충돌 판단에 사용하는 시각의 밀리초 정밀도 |
+| 18 | 창고 입력값의 상한과 상한 초과 |
+| 19 | PATCH 전체 본문 계약과 일부 필드만 보낸 요청 거부 |
+| 20 | 로그인 연속 실패 시 잠금과 응답 일관성 |
+
+## 실행 순서
+
+전용 테스트 서버와 DB를 사용합니다. 서버의 DB와 아래 DB 접속 정보가 같은 대상을 가리켜야 합니다. 서버 설정 예시는 [server/.env.example](../../server/.env.example)에 있습니다.
+
+저장소 루트에서 서버를 먼저 실행하고, 별도 터미널에서 실행합니다.
+
 ```bash
 cd qa/api-tests
-python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
-# 서버 기동 필요: (server) npm run start:dev
-./.venv/bin/pytest -v
+python3 -m venv .venv
+./.venv/bin/pip install -r requirements.txt
+./.venv/bin/python -m pytest --collect-only -q  # 실행 항목만 확인
+./.venv/bin/python -m pytest -v                # 실제 API 및 DB 테스트
 ```
 
-## 환경 변수(기본값)
-- `API_BASE_URL` = http://127.0.0.1:3000/api/v1
-- `DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME` = localhost / 5433 / knitgether / knitgether / knitgether_dev
+| 환경 변수 | 기본값 |
+|---|---|
+| API_BASE_URL | http://127.0.0.1:3000/api/v1 |
+| DB_HOST / DB_PORT | localhost / 5433 |
+| DB_USER / DB_PASSWORD / DB_NAME | knitgether / knitgether / knitgether_dev |
 
-## 데이터 위생
-매 실행 유니크 계정(`pytest-<ts>-<uuid>@`)을 만들고, 세션 종료 시 **이 실행이 만든
-계정만** cascade 삭제한다(수동 QA 데이터 불침해). `.venv/`는 커밋 대상 아님.
+테스트는 고유 계정을 만들고 종료 시 해당 실행에서 등록한 계정의 프로필을 삭제합니다. 강제 종료되거나 DB 연결이 실패하면 정리가 끝나지 않을 수 있습니다. 일부 케이스는 SQL로 데이터를 변경하므로 개인 데이터가 있는 DB에서 실행하지 않습니다.
 
-## 결과 해석 규칙
-- **FAIL = 결함 후보.** 이 스위트에서 코드를 고치지 않는다 — 결함으로 보고한다.
-- test_02는 **PASS 해야 정상**(결함 #14가 그대로 존재한다는 뜻). 훗날 충돌 보호가
-  도입되면 test_02가 FAIL로 바뀌며, 그게 회귀 알림이 된다.
+## 결과 해석
+
+`test_02`의 PASS는 현재 충돌 방지 계약을 만족한다는 뜻입니다. “PASS이면 결함이 존재한다”는 설명은 수정 전 테스트에만 해당하며 현재 코드에는 적용하지 않습니다.
+
+파일 잔존을 관찰하는 일부 케이스는 현재 동작을 기록합니다. 따라서 전체 PASS만으로 모든 결함이 해결됐다고 판단하지 않습니다. FAIL은 기대값 불일치, ERROR는 준비 또는 실행 오류, SKIP은 미실행으로 구분해 원인을 확인합니다.

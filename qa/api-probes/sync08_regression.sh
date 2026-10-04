@@ -59,7 +59,8 @@ echo "3) PATCH 전 세션 수: $before (기대 2)"
 
 echo "4) S1만 담은 stale PATCH 전송 (구 동작이면 S2가 무이력 삭제됨)"
 code=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH "$API/projects/$P" -H "$AUTH" -H "Content-Type: application/json" -d "$(body_s1_only)")
-echo "   PATCH /projects/$P -> $code"
+patch_code=$code
+echo "   PATCH /projects/$P -> $patch_code"
 
 after_json=$(curl -s "$API/projects/$P/work-sessions" -H "$AUTH")
 after=$(echo "$after_json" | python3 -c "import sys,json;d=json.load(sys.stdin);print(len(d))")
@@ -70,7 +71,7 @@ echo "6) 정리: 프로젝트 삭제"
 code=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "$API/projects/$P" -H "$AUTH")
 echo "   DELETE -> $code"
 
-if [ "$after" = "2" ] && [ "$has_s2" = "True" ]; then
+if [ "$patch_code" = "200" ] && [ "$before" = "2" ] && [ "$after" = "2" ] && [ "$has_s2" = "True" ]; then
   echo "== SYNC-08 회귀 검증 PASS: 요청 본문에 없는 세션이 보존됨 =="
 else
   echo "== SYNC-08 회귀 검증 FAIL =="
