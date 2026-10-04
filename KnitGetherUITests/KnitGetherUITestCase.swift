@@ -10,6 +10,7 @@ class KnitGetherUITestCase: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
         addUIInterruptionMonitor(withDescription: "System password prompt") { alert in
             let dismissButtonTitles = [
                 "Not Now",
