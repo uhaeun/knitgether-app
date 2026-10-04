@@ -75,11 +75,11 @@
 
 사용 흐름과 예외 상황을 다룬 설계 묶음은 22건입니다. 주요 사용 흐름과 기능 간 연결 4건, 기록 유실과 계정 분리의 예외 상황 6건, 기능별 동작과 예외 처리 12건으로 구성했습니다. 이후 추가한 UI 및 API 자동화 테스트는 별도로 관리했습니다.
 
-[근거: 품질 리스크맵](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/03_quality_risk_map.md)
+[근거: 품질 리스크맵](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/03_quality_risk_map.md)
 
-[전체 테스트 조건과 기대 결과](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/05_test_cases.md)
+[테스트 케이스 목록과 대표 설계](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/05_test_cases.md)
 
-[UI와 API 테스트 범위](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/09_test_case_master.md)
+[UI와 API 테스트 범위](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/09_test_case_master.md)
 
 <!-- pagebreak -->
 
@@ -136,9 +136,11 @@ PDF 직접 교체 경로의 추가 촬영 화면에서는 교체 취소 후 선�
 
 파일 교체 성공 여부와 함께, 기록이 어떤 선택을 거쳐 삭제되는지 확인해야 합니다. 취소 경로도 데이터 보존의 핵심 검증 조건입니다.
 
-[결함과 수정 기록](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/10_defect_catalog.md)
+[결함과 수정 기록](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/10_defect_catalog.md)
 
-[Appium UI-45: 교체 취소와 승인](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/qa/appium/tests/test_tc10a_workspace_pattern.py)
+[Appium UI-45: 교체 취소와 승인](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/tests/test_tc10a_workspace_pattern.py#L180-L199)
+
+[드로잉 상태 판정 코드](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/pages/pattern_panel_page.py#L296-L298)
 
 <!-- pagebreak -->
 
@@ -182,15 +184,15 @@ PDF 직접 교체 경로의 추가 촬영 화면에서는 교체 취소 후 선�
 
 pytest 기반 API 테스트는 정상 프로젝트와 오류 대상을 생성한 뒤 SQL로 단수 정보를 삭제 상태로 바꾸고, HTTP 200과 정상 항목 포함 및 오류 항목 제외를 확인합니다. 최초 재현은 레코드 제거, 자동화는 삭제 상태 변경 조건입니다.
 
-정상 목록 반환을 확인했으며, 제외된 항목의 복구와 안내 및 개별 조회 오류는 추가 확인 범위로 남겼습니다.
+정상 목록 반환을 확인했습니다. 오류 항목의 개별 조회에는 HTTP 500이 남아 있으며, 해당 항목의 복구와 오류 안내는 후속 개선 범위입니다.
 
 #### 이 사례에서 배운 점
 
 DB의 불일치가 API 응답과 사용자의 작업 진입에 미치는 영향을 연결해 판단했습니다.
 
-[DEF-08 재현과 수정 전후 비교](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/10_defect_catalog.md)
+[DEF-08 재현과 수정 전후 비교](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/10_defect_catalog.md)
 
-[API-21: 정상 목록 보존](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/qa/api-tests/test_13_row_counter_isolation.py)
+[API-21: 정상 목록 보존](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/api-tests/test_13_row_counter_isolation.py#L21-L61)
 
 ### 03-3 탭 복귀 후 도안 페이지 초기화 (DEF-19)
 
@@ -200,7 +202,7 @@ DB의 불일치가 API 응답과 사용자의 작업 진입에 미치는 영향�
 
 #### 수정과 재검증
 
-페이지를 저장하고 복원하도록 수정됐습니다. Appium으로 홈 탭 경유와 사전 조회 경로를 나눠 이동 전후 도안 본문을 비교했고, 두 경로 모두 통과했습니다. 앱 종료 후 재실행까지의 유지는 당시 보장 범위에서 제외했습니다.
+페이지를 저장하고 복원하도록 수정됐습니다. 이후 재검증에서는 빈 결과도 같다고 판정하던 테스트를 보완했습니다. Appium으로 실제 페이지 이동을 확인하고, 홈 탭과 사전 조회에서 복귀한 뒤 같은 페이지의 고유 표시가 유지되는지 검사해 두 경로 모두 통과했습니다. 앱 재실행 후 페이지 유지는 당시 보장 범위 밖이었습니다.
 
 <!-- photo-width: 125 -->
 
@@ -211,9 +213,11 @@ DB의 불일치가 API 응답과 사용자의 작업 진입에 미치는 영향�
 
 촬영: 2026-10-04 추가 검증은 4페이지 테스트 도안을 사용했습니다. 이동 전후 같은 3페이지가 표시되는지 확인했습니다.
 
-[기대 결과 확정과 실행 기록](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/06_manual_execution.md)
+[기대 결과 확정과 실행 기록](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/06_manual_execution.md)
 
-[Appium UI-51: 경로별 페이지 유지](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/qa/appium/tests/test_tc10a_workspace_pattern.py)
+[Appium UI-51: 경로별 페이지 유지](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/tests/test_tc10a_workspace_pattern.py#L292-L341)
+
+[보완한 두 경로의 재실행 결과](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/validation/2026-10-04/evidence/appium-page-final.xml)
 
 [추가 촬영과 실행 기록](evidence/2026-10-04/README.md)
 
@@ -244,11 +248,11 @@ A 계정에서 로그아웃한 뒤 B 계정으로 로그인했는데, 앱에 다
 
 서버의 소유자 구분이 정상이어도 앱에 남은 데이터가 노출될 수 있어, API와 화면 및 로컬 저장소를 함께 확인해야 합니다.
 
-[계정 변경 시 노출과 업로드 구분](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/06_manual_execution.md)
+[계정 변경 시 노출과 업로드 구분](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/06_manual_execution.md)
 
-[Appium UI-77](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/qa/appium/tests/test_tc15_logout.py)
+[Appium UI-77](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/tests/test_tc15_logout.py#L23-L49)
 
-[계정별 저장 폴더 테스트](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/KnitGetherTests/AppRepositoryContainerTests.swift)
+[계정별 저장 폴더 테스트](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/KnitGetherTests/AppRepositoryContainerTests.swift#L612-L648)
 
 ### 03-5 앱 강제 종료 후 단수 기록 복구 (TC-CNT02-01)
 
@@ -276,9 +280,9 @@ A 계정에서 로그아웃한 뒤 B 계정으로 로그인했는데, 앱에 다
 
 화면 반영과 서버 저장 완료 시점이 다를 수 있어, 재실행 직후의 보존과 통신 재개 후 동기화 결과를 나눠 판정했습니다.
 
-[TC-CNT02-01 설계와 판정](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/05_test_cases.md)
+[TC-CNT02-01 설계와 판정](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/05_test_cases.md)
 
-[화면과 서버 및 로컬 값 확인 기록](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/06_manual_execution.md)
+[화면과 서버 및 로컬 값 확인 기록](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/06_manual_execution.md)
 
 ## 04 결과와 회고
 
@@ -299,8 +303,8 @@ A 계정에서 로그아웃한 뒤 B 계정으로 로그인했는데, 앱에 다
 - **성능 검증:** 기능 동작과 데이터 보존을 우선해 데이터 규모별 목록 조회 시간과 도안 로딩 시간을 체계적으로 측정하지 못했습니다. 데이터 규모와 응답 시간 기준을 정하고, 실기기에서 로딩 시간과 메모리 사용량을 확인하겠습니다.
 - **모바일 환경:** 반복 자동화는 시뮬레이터 중심이었습니다. 실제 기기와 OS 조합을 정해 앱 종료와 복귀, 통신 복구, 권한 거부 후 재시도를 확인하고, 화면 크기와 접근성 검증도 넓히겠습니다.
 
-[회차별 실행과 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/11_execution_results.md)
+[회차별 실행과 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/11_execution_results.md)
 
-[자동화 구성과 결함 연결](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/13_automation_showcase.md)
+[자동화 구성과 결함 연결](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/13_automation_showcase.md)
 
-[요구사항 보완과 테스트 검토 과정](https://github.com/uhaeun/knitgether-app/blob/ba091be40a140db3e6edf2f1db0919b666dc3d91/docs/qa/portfolio/14_observations.md)
+[요구사항 보완과 테스트 검토 과정](https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/14_observations.md)
