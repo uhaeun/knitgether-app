@@ -11,12 +11,12 @@ KnitGether iOS 앱을 iOS 시뮬레이터에서 Appium(XCUITest 드라이버)으
 | Xcode | 26.6 (이 저장소를 마지막으로 돌린 기계 기준) | `xcodebuild -version` |
 | 시뮬레이터 | iPhone 17 Pro Max, UDID `3E4280D4-3E27-42E0-9C35-E84B24E08BD1` | `support/simctl.py`, `KG_UDID`로 변경 |
 | 앱 빌드 | DerivedData에서 가장 최근 `KnitGether.app` (Debug-iphonesimulator) | `conftest.py`, `KG_APP_PATH`로 변경 |
-| Appium 서버 | `http://127.0.0.1:4723`, 로컬 설치 Appium 3.1.2, xcuitest 드라이버 12.3.4 | 주소는 `conftest.py`, 버전은 실행 기계 실측 (최초 실행 당시 버전은 확인 필요) |
+| Appium 서버 | `http://127.0.0.1:4723`, 로컬 설치 Appium 3.1.2, xcuitest 드라이버 12.3.4 | `APPIUM_SERVER_URL`로 주소 변경, `KG_WDA_LOCAL_PORT`로 WDA 포트 변경. 버전은 실행 기계 실측 (최초 실행 당시 버전은 확인 필요) |
 | Python | 3.14.6 (`.venv/pyvenv.cfg`) | Appium-Python-Client 6.0.0, pytest 9.1.1, pillow, requests |
 | 서버 | `http://127.0.0.1:3000/api/v1`, `server` 마커가 붙은 케이스(6개 파일, 16개 실행 항목)만 필요 | `KG_API_BASE_URL`로 변경 |
-| 오프라인 케이스 | `support/netgate.py`가 3999 포트 TCP 프록시를 띄워 3000으로 넘긴다 | tc16 |
+| 오프라인 케이스 | `support/netgate.py`가 3999 포트 TCP 프록시를 띄워 기본 3000으로 넘긴다. `KG_NETGATE_FORWARD_PORT`로 대상 포트 변경 | tc16 |
 
-번들 ID는 `com.uhaeun.KnitGether`이고 카메라, 사진 권한은 세션 시작 시 `simctl privacy grant`로 미리 준다. 서버 케이스는 실행마다 고유 이메일로 계정을 새로 만들며 `db:reset-test`는 쓰지 않는다. 서버 설정은 `server/.env.example`을 참고한다. 전용 테스트 시뮬레이터를 사용한다. 이 스위트는 앱 저장 파일을 삭제하고 테스트 데이터를 주입하므로 개인 기록이 있는 시뮬레이터에서 실행하지 않는다.
+번들 ID는 `com.uhaeun.KnitGether`이고 카메라, 사진 권한은 `appium:permissions` 설정으로 앱 설치 후 WDA 시작 전에 부여한다. 서버 케이스는 실행마다 고유 이메일로 계정을 새로 만들며 `db:reset-test`는 쓰지 않는다. 서버 설정은 `server/.env.example`을 참고한다. 전용 테스트 시뮬레이터를 사용한다. 이 스위트는 앱 저장 파일을 삭제하고 테스트 데이터를 주입하므로 개인 기록이 있는 시뮬레이터에서 실행하지 않는다.
 
 ## 실행
 

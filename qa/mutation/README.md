@@ -4,11 +4,11 @@
 
 ```bash
 python3 qa/mutation/run_mutation.py --list
-# KG_UDID와 KG_APP_PATH를 전용 시뮬레이터 및 빌드한 앱 경로로 설정한 뒤:
+# KG_UDID, KG_DERIVED_DATA_PATH, KG_APP_PATH를 전용 환경으로 설정한 뒤:
 python3 qa/mutation/run_mutation.py counter-lower-bound
 ```
 
-실제 실행에는 Xcode, Node.js, Appium, qa/appium의 Python 환경과 DB가 필요합니다. 서버 실험은 3000 포트가 비어 있어야 하며 도구가 시작한 서버만 종료합니다. 앱 빌드는 KnitGether Local Offline 스킴을 사용하므로 KG_APP_PATH는 이 빌드가 갱신하는 앱을 가리켜야 합니다.
+실제 실행에는 Xcode, Node.js, Appium, qa/appium의 Python 환경과 DB가 필요합니다. 서버 실험은 기본 3106 포트를 사용하며 `KG_MUTATION_SERVER_PORT`로 바꿀 수 있습니다. 해당 포트가 비어 있어야 하며 도구가 시작한 서버만 종료합니다. `KG_API_BASE_URL`도 같은 서버를 가리켜야 합니다. 앱 빌드는 KnitGether Local Offline 스킴을 사용합니다. `KG_APP_PATH`는 `KG_DERIVED_DATA_PATH/Build/Products/Debug-iphonesimulator/KnitGether.app`과 일치해야 하며, 다른 경로이면 실행을 중단합니다.
 
 기대한 케이스의 assertion 실패와 대조 케이스의 통과를 함께 확인합니다. 준비 오류, 누락, SKIP 또는 파라미터별 혼합 결과를 검출 성공으로 세지 않습니다.
 

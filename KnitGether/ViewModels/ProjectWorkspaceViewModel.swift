@@ -118,7 +118,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         libraryRepository: any LibraryRepository,
         gaugeRecordRepository: (any GaugeRecordRepository)? = nil,
         progressPhotoRepository: (any ProjectProgressPhotoRepository)? = nil,
-        workTimerSuppressionStore: WorkTimerSuppressionStore = .shared
+        workTimerSuppressionStore: WorkTimerSuppressionStore? = nil
     ) {
         self.project = project
         self.projectRepository = projectRepository
@@ -127,7 +127,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         self.libraryRepository = libraryRepository
         self.gaugeRecordRepository = gaugeRecordRepository
         self.progressPhotoRepository = progressPhotoRepository
-        self.workTimerSuppressionStore = workTimerSuppressionStore
+        self.workTimerSuppressionStore = workTimerSuppressionStore ?? .shared
         displayMode = project.workspaceDisplayMode ?? .patternAndCounter
         sheetPosition = Self.resolvedSheetPosition(for: project)
         memoText = project.memo

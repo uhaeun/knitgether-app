@@ -170,10 +170,12 @@ extension UITestPage {
         let candidates = [
             springboard.buttons["Not Now"].firstMatch,
             springboard.buttons["나중에"].firstMatch,
+            springboard.buttons["지금 안 함"].firstMatch,
             springboard.buttons["Don't Save"].firstMatch,
             springboard.buttons["저장 안 함"].firstMatch,
             app.buttons["Not Now"].firstMatch,
             app.buttons["나중에"].firstMatch,
+            app.buttons["지금 안 함"].firstMatch,
             app.buttons["Don't Save"].firstMatch,
             app.buttons["저장 안 함"].firstMatch
         ]

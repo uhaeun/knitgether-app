@@ -4,13 +4,11 @@
 검증 의도:
 - 인증 경계: 토큰 없음/변조/형식오류 Bearer → 401 (ApiAuthGuard).
 - 경계값 RowCounter.currentRow: @Min(0) → 0 허용(200), -1 거부(400).
-- WorkSession 시간 역전(endedAt < startedAt): 서버에 교차 필드 검증이 없어
-  '수용'될 것으로 예상(특성화). 200이면 검증 공백을 보고 대상으로 남긴다.
+- WorkSession 시간 역전(endedAt < startedAt): 400으로 거부하고 프로젝트를 생성하지 않는다.
 
 근거: src/auth/api-auth.guard.ts, project-save.dto.ts(@Min(0)),
-      SaveWorkSessionDto(시작/종료 교차검증 부재).
+      SaveWorkSessionDto와 서버의 세션 시간 검증.
 """
-import pytest
 import requests
 
 from helpers import bearer, project_payload, work_session
@@ -55,9 +53,9 @@ def test_negative_current_row_is_rejected_400(account_a):
     assert r.status_code == 400, f"@Min(0) 위반인데 {r.status_code}"
 
 
-# ---- 경계값: WorkSession 시간 역전 (특성화) ----
+# ---- 경계값: WorkSession 시간 역전 ----
 
-def test_time_reversed_work_session_behavior(account_a):
+def test_time_reversed_work_session_behavior(account_a, db):
     pid = project_payload()["id"]
     payload = project_payload(pid, name="시간역전")
     # endedAt < startedAt (논리적으로 불가능한 구간)
@@ -69,15 +67,11 @@ def test_time_reversed_work_session_behavior(account_a):
         )
     ]
     r = account_a.api.create_project(payload)
-    # 교차 필드 검증이 없어 수용될 것으로 예상. 실제 코드를 특성화한다.
-    # 수용(201)은 확정 결함 → Issue #15 (severity/medium, v2.3 §C-4).
-    # 영향 실증: 총 작업시간 -3000초 표시 / 통계 과소집계 / 랭킹 항목 소실.
-    # 서버 교차검증(400)이 도입되면 이 분기를 실동작에 맞게 갱신할 것.
-    if r.status_code == 201:
-        pytest.skip(
-            "특성화(Issue #15): 서버가 시간 역전 세션을 수용함(교차 검증 부재). "
-            "v2.3 §C-4는 endedAt>startedAt을 요구 → 현 동작은 스펙 위반이나 수정 전까지 감시."
-        )
-    else:
-        # 검증 도입 후: 400 거부가 정상 (Issue #15 해소 신호)
-        assert r.status_code == 400, r.text
+    # 수정된 계약의 회귀 검사다. 다시 수용하면 SKIP이 아니라 실패해야 한다.
+    assert r.status_code == 400, r.text
+    assert account_a.api.get(f"/projects/{pid}").status_code == 404, "거부한 프로젝트가 저장됨"
+    with db.cursor() as cur:
+        cur.execute('SELECT count(*) FROM "Project" WHERE id=%s', (pid,))
+        assert cur.fetchone()[0] == 0, "거부한 프로젝트가 DB에 저장됨"
+        cur.execute('SELECT count(*) FROM "RowCounter" WHERE "projectId"=%s', (pid,))
+        assert cur.fetchone()[0] == 0, "거부한 프로젝트의 단수 정보가 DB에 저장됨"

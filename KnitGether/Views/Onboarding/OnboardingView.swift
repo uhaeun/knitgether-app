@@ -189,7 +189,7 @@ struct OnboardingView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .accessibilityIdentifier(AppAccessibilityID.Onboarding.startButton)
+                .accessibilityIdentifier(AppAccessibilityID.Onboarding.skillTestButton)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()

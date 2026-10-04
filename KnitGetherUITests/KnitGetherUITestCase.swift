@@ -14,6 +14,7 @@ class KnitGetherUITestCase: XCTestCase {
             let dismissButtonTitles = [
                 "Not Now",
                 "나중에",
+                "지금 안 함",
                 "Don't Save",
                 "저장 안 함",
                 "Cancel",
@@ -43,7 +44,7 @@ class KnitGetherUITestCase: XCTestCase {
 
     @MainActor
     func launchForCoreFlow(
-        apiBaseURL: String = "http://127.0.0.1:3000/api/v1",
+        apiBaseURL: String = ProcessInfo.processInfo.environment["KG_API_BASE_URL"] ?? "http://127.0.0.1:3000/api/v1",
         localCacheDirectory: URL? = nil,
         localCacheRootDirectory: URL? = nil
     ) -> OnboardingPage {
@@ -65,7 +66,7 @@ class KnitGetherUITestCase: XCTestCase {
 
     @MainActor
     func relaunchForExistingSession(
-        apiBaseURL: String = "http://127.0.0.1:3000/api/v1",
+        apiBaseURL: String = ProcessInfo.processInfo.environment["KG_API_BASE_URL"] ?? "http://127.0.0.1:3000/api/v1",
         localCacheDirectory: URL? = nil,
         localCacheRootDirectory: URL? = nil
     ) -> MainTabBarPage {

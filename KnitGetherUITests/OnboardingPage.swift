@@ -15,14 +15,15 @@ struct OnboardingPage: UITestPage {
     }
 
     func advanceToSkillTestStep() -> OnboardingPage {
+        // Account -> profile -> skill test (the unit-setting step was removed).
         tapNext()
         tapNext()
-        tapNext()
+        XCTAssertTrue(app.buttons["onboarding.skill_test"].waitForExistence(timeout: 12))
         return self
     }
 
     func openSkillTest() -> SkillTestPage {
-        tap(app.buttons["스킬 테스트 시작"].firstMatch)
+        tap(app.buttons["onboarding.skill_test"].firstMatch)
         return SkillTestPage(app: app)
     }
 

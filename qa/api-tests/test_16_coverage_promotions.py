@@ -70,11 +70,11 @@ def test_api_07_missing_row_counter_is_rejected_without_insert(account_a, db):
 
 def test_api_12_work_session_missing_started_at_is_rejected(account_a):
     """세션 저장 검증 규칙 중 형식 축. `SaveWorkSessionDto.startedAt`은
-    @IsISO8601로 필수다. 시간 역전 규칙(test_06, Issue #15로 skip)과는 다른
+    @IsISO8601로 필수다. 시간 역전 규칙(test_06, 400 거부)과는 다른
     축이라 이 축은 실제로 400이 나온다.
 
     주의: 이 테스트가 통과해도 API-12는 여전히 PARTIAL이다. 판정 기준의
-    "시간 역전 세션 400"은 test_06에서 skip 상태로 남아 있고(현재 201),
+    "시간 역전 세션 400"은 test_06에서 회귀 검사하며,
     이 테스트는 그와 다른 규칙(필수 필드 형식)만 닫는다.
     """
     payload = project_payload(name="API12-세션형식오류")

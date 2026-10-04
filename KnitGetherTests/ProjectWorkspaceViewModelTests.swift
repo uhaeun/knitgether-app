@@ -1338,7 +1338,7 @@ struct ProjectWorkspaceViewModelTests {
         )
     }
 
-    nonisolated static func makePatternDocument(
+    static func makePatternDocument(
         id: UUID = UUID(uuidString: "abababab-abab-4aba-8aba-abababababab")!,
         title: String = "Stored Pattern",
         fileName: String? = "stored-pattern.pdf"
@@ -1359,7 +1359,7 @@ struct ProjectWorkspaceViewModelTests {
         )
     }
 
-    nonisolated static func makePatternCopy(
+    static func makePatternCopy(
         sourcePatternDocumentId: UUID? = nil,
         title: String = "Manual Pattern",
         fileName: String? = nil
@@ -1550,6 +1550,7 @@ struct ProjectWorkspaceViewModelTests {
         )
     }
 
+    @MainActor
     final class ProjectRepositorySpy: ProjectRepository {
         var projects: [KnittingProject]
         var projectAfterSave: KnittingProject?
@@ -1878,15 +1879,15 @@ struct ProjectWorkspaceViewModelTests {
         init(
             patterns: [PatternDocument] = [],
             patternCopyFileURLs: [UUID: URL] = [:],
-            storedPattern: PatternDocument = makePatternDocument(),
-            importedCopy: ProjectPatternCopy = makePatternCopy(),
-            projectOnlyCopy: ProjectPatternCopy = makePatternCopy()
+            storedPattern: PatternDocument? = nil,
+            importedCopy: ProjectPatternCopy? = nil,
+            projectOnlyCopy: ProjectPatternCopy? = nil
         ) {
             self.patterns = patterns
             self.patternCopyFileURLs = patternCopyFileURLs
-            self.storedPattern = storedPattern
-            self.importedCopy = importedCopy
-            self.projectOnlyCopy = projectOnlyCopy
+            self.storedPattern = storedPattern ?? makePatternDocument()
+            self.importedCopy = importedCopy ?? makePatternCopy()
+            self.projectOnlyCopy = projectOnlyCopy ?? makePatternCopy()
         }
 
         func fetchPatterns() async throws -> [PatternDocument] {

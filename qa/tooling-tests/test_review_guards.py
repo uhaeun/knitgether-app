@@ -110,3 +110,25 @@ def test_dirty_target_does_not_trigger_restore_or_rebuild(monkeypatch):
         mutation.check('example')
     restore.assert_not_called()
     build.assert_not_called()
+
+
+def test_mismatched_build_and_install_paths_stop_before_build(monkeypatch):
+    monkeypatch.setattr(mutation, 'UDID', 'isolated-device')
+    monkeypatch.setattr(mutation, 'APP', '/tmp/other/KnitGether.app')
+    monkeypatch.setattr(mutation, 'DERIVED_DATA', '/tmp/build-output')
+    run = Mock()
+    monkeypatch.setattr(mutation, 'run', run)
+    with pytest.raises(SystemExit, match='빌드 결과와 다릅니다'):
+        mutation.build_app()
+    run.assert_not_called()
+
+
+def test_mutation_server_refuses_a_different_api_target(monkeypatch):
+    monkeypatch.setattr(mutation, 'SERVER_PORT', 3106)
+    monkeypatch.setattr(mutation, 'API_BASE_URL', 'http://127.0.0.1:3105/api/v1')
+    monkeypatch.setattr(mutation, 'run', lambda *args, **kw: SimpleNamespace(returncode=1, stdout=''))
+    popen = Mock()
+    monkeypatch.setattr(mutation.subprocess, 'Popen', popen)
+    with pytest.raises(SystemExit, match='포트와 일치하지 않습니다'):
+        mutation.restart_server()
+    popen.assert_not_called()

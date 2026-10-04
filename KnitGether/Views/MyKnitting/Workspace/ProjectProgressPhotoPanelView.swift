@@ -16,17 +16,18 @@ struct ProjectProgressPhotoPanelView: View {
     @State private var isImportingPhoto = false
 
     var body: some View {
-        WorkspaceSectionView(
+        let hasNoPhotos = viewModel.progressPhotos.isEmpty
+        return WorkspaceSectionView(
             title: "진행 사진",
             systemImage: "camera",
             headerAction: {
                 PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                     Image(systemName: isImportingPhoto ? "arrow.up.circle" : "plus")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(viewModel.progressPhotos.isEmpty ? Color.white : AppTheme.Color.accent)
+                        .foregroundStyle(hasNoPhotos ? Color.white : AppTheme.Color.accent)
                         .frame(width: 32, height: 32)
                         .background(
-                            viewModel.progressPhotos.isEmpty ? AnyShapeStyle(AppTheme.Color.accent) : AnyShapeStyle(AppTheme.Color.accentSoft),
+                            hasNoPhotos ? AnyShapeStyle(AppTheme.Color.accent) : AnyShapeStyle(AppTheme.Color.accentSoft),
                             in: Circle()
                         )
                 }

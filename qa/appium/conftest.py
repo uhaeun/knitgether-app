@@ -7,6 +7,7 @@
 로컬 모드는 KNITGETHER_LOCAL_CACHE_DIRECTORY가 먹지 않으므로(서버 모드 전용)
 격리는 컨테이너의 저장 파일을 지우고 다시 쓰는 방식으로 한다.
 """
+import json
 import os
 import subprocess
 import time
@@ -20,7 +21,7 @@ from support import simctl
 from support.netgate import NetGate
 from support.seed import Seed
 
-APPIUM_SERVER = "http://127.0.0.1:4723"
+APPIUM_SERVER = os.environ.get("APPIUM_SERVER_URL", "http://127.0.0.1:4723")
 
 # 세션을 이만큼 쓰면 멀쩡해 보여도 새로 연다(2026-09-05 실측).
 #
@@ -51,20 +52,33 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
     if report.when == "call" and report.failed:
+        print(f"\n[실패 원인] {report.longrepr}")
         for name in ("kg", "kg_server", "onboarding"):
             obj = item.funcargs.get(name)
             driver = getattr(obj, "driver", None)
             if driver is not None:
                 os.makedirs(FAILURE_DIR, exist_ok=True)
                 shot = os.path.join(FAILURE_DIR, f"{item.name}.png")
-                driver.save_screenshot(shot)
-                print(f"\n[실패 스크린샷] {shot}")
+                try:
+                    driver.save_screenshot(shot)
+                    with open(os.path.splitext(shot)[0] + ".xml", "w", encoding="utf-8") as snapshot:
+                        snapshot.write(driver.page_source)
+                    print(f"\n[실패 화면과 요소 기록] {shot}")
+                except Exception as exc:
+                    print(f"\n[실패 증거 저장 오류] {type(exc).__name__}: {exc}")
                 break
 
 
 def _options(*, onboarding_completed=True, api_base_url="", full_reset=False, cache_dir=None):
     o = XCUITestOptions()
     o.udid = simctl.UDID
+    # Apply permissions after installation and before WDA launches the app.
+    # Changing permissions after launch terminates the app on iOS 26.5.
+    o.set_capability("appium:permissions", json.dumps({
+        simctl.BUNDLE_ID: {"camera": "yes", "photos": "yes"}
+    }))
+    if os.environ.get("KG_WDA_LOCAL_PORT"):
+        o.set_capability("appium:wdaLocalPort", int(os.environ["KG_WDA_LOCAL_PORT"]))
     # 재부팅 직후 시뮬레이터가 굼떠 기본 60초를 넘기면 세션이 죽는다 (Appium 로그 권고)
     o.set_capability("appium:wdaLaunchTimeout", 180000)
     # 서버 세션은 로컬 케이스가 도는 30분 넘게 놀고 있게 된다. 기본 60초로 두면
@@ -222,11 +236,8 @@ class DriverPool:
             # 온보딩 초기화는 full_reset 이 아니라 KNITGETHER_UI_TEST_RESET_ONBOARDING 이
             # 하므로 재시도 세션에도 그대로 적용된다.
             options = {**options, "full_reset": False}
-            # 앱을 다시 깔면 권한 부여가 초기화된다. 온보딩 케이스가 재설치를 하므로
-            # 세션을 새로 열 때마다 다시 준다. 안 주면 문서 스캔에서 권한 다이얼로그가 뜨고
-            # 그 다이얼로그가 다음 케이스 화면까지 막는다.
-            # simctl privacy grant 는 대상 앱을 종료시킨다. 부여한 뒤 다시 띄워야 한다.
-            simctl.grant_permissions()
+            # Permissions are applied through capabilities before WDA starts,
+            # including the full-reset onboarding path.
             try:
                 self._driver.activate_app(simctl.BUNDLE_ID)
             except Exception as exc:
@@ -334,7 +345,6 @@ def _installed_app():
 
 @pytest.fixture(scope="session")
 def _pool(_installed_app):
-    simctl.grant_permissions()
     pool = DriverPool()
     yield pool
     pool.close()

@@ -11,6 +11,7 @@
        python3 qa/mutation/run_mutation.py --list
 """
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -25,6 +26,9 @@ from injections import INJECTIONS, ROOT
 UDID = os.environ.get("KG_UDID", "")
 SCHEME = "KnitGether Local Offline"
 APP = os.environ.get("KG_APP_PATH", "")
+DERIVED_DATA = os.environ.get("KG_DERIVED_DATA_PATH", "")
+SERVER_PORT = int(os.environ.get("KG_MUTATION_SERVER_PORT", "3106"))
+API_BASE_URL = os.environ.get("KG_API_BASE_URL", f"http://127.0.0.1:{SERVER_PORT}/api/v1")
 _BACKUPS = {}
 _SERVER = None
 _SERVER_LOG = None
@@ -92,8 +96,14 @@ def restore(inj):
 def build_app():
     if not UDID or not APP:
         raise SystemExit("전용 시뮬레이터 KG_UDID와 KG_APP_PATH를 지정해야 합니다")
+    if not DERIVED_DATA:
+        raise SystemExit("빌드와 설치 대상을 일치시키려면 KG_DERIVED_DATA_PATH가 필요합니다")
+    expected_app = Path(DERIVED_DATA) / "Build/Products/Debug-iphonesimulator/KnitGether.app"
+    if Path(APP).resolve() != expected_app.resolve():
+        raise SystemExit("KG_APP_PATH가 지정한 DerivedData의 빌드 결과와 다릅니다")
     r = run(["xcodebuild", "build", "-project", "KnitGether.xcodeproj",
-             "-scheme", SCHEME, "-destination", f"id={UDID}"], cwd=ROOT)
+             "-scheme", SCHEME, "-destination", f"id={UDID}",
+             "-derivedDataPath", DERIVED_DATA, "-jobs", "2"], cwd=ROOT)
     if r.returncode != 0:
         print(r.stdout[-2000:])
         raise SystemExit("빌드 실패")
@@ -119,12 +129,14 @@ def stop_server():
 
 
 def restart_server():
-    """Start an owned test server; never kill another process on port 3000."""
+    """Start an owned test server; never kill another process on the configured port."""
     global _SERVER, _SERVER_LOG
     stop_server()
-    probe = run(["lsof", "-nP", "-tiTCP:3000", "-sTCP:LISTEN"])
+    probe = run(["lsof", "-nP", f"-tiTCP:{SERVER_PORT}", "-sTCP:LISTEN"])
     if probe.returncode not in (0, 1) or probe.stdout.strip():
-        raise SystemExit("3000 포트를 비운 전용 테스트 환경에서 실행해야 합니다")
+        raise SystemExit(f"{SERVER_PORT} 포트를 비운 전용 테스트 환경에서 실행해야 합니다")
+    if API_BASE_URL.rstrip("/") != f"http://127.0.0.1:{SERVER_PORT}/api/v1":
+        raise SystemExit("KG_API_BASE_URL이 결함 주입 서버 포트와 일치하지 않습니다")
     server_dir = Path(ROOT) / "server"
     built = run(["npm", "run", "build"], cwd=server_dir)
     if built.returncode != 0:
@@ -134,14 +146,14 @@ def restart_server():
     if entry is None:
         raise SystemExit("서버 빌드 산출물 없음")
     _SERVER_LOG = tempfile.TemporaryFile(mode="w+")
-    env = dict(os.environ, PORT="3000", NODE_ENV="test")
+    env = dict(os.environ, PORT=str(SERVER_PORT), NODE_ENV="test")
     _SERVER = subprocess.Popen(["node", str(entry)], cwd=server_dir, env=env,
                                stdout=_SERVER_LOG, stderr=subprocess.STDOUT)
     for _ in range(30):
         if _SERVER.poll() is not None:
             raise SystemExit("테스트 서버 시작 실패")
         try:
-            with urllib.request.urlopen("http://127.0.0.1:3000/api/v1/health", timeout=2) as r:
+            with urllib.request.urlopen(f"http://127.0.0.1:{SERVER_PORT}/api/v1/health", timeout=2) as r:
                 if r.status == 200:
                     return
         except OSError:
@@ -164,10 +176,19 @@ def pytest_run(names):
     with tempfile.TemporaryDirectory(prefix="kg-mutation-") as directory:
         report = Path(directory) / "report.xml"
         args = [os.path.join(TESTS, ".venv/bin/python"), "-m", "pytest", "tests/",
-                "-q", "--tb=no", "--runxfail", "-k", " or ".join(names),
+                "-q", "--tb=short", "--runxfail", "-k", " or ".join(names),
                 f"--junitxml={report}"]
         result = subprocess.run(args, cwd=TESTS, capture_output=True, text=True,
-                                env=dict(os.environ, KG_API_BASE_URL="http://127.0.0.1:3000/api/v1"))
+                                env=dict(os.environ, KG_API_BASE_URL=API_BASE_URL))
+        artifact_root = Path(os.environ.get("KG_MUTATION_RESULTS_DIR", "/tmp/knitgether-mutation-results"))
+        artifact_root.mkdir(parents=True, exist_ok=True)
+        artifact_name = f"{time.time_ns()}-{names[0] if names else 'empty'}"
+        (artifact_root / f"{artifact_name}.log").write_text(
+            (getattr(result, "stdout", "") or "") + (getattr(result, "stderr", "") or ""),
+            encoding="utf-8")
+        if report.exists():
+            shutil.copy2(report, artifact_root / f"{artifact_name}.xml")
+        print(f"  실행 원본: {artifact_root / artifact_name}")
         if result.returncode not in (0, 1) or not report.exists():
             raise RuntimeError("pytest 실행이 완료되지 않아 결함 검출을 판정할 수 없음")
         return parse_results(report)

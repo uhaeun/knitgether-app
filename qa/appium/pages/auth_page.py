@@ -5,6 +5,9 @@
 """
 import time
 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from support import texts as T
 
 from .base_page import ID, PRED, BasePage
@@ -50,7 +53,25 @@ class AuthPage(BasePage):
     def submit(self):
         self.tap("auth.submit")
         time.sleep(3)
+        self.dismiss_password_save_prompt()
         return self
+
+    def dismiss_password_save_prompt(self):
+        """Close only the iOS password-save prompt, not app confirmation dialogs."""
+        deadline = time.monotonic() + 4
+        while time.monotonic() < deadline:
+            sheets = self._all(
+                'type IN {"XCUIElementTypeSheet", "XCUIElementTypeAlert"} AND visible == true '
+                'AND (label CONTAINS "암호" OR label CONTAINS[c] "password")', PRED)
+            for sheet in sheets:
+                buttons = sheet.find_elements(
+                    PRED, 'type == "XCUIElementTypeButton" AND '
+                    'label IN {"지금 안 함", "나중에", "저장 안 함", "Not Now", "Don\'t Save"}')
+                if buttons:
+                    self.tap_at(buttons[0])
+                    WebDriverWait(self.driver, 5).until(EC.invisibility_of_element(buttons[0]))
+                    return
+            time.sleep(0.25)
 
     def signup(self, email, password, display_name):
         self.select_mode(T.SIGNUP)

@@ -23,7 +23,7 @@ enum APITestError: Error, CustomStringConvertible {
 struct KnitGetherAPIClient {
     let baseURL: URL
 
-    init(baseURL: String = "http://127.0.0.1:3000/api/v1") {
+    init(baseURL: String = ProcessInfo.processInfo.environment["KG_API_BASE_URL"] ?? "http://127.0.0.1:3000/api/v1") {
         self.baseURL = URL(string: baseURL)!
     }
 

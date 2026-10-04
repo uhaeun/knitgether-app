@@ -274,6 +274,7 @@ enum AppAccessibilityID {
 
     enum Onboarding {
         static let startButton = "onboarding.start"
+        static let skillTestButton = "onboarding.skill_test"
         static let registerButton = "onboarding.register"
         static let loginButton = "onboarding.login"
         static let completeButton = "onboarding.complete"

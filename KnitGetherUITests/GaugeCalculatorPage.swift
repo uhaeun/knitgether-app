@@ -354,9 +354,11 @@ struct GaugeCalculatorPage: UITestPage {
     }
 
     private func replaceGaugeText(_ identifier: String, text: String) {
+        dismissKeyboard()
         let element = materializedInputElement(identifier)
         tap(element)
-        element.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5),
+                      "게이지 입력 칸을 선택하면 키보드가 표시되어야 합니다.")
 
         if let currentValue = element.value as? String,
            shouldClearTextValue(currentValue) {
@@ -364,6 +366,8 @@ struct GaugeCalculatorPage: UITestPage {
         }
 
         element.typeText(text)
+        XCTAssertEqual(element.value as? String, text, "게이지 입력값이 반영되어야 합니다.")
+        dismissKeyboard()
     }
 
     private func materializedInputElement(

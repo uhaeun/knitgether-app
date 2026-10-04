@@ -16,12 +16,13 @@
 Charles를 쓰지 않은 이유는 재현성이다. GUI 도구는 증거가 스크린샷으로만 남고
 CI에 넣을 수 없다. 여기 조건은 코드로 기록되고 그대로 다시 돌릴 수 있다.
 """
+import os
 import socket
 import threading
 import time
 
 FORWARD_HOST = "127.0.0.1"
-FORWARD_PORT = 3000
+FORWARD_PORT = int(os.environ.get("KG_NETGATE_FORWARD_PORT", "3000"))
 CHUNK = 65536
 
 
