@@ -11,8 +11,8 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.par
 
 INJECTIONS = {
     "counter-lower-bound": {
-        "설명": "카운터 하한을 두 층에서 모두 제거 (DEF-15 재현). "
-              "뷰의 버튼 비활성화와 ViewModel의 0 하한이 이중 방어라 한쪽만 무너뜨리면 드러나지 않는다",
+        "설명": "0에서도 감소 버튼을 누를 수 있게 하고, 감소 처리를 증가로 바꾼다. "
+              "0 하한 유지와 정상 감소를 각각 검사한다",
         "대상": "app",
         "편집": [
             ("KnitGether/Views/MyKnitting/Workspace/ProjectCounterPanelView.swift",

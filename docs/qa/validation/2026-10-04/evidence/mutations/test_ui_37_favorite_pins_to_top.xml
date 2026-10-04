@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="242.039" timestamp="2026-10-04T19:52:51.216501+09:00" hostname="isolated-local-environment"><testcase classname="tests.test_tc04_project_create" name="test_ui_13_add_via_top_plus" time="50.476" /><testcase classname="tests.test_tc05_project_edit" name="test_ui_18_rename_from_workspace" time="22.479" /><testcase classname="tests.test_tc09_favorite" name="test_ui_37_favorite_pins_to_top" time="20.508"><failure message="AssertionError: 즐겨찾기가 최상단으로 오지 않음&#10;assert '최신건' == '아래건'&#10;  &#10;  - 아래건&#10;  + 최신건">tests/test_tc09_favorite.py:30: in test_ui_37_favorite_pins_to_top
+    assert lst.project_names()[0] == "아래건", "즐겨찾기가 최상단으로 오지 않음"
+E   AssertionError: 즐겨찾기가 최상단으로 오지 않음
+E   assert '최신건' == '아래건'
+E
+E     - 아래건
+E     + 최신건</failure></testcase><testcase classname="tests.test_tc10a_workspace_pattern" name="test_ui_44_manual_pattern" time="24.037" /><testcase classname="tests.test_tc10c_workspace_info" name="test_ui_62_work_memo_saved_and_persists" time="30.606" /><testcase classname="tests.test_tc12_library_create" name="test_ui_65_register_yarn" time="42.622" /><testcase classname="tests.test_tc13_library_edit" name="test_ui_70_yarn_edit_does_not_propagate" time="49.549" /></testsuite></testsuites>

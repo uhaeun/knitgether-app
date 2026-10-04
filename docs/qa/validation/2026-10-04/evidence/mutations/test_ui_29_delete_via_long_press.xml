@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="8" time="273.803" timestamp="2026-10-04T19:42:25.190772+09:00" hostname="isolated-local-environment"><testcase classname="tests.test_tc04_project_create" name="test_ui_13_add_via_top_plus" time="38.003" /><testcase classname="tests.test_tc05_project_edit" name="test_ui_18_rename_from_workspace" time="27.354" /><testcase classname="tests.test_tc06_project_delete" name="test_ui_29_delete_via_long_press" time="29.651"><failure message="AssertionError: 삭제 확인창이 뜨지 않음">tests/test_tc06_project_delete.py:43: in test_ui_29_delete_via_long_press
+    lst.confirm_delete()
+pages/my_knitting_page.py:94: in confirm_delete
+    assert self.alert_shown(T.DELETE_PROJECT_TITLE), "삭제 확인창이 뜨지 않음"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: 삭제 확인창이 뜨지 않음</failure></testcase><testcase classname="tests.test_tc06_project_delete" name="test_ui_31_delete_two_of_three_keeps_rest" time="28.911"><failure message="AssertionError: 삭제 확인창이 뜨지 않음">tests/test_tc06_project_delete.py:70: in test_ui_31_delete_two_of_three_keeps_rest
+    lst.confirm_delete()
+pages/my_knitting_page.py:94: in confirm_delete
+    assert self.alert_shown(T.DELETE_PROJECT_TITLE), "삭제 확인창이 뜨지 않음"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: 삭제 확인창이 뜨지 않음</failure></testcase><testcase classname="tests.test_tc10a_workspace_pattern" name="test_ui_44_manual_pattern" time="26.635" /><testcase classname="tests.test_tc10c_workspace_info" name="test_ui_62_work_memo_saved_and_persists" time="38.746" /><testcase classname="tests.test_tc12_library_create" name="test_ui_65_register_yarn" time="42.833" /><testcase classname="tests.test_tc13_library_edit" name="test_ui_70_yarn_edit_does_not_propagate" time="38.916" /></testsuite></testsuites>

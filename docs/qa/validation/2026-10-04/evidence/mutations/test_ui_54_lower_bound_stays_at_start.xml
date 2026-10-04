@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="8" time="275.903" timestamp="2026-10-04T19:37:09.170241+09:00" hostname="isolated-local-environment"><testcase classname="tests.test_tc04_project_create" name="test_ui_13_add_via_top_plus" time="37.690" /><testcase classname="tests.test_tc05_project_edit" name="test_ui_18_rename_from_workspace" time="27.586" /><testcase classname="tests.test_tc10a_workspace_pattern" name="test_ui_44_manual_pattern" time="30.722" /><testcase classname="tests.test_tc10b_workspace_counter" name="test_ui_52_simple_mode_increment_and_decrement" time="29.011"><failure message="AssertionError: 1회 내렸는데 값이 다름: 현재 4단&#10;assert '현재 4단' == '현재 2단'&#10;  &#10;  - 현재 2단&#10;  ?    ^&#10;  + 현재 4단&#10;  ?    ^">tests/test_tc10b_workspace_counter.py:29: in test_ui_52_simple_mode_increment_and_decrement
+    assert counter.current_text() == T.COUNTER_CURRENT.format(2), \
+E   AssertionError: 1회 내렸는데 값이 다름: 현재 4단
+E   assert '현재 4단' == '현재 2단'
+E
+E     - 현재 2단
+E     ?    ^
+E     + 현재 4단
+E     ?    ^</failure></testcase><testcase classname="tests.test_tc10b_workspace_counter" name="test_ui_54_lower_bound_stays_at_start" time="17.207"><failure message="AssertionError: 하한에서 감소했더니 값이 변함: 현재 1단&#10;assert '현재 1단' == '시작 전'&#10;  &#10;  - 시작 전&#10;  + 현재 1단">tests/test_tc10b_workspace_counter.py:65: in test_ui_54_lower_bound_stays_at_start
+    assert counter.current_text() == T.COUNTER_START, \
+E   AssertionError: 하한에서 감소했더니 값이 변함: 현재 1단
+E   assert '현재 1단' == '시작 전'
+E
+E     - 시작 전
+E     + 현재 1단</failure></testcase><testcase classname="tests.test_tc10c_workspace_info" name="test_ui_62_work_memo_saved_and_persists" time="41.060" /><testcase classname="tests.test_tc12_library_create" name="test_ui_65_register_yarn" time="43.181" /><testcase classname="tests.test_tc13_library_edit" name="test_ui_70_yarn_edit_does_not_propagate" time="43.745" /></testsuite></testsuites>

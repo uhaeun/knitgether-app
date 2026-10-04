@@ -1,0 +1,6 @@
+Prisma schema loaded from server/prisma/schema.prisma
+Datasource "db": PostgreSQL database "knitgether_validation_20261004", schema "public" at "127.0.0.1:5433"
+
+23 migrations found in prisma/migrations
+
+Database schema is up to date!

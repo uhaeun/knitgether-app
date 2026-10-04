@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="157.339" timestamp="2026-10-04T19:27:24.144234+09:00" hostname="isolated-local-environment"><testcase classname="tests.test_tc10a_workspace_pattern" name="test_ui_51_step3_page_kept_after_lookup" time="58.270"><failure message="AssertionError: 도안의 페이지 표식을 읽지 못해 페이지 유지를 판정할 수 없음">tests/test_tc10a_workspace_pattern.py:305: in test_ui_51_step3_page_kept_after_lookup
+    before = pat.viewer_page_marker()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+pages/pattern_panel_page.py:217: in viewer_page_marker
+    assert markers, "도안의 페이지 표식을 읽지 못해 페이지 유지를 판정할 수 없음"
+           ^^^^^^^
+E   AssertionError: 도안의 페이지 표식을 읽지 못해 페이지 유지를 판정할 수 없음</failure></testcase><testcase classname="tests.test_tc10a_workspace_pattern" name="test_ui_51_step2_page_kept_after_tab_round_trip" time="53.901" /><testcase classname="tests.test_tc10c_workspace_info" name="test_ui_57_progress_photo" time="43.194" /></testsuite></testsuites>

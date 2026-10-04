@@ -236,7 +236,7 @@ def check(name):
         if results.get(c) != "PASSED":
             collateral.append(c)
 
-    print(f"  잡음   {len(caught)}/{len(expected)}")
+    print(f"  검출   {len(caught)}/{len(expected)}")
     for t in caught:
         print(f"    O {t}")
     for t in missed:
@@ -268,8 +268,8 @@ def main():
     print(f"\n{'=' * 62}\n음성 대조 종합\n{'=' * 62}")
     for s in summary:
         state = "통과" if not s["missed"] and not s["collateral"] else "확인 필요"
-        print(f"  {s['name']:24s} 잡음 {len(s['caught'])}건  "
-              f"놓침 {len(s['missed'])}건  과잉 {len(s['collateral'])}건  {state}")
+        print(f"  {s['name']:24s} 검출 {len(s['caught'])}건  "
+              f"놓침 {len(s['missed'])}건  대조 실패 {len(s['collateral'])}건  {state}")
 
     if any(s["missed"] or s["collateral"] for s in summary):
         raise SystemExit(1)

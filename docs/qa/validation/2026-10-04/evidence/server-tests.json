@@ -1,0 +1,672 @@
+{
+  "numPassedTestSuites": 12,
+  "numFailedTestSuites": 0,
+  "numTotalTests": 147,
+  "numPassedTests": 147,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "success": true,
+  "startTime": 1791104069620,
+  "testResults": [
+    {
+      "file": "projects.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Projects route rejects unauthenticated requests",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects requests with the wrong token",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route authenticates API tokens as their configured user",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns only active projects owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns one active project owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route updates only a project row counter through the partial API",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route upserts one row instruction through the partial API",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route updates one work session through the partial API",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route lists yarn usage records for an owned project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route records yarn usage and decrements the owned yarn quantity",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route updates yarn usage and adjusts only the quantity delta",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route soft deletes yarn usage and restores the consumed yarn quantity",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route soft deletes yarn usage without restoring quantity when the linked yarn is already deleted",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route lists progress photos for an owned project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route uploads a progress photo for an owned project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects non-image progress photo uploads",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route updates progress photo metadata",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route downloads progress photo bytes",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route deletes a progress photo and removes its stored file",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns project pattern copy metadata with projects",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route downloads the active project pattern copy PDF",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route uploads a directly attached project pattern copy PDF",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route downloads a directly attached project pattern copy PDF",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route uploads drawing data for the active project pattern copy",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route downloads drawing data for the active project pattern copy",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns 404 when a project is missing or not owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route creates a project with row counter and work sessions",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a project when the row counter belongs to a different project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a project when a work session belongs to a different project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route saves a project pattern copy with the project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route updates an active project owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route reconciles project children from the full patch payload",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route soft-deletes an active project owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns 404 when deleting a missing project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a project memo longer than 500 characters",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a row counter name longer than 30 characters",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a work session memo longer than 500 characters",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a work session whose end time is not after its start time",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a work session longer than 24 hours",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route accepts a work session exactly 24 hours long",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a project save whose work session reverses time",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a new project when the owner already has 200 active projects",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects an existing project on create without consulting the project limit",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns 409 when creating a project whose ID belongs to another owner",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns 409 with the server copy when baseUpdatedAt is older than the stored project",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route saves a project when baseUpdatedAt matches the stored updatedAt",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route returns 409 when baseUpdatedAt is truncated to seconds while the stored updatedAt has milliseconds",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route saves a project when baseUpdatedAt echoes the stored updatedAt down to the millisecond",
+          "status": "passed"
+        },
+        {
+          "name": "Projects route rejects a stale patch when baseUpdatedAt is older than the stored project",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "library.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Library route rejects unauthenticated yarn requests",
+          "status": "passed"
+        },
+        {
+          "name": "Library route lists active yarns owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Library route lists active needles owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Library route lists project usages for an owned yarn",
+          "status": "passed"
+        },
+        {
+          "name": "Library route creates a yarn for the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Library route updates an owned yarn",
+          "status": "passed"
+        },
+        {
+          "name": "Library route soft deletes an owned yarn",
+          "status": "passed"
+        },
+        {
+          "name": "Library route creates a needle for the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Library route updates an owned needle",
+          "status": "passed"
+        },
+        {
+          "name": "Library route soft deletes an owned needle",
+          "status": "passed"
+        },
+        {
+          "name": "Library route links a yarn to a project with a link-time snapshot",
+          "status": "passed"
+        },
+        {
+          "name": "Library route refreshes the snapshot when relinking an existing yarn link",
+          "status": "passed"
+        },
+        {
+          "name": "Library route counts only live projects linked to a yarn",
+          "status": "passed"
+        },
+        {
+          "name": "Library route counts only live projects linked to a needle",
+          "status": "passed"
+        },
+        {
+          "name": "Library route counts only live projects linked to a tool",
+          "status": "passed"
+        },
+        {
+          "name": "Library route returns 404 when counting links for a yarn that does not exist",
+          "status": "passed"
+        },
+        {
+          "name": "Library route lists project yarn links regardless of yarn liveness",
+          "status": "passed"
+        },
+        {
+          "name": "Library route unlinks a yarn from a project with a tombstone",
+          "status": "passed"
+        },
+        {
+          "name": "Library route links a needle to a project with a link-time snapshot",
+          "status": "passed"
+        },
+        {
+          "name": "Library route uploads a representative photo for an owned yarn",
+          "status": "passed"
+        },
+        {
+          "name": "Library route rejects a non-image yarn photo upload",
+          "status": "passed"
+        },
+        {
+          "name": "Library route deletes a yarn photo and clears photo fields",
+          "status": "passed"
+        },
+        {
+          "name": "Library route rejects a yarn name longer than 30 characters",
+          "status": "passed"
+        },
+        {
+          "name": "Library route rejects yarn notes longer than 500 characters",
+          "status": "passed"
+        },
+        {
+          "name": "Library route rejects a needle name longer than 30 characters",
+          "status": "passed"
+        },
+        {
+          "name": "Library route rejects a tool name longer than 30 characters",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "patterns.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Patterns route rejects unauthenticated requests",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route uploads a PDF pattern and returns metadata",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route rejects non-PDF uploads",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route creates a title-only pattern without a file",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route rejects a pattern title longer than 30 characters on creation",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route rejects a pattern title longer than 30 characters on update",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route rejects a fileless creation without title",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route attaches a PDF to a pattern that has no file yet",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route rejects attaching a file when the pattern already has one",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route returns only active patterns owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route returns one active pattern owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route updates owner-scoped pattern metadata",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route downloads the owner-scoped PDF",
+          "status": "passed"
+        },
+        {
+          "name": "Patterns route soft-deletes metadata and removes the disk file",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "auth.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Auth routes registers an account and returns an access token with profile data",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes rejects duplicate account registration by email",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes logs in and uses the issued token for authenticated routes",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes locks the account after five consecutive failed logins",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes rejects the correct password while the account is locked",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes clears the failure count after a successful login",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes does not reveal account existence through the lock response",
+          "status": "passed"
+        },
+        {
+          "name": "Auth routes rejects login with an invalid password",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "profile.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Profile route rejects unauthenticated profile requests",
+          "status": "passed"
+        },
+        {
+          "name": "Profile route returns the current user profile and creates a default when missing",
+          "status": "passed"
+        },
+        {
+          "name": "Profile route updates the current user profile",
+          "status": "passed"
+        },
+        {
+          "name": "Profile route rejects a display name longer than 80 characters",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "health.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Health route returns API health status",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "dictionary.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Dictionary terms route rejects unauthenticated requests",
+          "status": "passed"
+        },
+        {
+          "name": "Dictionary terms route lists active dictionary terms owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Dictionary terms route returns one active dictionary term owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Dictionary terms route creates a dictionary term for the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Dictionary terms route updates an owned dictionary term",
+          "status": "passed"
+        },
+        {
+          "name": "Dictionary terms route soft deletes an owned dictionary term",
+          "status": "passed"
+        },
+        {
+          "name": "Dictionary terms route returns 400 when required text is missing",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "skills.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Skills route rejects unauthenticated requests",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route lists active system and user skills with current user levels",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route returns one active skill owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route creates a skill for the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route updates an owned skill",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route rejects direct updates to system skills",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route updates the current user level for a system skill",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route lists active skill animations owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Skills route soft deletes an owned skill",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "gauge-targets.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Gauge targets route rejects unauthenticated requests",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge targets route lists active gauge targets with swatches and measurements",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge targets route creates a gauge target with nested swatches and measurements",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge targets route rejects invalid target dimensions",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge targets route updates existing swatches and measurements within the owner scope without duplicate creates",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge targets route soft deletes an owned gauge target and its nested data",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "gauge-records.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Gauge records route rejects unauthenticated requests",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge records route lists active gauge records owned by the current user",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge records route creates a before-wash gauge record with calculated results",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge records route rejects invalid measurement values",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge records route updates an owned gauge record with recalculated results",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge records route does not update a missing gauge record",
+          "status": "passed"
+        },
+        {
+          "name": "Gauge records route soft deletes an owned gauge record",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "auth-configuration.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Auth configuration security rejects the implicit dev token in production when DEV_AUTH_TOKEN is unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security rejects the implicit dev token when NODE_ENV is unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security rejects the implicit dev token when NODE_ENV is blank",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security rejects the implicit dev token in staging when DEV_AUTH_TOKEN is unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security fails clearly in production when AUTH_JWT_SECRET is unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security fails clearly when NODE_ENV and AUTH_JWT_SECRET are unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security fails clearly when NODE_ENV is blank and AUTH_JWT_SECRET is unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security fails clearly in staging when AUTH_JWT_SECRET is unset",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security signs and verifies JWTs in production when AUTH_JWT_SECRET is set",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security keeps the implicit dev token available in development",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security keeps the implicit dev token available in test",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security keeps the local JWT secret fallback available in development",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security keeps the local JWT secret fallback available in test",
+          "status": "passed"
+        },
+        {
+          "name": "Auth configuration security keeps configured API token mapping available in production",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "file": "listen-options.e2e-spec.ts",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "Server listen options listens on all interfaces by default for local device testing",
+          "status": "passed"
+        },
+        {
+          "name": "Server listen options allows the listen host to be overridden",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

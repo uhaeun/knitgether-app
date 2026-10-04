@@ -1,0 +1,35 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceName": "KnitGether Full Validation 20261004",
+        "modelName": "iPhone 17 Pro Max",
+        "osBuildNumber": "23F77",
+        "osVersion": "26.5",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 1,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "KnitGether Local Offline · Built with macOS 26.5.1",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1791112185.265,
+  "passedTests": 1,
+  "result": "Passed",
+  "skippedTests": 0,
+  "startTime": 1791112078.472,
+  "statistics": [],
+  "testFailures": [],
+  "title": "Test - KnitGether Local Offline",
+  "topInsights": [],
+  "totalTestCount": 1
+}

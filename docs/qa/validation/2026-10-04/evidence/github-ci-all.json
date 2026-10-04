@@ -1,0 +1,234 @@
+{
+  "conclusion": "success",
+  "headSha": "8f22e34542db2f023b3e8ae37615936428b9b66e",
+  "status": "completed",
+  "url": "https://github.com/uhaeun/knitgether-app/actions/runs/37197112333",
+  "jobs": [
+    {
+      "name": "Server Build And Test",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Initialize containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install server dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Generate Prisma Client",
+          "conclusion": "success"
+        },
+        {
+          "name": "Apply database migrations",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run server tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "API Contract, Network Degradation, DB Integrity",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Initialize containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install API test dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install server dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Generate Prisma Client",
+          "conclusion": "success"
+        },
+        {
+          "name": "Apply database migrations",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start API server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run API tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload API diagnostics",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop API server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Python",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop containers",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "iOS Build, Unit, And UI Smoke",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install PostgreSQL",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare iOS test database",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install server dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Generate Prisma Client",
+          "conclusion": "success"
+        },
+        {
+          "name": "Apply database migrations",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start API server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Select iPhone simulator",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build iOS app",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run iOS unit tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Reset simulator before UI smoke",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run iOS UI smoke tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload iOS diagnostics",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop API server",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Set up Node",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

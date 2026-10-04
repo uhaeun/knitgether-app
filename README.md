@@ -49,4 +49,4 @@
 
 실행 방법은 [Appium 안내](qa/appium/README.md)와 [API 테스트 안내](qa/api-tests/README.md)를 참고합니다.
 
-문서와 테스트 도구의 최근 점검 내용은 [저장소 검토 기록](docs/qa/repository-review/README.md)에 정리했습니다.
+문서와 테스트 도구의 점검 내용은 [저장소 검토 기록](docs/qa/repository-review/README.md), 이후 실제 실행 결과는 [2026-10-04 전체 재검증](docs/qa/validation/2026-10-04/README.md)에 정리했습니다.

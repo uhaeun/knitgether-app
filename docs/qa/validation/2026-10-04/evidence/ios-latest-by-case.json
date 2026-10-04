@@ -1,0 +1,1528 @@
+{
+  "method": "Latest result per test identifier from whole-suite run and targeted reruns. Launch orientation repetitions are counted once per identifier.",
+  "counts": {
+    "KnitGetherTests": {
+      "Passed": 351
+    },
+    "KnitGetherUITests": {
+      "Passed": 23
+    },
+    "KnitGetherQAUITests": {
+      "Passed": 4
+    }
+  },
+  "cases": {
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/APIClientTests/getAddsAuthorizationHeaderAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/APIClientTests/getThrowsStructuredErrorForHTTPFailure()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/APIClientTests/getNotifiesAuthFailureWhenTokenWasSent()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/APIClientTests/getDoesNotNotifyAuthFailureForNonUnauthorizedHTTPFailure()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/APIClientTests/uploadMultipartAddsAuthorizationAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/APIClientTests/downloadDataReturnsBinaryResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/makeDefaultUsesLocalRepositoriesWhenAPIBaseURLIsMissing()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/makeDefaultUsesOfflineFirstRepositoriesWhenAPIBaseURLIsConfigured()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeSignedOutProfileRepositoryUsesAnonymousLocalCache()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeProjectRepositoryCachesRemoteProjectsAndFallsBackToCacheWhenServerFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeProjectWriteRetryableFailurePreservesPendingAndSyncsAfterNetworkRecovery()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeProjectFetchWithoutServerAndWithoutCacheThrowsOfflineError()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/makeDefaultUsesAPIAuthTokenWhenConfigured()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/makeDefaultUsesStoredSessionTokenBeforeDevToken()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeCreatesJSONDataCachesPerAccount()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeCacheScopeSeparatesBaseURLAndUser()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/repositoryStoreRebuildsContainerWhenStoredAccountChanges()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/unauthorizedResponseClearsStoredSessionToken()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/unauthorizedExplicitAPIAuthTokenDoesNotClearStoredSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/apiModeCanDisableSchemeDevTokenForAuthenticatedUITestSessions()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/removeCachedDataDeletesOnlyTheSignedOutAccountDirectory()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AppRepositoryContainerTests/removeCachedDataDoesNothingWithoutAPIBaseURL()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/loginSavesSessionAndLoadsCurrentUser()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/registerSavesSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/registerShowsDuplicateEmailMessage()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/registerShowsConnectionMessageForNetworkFailure()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/signOutClearsStoredSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/loadSessionShowsRefreshErrorWhenCurrentUserCannotLoad()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthAccountViewModelTests/retryLoadSessionReloadsCurrentUserAndClearsRefreshError()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/AuthSessionStoreTests/saveRestoreAndClearSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/DataBackupExportViewModelTests/exportBackupWritesReadableSnapshotFile()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/DataBackupExportViewModelTests/importBackupRestoresSnapshotIntoRepositories()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/DictionaryViewModelTests/loadTermsSortsDefaultOrderAndSearchesAcrossFields()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/DictionaryViewModelTests/filterOptionsSeparateAbbreviationKoreanAndRelatedSkillTerms()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/DictionaryViewModelTests/resolveRelatedSkillsMatchesRegisteredAndUnregisteredTags()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/saveCurrentGaugeRecordPersistsCalculationWithProjectSnapshot()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/loadPatternsExposesPatternDocumentsForGaugeLinking()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/oversizedGaugeInputsDoNotCrashCalculation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/saveCurrentGaugeRecordUsesSelectedPatternSnapshot()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/saveCurrentGaugeTargetPersistsDetailedManualMeasurement()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/manualPatternNameOverridesSelectedPatternAndProjectPattern()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/washComparisonUsesLatestBeforeAndAfterRecords()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/loadGaugeRecordRestoresInputsAndProjectSelection()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/deleteGaugeRecordRemovesRecordFromRepositoryAndList()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/updateLoadedGaugeRecordSavesChangesWithoutCreatingDuplicateRecord()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/reloadAfterAccountChangeFetchesProjectsAndGaugeRecordsAgain()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeCalculatorViewModelTests/reloadAfterAccountChangeClearsStaleGaugeDataWhenFetchFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasureViewModelTests/saveTargetCreatesTrimmedGaugeTarget()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasureViewModelTests/saveExistingTargetUpdatesRepositoryTarget()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasureViewModelTests/saveSwatchAddsSwatchToExistingTarget()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasureViewModelTests/saveManualMeasurementAddsMeasurementToSwatch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasureViewModelTests/savePhotoMeasurementStoresUserCorrectedCounts()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasurementInputTests/manualMeasurementInputNormalizesStitchesAndRowsPer10cm()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasurementInputTests/manualMeasurementInputAcceptsCommaDecimalsAndOptionalRows()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasurementInputTests/gaugeTargetInputRequiresNamedPositiveTarget()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasurementInputTests/photoMeasurementSourcesFallbackToPhotoLibraryInTests()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/GaugeMeasurementInputTests/autoCounterRejectsSelectionsThatAreNotFourPoints()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/HomeDashboardSummaryTests/summaryCountsProjectsAndChoosesContinueProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/KnitGetherTests/example()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/allLibraryKindsReportLinkedProjectCountForDeletionNotice()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deletionMessageOmitsLinkNoticeWhenCountIsZero()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deletionMessageUsesSameLinkNoticeAcrossLibraryKinds()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/linkedProjectCountFallsBackToZeroWhenServerFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/addYarnSavesTrimmedFormAndReloadsYarns()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/addYarnRejectsMissingName()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deleteYarnDeletesAndReloadsYarns()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deleteYarnReturnsFalseAndKeepsExistingYarnsWhenDeleteFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deletionPresentationKeepsSelectedDetailWhenDeleteFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deletionPresentationClearsSelectedDetailOnlyForMatchingSuccessfulDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deletionPresentationClearsPendingDeletionOnlyWhenDeleteSucceeds()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/yarnDetailRowsHideEmptyOptionalMetadataAndKeepQuantity()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/filteredYarnsMatchesNameBrandColorwayWeightAndNotes()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/loadYarnUsagesStoresUsageRecordsAndTotalQuantity()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/retryYarnSyncReloadsYarnsAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/addNeedleSavesTrimmedFormAndReloadsNeedles()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/addNeedleRejectsMissingRequiredFields()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deleteNeedleDeletesAndReloadsNeedles()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deleteNeedleReturnsFalseAndKeepsExistingNeedlesWhenDeleteFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/needleDetailRowsHideEmptyLengthAndKeepRequiredMetadata()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/filteredNeedlesMatchesNameTypeSizeLengthAndNotes()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/retryNeedleSyncReloadsNeedlesAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/addToolSavesTrimmedFormAndReloadsTools()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/addToolRejectsMissingRequiredFields()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/deleteToolDeletesAndReloadsTools()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/filteredToolsMatchesNameTypeLinkAndMemo()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/retryToolSyncReloadsToolsAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryItemViewModelTests/toolDetailRowsHideEmptyLinkAndKeepUsageCount()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryViewModelTests/reloadAfterAccountChangeFetchesLibraryAgain()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LibraryViewModelTests/reloadAfterAccountChangeClearsStaleLibraryWhenFetchFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalPatternFileStoreTests/storeLibraryPatternDataWritesFileUnderPatternDirectory()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalPatternFileStoreTests/copyLibraryPatternFileToProjectCopiesCachedPattern()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/projectRepositoryCanLoadDiskCacheWithoutSeedingSamples()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/patternRepositoryCanStartEmptyWithoutSeedingSamples()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/skillRepositoryCanLoadDiskCacheWithoutSeedingSamples()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/libraryRepositoryCanLoadDiskCacheWithoutSeedingSamples()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/libraryRepositoryCanStartEmptyWithoutSeedingSamples()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/profileRepositoryCanLoadDiskCacheWithoutSeedingSample()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/gaugeTargetRepositoryCanLoadDiskCacheAfterRecreation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/gaugeTargetRepositoryPersistsUpdatesWithoutDuplicatingTargets()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/gaugeTargetRepositoryPersistsDeletesAfterRecreation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/LocalRepositoryPersistenceTests/gaugeTargetRepositoryStartsEmptyWhenCacheFileDoesNotExist()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/addProjectSavesSelectedYarnAndNeedleSnapshots()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/addProjectReturnsFalseAndKeepsErrorWhenSaveFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/updateProjectReturnsFalseAndKeepsExistingListWhenSaveFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/deleteProjectReturnsFalseAndKeepsExistingListWhenDeleteFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/updateProjectSetsSuccessStatusMessage()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/deleteProjectSetsSuccessStatusMessage()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/addProjectSavesSelectedPatternDocumentAsProjectPatternCopy()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/manualPatternNameClearsPreviouslySelectedPatternDocument()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/projectFormDataInitializesMaterialSelectionFromProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/reloadAfterAccountChangeFetchesProjectsAgain()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/reloadAfterAccountChangeClearsStaleProjectsWhenFetchFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/MyKnittingViewModelTests/retrySyncReloadsProjectsAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/fetchGaugeRecordsFallsBackToLocalCacheWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/saveGaugeRecordKeepsLocalChangeAndFlushesOnNextSuccessfulFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/savePendingGaugeRecordKeepsPendingUploadWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/updateGaugeRecordKeepsPendingUploadAndFlushesWithPatchOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/deleteGaugeRecordKeepsHiddenPendingDeleteAndFlushesOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/deleteLocalOnlyGaugeRecordDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/rejectedPendingGaugeRecordRemovesUnacceptedLocalOnlyChangeOnFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests/rejectedPendingGaugeRecordDeleteClearsTombstoneOnFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/fetchYarnsFallsBackToLocalCacheWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/saveYarnKeepsLocalChangeAndFlushesOnNextSuccessfulFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/savePendingYarnUploadsAsExistingYarnWhenRemoteIsAvailable()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/saveYarnCachesServerVersionAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/savePendingNeedleUploadsAsExistingNeedleWhenRemoteIsAvailable()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/saveNeedleCachesServerVersionAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/saveToolKeepsLocalChangeAndFlushesOnNextSuccessfulFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/saveToolCachesServerVersionAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/deleteLocalOnlyYarnDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/deleteLocalOnlyNeedleDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/deleteLocalOnlyToolDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/recordYarnUsageKeepsLocalChangeAndFlushesOnNextUsageFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/recordYarnUsageRollsBackInventoryWhenRemoteRejectsChange()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/saveYarnRollsBackLocalChangeWhenRemoteRejectsChange()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/deleteYarnRollsBackLocalDeletionWhenRemoteRejectsChange()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstLibraryRepositoryTests/deleteLocalOnlyYarnUsageDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/fetchPatternsFallsBackToLocalCacheWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/createPatternKeepsLocalFileAndFlushesUploadOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/savePendingPatternUploadsAsExistingPatternWhenRemoteIsAvailable()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/savePatternCachesServerVersionAndKeepsLocalFileAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/deletePatternKeepsHiddenPendingDeleteAndFlushesOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/deleteLocalOnlyPatternDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstPatternRepositoryTests/createProjectPatternCopyKeepsDirectFileLocalForProjectUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProfileRepositoryTests/fetchProfileFallsBackToLocalCacheWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProfileRepositoryTests/saveProfileKeepsPendingUploadAndFlushesOnNextSuccessfulFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProfileRepositoryTests/savePendingProfileUploadsAsExistingProfileWhenRemoteIsAvailable()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProfileRepositoryTests/saveProfileCachesServerVersionAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/fetchProjectsFallsBackToLocalCacheWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/fetchProjectsThrowsWhenRemoteIsOfflineAndLocalCacheIsMissing()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/saveNewProjectKeepsLocalChangeAndFlushesOnNextSuccessfulFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/saveSyncedProjectKeepsPendingUploadAndFlushesAsSyncedOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/savePendingProjectUploadsAsExistingProjectWhenRemoteIsAvailable()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/saveProjectCachesServerVersionAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/deleteProjectKeepsHiddenPendingDeleteAndFlushesOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/deleteLocalOnlyProjectDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/rejectedPendingLocalOnlyProjectIsPreservedAsConflictOnFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/rejectedPendingProjectDeleteClearsTombstoneOnFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/saveRowCounterRetryableFailurePersistsParentProjectPendingForRestart()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/pendingRowCounterRetriesAfterRepositoryRecreationAndClearsPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/pendingRowInstructionRetriesAfterRepositoryRecreation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/pendingNewWorkSessionRetriesWithPostAfterRepositoryRecreationWithoutDuplicateCreate()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/successfulImmediateChildRemoteSaveLeavesNoParentPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/nonRetryableRowCounterFailureRestoresSnapshotAndLeavesNoPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/nonRetryableRowInstructionFailureRestoresSnapshotAndLeavesNoPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/pendingProjectScalarAndNewRowInstructionRetryUploadsAggregateProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/pendingRowCounterScalarAndChildRetryUploadsAggregateProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/pendingAggregateRetryFailureKeepsParentPendingUntilFullUploadSucceeds()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/retryableRowInstructionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/retryableWorkSessionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/successfulDirectChildDeleteLeavesNoParentPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/alreadyDeletedChildKeepsLocalDeleteWithoutPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstProjectRepositoryTests/nonRetryableChildDeleteRestoresSnapshotAndLeavesNoPending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/fetchSkillsFallsBackToLocalCacheWhenRemoteIsOffline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/saveNewSkillKeepsLocalChangeAndFlushesOnNextSuccessfulFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/saveSyncedSkillKeepsPendingUploadAndFlushesAsSyncedOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/savePendingSkillUploadsAsExistingSkillWhenRemoteIsAvailable()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/saveSkillCachesServerVersionAfterSuccessfulUpload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/saveSystemSkillLevelUsesLevelEndpointInsteadOfFullSkillUpdate()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/pendingSystemSkillLevelRetriesWithLevelEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/deleteSkillKeepsHiddenPendingDeleteAndFlushesOnNextFetch()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OfflineFirstSkillRepositoryTests/deleteLocalOnlySkillDoesNotCallRemoteDelete()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OnboardingViewModelTests/onboardingStepsIncludeAccountAndSkillTestPrompts()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OnboardingViewModelTests/loadExistingProfilePopulatesForm()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OnboardingViewModelTests/completeOnboardingSavesDefaultDisplayNameWhenBlank()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OnboardingViewModelTests/completeOnboardingPreservesExistingProfileIdentity()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/OnboardingViewModelTests/replacingProfileRepositoryUsesNewScopeWhenCompletingOnboarding()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/formDataInitializesFromExistingPattern()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/updatePatternSavesExistingIdentityAndReloadsPatterns()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/preparePatternForViewingFetchesMissingFileAndUpdatesList()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/retrySyncReloadsPatternsAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/deletePatternDeletesAndReloadsPatterns()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/deletePatternReturnsFalseAndKeepsExistingPatternsWhenDeleteFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/patternFileURLUsesRepositoryFileURL()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/PatternLibraryViewModelTests/filteredPatternsMatchesTitleDesignerFileNameAndNotes()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProfileSettingsViewModelTests/loadProfilePopulatesFormData()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProfileSettingsViewModelTests/loadProfileWithoutSavedLocalProfileKeepsEditableDefaults()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProfileSettingsViewModelTests/authenticatedProfileLoadAfterSignOutKeepsEditableDefaultsWithoutError()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProfileSettingsViewModelTests/saveProfilePersistsTrimmedProfileAndReloads()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProfileSettingsViewModelTests/saveProfileRejectsMissingDisplayName()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProfileSettingsViewModelTests/retrySyncReloadsProfileAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/projectSaveConflictKeepsUnsavedMemoInsteadOfServerValue()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/projectSaveConflictRefetchesServerProjectToRefreshLockBaseline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/failedMemoSaveKeepsErrorMessageVisibleAfterFollowUpLoad()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/projectSaveConflictMessageSaysInputIsKept()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/resetCurrentRowPersistsZeroAndKeepsCounterMetadata()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/completeProjectPersistsFOStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/unlinkPatternRemovesPatternAndDrawingState()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/attachManualPatternReturnsFalseAndKeepsExistingPatternWhenSaveFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/resolvedSkillTagsMarksRegisteredAndUnregisteredTags()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/currentLearningSkillTagsPrioritizesUnknownAndUnsureCurrentRowSkills()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadRelatedSkillsIncludesAbbreviationsExtractedFromAttachedPDFText()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadRelatedSkillsIncludesAbbreviationsRecognizedFromScannedPDFImage()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/attachNewPatternCanStoreFileInLibraryBeforeProjectConnection()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/attachNewPatternCanKeepFileProjectOnly()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadRelatedSkillsBuildsRowInstructionSuggestionsFromPatternText()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/addPatternRowInstructionSuggestionPersistsRowInstruction()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/recordYarnUsageSavesUsageAndRefreshesRemainingYarn()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/updateYarnUsageRefreshesAdjustedRemainingYarn()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/deleteYarnUsageRefreshesRestoredRemainingYarn()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/finishWorkSessionDoesNotPersistVeryShortAutomaticSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/manualStopKeepsTimerOffWhenScreenIsReopened()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/manualStartClearsSuppressionForLaterAutoStart()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/leavingScreenDoesNotSuppressAutoStartOnReturn()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/manualStopKeepsTimerOffAfterAppReturnsFromBackground()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/backgroundEndsSessionAndActivationStartsANewOne()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/recordingWorkSessionCreatesLocalOnlySessionForSyncedProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/recordingWorkSessionKeepsLocalProjectSessionLocalOnly()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/workSessionsByMostRecentSortsSessionsDescending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/workSessionStatisticsSummarizesTodayTotalAndAverage()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/updateWorkSessionMemoPersistsTrimmedMemo()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/deleteWorkSessionRemovesSessionAndPersists()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadGaugeRecordsKeepsLinkedRecordsForCurrentProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/linkGaugeRecordPersistsProjectSnapshot()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/unlinkGaugeRecordClearsProjectConnection()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadNeedlesSetsAvailableNeedlesAndAttachedNeedle()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/attachNeedlePersistsNeedleSnapshot()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/unlinkNeedleClearsNeedleSnapshot()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadToolsSetsAvailableAndLinkedProjectTools()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/linkToolConnectsProjectTool()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/unlinkToolDisconnectsProjectTool()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/loadProgressPhotosSetsProjectPhotos()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/addProgressPhotoStoresPhotoAndSortsByTakenAtDescending()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/updateProgressPhotoReplacesExistingPhoto()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/deleteProgressPhotoRemovesPhotoFromWorkspace()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/retrySyncFetchesLatestProjectAndRefreshesWorkspaceState()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/incrementRowAppliesFetchedProjectAfterSave()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/addRowInstructionReturnsFalseAndKeepsRowsWhenRowNumberAlreadyExists()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/ProjectWorkspaceViewModelTests/addBulkRowInstructionsReturnsTrueWhenRowsAreSaved()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteAuthRepositoryTests/loginPostsCredentialsAndDecodesSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteAuthRepositoryTests/registerPostsProfileDataAndDecodesSession()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteAuthRepositoryTests/fetchCurrentUserRequestsMeEndpointWithBearerToken()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteDictionaryRepositoryTests/fetchTermsRequestsDictionaryEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteDictionaryRepositoryTests/saveNewTermPostsDictionaryPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteDictionaryRepositoryTests/saveSyncedTermPatchesDictionaryPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteDictionaryRepositoryTests/deleteTermDeletesDictionaryEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeRecordRepositoryTests/fetchGaugeRecordsLoadsServerRecords()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeRecordRepositoryTests/saveGaugeRecordPostsRecordToServer()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeRecordRepositoryTests/updateGaugeRecordPatchesExistingRecordOnServer()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeTargetRepositoryTests/fetchGaugeTargetsLoadsNestedSwatchesAndMeasurements()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeTargetRepositoryTests/saveGaugeTargetPostsNestedMeasurementData()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeTargetRepositoryTests/updateGaugeTargetPatchesExistingTargetWithNestedMeasurementData()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteGaugeTargetRepositoryTests/deleteGaugeTargetDeletesServerTarget()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/fetchYarnsRequestsYarnsEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/fetchNeedlesRequestsNeedlesEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/saveNewYarnPostsYarnPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/saveSyncedYarnPatchesYarnPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/deleteYarnRequestsDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/fetchYarnUsagesRequestsProjectYarnUsageEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/fetchYarnUsagesForYarnRequestsYarnUsageEndpointAndDecodesProjectName()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/recordYarnUsagePostsProjectYarnUsagePayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/updateYarnUsagePatchesProjectYarnUsagePayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/deleteYarnUsageRequestsProjectYarnUsageDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/saveNewNeedlePostsNeedlePayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/saveSyncedNeedlePatchesNeedlePayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/deleteNeedleRequestsDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/fetchToolsRequestsToolsEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/saveNewToolPostsToolPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/deleteToolRequestsDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/fetchProjectToolsRequestsProjectToolEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/linkToolRequestsProjectToolLinkEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteLibraryRepositoryTests/unlinkToolRequestsProjectToolUnlinkEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/fetchPatternsRequestsPatternsEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/createPatternUploadsPdfAndCachesDownload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/fetchPatternDownloadsFileWhenCacheIsMissing()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/deletePatternRequestsDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/saveLocalOnlyPatternUploadsPdfWithStableID()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/createProjectPatternCopyUploadsPdfToLibraryAndCachesProjectCopy()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemotePatternRepositoryTests/saveDrawingDataUploadsDrawingAndCachesLocalCopy()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProfileRepositoryTests/fetchCurrentProfileRequestsProfileEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProfileRepositoryTests/saveCurrentProfilePatchesProfilePayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectProgressPhotoRepositoryTests/fetchProgressPhotosDownloadsRemoteFilesIntoLocalStore()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectProgressPhotoRepositoryTests/createProgressPhotoUploadsMultipartAndCachesImage()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectProgressPhotoRepositoryTests/updateProgressPhotoPatchesMetadataAndPreservesLocalFilePath()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectProgressPhotoRepositoryTests/deleteProgressPhotoDeletesRemoteRecordAndCachedFile()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/fetchProjectsRequestsProjectsEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/fetchProjectsDownloadsPatternCopyFileWhenCacheIsMissing()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/fetchProjectsDownloadsPatternCopyDrawingWhenCacheIsMissing()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/fetchProjectRequestsProjectEndpointAndReturnsNilForNotFound()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveNewProjectPostsProjectPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveProjectIncludesPatternCopyPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveProjectUploadsDirectPatternCopyFileAfterSavingProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveProjectUploadsPatternCopyDrawingAfterSavingProject()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveSyncedProjectPatchesProjectPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveSyncedProjectSendsBaseUpdatedAtWithMilliseconds()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/baseUpdatedAtSurvivesRepositoryRecreation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveFetchesBaseUpdatedAtWhenNoneIsKnown()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/conflictedProjectKnownToServerIsSentAsUpdateWithBaseline()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/conflictedProjectUnknownToServerIsSentAsCreate()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/createRetriesAsUpdateWhenServerSaysProjectAlreadyExists()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/deleteProjectRequestsProjectDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveRowCounterPatchesPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveLocalOnlyRowInstructionPostsPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveSyncedRowInstructionPatchesPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/deleteRowInstructionUsesPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveLocalOnlyWorkSessionPostsPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveNewWorkSessionRecordedFromSyncedProjectPostsPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/saveSyncedWorkSessionPatchesPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteProjectRepositoryTests/deleteWorkSessionUsesPartialEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/fetchSkillsRequestsSkillsEndpointAndDecodesResponse()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/fetchSkillRequestsSkillEndpointAndReturnsNilForNotFound()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/saveNewSkillPostsSkillPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/saveSyncedSkillPatchesSkillPayload()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/saveSkillLevelPatchesLevelEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/deleteSkillRequestsDeleteEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/RemoteSkillRepositoryTests/fetchSkillAnimationsRequestsSkillAnimationsEndpoint()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SettingsStatisticsTests/workTimeSummaryAggregatesSessionsAcrossProjects()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillAnimationViewModelTests/loadSkillsFetchesSkillsAndAnimations()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillAnimationViewModelTests/quickSkillsReturnsUnknownSkillsInCreatedOrder()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillAnimationViewModelTests/displayedSkillsAppliesLevelFilterSearchAndSort()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillAnimationViewModelTests/relatedDictionaryTermsMatchSkillAbbreviation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillAnimationViewModelTests/frameSequenceUsesSkillStepsForProceduralAnimation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/formDataInitializesFromExistingSkill()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/updateSkillSavesExistingIdentityAndReloadsSkills()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/deleteSkillDeletesAndReloadsSkills()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/deleteSkillReturnsFalseAndKeepsExistingSkillsWhenDeleteFails()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/systemSkillCannotBeUpdatedOrDeleted()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/retrySyncReloadsSkillsAndClearsPendingStatus()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/animationSkillsOnlyIncludesSkillsWithAnimationMetadata()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/animationSkillsIsEmptyWhenNoSkillsHaveAnimationMetadata()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/animationSkillsIncludesSkillsWithAnimationRecords()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillLibraryViewModelTests/animationsForSkillMatchesAnimationRecordsBySkillIDAndAnimationIDs()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillTestViewModelTests/skillLevelFormatterUsesTrafficLightLabelsAndAcceptsLegacyUnsureText()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillTestViewModelTests/loadSkillsSortsByCreatedAtThenAbbreviation()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillTestViewModelTests/selectingLevelsAndSavingResultsPersistsAllSkillsAndBuildsSummary()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillTestViewModelTests/savePartialAndExitPersistsOnlyAnsweredSkills()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SkillTestViewModelTests/navigationClampsToValidSkillRange()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SyncStatusPresentationTests/syncStatusProvidesUserFacingKoreanCopy()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SyncStatusPresentationTests/syncStatusProvidesBadgeSystemImages()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SyncStatusPresentationTests/syncStatusProvidesUserFacingDetailText()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherTests/SyncStatusPresentationTests/syncStatusDistinguishesSyncedPendingAndAttentionStates()": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testAccountSwitchKeepsProjectCacheSeparatedByUser": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords": {
+      "result": "Passed",
+      "source": "ios-fresh-coordinate-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testDictionaryTermsSeededViaAPIDisplaySearchAndDetail": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testExample": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testExistingAccountCanLogInAndReachMainTabs": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testGaugeSwatchAndManualMeasurementPersistAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-gauge-selection-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-gauge-selection-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testLaunchPerformance": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testLogoutDoesNotShowProfileLoadError": {
+      "result": "Passed",
+      "source": "ios-account-settings-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testNeedleLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-native-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testProjectCanBeEditedDeletedAndStayDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testProjectPersistsAfterAppRelaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testServerOffPendingProjectSyncsAfterServerRecovers": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testServerOffWithCachedProjectShowsCachedProject": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testServerOffWithoutProjectCacheShowsOfflineNotice": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testToolLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-native-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testWorkspaceRowCounterPersistsAfterAppRelaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testWorkspaceRowInstructionCanBeSavedEditedDeletedAndStayDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testWorkspaceWorkSessionCanBeDeletedAndStaysDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testWorkspaceWorkSessionCanBeRecorded": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testWrongPasswordLoginShowsErrorAndDoesNotPersistSession": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch": {
+      "result": "Passed",
+      "source": "ios-native-final.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITestsLaunchTests/testLaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherQAUITests/DEF_15_RegressionTests/testDEF15": {
+      "result": "Passed",
+      "source": "ios-native-retest.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherQAUITests/KnitGetherQAUITests/testExample": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherQAUITests/KnitGetherQAUITests/testLaunchPerformance": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    },
+    "test://com.apple.xcode/KnitGether/KnitGetherQAUITests/KnitGetherQAUITestsLaunchTests/testLaunch": {
+      "result": "Passed",
+      "source": "ios-full.xcresult"
+    }
+  }
+}

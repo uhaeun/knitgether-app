@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="254.166" timestamp="2026-10-04T19:47:25.047822+09:00" hostname="isolated-local-environment"><testcase classname="tests.test_tc04_project_create" name="test_ui_13_add_via_top_plus" time="45.808" /><testcase classname="tests.test_tc05_project_edit" name="test_ui_18_rename_from_workspace" time="26.696" /><testcase classname="tests.test_tc08_sort_filter" name="test_ui_34_start_date_desc_without_history" time="44.047"><failure message="AssertionError: 시작일 내림차순이 아님: ['정렬A', '정렬B', '정렬C']&#10;assert ['정렬A', '정렬B', '정렬C'] == ['정렬C', '정렬B', '정렬A']&#10;  &#10;  At index 0 diff: '정렬A' != '정렬C'&#10;  Use -v to get more diff">tests/test_tc08_sort_filter.py:52: in test_ui_34_start_date_desc_without_history
+    assert lst.project_names() == ["정렬C", "정렬B", "정렬A"], \
+E   AssertionError: 시작일 내림차순이 아님: ['정렬A', '정렬B', '정렬C']
+E   assert ['정렬A', '정렬B', '정렬C'] == ['정렬C', '정렬B', '정렬A']
+E
+E     At index 0 diff: '정렬A' != '정렬C'
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_tc10a_workspace_pattern" name="test_ui_44_manual_pattern" time="32.147" /><testcase classname="tests.test_tc10c_workspace_info" name="test_ui_62_work_memo_saved_and_persists" time="30.032" /><testcase classname="tests.test_tc12_library_create" name="test_ui_65_register_yarn" time="34.988" /><testcase classname="tests.test_tc13_library_edit" name="test_ui_70_yarn_edit_does_not_propagate" time="37.153" /></testsuite></testsuites>

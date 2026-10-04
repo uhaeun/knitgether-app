@@ -1,0 +1,57 @@
+{
+  "requests": [
+    {
+      "name": "Health",
+      "status": 200
+    },
+    {
+      "name": "Auth Login",
+      "status": 200
+    },
+    {
+      "name": "Projects List",
+      "status": 200
+    },
+    {
+      "name": "Projects Create",
+      "status": 201
+    },
+    {
+      "name": "Patterns List",
+      "status": 200
+    },
+    {
+      "name": "Library Yarns List",
+      "status": 200
+    },
+    {
+      "name": "Library Needles List",
+      "status": 200
+    },
+    {
+      "name": "Library Tools List",
+      "status": 200
+    },
+    {
+      "name": "Skills List",
+      "status": 200
+    },
+    {
+      "name": "Dictionary Terms List",
+      "status": 200
+    },
+    {
+      "name": "Gauge Records List",
+      "status": 200
+    },
+    {
+      "name": "Gauge Targets List",
+      "status": 200
+    }
+  ],
+  "db_check": {
+    "projectName": "QA Cardigan",
+    "currentRow": 0,
+    "result": "PASS"
+  }
+}

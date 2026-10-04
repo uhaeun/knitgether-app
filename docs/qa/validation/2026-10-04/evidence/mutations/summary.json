@@ -1,0 +1,288 @@
+[
+  {
+    "source": "test_ui_54_lower_bound_stays_at_start.xml",
+    "counts": {
+      "PASS": 6,
+      "FAIL": 2,
+      "ERROR": 0,
+      "SKIP": 0
+    },
+    "cases": [
+      {
+        "name": "test_ui_13_add_via_top_plus",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_18_rename_from_workspace",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_44_manual_pattern",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_52_simple_mode_increment_and_decrement",
+        "result": "FAIL",
+        "failure": "AssertionError: 1회 내렸는데 값이 다름: 현재 4단\nassert '현재 4단' == '현재 2단'\n  \n  - 현재 2단\n  ?    ^\n  + 현재 4단\n  ?    ^"
+      },
+      {
+        "name": "test_ui_54_lower_bound_stays_at_start",
+        "result": "FAIL",
+        "failure": "AssertionError: 하한에서 감소했더니 값이 변함: 현재 1단\nassert '현재 1단' == '시작 전'\n  \n  - 시작 전\n  + 현재 1단"
+      },
+      {
+        "name": "test_ui_62_work_memo_saved_and_persists",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_65_register_yarn",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_70_yarn_edit_does_not_propagate",
+        "result": "PASS",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "source": "test_ui_29_delete_via_long_press.xml",
+    "counts": {
+      "PASS": 6,
+      "FAIL": 2,
+      "ERROR": 0,
+      "SKIP": 0
+    },
+    "cases": [
+      {
+        "name": "test_ui_13_add_via_top_plus",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_18_rename_from_workspace",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_29_delete_via_long_press",
+        "result": "FAIL",
+        "failure": "AssertionError: 삭제 확인창이 뜨지 않음"
+      },
+      {
+        "name": "test_ui_31_delete_two_of_three_keeps_rest",
+        "result": "FAIL",
+        "failure": "AssertionError: 삭제 확인창이 뜨지 않음"
+      },
+      {
+        "name": "test_ui_44_manual_pattern",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_62_work_memo_saved_and_persists",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_65_register_yarn",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_70_yarn_edit_does_not_propagate",
+        "result": "PASS",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "source": "test_ui_34_start_date_desc_without_history.xml",
+    "counts": {
+      "PASS": 6,
+      "FAIL": 1,
+      "ERROR": 0,
+      "SKIP": 0
+    },
+    "cases": [
+      {
+        "name": "test_ui_13_add_via_top_plus",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_18_rename_from_workspace",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_34_start_date_desc_without_history",
+        "result": "FAIL",
+        "failure": "AssertionError: 시작일 내림차순이 아님: ['정렬A', '정렬B', '정렬C']\nassert ['정렬A', '정렬B', '정렬C'] == ['정렬C', '정렬B', '정렬A']\n  \n  At index 0 diff: '정렬A' != '정렬C'\n  Use -v to get more diff"
+      },
+      {
+        "name": "test_ui_44_manual_pattern",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_62_work_memo_saved_and_persists",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_65_register_yarn",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_70_yarn_edit_does_not_propagate",
+        "result": "PASS",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "source": "test_ui_37_favorite_pins_to_top.xml",
+    "counts": {
+      "PASS": 6,
+      "FAIL": 1,
+      "ERROR": 0,
+      "SKIP": 0
+    },
+    "cases": [
+      {
+        "name": "test_ui_13_add_via_top_plus",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_18_rename_from_workspace",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_37_favorite_pins_to_top",
+        "result": "FAIL",
+        "failure": "AssertionError: 즐겨찾기가 최상단으로 오지 않음\nassert '최신건' == '아래건'\n  \n  - 아래건\n  + 최신건"
+      },
+      {
+        "name": "test_ui_44_manual_pattern",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_62_work_memo_saved_and_persists",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_65_register_yarn",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_70_yarn_edit_does_not_propagate",
+        "result": "PASS",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "source": "test_ui_64_state_survives_app_restart.xml",
+    "counts": {
+      "PASS": 6,
+      "FAIL": 1,
+      "ERROR": 0,
+      "SKIP": 0
+    },
+    "cases": [
+      {
+        "name": "test_ui_13_add_via_top_plus",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_18_rename_from_workspace",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_44_manual_pattern",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_62_work_memo_saved_and_persists",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_64_state_survives_app_restart",
+        "result": "FAIL",
+        "failure": "AssertionError: 카운터 값이 유지되지 않음\nassert '시작 전' == '현재 3단'\n  \n  - 현재 3단\n  + 시작 전"
+      },
+      {
+        "name": "test_ui_65_register_yarn",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_70_yarn_edit_does_not_propagate",
+        "result": "PASS",
+        "failure": null
+      }
+    ]
+  },
+  {
+    "source": "test_ui_77_logout_shows_gate_and_hides_account_data.xml",
+    "counts": {
+      "PASS": 6,
+      "FAIL": 1,
+      "ERROR": 0,
+      "SKIP": 0
+    },
+    "cases": [
+      {
+        "name": "test_ui_13_add_via_top_plus",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_18_rename_from_workspace",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_44_manual_pattern",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_62_work_memo_saved_and_persists",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_65_register_yarn",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_70_yarn_edit_does_not_propagate",
+        "result": "PASS",
+        "failure": null
+      },
+      {
+        "name": "test_ui_77_logout_shows_gate_and_hides_account_data",
+        "result": "FAIL",
+        "failure": "AssertionError: 로그인 중에 다른 계정의 프로젝트가 보인다\nassert '남의프로젝트' not in ['남의프로젝트']\n +  where ['남의프로젝트'] = project_names()\n +    where project_names = <pages.my_knitting_page.MyKnittingPage object at 0x105c85370>.project_names\n +      where <pages.my_knitting_page.MyKnittingPage object at 0x105c85370> = open()\n +        where open = <pages.my_knitting_page.MyKnittingPage object at 0x105c85370>.open"
+      }
+    ]
+  }
+]

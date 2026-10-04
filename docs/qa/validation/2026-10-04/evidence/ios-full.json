@@ -1,0 +1,96 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceName": "KnitGether Full Validation 20261004",
+        "modelName": "iPhone 17 Pro Max",
+        "osBuildNumber": "23F77",
+        "osVersion": "26.5",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 5,
+      "passedTests": 379,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "KnitGether Local Offline · Built with macOS 26.5.1",
+  "expectedFailures": 0,
+  "failedTests": 5,
+  "finishTime": 1791107242.58,
+  "passedTests": 373,
+  "result": "Failed",
+  "skippedTests": 0,
+  "startTime": 1791104019.286,
+  "statistics": [
+    {
+      "subtitle": "8 test runs",
+      "title": "2 tests ran with dynamic parameters"
+    },
+    {
+      "subtitle": "2 test runs",
+      "title": "2 tests collected performance metrics"
+    }
+  ],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertTrue failed",
+      "targetName": "KnitGetherQAUITests",
+      "testIdentifier": 375,
+      "testIdentifierString": "DEF_15_RegressionTests/testDEF15()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherQAUITests/DEF_15_RegressionTests/testDEF15",
+      "testName": "testDEF15()"
+    },
+    {
+      "failureText": "XCTAssertEqual failed: (\"Optional(\"1010\")\") is not equal to (\"Optional(\"10\")\") - 게이지 입력값이 반영되어야 합니다.",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 353,
+      "testIdentifierString": "KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords",
+      "testName": "testCoreUserFlowRegistersAndSavesCommonRecords()"
+    },
+    {
+      "failureText": "XCTAssertEqual failed: (\"Optional(\"1010\")\") is not equal to (\"Optional(\"10\")\") - 게이지 입력값이 반영되어야 합니다.",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 357,
+      "testIdentifierString": "KnitGetherUITests/testGaugeSwatchAndManualMeasurementPersistAfterRelaunch()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testGaugeSwatchAndManualMeasurementPersistAfterRelaunch",
+      "testName": "testGaugeSwatchAndManualMeasurementPersistAfterRelaunch()"
+    },
+    {
+      "failureText": "XCTAssertEqual failed: (\"Optional(\"1010\")\") is not equal to (\"Optional(\"10\")\") - 게이지 입력값이 반영되어야 합니다.",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 358,
+      "testIdentifierString": "KnitGetherUITests/testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch",
+      "testName": "testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch()"
+    },
+    {
+      "failureText": "XCTAssertFalse failed - 삭제한 실이 목록에 보이면 안 됩니다: Edited Yarn 149f94f0",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 373,
+      "testIdentifierString": "KnitGetherUITests/testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch",
+      "testName": "testYarnLibraryCanBeAddedEditedDeletedAndStayDeletedAfterRelaunch()"
+    }
+  ],
+  "title": "Test - KnitGether Local Offline",
+  "topInsights": [
+    {
+      "category": "Common Failures",
+      "impact": "60% of failures",
+      "text": "3 runs of 3 tests failed with XCTAssertEqual failed: (\"Optional(\"1010\")\") is not equal to (\"Optional(\"10\")\") - 게이지 입력값이 반영되어야 합니다."
+    },
+    {
+      "category": "Longest Test Runs",
+      "impact": "74% of duration",
+      "text": "1 longest test run with outlier durations exceeding 0.43s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 378
+}

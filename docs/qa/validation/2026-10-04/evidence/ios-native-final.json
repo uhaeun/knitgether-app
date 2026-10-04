@@ -1,0 +1,60 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceName": "KnitGether Full Validation 20261004",
+        "modelName": "iPhone 17 Pro Max",
+        "osBuildNumber": "23F77",
+        "osVersion": "26.5",
+        "platform": "iOS Simulator"
+      },
+      "expectedFailures": 0,
+      "failedTests": 3,
+      "passedTests": 3,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "KnitGether Local Offline · Built with macOS 26.5.1",
+  "expectedFailures": 0,
+  "failedTests": 3,
+  "finishTime": 1791108713.131,
+  "passedTests": 3,
+  "result": "Failed",
+  "skippedTests": 0,
+  "startTime": 1791107763.664,
+  "statistics": [],
+  "testFailures": [
+    {
+      "failureText": "XCTAssertEqual failed: (\"Optional(\"101010\")\") is not equal to (\"Optional(\"10\")\") - 게이지 입력값이 반영되어야 합니다.",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 1,
+      "testIdentifierString": "KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords",
+      "testName": "testCoreUserFlowRegistersAndSavesCommonRecords()"
+    },
+    {
+      "failureText": "Failed to tap \"Return\" Button: No matches found for Descendants matching type Keyboard from input {(\n    Application, pid: 24567, label: 'KnitGether'\n)}",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 2,
+      "testIdentifierString": "KnitGetherUITests/testGaugeSwatchAndManualMeasurementPersistAfterRelaunch()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testGaugeSwatchAndManualMeasurementPersistAfterRelaunch",
+      "testName": "testGaugeSwatchAndManualMeasurementPersistAfterRelaunch()"
+    },
+    {
+      "failureText": "Failed to tap \"Return\" Button: No matches found for Descendants matching type Keyboard from input {(\n    Application, pid: 26060, label: 'KnitGether'\n)}",
+      "targetName": "KnitGetherUITests",
+      "testIdentifier": 3,
+      "testIdentifierString": "KnitGetherUITests/testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch()",
+      "testIdentifierURL": "test://com.apple.xcode/KnitGether/KnitGetherUITests/KnitGetherUITests/testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch",
+      "testName": "testGaugeTargetCanBeEditedDeletedAndStayDeletedAfterRelaunch()"
+    }
+  ],
+  "title": "Test - KnitGether Local Offline",
+  "topInsights": [],
+  "totalTestCount": 6
+}
