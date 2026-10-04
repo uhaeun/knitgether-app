@@ -15,7 +15,7 @@ PDF와 본문에는 사진 8장이 포함돼 있습니다. PDF는 읽기 순서�
 
 ## PDF 갱신
 
-본문의 정본은 `portfolio.md`입니다. `tools/build_pdf.py`는 이 파일을 읽어 PDF를 생성하며 본문을 덮어쓰지 않습니다. Python과 ReportLab, 한글 TrueType 글꼴이 필요합니다. macOS 기본 경로에 글꼴이 없으면 `KG_KOREAN_FONT`에 사용할 글꼴 경로를 지정합니다.
+본문의 정본은 `portfolio.md`입니다. `tools/build_pdf.py`는 이 파일을 읽어 PDF를 생성하며 본문을 덮어쓰지 않습니다. Python과 ReportLab이 필요합니다. 저장소에 포함된 나눔스퀘어 Regular와 Bold를 사용하며, PDF에 글꼴을 포함합니다. 글꼴 출처와 라이선스는 `fonts/LICENSE.txt`에 기록했습니다. 다른 글꼴을 사용할 경우 `KG_KOREAN_FONT`와 `KG_KOREAN_FONT_BOLD`에 각 글꼴 경로를 지정합니다.
 
 저장소 루트에서 실행합니다.
 

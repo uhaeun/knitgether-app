@@ -1,6 +1,7 @@
 """Build the QA portfolio PDF from portfolio.md without rewriting its contents.
 
-Requires reportlab. Set KG_KOREAN_FONT to a Korean TrueType font when needed.
+Requires reportlab. Bundled NanumSquare fonts are used by default.
+KG_KOREAN_FONT and KG_KOREAN_FONT_BOLD optionally override the font paths.
 """
 from pathlib import Path
 import os
@@ -17,9 +18,14 @@ from reportlab.pdfgen.canvas import Canvas
 ROOT = Path(__file__).resolve().parents[4]
 SOURCE = ROOT / 'docs/qa/submission/portfolio.md'
 OUT = ROOT / 'output/pdf/knitgether_qa_portfolio.pdf'
-FONT = os.environ.get('KG_KOREAN_FONT', '/Library/Fonts/Arial Unicode.ttf')
+FONT_DIR = SOURCE.parent / 'fonts'
+FONT = os.environ.get('KG_KOREAN_FONT', str(FONT_DIR / 'NanumSquareR.ttf'))
+BOLD_FONT = os.environ.get('KG_KOREAN_FONT_BOLD',
+                           FONT if 'KG_KOREAN_FONT' in os.environ else str(FONT_DIR / 'NanumSquareB.ttf'))
 pdfmetrics.registerFont(TTFont('Korean', FONT))
-pdfmetrics.registerFontFamily('Korean', normal='Korean', bold='Korean', italic='Korean', boldItalic='Korean')
+pdfmetrics.registerFont(TTFont('KoreanBold', BOLD_FONT))
+pdfmetrics.registerFontFamily('Korean', normal='Korean', bold='KoreanBold',
+                              italic='Korean', boldItalic='KoreanBold')
 INK, TEAL, MUTED = '#243431', '#346D67', '#596963'
 W, H, M = 595.28, 841.89, 44
 CW = W - M * 2
@@ -31,12 +37,12 @@ styles = {
 }
 def style(name, **kw):
     styles[name] = ParagraphStyle(name, parent=styles['body'], **kw)
-style('title', fontSize=24, leading=32, spaceAfter=12, textColor=colors.HexColor(INK), keepWithNext=True)
-style('chapter', fontSize=18, leading=26, spaceBefore=0, spaceAfter=15, keepWithNext=True)
-style('section', fontSize=12.4, leading=19, spaceBefore=8, spaceAfter=5,
+style('title', fontName='KoreanBold', fontSize=24, leading=32, spaceAfter=12, textColor=colors.HexColor(INK), keepWithNext=True)
+style('chapter', fontName='KoreanBold', fontSize=18, leading=26, spaceBefore=0, spaceAfter=15, keepWithNext=True)
+style('section', fontName='KoreanBold', fontSize=12.4, leading=19, spaceBefore=8, spaceAfter=5,
       textColor=colors.HexColor(TEAL), keepWithNext=True)
 style('cell', fontSize=9.3, leading=14.3, spaceAfter=0)
-style('headcell', fontSize=9.5, leading=14.5, spaceAfter=0, textColor=colors.white)
+style('headcell', fontName='KoreanBold', fontSize=9.5, leading=14.5, spaceAfter=0, textColor=colors.white)
 style('caption', fontSize=8.5, leading=12.5, spaceAfter=5, textColor=colors.HexColor(MUTED))
 style('link', fontSize=8.6, leading=13, spaceAfter=4, textColor=colors.HexColor(TEAL))
 style('bullet', leftIndent=12, firstLineIndent=-10, spaceAfter=5)
