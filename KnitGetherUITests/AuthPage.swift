@@ -160,7 +160,7 @@ struct AuthPage: UITestPage {
             }
             let backButton = app.navigationBars["계정"].buttons.element(boundBy: 0)
             if backButton.exists && backButton.isHittable {
-                backButton.tap()
+                backButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
                 if destination.waitForExistence(timeout: 3) && destination.isHittable {
                     return
                 }
