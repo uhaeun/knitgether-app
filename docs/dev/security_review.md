@@ -4,20 +4,22 @@
 
 
 대상: 브랜치 fix/qa-cycle-defects, 커밋 f93aacc 작업 트리. 방법: 정적 점검(코드와 설정 읽기, git 이력 패턴 검색, npm audit). 실행 재현은 하지 않았다.
-작성: Claude (사실 조사). 심각도와 결함 등록 여부는 하은이 판정한다. 등급 열의 값은 권고이며 추정이다.
+작성: Claude (사실 조사). 등급과 등록 상태는 당시 관찰 기록을 따른다. 등급 열의 값은 권고이며 추정이다.
 
-## 결론
+## 당시 점검 요약
 
-1. public 전환을 막는 시크릿은 git 이력에 없다. 이력에 나온 값은 전부 로컬 기본값과 테스트용 문자열이다.
-2. 계정 경계(다른 사용자 데이터 접근)는 서버가 강제한다. 노션 1차 조사 결론과 같다.
-3. 남은 구멍은 셋이다. 로그인 시도 제한 없음, 업로드 경로 의존성(multer) high 취약점, 업로드 파일 내용 검증 부재. 나머지는 관찰 수준이다.
-4. "로컬에 데이터를 저장해도 되는가"에 대한 답은 된다. 근거는 4절 C-1.
+1. 당시 패턴 검색에서 운영 비밀값으로 식별된 항목은 없었다. 패턴 검색 결과만으로 전체 이력에 비밀값이 없다고 보증하지 않는다.
+2. 서버의 소유권 필터와 인증 분기를 코드로 확인했다. 이 점검에서는 공격 시나리오를 실행하지 않았다.
+3. 로그인 시도 제한, 업로드 관련 의존성, 파일 내용 검증을 후속 확인 항목으로 남겼다.
+4. 로컬 캐시의 파일 보호 속성은 실기기에서 측정하지 않았다. 저장 방식의 안전성을 확정한 결과가 아니다.
+
+후속 변경: 로그인 시도 제한은 2026-09-15 AUTH-08로 구현됐다. 현재 등록 상태와 남은 범위는 [OBS-4-01](../qa/portfolio/14_observations.md)을 참고한다. 아래 표와 의존성 수치는 2026-09-01 당시 기록이며 현재 버전의 보안 점검 결과가 아니다.
 
 ## 1. 점검 범위와 결과 요약
 
 | # | 영역 | 확인한 것 | 결과 |
 | --- | --- | --- | --- |
-| A | git 이력 시크릿 | 전체 이력 diff에서 키, 토큰, 접속 문자열, 비밀번호 패턴 검색. .env 계열 파일 추가 이력 | 실제 시크릿 없음 |
+| A | git 이력 시크릿 | 전체 이력 diff에서 키, 토큰, 접속 문자열, 비밀번호 패턴 검색. .env 계열 파일 추가 이력 | 당시 검색 패턴에서 운영 비밀값 미식별 |
 | B | 서버 인증과 권한 | JWT 시크릿 처리, 개발 토큰 경로, 소유권 스코프, 비밀번호 해시, 로그인 제한 | 로그인 시도 제한 없음 (B-3) |
 | C | 클라이언트 저장 | 캐시 파일 보호 등급, Keychain 접근 등급, 로그 노출, 계정별 분리 | 관찰 2건 |
 | D | 전송 구간 | ATS 설정, 개발 스킴 http | 양호 |
@@ -31,12 +33,12 @@
 
 | 발견 | 내용 | 판정 |
 | --- | --- | --- |
-| DATABASE_URL | postgresql://knitgether:knitgether@localhost:5433 (docs, .env.example, CI 워크플로) | 로컬 기본값. docker-compose 컨테이너 계정. 위험 없음 |
-| AUTH_JWT_SECRET | replace-with-a-long-random-secret (.env.example), test-jwt-secret (e2e) | 자리표시자. 위험 없음 |
-| PASSWORD | appium-pass-1234, pytest-pass-1234 (테스트 코드) | 테스트 계정. 위험 없음 |
+| DATABASE_URL | postgresql://knitgether:knitgether@localhost:5433 (docs, .env.example, CI 워크플로) | 로컬 개발 컨테이너의 기본값. 운영 환경 적합성은 이 기록에서 평가하지 않음 |
+| AUTH_JWT_SECRET | replace-with-a-long-random-secret (.env.example), test-jwt-secret (e2e) | 예시 또는 테스트 설정값 |
+| PASSWORD | appium-pass-1234, pytest-pass-1234 (테스트 코드) | 테스트 계정용 설정값 |
 | .env 추적 | server/.env.example만 추적. server/.env는 이력에 없음 | 양호 |
 
-public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보로 볼 수 있는 값이 있다. 판단은 하은. `haeun.local`(개발용 Mac 호스트명, docs/09와 스킴), `~/...` 절대 경로(문서 일부), 시뮬레이터 UDID(docs/06). 사내 정보는 아니다.
+문서와 스킴에는 개발용 호스트명, 로컬 경로, 시뮬레이터 UDID가 포함돼 있다. 실행 환경을 재구성할 때는 자신의 호스트와 시뮬레이터 값으로 바꿔야 한다.
 
 ## 3. B. 서버 인증과 권한
 
@@ -54,7 +56,7 @@ public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보�
 
 | # | 항목 | 확인 결과 | 판정 | 등급(추정) |
 | --- | --- | --- | --- | --- |
-| C-1 | 캐시 파일 보호 | Application Support/KnitGether/RemoteCaches/<baseURL>/<userId>/ 아래 JSON. 코드에 FileProtection 지정 없음. iOS 기본 보호 등급(첫 잠금 해제 후 접근 가능)이 적용된다고 본다(추정, 프로젝트 entitlement에 Data Protection 미설정) | 저장해도 된다. 데이터가 뜨개 프로젝트 기록이라 기기 잠금 해제 전 암호화면 충분하다. 토큰은 여기 없고 Keychain에 있다 | 없음 |
+| C-1 | 캐시 파일 보호 | Application Support/KnitGether/RemoteCaches/<baseURL>/<userId>/ 아래 JSON. 코드에 FileProtection 지정 없음. iOS 기본 보호 등급(첫 잠금 해제 후 접근 가능)이 적용된다고 본다(추정, 프로젝트 entitlement에 Data Protection 미설정) | 실제 파일 보호 속성과 잠금 상태별 접근 여부는 미측정. 토큰은 별도 Keychain 저장 경로를 사용한다 | 없음 |
 | C-2 | Keychain | kSecClassGenericPassword, 접근 등급 미지정(기본 WhenUnlocked), iCloud 동기화 없음 (AuthSessionStore.swift) | 양호 | 없음 |
 | C-3 | 로그 | print, NSLog, Logger 호출 중 토큰, 비밀번호, 세션을 출력하는 곳 없음 | 양호 | 없음 |
 | C-4 | 계정별 분리 | 캐시 경로가 userId로 나뉜다. 로그아웃 후 이전 계정 캐시는 디스크에 남는다 | 기능 결함으로는 이미 관리 중(02 AUTH-06, 10 DEF-05~07). 보안으로는 기기 물리 접근이 전제라 낮다 | 하 |
@@ -79,14 +81,14 @@ public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보�
 
 ## 7. F. 의존성
 
-`npm audit --omit=dev` 결과 high 5건, critical 0건.
+2026-09-01 당시 `npm audit --omit=dev` 기록은 high 5건, critical 0건이다. 현재 의존성의 취약점 수로 사용하지 않는다.
 
 | 패키지 | 경로 | 내용 | 영향 |
 | --- | --- | --- | --- |
 | multer 1.0.0~2.1.1 | @nestjs/platform-express 경유 | 깊게 중첩된 필드명으로 DoS, 중단된 업로드 미정리로 DoS | 업로드 엔드포인트 3개(도안, 진행 사진, 드로잉)에 직접 해당 |
 | deepmerge-ts <8.0.0 | prisma, @prisma/config 경유 | 재귀 객체 병합 시 스택 고갈 | 빌드 시점 도구. 런타임 요청 경로 아님 |
 
-권고: `npm audit fix`로 해결되는지 확인하고, 안 되면 @nestjs/platform-express를 multer 2.1.2 이상을 쓰는 버전으로 올린다. 등급(추정) 중. 서버 e2e 재실행으로 회귀 확인.
+후속 확인 항목: 현재 잠금 파일을 기준으로 다시 점검하고, 의존성 변경 시 업로드 경로와 서버 e2e의 회귀 여부를 확인한다. 이 기록에는 해당 조치의 실행 결과가 없다.
 
 ## 8. G. 정보 노출
 
@@ -94,11 +96,11 @@ public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보�
 | --- | --- | --- | --- |
 | G-1 | 계정 존재 노출 | 로그인 실패는 "Email or password is incorrect."로 구분하지 않는다. 회원가입은 409 "Email is already registered."로 구분한다 | 가입 여부를 회원가입 엔드포인트로 알 수 있다. 대부분 서비스가 감수하는 트레이드오프. 등급(추정) 하 |
 | G-2 | 개발 로그 | NODE_ENV=development에서만 메서드, URL, 상태, 소요시간 출력. 본문과 헤더는 출력하지 않는다 | 양호 |
-| G-3 | admin.html | server/public/admin.html 1,196줄. 서버가 정적 파일로 서빙하지 않고 fetch 호출도 없다. 외부 CDN 폰트를 참조한다 | 정적 목업으로 보인다(추정). 용도와 잔존 여부는 하은 판단. 미조사 |
+| G-3 | admin.html | server/public/admin.html 1,196줄. 서버가 정적 파일로 서빙하지 않고 fetch 호출도 없다. 외부 CDN 폰트를 참조한다 | 관리 화면 시안. 2026-10-04 코드 확인에서 고정 시드로 만든 예시 데이터와 API 호출 부재를 확인했으며 화면에 Demo 표시를 추가함 |
 
 ## 9. 결함 또는 관찰 등록 후보 (2026-09-01 처리: SEC-A → OBS-4-01 배포 전 조건, SEC-B → OBS-4-02, SEC-C → OBS-4-03. 배포 이력 없음이 관찰 판정의 근거)
 
-등록 여부와 심각도는 하은이 정한다. 발견 시점은 전부 QA 신규 발견, 방법은 정적 점검이다.
+아래는 당시 등록 후보와 검증 방법이다. 재현 절차를 적은 것이며, 실행 완료 결과를 뜻하지 않는다. 후속 등록 상태는 [관찰 기록](../qa/portfolio/14_observations.md)에 있다.
 
 | 후보 | 항목 | 권고 처리 |
 | --- | --- | --- |
@@ -114,13 +116,12 @@ public 전환 전 남은 확인: 시크릿은 아니지만 개인 식별 정보�
 - 서버가 실제로 인터넷에 배포된 적이 있는지. 배포 이력이 없으면 B-3, F-1의 실질 위험은 배포 시점으로 미뤄진다
 - 릴리즈 빌드에 스킴 환경변수가 들어가지 않는다는 점의 실측 (D-2)
 - Keychain 항목이 앱 삭제 후에도 남는지(iOS 기본 동작상 남는다). 재설치 시 이전 세션 복원 여부
-- admin.html의 용도 (G-3)
 - (확인 완료) 백업 JSON 내보내기에는 토큰과 비밀번호가 없다. SettingsBackupSnapshot은 프로필, 프로젝트, 창고, 스킬, 사전, 게이지, 사용 기록, 사진 데이터만 담는다(DataBackupExportViewModel.swift:11~26). 사진 원본이 Data로 들어가 파일이 커질 수 있고, 공유 시트로 내보낸 파일은 암호화되지 않는다
 
-## 11. 도구로 재검증하는 방법 (하은이 직접)
+## 11. 당시 제안한 추가 검증 방법
 
 - git 이력: `brew install gitleaks` 후 `gitleaks git --redact -v .` (이 문서의 A절은 grep 패턴이라 gitleaks가 더 넓다)
 - 의존성: `cd server && npm audit --omit=dev`
-- 로그인 제한: Postman Collection Runner, iterations 50, 같은 요청. 응답 시간과 코드가 일정하면 제한 없음
+- 로그인 제한: 격리된 테스트 계정으로 연속 실패 횟수와 응답을 기록한다. AUTH-08 도입 이후에는 연속 5회 실패와 15분 잠금을 기준으로 확인한다
 - 파일 검증: Postman form-data로 `echo hello > fake.pdf` 업로드
 - ATS: Charles로 http://<서버 IP> 배포 서버를 흉내 내면 iOS가 차단하는지. 로컬 네트워크 대역이면 예외라 공인 IP나 도메인으로 해야 한다

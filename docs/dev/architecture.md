@@ -3,8 +3,8 @@
 > 작성 당시의 설계 또는 코드 대조 기록입니다. 본문의 기준 날짜와 커밋을 확인해 주세요. 이후 QA 수정 내용과 검증 범위는 [QA 안내](../qa/portfolio/README.md)를 따릅니다.
 
 
-작성 2026-09-01. 기준은 브랜치 fix/qa-cycle-defects 커밋 f93aacc의 코드와 git 이력, docs/dev/specs의 설계 문서, docs/spec/원본_v2.2.md다. 코드에서 확인한 사실과 문서에 적힌 결정은 그대로 적고, 문서에 없는 이유는 추정이라고 표시했다. 추정은 마지막 절에 질문으로 모았다.
-작성: Claude (사실 조사). 판단과 답변은 하은.
+작성 2026-09-01. 기준은 브랜치 fix/qa-cycle-defects 커밋 f93aacc의 코드와 git 이력, docs/dev/specs의 설계 문서, docs/spec/원본_v2.2.md다. 코드에서 확인한 사실과 문서에 적힌 결정은 그대로 적고, 문서에 없는 이유는 추정이라고 표시했다. 확정할 수 없는 설계 배경은 마지막 절에 구분했다.
+코드와 이력 조사에 Claude를 활용했다. 기록으로 확정되지 않은 설계 배경은 6절에 구분했다.
 
 ## 결론
 
@@ -84,7 +84,7 @@ iOS 앱 (SwiftUI)
 | 서버 프레임워크 NestJS | 첫 서버는 웹앱이 아니라 구조화된 API 서비스가 필요하다. 모듈, 검증, 인증, 파일 처리, 유지보수성에서 Next.js보다 적합 | 같은 문서 Decision |
 | Repository 프로토콜 유지 | 이미 데이터 접근이 프로토콜 뒤에 있으므로 원격 구현체를 옆에 추가하면 화면과 뷰모델을 다시 쓰지 않아도 된다 | 같은 문서 Purpose, iOS Integration |
 | OfflineFirst 계층 | 설계서는 "오프라인 우선 저장은 나중에 추가 가능"으로 열어 두었고, 7/11 커밋 f426a96에서 구현 | 같은 문서 Open Decisions, 커밋 f426a96 |
-| UI, API, DB 3층 검증 | 화면 표시, API 응답과 DB 저장값이 일치하는지 대조하는 검증 방식 | docs/qa/portfolio/PROJECT_HISTORY.md 0절 |
+| UI, API, DB 3층 검증 | 화면 표시, API 응답과 DB 저장값이 일치하는지 대조하는 검증 방식 | [프로젝트 이력 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/PROJECT_HISTORY.md) |
 | 작업 공간 2탭 분리 | 한 세로 스크롤에 12개 섹션이 쌓여 정보 과부하. 뜨는 중 쓰는 것(카운터, 도안, 행안내, 타이머)과 정보를 분리 | docs/dev/specs/2026-07-27-workspace-two-tab-design.md |
 | 캐시 디렉토리를 계정별로 분리 | 계정 간 데이터 노출 방지 | docs/dev/06_architecture_audit 갱신 항목 |
 

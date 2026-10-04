@@ -36,7 +36,7 @@
 | `docs/qa/submission/` | 포트폴리오 본문과 추가 검증 증거 |
 | `output/pdf/` | 포트폴리오 PDF |
 | `docs/qa/portfolio/` | 상세 QA 설계, 실행, 결함과 회고 |
-| `docs/spec/` | 기획서와 기능 정의 |
+| [docs/spec/](docs/spec/README.md) | 기획서와 기능 정의 |
 | `docs/dev/` | 앱 구조와 개발 환경 |
 | `qa/appium/` | iOS 화면 자동화 |
 | `qa/api-tests/` | API 응답과 DB 대조 테스트 |

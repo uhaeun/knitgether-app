@@ -18,8 +18,7 @@ pruningStaleEntries: true)`를 호출해 서버 목록에 없는 synced 스킬�
 쓰면 "프루닝이 안 됐다"와 "조회를 안 했다"가 구분되지 않는다. 판정이 무엇을 보는지 먼저
 고정해야 한다는 뜻이고, 실제 판정은 PASS다.
 
-이 케이스의 UI-NN 번호는 09_test_case_master.md에 아직 없다. 번호 배정은 QA(유하은) 몫으로
-남긴다.
+기존 UI-NN 번호와 별도로 이 파일의 함수명 및 DEF-09로 추적한다.
 """
 import time
 

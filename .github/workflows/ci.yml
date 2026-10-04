@@ -180,7 +180,7 @@ jobs:
           cat ../server-api.log
           exit 1
 
-      # 응답만 보지 않고 psql로 서버 DB 실제 상태까지 대조하는 층이다.
+      # 응답과 함께, 필요한 케이스는 psycopg2로 서버 DB 상태를 대조한다.
       # 네트워크 열화는 Charles가 아니라 support/netgate.py TCP 프록시로 만든다.
       # GUI 도구는 CI에 넣을 수 없어서 코드로 거는 조건만 게이트가 될 수 있다.
       - name: Run API tests

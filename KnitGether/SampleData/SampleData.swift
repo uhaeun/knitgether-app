@@ -33,28 +33,28 @@ enum SampleData {
         BundledPatternResource(
             title: "sample1",
             fileName: "sample1.pdf",
-            notes: "앱에 포함된 샘플 도안입니다.",
+            notes: "페이지 이동과 드로잉 확인을 위한 테스트 PDF입니다. 실제 뜨개 도안이 아닙니다.",
             createdAt: makeDate(year: 2026, month: 6, day: 4),
             updatedAt: makeDate(year: 2026, month: 6, day: 4)
         ),
         BundledPatternResource(
             title: "sample2",
             fileName: "sample2.pdf",
-            notes: "앱에 포함된 샘플 도안입니다.",
+            notes: "페이지 이동과 드로잉 확인을 위한 테스트 PDF입니다. 실제 뜨개 도안이 아닙니다.",
             createdAt: makeDate(year: 2026, month: 6, day: 4),
             updatedAt: makeDate(year: 2026, month: 6, day: 4)
         ),
         BundledPatternResource(
             title: "sample3",
             fileName: "sample3.pdf",
-            notes: "앱에 포함된 샘플 도안입니다.",
+            notes: "페이지 이동과 드로잉 확인을 위한 테스트 PDF입니다. 실제 뜨개 도안이 아닙니다.",
             createdAt: makeDate(year: 2026, month: 6, day: 4),
             updatedAt: makeDate(year: 2026, month: 6, day: 4)
         ),
         BundledPatternResource(
             title: "sample4",
             fileName: "sample4.pdf",
-            notes: "앱에 포함된 샘플 도안입니다.",
+            notes: "페이지 이동과 드로잉 확인을 위한 테스트 PDF입니다. 실제 뜨개 도안이 아닙니다.",
             createdAt: makeDate(year: 2026, month: 6, day: 4),
             updatedAt: makeDate(year: 2026, month: 6, day: 4)
         )

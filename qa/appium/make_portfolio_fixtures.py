@@ -1,4 +1,4 @@
-"""Submission capture inputs only: original, non-commercial test PDFs."""
+"""Create original PDF fixtures for drawing and page-retention checks."""
 from pathlib import Path
 import sys
 from reportlab.pdfgen import canvas

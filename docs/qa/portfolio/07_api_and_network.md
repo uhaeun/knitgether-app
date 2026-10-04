@@ -2,7 +2,7 @@
 
 > **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/07_api_and_network.md)
 
-> 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표(`docs/qa/appium-charles-smoke.md`)와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다. 원본에서 1, 2, 6, 7절은 하은의 문장으로 다시 쓸 초안으로 표시되어 있었고, 이 판의 1, 2, 7, 8절이 그 자리다.
+> 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표(`docs/qa/appium-charles-smoke.md`)와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다.
 
 #### 1. 화면만 보면 무엇을 놓치는가
 
@@ -252,9 +252,9 @@ Postman으로 POST를 보내 201을 받은 뒤 같은 id를 psql로 조회했다
 
 넷째와 다섯째가 이 절의 핵심이다. 둘 다 서버가 처리를 끝낸 뒤 클라이언트가 결과를 못 받는 상황인데, 하나는 타임아웃이고 하나는 연결 리셋이다. 클라이언트가 보는 것은 둘 다 실패지만 서버가 겪는 일은 다르다. 두 경우 모두 부분 커밋과 고아 레코드가 없음을 psql로 확인했다.
 
-6-4. 스트리밍 관점
+6-4. 동기화 중 통신 상태 변화
 
-네트워크 열화 비중을 키운 것은 이 앱이 offline-first 동기화 구조라서이기도 하고, 회선이 나쁠 때의 동작이 사용자 경험의 중심인 제품군을 염두에 두어서이기도 하다. 재생이든 동기화든 질문은 같다. 회선이 흔들릴 때 데이터가 깨지는가. 사용자가 이탈했을 때 서버는 어떤 상태로 남는가.
+오프라인 우선 저장 구조에서는 네트워크가 끊기거나 응답이 늦어져도 로컬 기록이 보존돼야 한다. 통신 중단과 복구 이후 앱 및 서버에 남은 데이터를 대조하는 조건을 포함했다.
 
 #### 7. 발견과 판정
 
@@ -343,25 +343,6 @@ Postman으로 POST를 보내 201을 받은 뒤 같은 id를 psql로 조회했다
 
 #### 부록. 실행 방법
 
-```bash
-# 사전
-docker compose -f server/docker-compose.yml up -d     # Postgres 5433
-cd server && npm run start:dev                        # API 3000
+현재 환경 설정과 명령은 [API 테스트 안내](../../../qa/api-tests/README.md)를 따릅니다. 서버와 테스트는 각각 별도 터미널에서 실행합니다.
 
-# 전체
-cd qa/api-tests && ./.venv/bin/python -m pytest -v
-
-# 층별
-./.venv/bin/python -m pytest test_08_network_degradation.py   # 네트워크 열화
-./.venv/bin/python -m pytest test_09_transferred_from_06.py   # 이관 3건
-./.venv/bin/python -m pytest test_11_sync_loss_regression.py  # RC-01 회귀
-```
-
-CI에서는 `ci.yml`의 `api` 잡이 같은 스위트를 돌린다. 수동 실행 때 `scope=api-only`를 고르면 macOS 러너를 쓰는 ios 잡을 건너뛴다.
-
-<!--
-원본 간 불일치 (2026-09-19 갱신)
-
-편집 기록 (불일치 아님)
-2. 스모크 점검표와 Postman 컬렉션에 있던 개발 토큰, 테스트 계정 이메일과 비밀번호, 로컬 baseUrl은 옮기지 않았다.
--->
+CI에서는 `ci.yml`의 `api` 잡이 같은 API 스위트를 실행합니다. 수동 실행에서 `scope=api-only`를 고르면 iOS 잡을 건너뜁니다.
