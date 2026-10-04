@@ -360,18 +360,25 @@ struct GaugeCalculatorPage: UITestPage {
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5),
                       "게이지 입력 칸을 선택하면 키보드가 표시되어야 합니다.")
 
-        // Numeric fields are right-aligned. A center tap can leave the caret
-        // before the number, where delete keys cannot clear any characters.
-        element.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        var previousValue: String?
-        for _ in 0..<5 {
-            guard let currentValue = element.value as? String,
-                  shouldClearTextValue(currentValue),
-                  currentValue != previousValue else { break }
-            previousValue = currentValue
+        if let currentValue = element.value as? String, shouldClearTextValue(currentValue) {
+            // Select the value explicitly: tapping a right-aligned numeric field
+            // does not reliably put the caret after its last character.
+            element.press(forDuration: 1.1)
+            let selectAllLabels = ["Select All", "전체 선택", "모두 선택"]
+            for label in selectAllLabels {
+                let item = app.menuItems[label].firstMatch
+                let button = app.buttons[label].firstMatch
+                if item.exists {
+                    item.tap()
+                    break
+                }
+                if button.exists {
+                    button.tap()
+                    break
+                }
+            }
             element.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count))
         }
-
         element.typeText(text)
         XCTAssertEqual(element.value as? String, text, "게이지 입력값이 반영되어야 합니다.")
         dismissKeyboard()

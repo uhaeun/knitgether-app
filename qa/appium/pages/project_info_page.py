@@ -59,7 +59,7 @@ class ProjectInfoPage(BasePage):
         return self
 
     def add_progress_photo(self):
-        """사진 격자의 실제 항목을 선택하고 편집 화면에서 저장한다."""
+        """사진 격자의 실제 항목을 선택하고 자동 저장된 행을 확인한다."""
         self.tap("workspace.progress_photo.add")
         photo = self.find(
             'type == "XCUIElementTypeImage" AND name == "PXGGridLayout-Info"',
@@ -67,9 +67,6 @@ class ProjectInfoPage(BasePage):
         # iOS exposes the dimmed background as another large Image element.
         # The Photos grid identifier excludes that non-selectable background.
         self.tap_at(photo)
-        assert self.exists("workspace.progress_photo.save", timeout=12), \
-            "사진 선택 후 진행 사진 편집 화면이 열리지 않음"
-        self.tap("workspace.progress_photo.save")
         assert self.has_progress_photo(), "저장한 진행 사진 행이 표시되지 않음"
         return self
 

@@ -6,6 +6,7 @@
 import base64
 import io
 import time
+from xml.etree import ElementTree
 
 from PIL import Image, ImageChops
 
@@ -205,6 +206,37 @@ class PatternPanelPage(WorkspacePage):
         signature = [label for label in labels if label][:5]
         assert signature, "도안 본문을 읽지 못해 위치 유지를 판정할 수 없음"
         return signature
+
+    def viewer_page_marker(self):
+        """Identify the PDF page occupying most of the viewport.
+
+        PDFKit keeps offscreen pages in its accessibility tree. A marker can
+        itself be offscreen while its page is visible, so use page bounds,
+        not the marker's visibility or the first cached label.
+        """
+        return self.page_marker_from_source(self.driver.page_source)
+
+    @staticmethod
+    def page_marker_from_source(source):
+        root = ElementTree.fromstring(source)
+        candidates = []
+        for viewport in root.iter("XCUIElementTypeScrollView"):
+            top = float(viewport.get("y", 0))
+            bottom = top + float(viewport.get("height", 0))
+            for text_view in viewport.findall("./XCUIElementTypeTextView"):
+                for page in text_view:
+                    markers = [e.get("label", "") for e in page.iter("XCUIElementTypeStaticText")
+                               if e.get("label", "").startswith("Unique page marker: ")]
+                    page_top = float(page.get("y", 0))
+                    page_bottom = page_top + float(page.get("height", 0))
+                    overlap = max(0, min(bottom, page_bottom) - max(top, page_top))
+                    if len(markers) == 1 and overlap > 0:
+                        candidates.append((overlap, markers[0]))
+        assert candidates, "도안의 페이지 표식을 읽지 못해 페이지 유지를 판정할 수 없음"
+        candidates.sort(reverse=True)
+        assert len(candidates) == 1 or candidates[0][0] != candidates[1][0], \
+            "두 페이지가 같은 면적으로 보여 현재 페이지를 판정할 수 없음"
+        return candidates[0][1]
 
     def scroll_pages(self, count):
         """도안을 아래로 넘긴다. 뷰어가 세로 스크롤이라 페이지 이동도 스크롤이다."""

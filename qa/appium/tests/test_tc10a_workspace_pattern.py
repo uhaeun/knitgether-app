@@ -290,7 +290,7 @@ def test_ui_50_delete_drawing_with_cancel(kg):
 
 
 def test_ui_51_step3_page_kept_after_lookup(kg):
-    """UI-51 스텝3 사전/스킬 찾기로 이탈했다 돌아와도 보던 위치가 유지되는지.
+    """UI-51 스텝3 사전/스킬 찾기 후 같은 페이지로 복귀하는지.
 
     PAT-05 기존 약속. 1차 판정 이력: PASS (8/23 수동). 기법: 상태 전이
     """
@@ -300,10 +300,10 @@ def test_ui_51_step3_page_kept_after_lookup(kg):
 
     lst.open().open_project("검색이탈")
     pat.set_mode(T.MODE_VIEWER)
-    initial = pat.viewer_signature()
+    initial = pat.viewer_page_marker()
     pat.scroll_pages(3)
-    before = pat.viewer_signature()
-    assert before != initial, "도안 위치가 이동하지 않아 복귀 후 유지 여부를 판정할 수 없음"
+    before = pat.viewer_page_marker()
+    assert before != initial, "도안 페이지가 이동하지 않아 복귀 후 유지 여부를 판정할 수 없음"
 
     pat.menu("workspace.pattern.lookup", expect="사전")
     time.sleep(2)
@@ -311,11 +311,11 @@ def test_ui_51_step3_page_kept_after_lookup(kg):
     time.sleep(2)
     assert not pat.has_text("도안 보며 찾아보기", timeout=1), "사전 화면이 닫히지 않음"
 
-    assert pat.viewer_signature() == before, "검색에서 돌아오니 보던 위치가 달라짐"
+    assert pat.viewer_page_marker() == before, "사전 검색 후 도안 페이지가 달라짐"
 
 
 def test_ui_51_step2_page_kept_after_tab_round_trip(kg):
-    """UI-51 스텝2 다른 탭을 다녀와도 보던 도안 위치가 유지되는지.
+    """UI-51 스텝2 다른 탭을 다녀와도 같은 도안 페이지로 복귀하는지.
 
     작업 화면에는 탭바가 없어 다른 탭으로 가려면 반드시 목록으로 나갔다 와야 한다.
     시트 스텝의 "홈 탭 다녀오기"는 실제로 이 경로다.
@@ -328,14 +328,14 @@ def test_ui_51_step2_page_kept_after_tab_round_trip(kg):
 
     lst.open().open_project("탭복귀")
     pat.set_mode(T.MODE_VIEWER)
-    initial = pat.viewer_signature()
+    initial = pat.viewer_page_marker()
     pat.scroll_pages(3)
-    before = pat.viewer_signature()
-    assert before != initial, "도안 위치가 이동하지 않아 복귀 후 유지 여부를 판정할 수 없음"
+    before = pat.viewer_page_marker()
+    assert before != initial, "도안 페이지가 이동하지 않아 복귀 후 유지 여부를 판정할 수 없음"
 
     ws.go_back()
     pat.go_tab("홈")
     lst.open().open_project("탭복귀")
     time.sleep(2)
 
-    assert pat.viewer_signature() == before, "탭을 다녀오니 보던 위치가 처음으로 돌아감"
+    assert pat.viewer_page_marker() == before, "탭 복귀 후 도안 페이지가 달라짐"

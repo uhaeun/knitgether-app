@@ -33,6 +33,24 @@ def test_signature_preserves_visible_text_beyond_first_40_characters():
     assert viewer([(prefix + 'A', True)]).viewer_signature() != viewer([(prefix + 'B', True)]).viewer_signature()
 
 
+def pdf_source(page_positions):
+    pages = "".join(f'<XCUIElementTypeOther y="{y}" height="612"><XCUIElementTypeStaticText label="Unique page marker: SAMPLE 4-{number:02d}" visible="false"/></XCUIElementTypeOther>' for number, y in page_positions)
+    return f'<root><XCUIElementTypeScrollView y="259" height="551"><XCUIElementTypeTextView>{pages}</XCUIElementTypeTextView></XCUIElementTypeScrollView></root>'
+
+
+def test_page_identity_ignores_intra_page_scroll_but_detects_other_page():
+    identify = PatternPanelPage.page_marker_from_source
+    # Saved failure: page 3 is cached offscreen, page 4's marker is above
+    # the viewport, and only the beginning of page 5 is visible.
+    assert identify(pdf_source([(3, -570), (4, 50), (5, 670)])) == identify(pdf_source([(4, 259), (5, 879)]))
+    assert identify(pdf_source([(4, 259)])) != identify(pdf_source([(5, 259)]))
+
+
+def test_missing_page_marker_cannot_pass():
+    with pytest.raises(AssertionError, match="페이지 표식"):
+        PatternPanelPage.page_marker_from_source('<root/>')
+
+
 def injection(edits):
     return {'편집': edits}
 
