@@ -294,7 +294,7 @@ def test_ui_51_step3_page_kept_after_lookup(kg):
 
     PAT-05 기존 약속. 1차 판정 이력: PASS (8/23 수동). 기법: 상태 전이
     """
-    s = Seed(); s.project("검색이탈", pattern="여러장도안", pdf="sample4.pdf", pages=8)
+    s = Seed(); s.project("검색이탈", pattern="여러장도안", pdf="sample4.pdf", pages=17)
     kg.launch(s)
     lst, pat, ws, _ = _pages(kg)
 
@@ -322,7 +322,7 @@ def test_ui_51_step2_page_kept_after_tab_round_trip(kg):
     판정 근거: PAT-05 개정판(탭 이동 포함, 오너 결정 8/23)
     발견 시점: DEF-19는 8/23 UI-51 실행 중 관찰. 기법: 상태 전이, 회귀
     """
-    s = Seed(); s.project("탭복귀", pattern="여러장도안", pdf="sample4.pdf", pages=8)
+    s = Seed(); s.project("탭복귀", pattern="여러장도안", pdf="sample4.pdf", pages=17)
     kg.launch(s)
     lst, pat, ws, _ = _pages(kg)
 

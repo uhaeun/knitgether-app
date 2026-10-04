@@ -163,6 +163,8 @@ extension UITestPage {
         } else {
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.14)).tap()
         }
+        // Do not let the next form operation tap a keyboard that is animating away.
+        _ = app.keyboards.firstMatch.waitForNonExistence(timeout: 3)
     }
 
     func dismissSystemPasswordPromptIfNeeded(timeout: TimeInterval = 2) {

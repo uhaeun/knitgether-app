@@ -192,13 +192,15 @@ class PatternPanelPage(WorkspacePage):
 
     # ---------- 뷰어 페이지 ----------
     def _scroll_view(self):
-        return self.find('type == "XCUIElementTypeScrollView"', PRED)
+        # PDFKit also exposes an empty nested scroll view. Select the container
+        # that actually contains PDF text in the accessibility snapshot.
+        return self.find("//XCUIElementTypeScrollView[.//XCUIElementTypeStaticText]", "xpath")
 
     def viewer_signature(self):
         """지금 보이는 도안 본문 텍스트. 페이지 인디케이터가 없어 이걸 위치 지표로 쓴다."""
         sv = self._scroll_view()
         labels = [self.label_of(e).strip() for e in
-                  sv.find_elements(PRED, 'type == "XCUIElementTypeStaticText"')
+                  sv.find_elements("xpath", ".//XCUIElementTypeStaticText")
                   if e.is_displayed()]
         signature = [label for label in labels if label][:5]
         assert signature, "도안 본문을 읽지 못해 위치 유지를 판정할 수 없음"
