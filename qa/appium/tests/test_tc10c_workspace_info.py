@@ -121,6 +121,7 @@ def test_ui_57_progress_photo(kg):
     lst.open().open_project("사진대상")
     ws.show_info_tab()
     assert not info.has_text("아직 진행 사진이 없어요.", timeout=3), "재실행 후 사진이 사라짐"
+    assert info.has_progress_photo(), "재실행 후 저장한 진행 사진 행이 표시되지 않음"
 
 
 def test_ui_63_related_skills_shown_and_navigable(kg):

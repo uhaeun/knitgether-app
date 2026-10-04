@@ -59,22 +59,22 @@ class ProjectInfoPage(BasePage):
         return self
 
     def add_progress_photo(self):
-        """진행 사진 추가.
-
-        사진 피커에는 사진 격자 말고도 안내 배너 아이콘 같은 이미지 요소가 섞여 있다.
-        크기로 걸러 실제 사진 칸만 고른다.
-        """
+        """사진 격자의 실제 항목을 선택하고 편집 화면에서 저장한다."""
         self.tap("workspace.progress_photo.add")
-        time.sleep(3)
-        photos = [e for e in self._all('type == "XCUIElementTypeImage"', PRED)
-                  if e.rect["width"] >= 100 and e.rect["height"] >= 100]
-        assert photos, "사진 피커에 고를 사진이 없다. simctl addmedia로 먼저 채워야 한다"
-        self.tap_at(photos[0])
-        time.sleep(2)
-        if self.exists("workspace.progress_photo.save", timeout=5):
-            self.tap("workspace.progress_photo.save")
-        time.sleep(2)
+        photo = self.find(
+            'type == "XCUIElementTypeImage" AND name == "PXGGridLayout-Info"',
+            PRED, timeout=12)
+        # iOS exposes the dimmed background as another large Image element.
+        # The Photos grid identifier excludes that non-selectable background.
+        self.tap_at(photo)
+        assert self.exists("workspace.progress_photo.save", timeout=12), \
+            "사진 선택 후 진행 사진 편집 화면이 열리지 않음"
+        self.tap("workspace.progress_photo.save")
+        assert self.has_progress_photo(), "저장한 진행 사진 행이 표시되지 않음"
         return self
+
+    def has_progress_photo(self):
+        return self.exists('name BEGINSWITH "workspace.progress_photo.row."', PRED, timeout=12)
 
     def link_gauge(self, row_label):
         """게이지 기록 연결. 목록은 바늘 이름이 아니라 '세탁 전/후'와 코수로 표시된다."""
