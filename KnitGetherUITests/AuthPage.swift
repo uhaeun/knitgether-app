@@ -139,30 +139,35 @@ struct AuthPage: UITestPage {
     }
 
     func returnToOnboarding() -> OnboardingPage {
-        returnFromAccountScreen()
+        returnFromAccountScreen(destination: app.buttons["onboarding.login"].firstMatch)
         return OnboardingPage(app: app)
     }
 
     @discardableResult
     func returnToSettings() -> SettingsPage {
-        returnFromAccountScreen()
+        returnFromAccountScreen(destination: app.buttons["settings.account"].firstMatch)
         return SettingsPage(app: app)
     }
 
-    private func returnFromAccountScreen() {
-        let backButton = app.navigationBars.buttons.element(boundBy: 0)
-        let deadline = Date().addingTimeInterval(20)
-        // Password UI can appear after the success message in a fresh simulator.
-        // Wait for the underlying navigation to be usable instead of scrolling it.
+    private func returnFromAccountScreen(destination: XCUIElement) {
+        let deadline = Date().addingTimeInterval(30)
+        // A password prompt can appear between isHittable and the actual tap.
+        // Only the destination screen proves that navigation completed.
         while Date() < deadline {
             dismissSystemPasswordPromptIfNeeded(timeout: 1)
+            if destination.exists && destination.isHittable {
+                return
+            }
+            let backButton = app.navigationBars["계정"].buttons.element(boundBy: 0)
             if backButton.exists && backButton.isHittable {
                 backButton.tap()
-                return
+                if destination.waitForExistence(timeout: 3) && destination.isHittable {
+                    return
+                }
             }
             RunLoop.current.run(until: Date().addingTimeInterval(0.2))
         }
-        XCTFail("암호 저장 창을 닫은 뒤 계정 화면에서 돌아갈 수 있어야 합니다.")
+        XCTFail("계정 화면에서 돌아간 뒤 목적 화면이 보여야 합니다.")
     }
 
     private func reopenAccountFormIfNeeded(
