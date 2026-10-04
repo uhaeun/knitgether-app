@@ -1,6 +1,6 @@
 # 05_테스트케이스
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/05_test_cases.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/05_test_cases.md)
 
 > 2026-09-18 재작성. 케이스 ID, 절차, 판정 기준, 실행 결과는 8월 원본(`docs/qa/portfolio/05`, 1차 설계 8/3~8/4, 2차 설계 8/10)과 06, 11의 판정을 그대로 옮겼다. 바뀐 것은 배치다. 22건 전문을 옮기지 않고 기법별 대표 케이스로 설계 의도를 보인다. 케이스별 절차와 SQL 전문은 원본이 정본이다.
 

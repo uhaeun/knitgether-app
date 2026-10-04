@@ -1,6 +1,6 @@
 # 04_테스트전략
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/04_test_strategy.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/04_test_strategy.md)
 
 > 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(잔존 결함 허용 정책 신설) 반영. 접근법, 기법, 환경, 결함 관리, 종료 기준, 잔존 결함 허용 정책의 판정은 원본(`docs/qa/portfolio/04`, v1.1과 2차 사이클 전략, 8/29 심각도 규칙 개정, 9/15 허용 정책)을 그대로 옮겼다. 바뀐 것은 배치다. 29119-3 테스트 계획서의 전략 항목 순서로 다시 놓고 레벨, 유형, 기법에 ISTQB 4.0 분류를 붙였다.
 

@@ -2,7 +2,7 @@
 
 ## 읽는 순서
 
-1. **[제출용 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)**: 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고를 담은 12쪽 문서입니다.
+1. **[포트폴리오 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)**: 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고를 담은 12쪽 문서입니다.
 2. **[웹 본문](portfolio.md)**: PDF와 같은 내용을 GitHub에서 읽을 수 있습니다. 사진을 누르면 원본이 열립니다.
 3. **[추가 검증 증거](evidence/2026-10-04/README.md)**: Appium으로 촬영한 원본 화면, 검사 결과와 실행 환경입니다.
 4. **[상세 QA 기록](../portfolio/README.md)**: 테스트 조건, 수행 결과, 결함과 수정 이력입니다.

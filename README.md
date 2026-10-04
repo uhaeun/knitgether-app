@@ -1,6 +1,6 @@
 # 뜨개더 KnitGether | iOS QA 포트폴리오
 
-뜨개더는 도안, 단수, 작업 기록과 뜨개 재료를 한 프로젝트에서 관리하는 SwiftUI 기반 iOS 앱입니다. DB QA 경험을 모바일 앱의 데이터 정합성 검증으로 확장한 개인 프로젝트입니다.
+뜨개더는 도안, 단수, 작업 기록과 뜨개 재료를 한 프로젝트에서 관리하는 SwiftUI 기반 iOS 앱입니다. 앱 화면, API 응답과 DB 저장값을 대조해 기능 동작과 데이터 보존을 검증한 개인 프로젝트입니다.
 
 앱 기획과 테스트 시나리오 설계, 수동 테스트 및 자동화 결과 확인 과정을 정리했습니다. 앱과 API 서버 구현에는 AI 도구를 활용했습니다. 담당 역할과 검증 범위는 포트폴리오 본문에서 확인할 수 있습니다.
 
@@ -8,7 +8,7 @@
 
 | 자료 | 내용 |
 |---|---|
-| **[제출용 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf)** | 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고. 총 12쪽 |
+| **[QA 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf)** | 프로젝트와 역할, 테스트 전략, 상세 사례 5개, 결과와 회고. 총 12쪽 |
 | [GitHub에서 본문 읽기](docs/qa/submission/portfolio.md) | PDF와 같은 본문 및 검증 화면 8장. 사진을 누르면 원본 확인 가능 |
 | [추가 검증 화면과 실행 기록](docs/qa/submission/evidence/2026-10-04/README.md) | 도안 교체와 페이지 복귀를 Appium으로 다시 확인한 기록 |
 | [상세 QA 기록](docs/qa/portfolio/README.md) | 테스트 설계, 수동 실행, 결함 및 수정 후 확인 이력 |
@@ -33,8 +33,8 @@
 
 | 경로 | 내용 |
 |---|---|
-| `docs/qa/submission/` | 제출용 본문과 추가 검증 증거 |
-| `output/pdf/` | 제출용 PDF |
+| `docs/qa/submission/` | 포트폴리오 본문과 추가 검증 증거 |
+| `output/pdf/` | 포트폴리오 PDF |
 | `docs/qa/portfolio/` | 상세 QA 설계, 실행, 결함과 회고 |
 | `docs/spec/` | 기획서와 기능 정의 |
 | `docs/dev/` | 앱 구조와 개발 환경 |

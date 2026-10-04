@@ -1,6 +1,6 @@
 # 02_기능 동작 정의서
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/02_functional_spec.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/02_functional_spec.md)
 
 > 2026-09-18 재작성, 2026-09-19 원본 v2.5(9/15) 반영. SPEC 48건의 동작 정의와 코드 일치 판정은 원본(`docs/qa/portfolio/02`, 문서 이력 v2.5)을 그대로 옮겼다. 바뀐 것은 배치다. 판정 체계와 추적 구조를 SPEC 목록 앞으로 빼고, 근거 열은 대표 파일:라인만 남겼다. 근거 전체와 판정 경위 원문은 원본에 있다.
 

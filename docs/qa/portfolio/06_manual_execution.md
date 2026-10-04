@@ -1,6 +1,6 @@
 # 06_수동 실행 로그
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/06_manual_execution.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/06_manual_execution.md)
 
 > 2026-09-18 재작성. 판정, 결함 ID, 근거는 원본(`docs/qa/portfolio/06`, Notion `06_수동테스트` 최종 갱신 2026-08-23, repo 이관 2026-08-27)을 그대로 옮겼다. 바뀐 것은 배치다. 실행 환경 절을 앞에 두고, 결함 기록을 표로 묶고, 탐색 관찰은 16으로 넘겼다. 실행 중 쓴 원본 메모(Notion `관찰 로그 (작업 메모, 8/4 트랙 A)`)는 이관하지 않았다.
 

@@ -1,6 +1,6 @@
 # 14_관찰과 개선 제안
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/14_observations.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/14_observations.md)
 
 > 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(OBS-4-01 승격) 반영. 관찰 분류, OBS ID, 승격 이력, 오탐 정정은 원본(`docs/qa/portfolio/14`)의 판정을 그대로 옮겼다. 바뀐 것은 배치다. 관찰 대장을 뒤로 보내고, 그 관찰에서 나온 교훈을 "한계와 그 뒤의 결정" 형식으로 앞에 세웠다. 2절의 교훈 가운데 원본 14에 없던 두 줄은 `docs/qa/fix_cycle_worklog_2026-09-03.md` 5-7절과 원본 10의 7-3절에서 가져왔다.
 

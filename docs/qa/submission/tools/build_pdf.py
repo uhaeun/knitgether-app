@@ -1,4 +1,4 @@
-"""Build the submission PDF from portfolio.md without rewriting its contents.
+"""Build the QA portfolio PDF from portfolio.md without rewriting its contents.
 
 Requires reportlab. Set KG_KOREAN_FONT to a Korean TrueType font when needed.
 """

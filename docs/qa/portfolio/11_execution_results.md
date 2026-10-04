@@ -1,6 +1,6 @@
 # 11_실행 결과
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/11_execution_results.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/11_execution_results.md)
 
 > **2026-10-04 코드 대조:** Appium은 20개 테스트 파일에서 83개, API는 20개 파일에서 69개 실행 항목이 수집됩니다. 케이스 ID 개수와 파라미터별 실행 항목 수는 다릅니다. 수집 성공은 테스트 통과를 뜻하지 않습니다. 과거 PASS 집계는 당시 기록입니다.
 

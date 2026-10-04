@@ -1,6 +1,6 @@
 # QA 기록 안내
 
-처음 읽는 분은 [제출용 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf) 또는 [포트폴리오 본문](../submission/portfolio.md)을 먼저 확인해 주세요. 아래 문서는 사례의 설계와 판정 근거를 더 자세히 볼 때 사용합니다.
+처음 읽는 분은 [포트폴리오 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf) 또는 [포트폴리오 본문](../submission/portfolio.md)을 먼저 확인해 주세요. 아래 문서는 사례의 설계와 판정 근거를 더 자세히 볼 때 사용합니다.
 
 ## 권장 읽기 순서
 

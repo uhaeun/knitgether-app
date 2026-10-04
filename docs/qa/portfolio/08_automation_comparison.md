@@ -1,6 +1,6 @@
 # 08_자동화 도구 비교
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/08_automation_comparison.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/08_automation_comparison.md)
 
 > 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(3절 세션 생존 판정) 반영. 실측값과 결론은 원본(`docs/qa/portfolio/08`, 2026-09-15 갱신분까지)과 `docs/qa/appium_suite_worklog_2026-08-27.md`에서 옮겼다. 바뀐 것은 배치다. 도구가 갈린 지점을 선정 기준별로 묶고, 결론 뒤의 경과를 환경 부채 표로 모았다.
 

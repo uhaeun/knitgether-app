@@ -1,6 +1,6 @@
 # 03_품질리스크맵
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 현재 제출 내용은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/03_quality_risk_map.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/03_quality_risk_map.md)
 
 > 2026-09-18 재작성. 결함 클래스 8개의 영향도, 발생가능성, 등급은 원본(`docs/qa/portfolio/03`, v1.0 판정, v1.1 표기 정리)의 판정을 그대로 옮겼다. 8개는 치명도 축 안 7개와 축 밖 운영 리스크 1개(RC-08)다. 바뀐 것은 배치다. 리스크 레지스터 형식으로 식별, 평가, 대응을 나누고 실행 후 대조 절을 붙였다. 대조 절의 숫자는 12와 10에서 옮겼다.
 

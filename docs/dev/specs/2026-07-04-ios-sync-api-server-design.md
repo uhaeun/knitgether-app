@@ -1,6 +1,6 @@
 # KnitGether iOS Sync API Server Design
 
-> 작성 당시의 설계 또는 코드 대조 기록입니다. 본문의 기준 날짜와 커밋을 확인해 주세요. 이후 QA 수정 내용과 현재 제출 범위는 [QA 안내](../../qa/portfolio/README.md)를 따릅니다.
+> 작성 당시의 설계 또는 코드 대조 기록입니다. 본문의 기준 날짜와 커밋을 확인해 주세요. 이후 QA 수정 내용과 검증 범위는 [QA 안내](../../qa/portfolio/README.md)를 따릅니다.
 
 
 Date: 2026-07-04
