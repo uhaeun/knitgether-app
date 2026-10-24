@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/run_sync.py", line 73, in <module>
+    d=webdriver.Remote('http://127.0.0.1:14723',options=o); drivers.append(d)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py", line 249, in __init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        command_executor=command_executor,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        client_config=client_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 296, in __init__
+    self.start_session(capabilities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py", line 343, in start_session
+    response = self.execute(RemoteCommand.NEW_SESSION, w3c_caps)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 506, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:18101
+Stacktrace:
+UnknownError: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:18101
+    at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/errors.ts:1103:34)
+    at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/protocol.ts:507:57)
+The above error is caused by
+Error: Unable to start WebDriverAgent session. Original error: Could not proxy command to the remote server. Original error: connect ECONNREFUSED 127.0.0.1:18101
+    at establishProxySession (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:327:11)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:254:25
+    at wrapped (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:208:13)
+    at retry (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:178:13)
+    at retryInterval (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/asyncbox/lib/asyncbox.ts:218:10)
+    at runStartupWithRetries (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:241:3)
+    at startUnderSynchronizationLock (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:174:3)
+    at file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/wda/startup.ts:43:5

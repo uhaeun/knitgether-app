@@ -1,0 +1,26 @@
+{
+  "exception": {
+    "codes": "0x0000000000000000, 0x0000000000000000",
+    "rawCodes": [
+      0,
+      0
+    ],
+    "type": "EXC_CRASH",
+    "signal": "SIGABRT"
+  },
+  "termination": {
+    "code": 1,
+    "flags": 518,
+    "namespace": "DYLD",
+    "indicator": "Library missing",
+    "details": [
+      "(terminated at launch; ignore backtrace)"
+    ],
+    "reasons": [
+      "Library not loaded: @rpath/lib_TestingInterop.dylib",
+      "Referenced from: <C2C90BCE-5C54-3458-BA12-FBBDCD569A26> /Users/USER/Library/Developer/CoreSimulator/Devices/1DA534CF-4ADC-4D93-8618-3D93109B0743/data/Containers/Bundle/Application/F72F4931-6DDC-4EC9-B004-1F485D0CF23B/WebDriverAgentRunner-Runner.app/Frameworks/Testing.framework/Testing",
+      "Reason: tried: '/Library/Developer/CoreSimulator/Volumes/iOS_22F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 18.5.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift/lib_TestingInterop.dylib' (no such file), '/usr/lib/swift/lib_TestingInterop.dylib' (no such file, not in dyld cache), '/Users/yuha/Library/Developer/CoreSimulator/Devices/1DA534CF-4ADC-4D93-8618-3D93109B0743/data/Containers/Bundle/Application/F72F4931-6DDC-4EC9-B004-1F485D0CF23B/WebDriverAgentRunner-Runner.app/Frameworks/Testing.framework/../../../usr/lib/lib_TestingInterop.dylib' (no such file), '/Library/Developer/CoreSimulator/Volumes/iOS_22F77/Library/Developer/CoreSimulator/Profiles/Runti"
+    ]
+  },
+  "faultingThread": 0
+}

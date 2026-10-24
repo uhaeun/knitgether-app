@@ -1,0 +1,14 @@
+[
+  {
+    "case": "SYNC11-B-DRAFT-NOT-SAVED",
+    "status": "PASS",
+    "detail": "B draft present on UI; server memo remains empty",
+    "at": "2026-10-22T14:43:07.125751+00:00"
+  },
+  {
+    "case": "SYNC11-A-SAVE",
+    "status": "PASS",
+    "detail": "A first saved memo 20261022",
+    "at": "2026-10-22T14:43:15.410685+00:00"
+  }
+]

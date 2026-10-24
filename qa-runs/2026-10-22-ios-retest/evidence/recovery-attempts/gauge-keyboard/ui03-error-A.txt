@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22-ios-retest/run_ui03.py", line 65, in <module>
+    f=visible('tool.gauge.'+key);f.clear();f.send_keys(value)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22-ios-retest/run_ui03.py", line 46, in visible
+    raise AssertionError('Visible field missing: '+locator)
+AssertionError: Visible field missing: tool.gauge.sample_height

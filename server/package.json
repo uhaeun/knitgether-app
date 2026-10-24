@@ -15,7 +15,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "db:reset-test": "ts-node --transpile-only scripts/reset-test-data.ts",
-    "seed": "ts-node --transpile-only scripts/seed-system-content.ts"
+    "seed": "ts-node --transpile-only scripts/seed-system-content.ts",
+    "test:db:projects": "jest --config ./test/jest-real-db.json --runInBand"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

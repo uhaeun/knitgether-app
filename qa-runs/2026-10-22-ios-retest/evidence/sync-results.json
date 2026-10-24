@@ -1,0 +1,185 @@
+[
+  {
+    "case": "SYNC11-B-DRAFT-NOT-SAVED",
+    "status": "PASS",
+    "detail": "B draft present on UI; server memo remains empty",
+    "at": "2026-10-22T14:48:00.564130+00:00"
+  },
+  {
+    "case": "SYNC11-A-SAVE",
+    "status": "PASS",
+    "detail": "A first saved memo 20261022",
+    "at": "2026-10-22T14:48:08.011084+00:00"
+  },
+  {
+    "case": "SYNC11-409",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+          "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+          "name": "SYNC11 preserved name",
+          "status": "WIP",
+          "isFavorite": true,
+          "memo": "A first saved memo 20261022",
+          "startDate": "2026-10-22T14:45:16.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "a6124c4c-2028-4d90-bc07-cf5dfa7151d1",
+            "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+            "projectId": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-22T14:45:16.321Z",
+            "updatedAt": "2026-10-22T14:48:08.040Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-22T14:45:16.316Z",
+          "updatedAt": "2026-10-22T14:48:08.038Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-22T14:48:42.407490+00:00"
+  },
+  {
+    "case": "SYNC11-SAME-BASELINE",
+    "status": "PASS",
+    "detail": {
+      "A": "2026-10-22T14:45:16.316Z",
+      "B": "2026-10-22T14:45:16.316Z"
+    },
+    "at": "2026-10-22T14:48:42.421275+00:00"
+  },
+  {
+    "case": "SYNC11-SERVER-A-KEPT",
+    "status": "PASS",
+    "detail": "A first saved memo 20261022",
+    "at": "2026-10-22T14:48:42.422456+00:00"
+  },
+  {
+    "case": "SYNC11-B-INPUT",
+    "status": "PASS",
+    "detail": "B unsaved memo 20261022",
+    "at": "2026-10-22T14:48:44.146724+00:00"
+  },
+  {
+    "case": "SYNC11-B-NOTICE",
+    "status": "PASS",
+    "detail": [
+      "오류",
+      "다른 기기에서 먼저 수정돼서 저장하지 못했어요. 입력하신 내용은 그대로 있어요. 다시 저장하면 이 기기의 내용으로 저장돼요.",
+      "SYNC11 preserved name",
+      "WIP",
+      "최근 작업",
+      "없음",
+      "프로젝트 요약",
+      "진행",
+      "0단 · 총 단수 미설정",
+      "일정",
+      "목표일 없음",
+      "시작일",
+      "Oct 22",
+      "총 작업시간",
+      "0초",
+      "진행 사진",
+      "아직 진행 사진이 없어요.",
+      "프로젝트 변화나 피팅 상태를 사진으로 남겨두세요.",
+      "실 사용량",
+      "연결된 실 없음",
+      "연결된 실 없음",
+      "추가 연결",
+      "대표 실 외에 함께 쓰는 실을 연결할 수 있어요.",
+      "프로젝트 수정에서 실을 먼저 연결해 주세요.",
+      "사용 바늘",
+      "아직 연결된 바늘이 없어요.",
+      "바늘 창고에 바늘을 먼저 추가해 주세요.",
+      "추가 연결",
+      "대표 바늘 외에 함께 쓰는 바늘을 연결할 수 있어요.",
+      "사용 도구",
+      "아직 연결된 도구가 없어요.",
+      "도구 창고에 도구를 먼저 추가해 주세요.",
+      "게이지 기록",
+      "0개 연결됨",
+      "게이지 계산기에서 저장한 세탁 전/후 기록을 프로젝트에 연결해요.",
+      "연결된 게이지 기록이 없어요.",
+      "게이지 계산기에서 기록을 저장한 뒤 연결할 수 있어요.",
+      "작업 메모",
+      "23/500",
+      "관련 스킬",
+      "아직 연결된 스킬이 없어요.",
+      "행안내나 메모에 뜨개 약어를 적으면 여기에 표시돼요.",
+      "실 연결",
+      "바늘 연결"
+    ],
+    "at": "2026-10-22T14:48:44.147618+00:00"
+  },
+  {
+    "case": "SYNC11-NO-AUTO-RETRY",
+    "status": "PASS",
+    "detail": {
+      "observationSeconds": 30,
+      "before": 3,
+      "after": 3
+    },
+    "at": "2026-10-22T14:49:14.182419+00:00"
+  },
+  {
+    "case": "SYNC11-EXPLICIT-RESAVE",
+    "status": "PASS",
+    "detail": "B unsaved memo 20261022",
+    "at": "2026-10-22T14:49:21.079760+00:00"
+  },
+  {
+    "case": "SYNC11-OTHER-FIELDS",
+    "status": "PASS",
+    "detail": {
+      "name": "SYNC11 preserved name",
+      "isFavorite": true,
+      "currentRow": 7
+    },
+    "at": "2026-10-22T14:49:21.080272+00:00"
+  },
+  {
+    "case": "SYNC11-RECONFLICT",
+    "status": "PASS",
+    "detail": {
+      "serverMemo": "Intervening writer 2",
+      "input": "B repeated conflict pending"
+    },
+    "at": "2026-10-22T14:49:36.345148+00:00"
+  },
+  {
+    "case": "SYNC11-RECONFLICT-RECOVERY",
+    "status": "PASS",
+    "detail": "B repeated conflict pending",
+    "at": "2026-10-22T14:49:39.286319+00:00"
+  }
+]

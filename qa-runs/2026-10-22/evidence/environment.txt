@@ -1,0 +1,10 @@
+Xcode 26.6
+Build version 17F113
+ProductName:		macOS
+ProductVersion:		26.5.1
+BuildVersion:		25F80
+v25.4.0
+postgres (PostgreSQL) 14.18 (Homebrew)
+75a9882eb841044aba1067ddbc703a985a4515d2
+Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s5   460Gi   413Gi   121Mi   100%    3.5M  1.2M   74%   /System/Volumes/Data

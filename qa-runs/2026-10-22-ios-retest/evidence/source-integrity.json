@@ -1,0 +1,1246 @@
+{
+  "commit": "75a9882eb841044aba1067ddbc703a985a4515d2",
+  "files": [
+    {
+      "path": "KnitGether-Info.plist",
+      "sha256": "8d7fd6f7877540f14946ce0105335d34f5784e20eef7cda04b71357cff2b076a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether.xcodeproj/project.pbxproj",
+      "sha256": "c0429512c03df9dce054b821af3e5b6ef8f772879c26cdce8f73d08a469bf21c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+      "sha256": "7f3b00b5c3fdb45242d7b87e1e5c4e25d1fa8129a16c94295ecc4e8ea2235c5f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether.xcodeproj/xcshareddata/xcschemes/KnitGether Local Device.xcscheme",
+      "sha256": "a97c1de31a1af37282fc3ab643e1fe8614bee8a55f028176427e1b2a22a1eaf6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether.xcodeproj/xcshareddata/xcschemes/KnitGether Local Offline.xcscheme",
+      "sha256": "3907a345b8e69c43277936b3132115968c52da988817980e1f7aa54f73156f3f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether.xcodeproj/xcshareddata/xcschemes/KnitGether Local Simulator.xcscheme",
+      "sha256": "278b768833340dba8a9605456811742fd1f117287e641ae3f2d7d142ec32a5fc",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether.xcodeproj/xcshareddata/xcschemes/KnitGether.xcscheme",
+      "sha256": "a97c1de31a1af37282fc3ab643e1fe8614bee8a55f028176427e1b2a22a1eaf6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Assets.xcassets/AccentColor.colorset/Contents.json",
+      "sha256": "9af65086fa30b49252fae1a1225731691de794f7775af74d71befeb507d12b7c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "d776cfae1b33325f70befa1b0fc5e5420c660655603409e8588d94fd8fc6e112",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Assets.xcassets/Contents.json",
+      "sha256": "0fd49ba3c3585c709678e0046a821c3c60685ec7063720d30d3a3448be3a208b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ContentView.swift",
+      "sha256": "dd5f025c566c6983f07306cda8d8151cf29952dffdbf6198b81c05358a599ef6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Formatters/SkillLevelFormatter.swift",
+      "sha256": "b44c6481caf836ac7c65a3e78c3c0aef09d416a5e139e4331ec3e0b57eba8b5b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/KnitGetherApp.swift",
+      "sha256": "cecbc2b14a477cd09dda3e8b2eba34db57d21e8de2a1a03aa2619eb31dd5ed77",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/AuthSession.swift",
+      "sha256": "3813dedb0ee9555d174d4c45f6481f48b9f6f3793d032dd68ae8b0a0b2d6f95b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/DictionaryTerm.swift",
+      "sha256": "b55a469de0319fefe2e041c6b6898f878c926ec46e22c36f704ded6076fee6df",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/GaugeRecord.swift",
+      "sha256": "2301e93aab1346a923e2e7e39617750f502d11c8b834ebba099ecfb0ce03ccd8",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/GaugeTarget.swift",
+      "sha256": "de15e8ec9724aed2a1d93098621e7497c51203c02b1cb25538763d43bc47f156",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/KnittingProject.swift",
+      "sha256": "4e5456f136f4f48275879f0d7de187381299f535104dde609a9046c1905c41e4",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/Needle.swift",
+      "sha256": "f2fe64b67ea97a1ed43a41c2cc0f3281f5f77442bae6349dbd46fb22ead4c4da",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/PatternDocument.swift",
+      "sha256": "efe8549a327584f934cf4772b6fdb9ec84bd5fda1021121391c4a4d5e1c54938",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectMaterialLink.swift",
+      "sha256": "34b03f91115e89b084d65c6e7ef286a374bd2476fbe9376020d7d91e79234038",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectPatternCopy.swift",
+      "sha256": "e6e9918ea1b969503da484938b790b20743f8599c5805b57bba1137e91852a09",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectProgressPhoto.swift",
+      "sha256": "2c6787712c03da5c1cbff107c006b037570eeda00f458a695e4aeb5686ca1604",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectStatus.swift",
+      "sha256": "cd330694029e77f76e7c9dbcfb2ddf60d41cd9535958d0df646fb2ce028a4ef4",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectWorkspaceDisplayMode.swift",
+      "sha256": "2ef0ddb0f04f41928785682cd30e7f898c14cbe5341755b65d21ab803488b3be",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectWorkspaceSheetPosition.swift",
+      "sha256": "a3545cb70e0d900f924f260f09323f545b8173b806f0732eaddf35c1f0b4605e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ProjectYarnUsage.swift",
+      "sha256": "be7503b964713bc62d06943cc9d3a3acd28c657073a41e4633d8202e86df4a22",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/RowCounter.swift",
+      "sha256": "c3ad5beeaeb48f8f466feebeb5a64b929aa6caab82144a53564b20a9da38e514",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/RowCounterMode.swift",
+      "sha256": "9f674bf1ab86c443e9edcf7e0c9d18da9e52fdf5ec1588778df69ee0bb6e2b11",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/RowInstruction.swift",
+      "sha256": "ca40dbeb419b96c2b02f82e83431f246f79973fe195836f52b37a42b7c28cc63",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/Skill.swift",
+      "sha256": "f8d3427aa5bfaa42c0d3d14a33fcfe287844dcaed8cfe3c36598e13d6c935978",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/SkillAnimation.swift",
+      "sha256": "34fb03c58115763213545ea04d174e90e414d8841fe418c455e88f2d5ae8c950",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/SkillAnimationFrameSequence.swift",
+      "sha256": "dd291f2bac580685a9a19c757a33f3de337eb247890aceccf4604222fe3e28e5",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/SyncStatus.swift",
+      "sha256": "d0e1c143234b8f31218e16bc07a3305b5d0f0de5c929c130de324e87e89a0320",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/ToolItem.swift",
+      "sha256": "ad7a469922ff4ddf33a67ceba2d38d89da464e6889b8d19b5d40a4c56053724e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/UserProfile.swift",
+      "sha256": "6c2c94003b023477327704b96ca1cfffe9a9cfc3ef0f7656789590213ff13532",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/WorkSession.swift",
+      "sha256": "3d844bacd451d3c53bc9de4a9b3b0d6419228ea4e5d240d86113d99adeec2df3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Models/Yarn.swift",
+      "sha256": "7d9d4f39a2a626589cf06326a4e9d9aca97a1d14176f328980b4a706985811a6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Networking/APIClient.swift",
+      "sha256": "4b61ef50396d70a94ce35444679d754f4aa60dce12fe2db9ed16ddac29d05f99",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Networking/APIConfiguration.swift",
+      "sha256": "e40ee84333dd39bc11937b2e93c1ef2bc9a9d8715335770974f0796dd48d5074",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Networking/APIError.swift",
+      "sha256": "836abb10ae5b1068e9d37c70ba76cc4b55ba027bc7e246854be8fe825f0fdeb7",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Networking/AuthSessionStore.swift",
+      "sha256": "3d570799230fa8601060fdc453223e9a8fe5563a2690a0cc1971fc88a2c47c34",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/AppRepositoryContainer.swift",
+      "sha256": "e42dc3d8810cd6eb85ad87e0b9ef5a97ccf5dd8fbaedc24cfde7e68246669d1a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Local/LocalGaugeTargetRepository.swift",
+      "sha256": "3a1548ef3c5a00a10a87b0c9ee0e2bc263a20db86e6e583ab96900e310daabfa",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Local/LocalPatternFileStore.swift",
+      "sha256": "e571a4664fa1e77a423882d62fba9625e34b62f66dbbf9af2ab2bcd6a7849368",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Local/LocalProjectProgressPhotoFileStore.swift",
+      "sha256": "f26e41ecf8a5e042a2e1422d5e558939121a2327f3b2046e77c55269b83f12b1",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Local/LocalProjectProgressPhotoRepository.swift",
+      "sha256": "1132a5457c2abbc6342862750844a154e69754fead57139d20ffba32f6635a4f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Local/LocalSampleRepositories.swift",
+      "sha256": "a065f253f2d4caa88bffeb0c6973538d82c2b4f7294028b6e7ba4dbfd338ba53",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstDictionaryRepository.swift",
+      "sha256": "c7ef76bd27975b15e49bd43276b2945e7c9cc56602a7d71f03310b6e95dac84d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstLibraryRepository.swift",
+      "sha256": "d6354e72900b08c0ba7189d183d6109fe96ba9054bcf698d5dd1af67b74e2d79",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstPatternRepository.swift",
+      "sha256": "3b805e9808c451a55bdbcffa30788dbbd9bd0289fa6324c35c7e6eece442c672",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstProfileRepository.swift",
+      "sha256": "d52ed1bef1719de81d2c1de03fb4d39a986fd2686345232aeaa8f0edd7ba568d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstProjectRepository.swift",
+      "sha256": "c1c6362ecc5a9322df84c4967e7859e8076eb64b99c3f97dfc0b918ef98e3d18",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstSkillRepository.swift",
+      "sha256": "2c01aa9bbd82349115e9531ad62306defaf6c426cd1d65b528cc91eb5a735b9f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/AuthRepository.swift",
+      "sha256": "70dc5fe66d18869d32f8055da27c5e8712876dc3b2590070e960eac844cadf19",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/DictionaryRepository.swift",
+      "sha256": "5145676aa62db59827a92079f6ab8970c481a8d2ad2249e090a8fee4603336df",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/GaugeRecordRepository.swift",
+      "sha256": "363dd5df6d797c4f115690c080290f517a64fabcaa377ea2a1b50c901bf8c664",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/GaugeTargetRepository.swift",
+      "sha256": "aca3630c80bc9b0bacaa118744b9561b2ffbfe559e3ce7aad5d8302146b6c425",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/LibraryRepository.swift",
+      "sha256": "20d7611009444aa24f69cfc2e5d04044949137b89e41efb24db720a80337242e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/OfflineSyncFlushable.swift",
+      "sha256": "4f760a346781d34c6e763ab408356848cc6ae44be691c38e7d03ea2fd51e36ec",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/PatternRepository.swift",
+      "sha256": "4ec38f44cc4700213227df78e16c833292565895d40ef1ac2da190cecf9715e6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/ProfileRepository.swift",
+      "sha256": "e8ab2e25ed3859ddac1b8fef8a6b46c1687658f388d06c1c20c03850f363ea30",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/ProjectProgressPhotoRepository.swift",
+      "sha256": "4ab21eaa914ea61825ea8b06f635daf0051b4530458704e3a7cbddfd63d91dc1",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/ProjectRepository.swift",
+      "sha256": "065f3a02184a2c5665a0d7b9917a140566d2f88186cda1617c0a72e49228e6a0",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/SkillRepository.swift",
+      "sha256": "f98e084c714092a5f367bc8df7ea186a1ff7cb31aaa6b45d06fc36856e68616e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteAuthRepository.swift",
+      "sha256": "129bd985a6b2eb723d6e2cb90ee1b92ab38d878e6aa2d0fcbc562fb58302c599",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteDictionaryRepository.swift",
+      "sha256": "e7da5fd0d187eae049ae53891124e729086f7e8cdc1035fea2c03532fb6b2d78",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteGaugeRecordRepository.swift",
+      "sha256": "cd20fd5081b2766674fbfa60642379969f76165fabf4f3c763f7bf12d563814f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteGaugeTargetRepository.swift",
+      "sha256": "2658849c3c9dded749206106c62dfc9d5ba2b2bc4268c2fd7a59afb8272c33d9",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteLibraryRepository.swift",
+      "sha256": "fd6b7070ec5aff185ff913b9b2d4d491f452f7a7262123dfd7f3b97041ff8b36",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemotePatternRepository.swift",
+      "sha256": "bd73d162a622c5023464d09f3a7464ea54b83a57b40ed243349d4fa60b35c1ee",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteProfileRepository.swift",
+      "sha256": "93ae71243e191eee0165f7fbd64f67aab61bd9f261b0d8c791ed6dd6a636ce21",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteProjectProgressPhotoRepository.swift",
+      "sha256": "9cbc4829c772160f11af2d09a57b641a528584800e1683e91952151861920cac",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteProjectRepository.swift",
+      "sha256": "ab8bf524bd3f802c005f8d612ac9d76daff24c247c667ab9fe66126b046c3301",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteSkillRepository.swift",
+      "sha256": "63d10f534e2630ec54771c92e655252ba8011d361eb8f81aa82d572036207245",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Resources/SamplePatterns/README.md",
+      "sha256": "2bb1b2392175ee833c9a43dbf008b82df49e0efe40ad3942463ddd0bae03b5ee",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Resources/SamplePatterns/sample1.pdf",
+      "sha256": "6f155e8b32bbdd4bb54e2fc46e8b72772dda4e599eb58659a1236ec531ea45aa",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Resources/SamplePatterns/sample2.pdf",
+      "sha256": "6792278738c0e733987dc0b390f65daa0e3fe5da94ade183d7b3073e9e0f7193",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Resources/SamplePatterns/sample3.pdf",
+      "sha256": "a0acccb70cf7a6d00619c3be0c8120293f0447c46ae7d67b6e60f38a3909633c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Resources/SamplePatterns/sample4.pdf",
+      "sha256": "7df372f8d64543c16e32d07ebc8b8e9b80bfef0257eab4116e3584fa8fb5ed92",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/SampleData/SampleData.swift",
+      "sha256": "2785990a5ab16d79581eab85f1948437f5eeae540ca174fd44b429a90dd3552a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Services/GaugeAutoCounter.swift",
+      "sha256": "f3d0cb19216e6a56d73cc7eb93189442d76f9e8bdc95f24e5e96ad5888d5c0af",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Services/GaugeTargetInput.swift",
+      "sha256": "447fe8be835f240f3060c692868f844e1e5e603d7ff4ecd4225870d146640495",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Services/ManualMeasurementInput.swift",
+      "sha256": "f566576b203f59268dbc803adc4e9a899b4c1fdaf709c5eeb0c896f24264a81c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Services/PhotoMeasurementSource.swift",
+      "sha256": "589c904c856f7345a35981830c5786529ea6915fd30ba0195b8c255585171860",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Services/UserDefaultsKeys.swift",
+      "sha256": "42d74e71f3fb2b3729811edb9f0471f25598c904f1c73a21225afe4cb41b9c37",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Services/WorkTimeFormatter.swift",
+      "sha256": "b7e7ce592ddcee0bc3f401d41558b7a9b8c2ed51c09e746984fbd99804256600",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/AuthAccountViewModel.swift",
+      "sha256": "fdbc22ea9fce572452664ec872ef53119f51670df4d30ead2e717b91ffdc80b6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/DataBackupExportViewModel.swift",
+      "sha256": "41c8755813b3c5dd343cc351014740896f1c02b6c50a1ad17ed1f2f88c338544",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/DictionaryViewModel.swift",
+      "sha256": "d71cc9125e63528d8fc5fd7bad5207e57bc8c2acd7a86ef2f713f61373568dc9",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/GaugeCalculatorViewModel.swift",
+      "sha256": "24e2a64bb5fa31db961b6b47eeda769e18fbb7e376181210e0689e218f148771",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/GaugeMeasureViewModel.swift",
+      "sha256": "6dc6e719cee85a12bc450adc5645b32cd3ee34caa3d66ee8a37ce00040110190",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/HomeDashboardViewModel.swift",
+      "sha256": "35bd5c9923d577b708e0e53258a5ebbf7d828549d20286eab6bf05923765369e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/LibraryItemViewModels.swift",
+      "sha256": "345d76a081d0aa46040c5bf4cc18b9fae2503ce2770d0226e2a9e53f4032be10",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/LibraryViewModel.swift",
+      "sha256": "b5de1d5b7a3a40a2fa122bb969a90795eba8de73eaed7d2a663234d768caad96",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/MyKnittingViewModel.swift",
+      "sha256": "ac9a42df611330e39ea6f11a71f1349665e1234bab77317658a7d0878221be8d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/OnboardingViewModel.swift",
+      "sha256": "87d93bfc88c81ba83c64f0e14a54389cda63cd796780b2342990be0c8f9c4a5a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/PatternLibraryViewModel.swift",
+      "sha256": "9703a300761fbeaa99063ae4d801b120201ca0d21ba35e3a0f3ceb684a206ab8",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/ProfileSettingsViewModel.swift",
+      "sha256": "7feb478dcacf399ae14c24f7f9f32bebd687609e1c7a6da167a379b345987963",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/ProjectFormData.swift",
+      "sha256": "ff3a4cb780d1f784f2adcf8c67c9d4d4ad7f221c4ced166d627326a229912cb9",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/ProjectWorkspaceViewModel.swift",
+      "sha256": "c101871fb83f8ff8cb8d1a3530d58090c9c52b2ecbc74ed3e75ddb34342cb3cc",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/SettingsWorkTimeSummary.swift",
+      "sha256": "642919372a17e53f64ac6bcd674d3a2b91674fad0a4561a4999b16d36be45e3d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/SkillAnimationViewModel.swift",
+      "sha256": "3f2ca479c4eef05dad1f3c9f1b3c59098e31603c9827aa97f5f7711dd8a9d5ab",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/SkillFormData.swift",
+      "sha256": "58853699c6d04b9bb48ec73aa3c6210298be2e06e0af893c17f93e19f07bedd3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/SkillLibraryViewModel.swift",
+      "sha256": "e792c4c590dedcc1ab730e8c2eed00074d29346226b4767f5bcfab8aecfe2427",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/SkillTestViewModel.swift",
+      "sha256": "27ee154c80aab6dbdc2d6986b8d8482b1551cfd96e8dbd3c802615555e30d0e4",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/WorkTimerSuppressionStore.swift",
+      "sha256": "5e58952254bb582dd36e48372b722fea8ab271a1bde834b3883a2def78932685",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Home/HomeView.swift",
+      "sha256": "447a1b788f326d5e7ca77514504ec12149c3b29ee97c1a2720d7e0417734be93",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/AddSkillView.swift",
+      "sha256": "7c836070bf0220e8a1a25ce38c3164eed5c1678f10ac8ed648f995afbef9680b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/LibraryView.swift",
+      "sha256": "58fb6820cff0d5046146a15f8676fb8e440330d925c3a57bd621bdaca03cfe78",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/NeedleLibraryView.swift",
+      "sha256": "f9708256f455d144a3915869e0e39c8eeb501da8fc39d2c51b60f62f65444cec",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/PatternLibraryView.swift",
+      "sha256": "39edafebbf09efd94ce8cbb6e972c5309099121905ad653b02fd18f5afa3d9ce",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/SkillLibraryView.swift",
+      "sha256": "a6d91fd00b6145f8d459885204deee90c90ffce41c2eb788edcd4bdc9084bf2f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/ToolLibraryView.swift",
+      "sha256": "b5a996f6397d5eeb9bad4d21e7ad34267d61dafabef42dda0682e17bf3064c53",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Library/YarnLibraryView.swift",
+      "sha256": "ca2f88bf3e90b3c630b42ac23a5fe3ccaa6470454c86ddb4056770d31e1ba463",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/AddProjectView.swift",
+      "sha256": "6bd3f8cacd2de446b4252e7eb05ae453005dc2cc03f556739f6824800c1df5f7",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/EditProjectView.swift",
+      "sha256": "aff152bcf0d9d602b3b0cc59702dbd89b7c12f6ebc7e977b031c3c4a6868d521",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/MyKnittingView.swift",
+      "sha256": "8bbf20ea026f95c81e818bbbac9f328ded15a6af51efee48a443ff3bf9d9d36d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/PatternSelectionView.swift",
+      "sha256": "b2e0a14251cf5a118178e7a5c0c61caaee0e35a968cc7e7d04086351ef948c3a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/ProjectCardView.swift",
+      "sha256": "14bfe52e90df9f6da95e73e6a9e916129fa10c37c059a758c5306756ccac37ab",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/ProjectFormView.swift",
+      "sha256": "7b55cad00805a19e92722fbf4621893c133424e5de486fc40813d87303dd66ca",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/ProjectWorkspaceView.swift",
+      "sha256": "6fed12d572f7986a4608ca303baf1ae8106e071f573e44abc1d548b5db08bd6e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/PatternSupportLookupView.swift",
+      "sha256": "7c3921f157bae5da13701dcb0d03e75f3428e7855c240720872d123c38556909",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectCounterPanelView.swift",
+      "sha256": "a2d63a657635d55c885b646587246b37ea18283674c92983639cb53d20c69522",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectGaugeRecordPanelView.swift",
+      "sha256": "4938f746ecc2be0e631e6dfc0ef4f97b9ac4915c9c0254e83e0d134f8f1da351",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectMemoPanelView.swift",
+      "sha256": "cf088a817400a4190dd92c2947f18fb3c11e3d3e5695086051ea040d1c8a1cfc",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectNeedlePanelView.swift",
+      "sha256": "553a55b7d168d4cd05329c8b89126640d77493e9317b460e653264a07b16d563",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectPatternFocusView.swift",
+      "sha256": "b6f5180989e28b9c93265d40858e00906738e34f40ad01d3d4d82983fcd98c3a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectProgressPhotoPanelView.swift",
+      "sha256": "2073d4b49ca951c6fac7ee3d2b84bf7e3156c9ceb88960e50c3c97f37c36faa9",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectRowGuidePanelView.swift",
+      "sha256": "458b88f8516a5ed911eb0709861329921fc6d30a4637a6646f0b7bdf0ca18805",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectToolPanelView.swift",
+      "sha256": "0278a6b00ed79f234646b19a7bb8f81169ce1016530198b43da9d21b5bc9461b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectWorkSessionListView.swift",
+      "sha256": "95bb8592edb33ad2c49555343742e073133e291593d6b9947e5be31ea9e32aca",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectWorkTimePanelView.swift",
+      "sha256": "905efb64f5a6f38d521372760687d2a61bd174c902ce0bb1680cd6868af25a5d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectWorkspaceHeaderView.swift",
+      "sha256": "7eaba4939a9c1d752b7f38dbd8323d8cd07509de73e251a60d6cd7fa300f1984",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectWorkspaceSummaryView.swift",
+      "sha256": "1cb3fe91697f8263c2f8a09662b6092d2a36179ff18277c0ebee68c9c607e13d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectYarnUsagePanelView.swift",
+      "sha256": "4a4d0424b0c58adcf832393b07fee3e4dbf1f89ebbae9a9278ba1c932f9793b1",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/SkillTagChipView.swift",
+      "sha256": "2653645c0a8ec2db15f21962749ce7a8a05725837c87eb6c092044f14bc0a738",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Onboarding/OnboardingView.swift",
+      "sha256": "e9a22c90491503f2777c9447435f891b116819db2b9ae08804e9fda016e060ab",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/AppAccessibilityID.swift",
+      "sha256": "120feb498a78a96ea9f08e7090f389dcda0b20db532fb5ef1dba7164848c804d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/AppDetailComponents.swift",
+      "sha256": "e074a9810d9b2ac50dbd160f05e5273b45123e86e1b69047147b9c9b2df809ca",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/AppFormComponents.swift",
+      "sha256": "9419251b6e59a889c624d6602a8a5fd7c206450989a2cecc434e263f7f1d25f3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/AppInputLimit.swift",
+      "sha256": "063b4e5dc5ced225cf240eea6d55b9133aec24cb377e0d3b822c1fec74b18cde",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/AppNavigationRow.swift",
+      "sha256": "1b0137ee2523aa6658a602b6af63311bd2ef169e4fddd155a7310b288b1173ac",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/AppTheme.swift",
+      "sha256": "35eebf1ebc9b65bd3abe5720d98869bed39ad8a6f78c3fb634e6c9969bee0c1b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/DocumentScannerView.swift",
+      "sha256": "dc067a3947de67b488f55506e1a1c9c58c7fda8f76dd25c0ce8a041c4f7d0e22",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/DraggableBottomSheet.swift",
+      "sha256": "6fcc90f35878c0f02550d3fcb4b6cd749c2150e31c06265e628f18f0161768c3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/EmptyStateView.swift",
+      "sha256": "26003e4d95b643ed92a109b7b397f9aa559485b23e649a91be8361252ab0836a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/LibraryItemPhotoContent.swift",
+      "sha256": "a31a19081a5281e639332f5af6abd0b22ee9cde1205ef8b62ee384066ca74d90",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/PDFKitView.swift",
+      "sha256": "68f46fcac70531c309401642e9e374180955ec9ee83ee9463cedb4dab5db59a6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/PencilCanvasView.swift",
+      "sha256": "5582f4717308576fba5826e5f7ec9a724c7dbf920bfa6b12cc4f4ffa5c3e7544",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/SkillDetailView.swift",
+      "sha256": "3bfea697669cdb2e7969070574ac86aa4fce8ef441da222a38cdbb9c896db5fc",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/SkillRowView.swift",
+      "sha256": "6d41506947a0e0e1bf60bcdf7bea22dcc6f315de4e14c2b7b75d2749259fee42",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/StatusBadgeView.swift",
+      "sha256": "53cffc616a12d25de0528ebe90a9d30868db0ee5a5f1fd60db3157978bf7f4dc",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/SyncRetryBanner.swift",
+      "sha256": "ae4031e0633da215b9c39490d1a4c1dc4cd860ec1aa7fbce6de5d973f9164f08",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/SyncStatusBadgeView.swift",
+      "sha256": "d741306da2f40f808cc1c9fe5063ecb15ad2facce0b3a26daf51190386336b65",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Shared/WorkspaceSectionView.swift",
+      "sha256": "70146885ef82ab040a88a778c87f7e3ef95591e5fabe44a2f0995b3d527b61fa",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/AuthAccountView.swift",
+      "sha256": "49d3432cc8758040f431bd70b5b2f84d3b7a8fde3cd9e435df769012762650ad",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/GaugeCalculator/Measure/GaugeMeasureHubView.swift",
+      "sha256": "ddfce4a346edfee2d4d764b6f03a792e647cd1841b9b43a5151ae4e1cb213c94",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/GaugeCalculator/Measure/GaugeMeasurementViews.swift",
+      "sha256": "71073f250920c89b6aa4df22213c1b5b6374f21ed464684c027a99f7f41a8892",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/GaugeCalculator/Measure/GaugeSwatchViews.swift",
+      "sha256": "b57d51fc33c5a9b4ce00374f6e84c94189587d8b1d1c01ef19663fe0e6a94ec4",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/GaugeCalculator/Measure/GaugeTargetFormView.swift",
+      "sha256": "88aeeaf4b3fbae73376ea77c0148f683149693a63e4e5622110bb63a82053a9b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/GaugeCalculatorView.swift",
+      "sha256": "ae90fb460d04924e39b44cb79990ae28d3d447587d4c7203e7d9bce51b0083ef",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/KnitAnimation/KnitAnimationView.swift",
+      "sha256": "b0e2d4446b17750ac31355265efa0ccfa51b45ab21e175c7ee7d882747b9f9da",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/KnitAnimation/SkillAnimationDetailView.swift",
+      "sha256": "1285385ecb49786340aca363e67f767a277e723b535dcc2f2b7b1a8cffb661ab",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/KnitDictionary/KnitDictionaryView.swift",
+      "sha256": "f3b46e0726316d9a9a80ce4725c5579f667cedea38840fd7ab96e06369117a51",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/ProfileSettingsView.swift",
+      "sha256": "4f94233f17f8292a2508438e998215a337bf5afe2900e1a4245d676d956aad97",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/AppInfoView.swift",
+      "sha256": "333a802bc9a1883ccc29feb00023b35976e6a9f47a93a6b5c8e9ca71f3d2f51e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/DataBackupView.swift",
+      "sha256": "da9337b3b71bc497ae746222e0dd7810af019236125f8a5596e5f69ace46bcb5",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/DataManagementView.swift",
+      "sha256": "790dc8b0a35017cb8165cc4543e2d91a6d4468aca4135a163c45811aa72f804d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/ProjectStatusGuideView.swift",
+      "sha256": "80aafa7b66f8ef3c7228094c11136e55ebd4876286a93c60833a65a4b9fb8f97",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/SettingsView.swift",
+      "sha256": "9f77de987003338a26f4f7483380fe5d80b14ed55be59f45930006ae919ff791",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/WorkSessionListView.swift",
+      "sha256": "0f2a368ef4a62c288b6ad988f58dbeb58fb564cdae00c2506cbf4f71b4e83fb8",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/Settings/WorkTimeStatisticsView.swift",
+      "sha256": "ff23a1fc1b0c46df8a6d4c3cdad7d14659dc8a219fa2c97e67e45f024c4c8b13",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/SkillTest/SkillLevelSelectionView.swift",
+      "sha256": "3aed1e72d434765c5496110fa44cf16593f46be4aba955a163602fe0ab383e43",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/SkillTest/SkillTestCardView.swift",
+      "sha256": "8599845811477cd3ca7e66c023c3cae93d0c049240aacdb56bd53357eed941ca",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/SkillTest/SkillTestProgressView.swift",
+      "sha256": "b6c3c5d304f78b07fcdfd724654e85ff331fc7ebd57f448444e7ada40dfe1377",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/SkillTest/SkillTestResultView.swift",
+      "sha256": "e7a10f62639d5676877ef9b7ae4da27314d54737b3eebf37fd57922ebd19add1",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/SkillTest/SkillTestView.swift",
+      "sha256": "5b04a73e3dbc899ebbefc7be3d51f30a01a02a0c2ea19562b727ae7d3328b968",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/SkillToolListView.swift",
+      "sha256": "11b5f0eb17fced7198096b926c2586c68d0860462aeddefab969b22440e57de6",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGether/Views/Tool/ToolView.swift",
+      "sha256": "445394daff3fca83c3511ae9b05f28b349f5aa10bc2ec549e7193da0abc1f501",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherQAUITests/CounterSheetPage.swift",
+      "sha256": "fdb710c661ca1e0bfe2d42074c6f9de3ccc083ba41d310df07146c624cbf2673",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherQAUITests/DEF-15_RegressionTests.swift",
+      "sha256": "ed730dbe0685a9b0d7ad5d1865bda26a89a62963d4fae2e83d9b4cfd8619525b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherQAUITests/KnitGetherQAUITests.swift",
+      "sha256": "e373eac1a9cfb35629fbc7d45792e9c7295206c466c5ae0720c725777a679899",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherQAUITests/KnitGetherQAUITestsLaunchTests.swift",
+      "sha256": "7444687616622011958e15409d80b696bea8cf19732e7dff297dd52abf27a7cf",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherQAUITests/MyKnittingPage.swift",
+      "sha256": "8f4603585f7d4609245135ea53a523053e307c2a1f4762adf3fd5daeabc4d04d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherQAUITests/WorkspacePage.swift",
+      "sha256": "8f2d42e966a2331b1e65bb0cb4ec54745a82defe1b2c82726578b830d8ff21c3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/APIClientTests.swift",
+      "sha256": "4319a04f2be03d286d96ef0efcf94e2180f9185eafc4fd58ed3c6726e5cf9db3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/AppRepositoryContainerTests.swift",
+      "sha256": "6afdc8c5b9c1ad815efc10745798274383b65a2d53fdeb437d8210c2bcebf810",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/AuthAccountViewModelTests.swift",
+      "sha256": "abd4469ee8ad362f24374234464077254fc1ea514364c6620faf302844ed34d2",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/AuthSessionStoreTests.swift",
+      "sha256": "384e0bddafecde9ab0686fd3f9830dc6e23a3d79a82393e4af057dbe305441c8",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/DataBackupExportViewModelTests.swift",
+      "sha256": "61fd4a50c045bb4d0e51166554d607b370d093a22b0a6ba2db6f28757bd5c45f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/DictionaryViewModelTests.swift",
+      "sha256": "c37299c888638405c780e55e7c60bc7bf43982418b87716e6e980a65a617e1d7",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/GaugeCalculatorViewModelTests.swift",
+      "sha256": "d99ea956f74c597b424950714d2588284366835196509bd0e8a496b0504e261c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/GaugeMeasureViewModelTests.swift",
+      "sha256": "98a228f15bcd50b3410bf2e2492669c6e0560aa4e51715bc81f61be9cf95a8f5",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/GaugeMeasurementInputTests.swift",
+      "sha256": "bfa0df513893d67aac4f8b79b66dccda1875e37d648b84dcd590784eed2de621",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/HomeDashboardSummaryTests.swift",
+      "sha256": "5b608031fbec644912244fdbd37f8afbc7b9e6c841a571a1cd4a58f2908b8cee",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/KnitGetherTests.swift",
+      "sha256": "ab78f8dc5ecfe7096cca9aa930fa072836a089f290b310d8d7b8fb60b930f4eb",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/LibraryItemViewModelTests.swift",
+      "sha256": "d9f87aeaf14a6b707d589ec869a2f0e1c9023db292c669bab66a1b8ac8112b7a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/LibraryViewModelTests.swift",
+      "sha256": "da972eb06f432813c40ea73f2912abc61d072b6445bd2d0edb3bbe8fe59c2f73",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/LocalPatternFileStoreTests.swift",
+      "sha256": "eba41fd794b4a71917bfee399cb1a7ad9c360585345c3bbc33122bca233dd418",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/LocalRepositoryPersistenceTests.swift",
+      "sha256": "3ceadf4cc586be98159ffabee1795b39cb3a1e709541956a1c1e5257ad960db0",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/MockURLProtocol.swift",
+      "sha256": "478931eaa7721474a6bcfa6fdadee359d1edb8b496a1c8a42b54e13b2a57cc10",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/MyKnittingViewModelTests.swift",
+      "sha256": "273abcd9399bbe002bbc696815f0546bc088453be7e05a9dbe1bc3ee97197d20",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstGaugeRecordRepositoryTests.swift",
+      "sha256": "f392e047a3a5f455a2bf715b824d9b0a05c30e62a87fbdd143ff26b186e0dc1f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstLibraryRepositoryTests.swift",
+      "sha256": "f776aa0ceda834c8e02e1463f46b2cb7cce2aed39d466c4356b3947f21163513",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstPatternRepositoryTests.swift",
+      "sha256": "2f7cc06d98b8d014cd1ae7c8c39f3701964e14d84ba44fbcf2ce3640bc932e7c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstProfileRepositoryTests.swift",
+      "sha256": "d0566e55f6432bf457f24d0d33e3a0157f041119f794f518117906d2b995bd53",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstProjectRepositoryTests.swift",
+      "sha256": "ec504415c3f1281c119189f97565a918c86e54205a31fcf82597fc6b4518afb2",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstSkillRepositoryTests.swift",
+      "sha256": "b8042322c9cdd58e57a3e16a1c875ddf71cd8a19e463a192765e4b6767b25ced",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OnboardingViewModelTests.swift",
+      "sha256": "4055185b7bedd6afa33e552c596ac902656cb7ced809bbf395806ee4341b8623",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/PatternLibraryViewModelTests.swift",
+      "sha256": "c08df6a6c4d80425a423a4fb087d963b48761501c88496c48e6ade3843a76855",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/ProfileSettingsViewModelTests.swift",
+      "sha256": "969b1811ba51457224ce756cd5964258fa7548203e6472573baffa508cbd4073",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/ProjectWorkspaceViewModelTests.swift",
+      "sha256": "fb7034d5587578003e6747b962dfc21d3cbee2eacc17adbd8d05c77488a52219",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteAuthRepositoryTests.swift",
+      "sha256": "747abac65cbdb55b1d088e5f6efbeda552a6e34d2031d9a67ec4758fa8cc4aa1",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteDictionaryRepositoryTests.swift",
+      "sha256": "e4d66ed5e5a652791f3e505636cc37f54b9a94a7cc8e41f5acdeac4f775548ec",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteGaugeRecordRepositoryTests.swift",
+      "sha256": "6916c9c1fc0a9c6d409c385168461c18df4d28cddd99d4f6b49290525cc904ef",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteGaugeTargetRepositoryTests.swift",
+      "sha256": "e6aed83ebbb6acd95a9a5fd629cf2cfdc9446b963f75a8e5275cc5cd9b3c8de5",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteLibraryRepositoryTests.swift",
+      "sha256": "e5b3813a3df225a5a3f0452eeaf28d823405112288e5acc968ab4df37642890d",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemotePatternRepositoryTests.swift",
+      "sha256": "edf51cd7d57ddeeed4b9f7f91fb62770c27252727cae833660d08262cffe1da5",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteProfileRepositoryTests.swift",
+      "sha256": "81d5276ffbae8a584f4af10cfde83922ba9b5abd00093e5e9d6c1610091db976",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteProjectProgressPhotoRepositoryTests.swift",
+      "sha256": "6bc0f30ce8ca17434a58891c56c3c044578f7f4d1456251b3010cf0cd2f6a780",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteProjectRepositoryTests.swift",
+      "sha256": "f0547adb78423240244dbc6ff6e21931c9f80ef0fb85a7a36e2fa2e39ae14d63",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteSkillRepositoryTests.swift",
+      "sha256": "dea53f5197592c8fe09bdedd86f699549990ef9d5b9cf71b099b259364c57eb7",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/SettingsStatisticsTests.swift",
+      "sha256": "928f06683d9d97157f67968ab1a41564995f314511936fdeb781d7279d47e149",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/SkillAnimationViewModelTests.swift",
+      "sha256": "d6c693429267eef6e45ee0a33c7f6b3fff2575131320077c46dbe7e05d7545d0",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/SkillLibraryViewModelTests.swift",
+      "sha256": "76e9576b191d264f7ef377cd9609390b45e41823e48242901f2cbd79432f7316",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/SkillTestViewModelTests.swift",
+      "sha256": "41ea5a35620ea33984617baf26f1aadadf99cd52cbe4c2a5c0309914b33d1f2e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherTests/SyncStatusPresentationTests.swift",
+      "sha256": "21b3681bab88b06d75c9187b8c90da1fce7ccd7d544847e33badd3930e9d0a9c",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/AuthPage.swift",
+      "sha256": "8f33b75ee4b27cfb840c96028cd0a5343d1ddf5da701433f44961b1104d66b18",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/DictionaryPage.swift",
+      "sha256": "71862f70a9642a48c481cf545abaca65a07827f52d0076bfc600fea0c377667e",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/GaugeCalculatorPage.swift",
+      "sha256": "e5d8ca1609c51bd551e6c52933fcd44114dd814ef79a67ee6cdd76e793dc7306",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/KnitGetherAPIClient.swift",
+      "sha256": "36dc4dcefd39b02493bc0d1e2679fb9706032fd3ba25b9e3f36db48225fc1b5f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/KnitGetherUITestCase.swift",
+      "sha256": "ff87eb72e837cc5dee66c0d5628f8fcd671ae3c1dafdd216787267c01b6a96a2",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/KnitGetherUITests.swift",
+      "sha256": "047365c026b5d1c2c4d530dea90116764403caf8139e452bfdb63f66dc765901",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/KnitGetherUITestsLaunchTests.swift",
+      "sha256": "48b8e0fa041f13d9c906aaf31ee912bb414f9bcb5ca9990e39c796cc0701480a",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/LibraryPage.swift",
+      "sha256": "8e3699c9909077d22e2afeacdb59bba44674ec7a4701d71bd8739adfbd8ff5f0",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/MainTabBarPage.swift",
+      "sha256": "da883bc5724c1f06da2673b256191a8a4ecabb6ba6609bb94265e2add3c2a9d3",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/MyKnittingPage.swift",
+      "sha256": "e39c72277f097481ed26e80cf1fbdb1e0aee9518e43da6f8dadc36e39f693718",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/NeedleLibraryPage.swift",
+      "sha256": "94947504467d7f3e566871cf780558d519201290f92e83be39f394aa9b0bdb59",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/OnboardingPage.swift",
+      "sha256": "070fa65c9f17686aa98f1166163c8e23ae093292a552766646c2e62c3d61a062",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/ProjectFormPage.swift",
+      "sha256": "dd068642cbd9a30cede69b191c8db72930e73e62bf9fa30e6f568627f97e3c98",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/SettingsPage.swift",
+      "sha256": "1016cf14ba12dd92e711a9a8ce6329a2fd205019a457607b6d150420af209e3b",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/SkillTestPage.swift",
+      "sha256": "cbb78385c0b58981dedbea8e66548950402bdabd8ffaf8b8ada6537582f243ce",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/ToolLibraryPage.swift",
+      "sha256": "17646063709943313830af1082df891d655bedb2a91d4aea7ae52e2394708766",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/ToolPage.swift",
+      "sha256": "4bf90917bb5a7ce75ed42065a50a32795594f006169c56f0bc432a0285de907f",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/UITestPage.swift",
+      "sha256": "81e56245007484c41484e94a5e4c0818b5cb07645c08b22f33f6ec1214727492",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/WorkspacePage.swift",
+      "sha256": "e4455274547f106f8e09b02ca7f827ba0c8ced82017a97171d307561074c6241",
+      "copyMatches": true
+    },
+    {
+      "path": "KnitGetherUITests/YarnLibraryPage.swift",
+      "sha256": "b20bee8c0e0845f029b3a3ed6cc0cd3fb183fb5de99b611e1e30e51c19605710",
+      "copyMatches": true
+    }
+  ],
+  "allMatch": true
+}

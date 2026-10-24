@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-24T08:56:54.076685+00:00",
+  "baseline": "75a9882eb841044aba1067ddbc703a985a4515d2",
+  "serverWorkingTreeModified": true,
+  "iOSProductSourceUnchanged": true,
+  "diffCheckPassed": true,
+  "reportLinksExist": true,
+  "serverRegressionPassed": 147,
+  "realDbCasesPassed": 8,
+  "controlledDbPairsPassed": 5,
+  "apiRegressionPassed": 18,
+  "externalPairsPassed": {
+    "direct": 20,
+    "proxy": 20
+  },
+  "iOSAssertionsPassed": 19,
+  "baselineControlledPair": [
+    200,
+    200
+  ],
+  "status": "PASS within reported scope",
+  "commitPushDeployPerformed": false
+}

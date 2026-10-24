@@ -1,0 +1,2 @@
+Executable=/private/tmp/knitgether-ios-retest-20261022/App/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether
+warning: Specifying ':' in the path is deprecated and will not work in a future release

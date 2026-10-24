@@ -255,11 +255,36 @@ export class ProjectsService {
       this.assertNoSaveConflict(existingProject, body, ownerId);
       this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
 
-      await transaction.project.update({
-        where: { id },
-        data: this.toProjectUpdateInput(ownerId, body),
-        include: this.projectInclude(ownerId),
+      // Compare and update in the same SQL statement. A transaction alone does
+      // not stop two readers from accepting the same previous version.
+      const nextUpdatedAt = new Date(
+        Math.max(Date.now(), existingProject.updatedAt.getTime() + 1),
+      );
+      if (!Number.isFinite(nextUpdatedAt.getTime())) {
+        throw new InternalServerErrorException('Project version timestamp is out of range.');
+      }
+      const changed = await transaction.project.updateMany({
+        where: {
+          id,
+          ownerId,
+          deletedAt: null,
+          updatedAt: existingProject.updatedAt,
+        },
+        data: this.toProjectUpdateInput(ownerId, body, nextUpdatedAt),
       });
+      if (changed.count !== 1) {
+        const latest = await transaction.project.findFirst({
+          where: { id, ownerId, deletedAt: null },
+          include: this.projectInclude(ownerId),
+        });
+        if (!latest) {
+          throw new NotFoundException({
+            code: 'PROJECT_NOT_FOUND',
+            message: 'Project not found.',
+          });
+        }
+        this.throwProjectConflict(latest, ownerId);
+      }
       await this.saveProjectChildren(transaction, ownerId, body);
 
       const project = await transaction.project.findFirstOrThrow({
@@ -272,7 +297,7 @@ export class ProjectsService {
       });
 
       return this.toResponse(project, ownerId);
-    });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async deleteProject(ownerId: string, id: string): Promise<void> {
@@ -1462,36 +1487,38 @@ export class ProjectsService {
     });
   }
 
-  // 낙관적 잠금. 클라이언트가 baseUpdatedAt을 보낸 경우에만 동작하며,
-  // 서버 updatedAt이 그보다 뒤면 409와 함께 서버 최신 본을 details.latest로 돌려준다.
+  // The token must identify the exact server version, including milliseconds.
   private assertNoSaveConflict(
     existing: ProjectWithChildren,
     body: SaveProjectDto,
     ownerId: string,
   ): void {
-    if (!body.baseUpdatedAt) {
-      return;
-    }
-
+    if (!body.baseUpdatedAt) return;
     const baseUpdatedAt = new Date(body.baseUpdatedAt).getTime();
-
-    if (existing.updatedAt.getTime() > baseUpdatedAt) {
-      // 최신 본 변환이 실패해도(예: 소프트 삭제된 행의 카운터 결손) 409 자체는 유지한다.
-      let latest: ProjectResponseDto | null = null;
-      try {
-        latest = this.toResponse(existing, ownerId);
-      } catch {
-        latest = null;
-      }
-
-      throw new ConflictException({
-        code: 'PROJECT_CONFLICT',
-        message: 'Project was modified after the provided base version.',
-        details: {
-          latest,
-        },
+    if (!Number.isFinite(baseUpdatedAt)) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'baseUpdatedAt must be a valid date.',
       });
     }
+    if (existing.updatedAt.getTime() !== baseUpdatedAt) {
+      this.throwProjectConflict(existing, ownerId);
+    }
+  }
+
+  private throwProjectConflict(existing: ProjectWithChildren, ownerId: string): never {
+    // Preserve the conflict response even if the latest child data is incomplete.
+    let latest: ProjectResponseDto | null = null;
+    try {
+      latest = this.toResponse(existing, ownerId);
+    } catch {
+      latest = null;
+    }
+    throw new ConflictException({
+      code: 'PROJECT_CONFLICT',
+      message: 'Project was modified after the provided base version.',
+      details: { latest },
+    });
   }
 
   private toProjectCreateInput(
@@ -1530,10 +1557,12 @@ export class ProjectsService {
   private toProjectUpdateInput(
     ownerId: string,
     body: SaveProjectDto,
-  ): Prisma.ProjectUncheckedUpdateInput {
+    updatedAt: Date,
+  ): Prisma.ProjectUncheckedUpdateManyInput {
     return {
       ownerId,
       ...this.toProjectScalarInput(body),
+      updatedAt,
       deletedAt: null,
     };
   }

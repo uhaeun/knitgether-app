@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-9.1.1, pluggy-1.7.0 -- /Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app
+collecting ... collected 18 items
+
+qa/api-tests/test_02_last_write_wins.py::test_update_without_base_updated_at_is_rejected PASSED [  5%]
+qa/api-tests/test_02_last_write_wins.py::test_second_update_from_same_baseline_is_rejected_and_first_survives PASSED [ 11%]
+qa/api-tests/test_02_last_write_wins.py::test_update_with_refreshed_baseline_succeeds PASSED [ 16%]
+qa/api-tests/test_03_create_idempotency.py::test_duplicate_create_is_rejected_and_row_stays_single PASSED [ 22%]
+qa/api-tests/test_03_create_idempotency.py::test_resend_reaches_server_through_update_path PASSED [ 27%]
+qa/api-tests/test_11_sync_loss_regression.py::test_api_18_partial_payload_does_not_delete_existing_sessions PASSED [ 33%]
+qa/api-tests/test_11_sync_loss_regression.py::test_api_18_resend_does_not_duplicate_or_drop PASSED [ 38%]
+qa/api-tests/test_11_sync_loss_regression.py::test_api_19_rejected_request_preserves_server_state PASSED [ 44%]
+qa/api-tests/test_11_sync_loss_regression.py::test_api_20_rejected_update_does_not_discard_previous_value PASSED [ 50%]
+qa/api-tests/test_11_sync_loss_regression.py::test_api_20_rejected_update_keeps_children_intact PASSED [ 55%]
+qa/api-tests/test_17_conflict_timestamp_precision.py::test_api_26_exact_millisecond_timestamp_allows_save PASSED [ 61%]
+qa/api-tests/test_17_conflict_timestamp_precision.py::test_api_26_truncated_timestamp_is_rejected_without_mutation PASSED [ 66%]
+qa/api-tests/test_19_patch_replace_contract.py::test_api_28_dictionary_patch_rejects_partial_body PASSED [ 72%]
+qa/api-tests/test_19_patch_replace_contract.py::test_api_28_project_patch_rejects_partial_body PASSED [ 77%]
+qa/api-tests/test_19_patch_replace_contract.py::test_api_28_project_patch_accepts_full_body PASSED [ 83%]
+qa/api-tests/test_19_patch_replace_contract.py::test_api_28_library_patch_rejects_partial_body[yarn] PASSED [ 88%]
+qa/api-tests/test_19_patch_replace_contract.py::test_api_28_library_patch_rejects_partial_body[needle] PASSED [ 94%]
+qa/api-tests/test_19_patch_replace_contract.py::test_api_28_library_patch_rejects_partial_body[tool] PASSED [100%]
+
+- generated xml file: /Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-24-sync11-fix/evidence/api-existing.xml -
+============================== 18 passed in 0.80s ==============================

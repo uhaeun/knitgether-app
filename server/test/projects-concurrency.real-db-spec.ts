@@ -1,0 +1,349 @@
+/** Opt-in real PostgreSQL + HTTP tests. Never uses a developer DATABASE_URL. */
+import { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { Prisma } from '@prisma/client';
+import { randomUUID } from 'node:crypto';
+import { promises as fs } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import request from 'supertest';
+import { AppModule } from '../src/app.module';
+import { setupApp } from '../src/app.setup';
+import { PrismaService } from '../src/database/prisma.service';
+
+const realUrl = process.env.QA_REAL_DATABASE_URL;
+if (!realUrl) throw new Error('QA_REAL_DATABASE_URL is required; no default database is used.');
+const parsed = new URL(realUrl);
+if (!/^\/knitgether_qa_sync11_[a-z0-9_]+$/.test(parsed.pathname) ||
+    !['127.0.0.1', 'localhost'].includes(parsed.hostname)) {
+  throw new Error('Use a dedicated local knitgether_qa_sync11_* database.');
+}
+const evidence: unknown[] = [];
+describe('Project concurrency on real PostgreSQL', () => {
+  let app: INestApplication;
+  let db: PrismaService;
+  let storage: string;
+  const owner = randomUUID();
+  let target: string | null = null;
+  let afterRead: ((value: any) => Promise<void>) | null = null;
+  let failAfterPatternWrite = false;
+  const oldEnv = { ...process.env };
+
+  beforeAll(async () => {
+    process.env.NODE_ENV = 'test';
+    process.env.DATABASE_URL = realUrl;
+    process.env.KNITGETHER_API_TOKENS = '';
+    process.env.DEV_AUTH_TOKEN = 'real-db-token';
+    process.env.DEV_AUTH_USER_ID = owner;
+    process.env.AUTH_JWT_SECRET = 'qa-real-db-only';
+    storage = await fs.mkdtemp(join(tmpdir(), 'knitgether-cas-'));
+    process.env.FILE_STORAGE_ROOT = storage;
+    db = new PrismaService({ datasources: { db: { url: realUrl } } });
+    await db.$connect();
+    await db.userProfile.create({ data: { id: owner, displayName: 'CAS integration' } });
+    const transact = db.$transaction.bind(db) as any;
+    // Only scheduling/failure injection is intercepted; all reads/writes use real SQL.
+    jest.spyOn(db, '$transaction').mockImplementation((async (callback: any, options: any) =>
+      transact(async (tx: Prisma.TransactionClient) => {
+        let intercepted = false;
+        const project = new Proxy(tx.project, {
+          get(delegate, key) {
+            if (key === 'findFirst') return async (args: any) => {
+              const value = await delegate.findFirst(args);
+              if (!intercepted && target && args.where.id === target && afterRead) {
+                intercepted = true;
+                await afterRead(value);
+              }
+              return value;
+            };
+            const value = Reflect.get(delegate, key);
+            return typeof value === 'function' ? value.bind(delegate) : value;
+          },
+        });
+        const pattern = new Proxy(tx.projectPatternCopy, {
+          get(delegate, key) {
+            if (key === 'upsert') return async (args: any) => {
+              const value = await delegate.upsert(args);
+              if (failAfterPatternWrite) {
+                evidence.push({ stage: 'late-failure-after-real-pattern-upsert', id: args.where.projectId });
+                throw new Error('Injected failure after actual child SQL');
+              }
+              return value;
+            };
+            const value = Reflect.get(delegate, key);
+            return typeof value === 'function' ? value.bind(delegate) : value;
+          },
+        });
+        const wrapped = new Proxy(tx, {
+          get(delegate, key) {
+            if (key === 'project') return project;
+            if (key === 'projectPatternCopy') return pattern;
+            const value = Reflect.get(delegate, key);
+            return typeof value === 'function' ? value.bind(delegate) : value;
+          },
+        });
+        return callback(wrapped);
+      }, { ...options, maxWait: 5000, timeout: 15000 })) as any);
+    const module = await Test.createTestingModule({ imports: [AppModule] })
+      .overrideProvider(PrismaService).useValue(db).compile();
+    app = module.createNestApplication();
+    app.useLogger(false);
+    setupApp(app);
+    await app.init();
+    evidence.push({ isolation: await db.$queryRaw`SHOW transaction_isolation` });
+  });
+  afterEach(() => { target = null; afterRead = null; failAfterPatternWrite = false; });
+  afterAll(async () => {
+    try {
+      if (process.env.QA_DB_EVIDENCE_PATH) {
+        await fs.writeFile(process.env.QA_DB_EVIDENCE_PATH, JSON.stringify(evidence, null, 2));
+      }
+    } finally {
+      jest.restoreAllMocks();
+      if (app) await app.close();
+      if (db) await db.$disconnect();
+      if (storage) await fs.rm(storage, { recursive: true, force: true });
+      process.env = oldEnv;
+    }
+    // Dedicated database records are preserved as evidence; no reset/delete-all.
+  });
+  const call = (method: 'get'|'post'|'patch', path: string, body?: any) => {
+    const req = request(app.getHttpServer())[method]('/api/v1'+path)
+      .set('Authorization', 'Bearer real-db-token');
+    return body ? req.send(body) : req;
+  };
+  async function create() {
+    const id = randomUUID();
+    const body = {
+      id, name: 'CAS baseline', memo: '', status: 'WIP', isFavorite: false,
+      startDate: '2026-10-24T00:00:00.000Z', relatedSkillIds: [],
+      rowCounter: { id: randomUUID(), projectId: id, name: 'Main', currentRow: 0, rowInstructions: [] as any[] },
+      workSessions: [] as any[], patternCopy: null as any,
+    };
+    const res = await call('post', '/projects', body).expect(201);
+    return { ...body, baseUpdatedAt: res.body.updatedAt };
+  }
+  function variant(original: any, marker: string) {
+    const b = structuredClone(original);
+    b.name = marker; b.memo = marker; b.isFavorite = marker === 'A';
+    b.rowCounter.currentRow = marker === 'A' ? 11 : 22;
+    b.rowCounter.rowInstructions = [{ id: randomUUID(), rowCounterId: b.rowCounter.id,
+      rowNumber: 1, instructionText: marker, skillTags: '' }];
+    b.workSessions = [{ id: randomUUID(), projectId: b.id, startedAt: '2026-10-24T00:00:00.000Z',
+      endedAt: '2026-10-24T00:01:00.000Z', memo: marker }];
+    b.patternCopy = { id: randomUUID(), projectId: b.id, sourcePatternDocumentId: null,
+      titleSnapshot: marker, designerSnapshot: null, fileNameSnapshot: null,
+      pageCountSnapshot: null, copiedAt: '2026-10-24T00:00:00.000Z', drawingUpdatedAt: null };
+    return b;
+  }
+  const snapshot = (id: string) => db.project.findUniqueOrThrow({ where: { id }, include: {
+    rowCounter: true, rowInstructions: { orderBy: { id: 'asc' } },
+    workSessions: { orderBy: { id: 'asc' } }, patternCopy: true,
+  } });
+
+  it('has exactly one winner with no loser children after both read the same baseline', async () => {
+    for (let trial = 0; trial < 5; trial++) {
+      const base = await create();
+      const a = variant(base, 'A'), b = variant(base, 'B');
+      // A session omitted by both updates must survive the incremental upserts.
+      const untouched = await db.workSession.create({ data: { id: randomUUID(), ownerId: owner,
+        projectId: base.id, startedAt: new Date('2026-10-24T00:02:00Z'), memo: 'untouched' } });
+      let release!: () => void;
+      let reject!: (e: Error) => void;
+      const ready = new Promise<void>((resolve, fail) => { release = resolve; reject = fail; });
+      const reads: string[] = [];
+      const timer = setTimeout(() => reject(new Error('Read barrier failed to rendezvous')), 3000);
+      target = base.id;
+      afterRead = async value => {
+        reads.push(value.updatedAt.toISOString());
+        if (reads.length === 2) { clearTimeout(timer); release(); }
+        await ready;
+      };
+      let responses: any[];
+      try { responses = await Promise.all([call('patch', '/projects/'+base.id, a), call('patch', '/projects/'+base.id, b)]); }
+      finally { clearTimeout(timer); release(); target = null; afterRead = null; }
+      const stored = await snapshot(base.id);
+      evidence.push({ trial, reads, requests: [a,b], responses: responses!.map(r => ({ status: r.status, body: r.body })), stored });
+      expect(reads).toEqual([base.baseUpdatedAt, base.baseUpdatedAt]);
+      expect(responses!.map(r => r.status).sort()).toEqual([200,409]);
+      const winner = responses![0].status === 200 ? a : b;
+      const loser = winner === a ? b : a;
+      expect(stored.memo).toBe(winner.memo);
+      expect(stored.name).toBe(winner.name);
+      expect(stored.isFavorite).toBe(winner.isFavorite);
+      expect(stored.rowCounter!.currentRow).toBe(winner.rowCounter.currentRow);
+      expect(stored.rowInstructions.map(r => r.id)).toEqual([winner.rowCounter.rowInstructions[0].id]);
+      expect(stored.patternCopy!.id).toBe(winner.patternCopy.id);
+      expect(stored.workSessions.map(r => r.id).sort()).toEqual([untouched.id,winner.workSessions[0].id].sort());
+      const conflict = responses!.find(r => r.status === 409).body;
+      expect(conflict.code).toBe('PROJECT_CONFLICT');
+      expect(conflict.details.latest.memo).toBe(winner.memo);
+      loser.baseUpdatedAt = conflict.details.latest.updatedAt;
+      await call('patch', '/projects/'+base.id, loser).expect(200);
+      expect((await snapshot(base.id)).memo).toBe(loser.memo);
+    }
+  });
+
+  it('rolls back parent/version and early children when row instruction replacement fails', async () => {
+    const b = await create();
+    const unrelated = await create();
+    await db.rowInstruction.create({ data: { id: randomUUID(), ownerId: owner, projectId: b.id,
+      rowCounterId: b.rowCounter.id, rowNumber: 1, instructionText: 'original instruction', skillTags: '' } });
+    const before = await snapshot(b.id), otherBefore = await snapshot(unrelated.id);
+    const body = variant(b,'A');
+    body.rowCounter.rowInstructions.push({ ...body.rowCounter.rowInstructions[0], id: randomUUID() });
+    const res = await call('patch','/projects/'+b.id,body).expect(400);
+    expect(res.body.message).toBe('Duplicate row instruction numbers are not allowed.');
+    const after = await snapshot(b.id);
+    expect(after).toEqual(before);
+    expect(await snapshot(unrelated.id)).toEqual(otherBefore);
+    evidence.push({ case: 'early-child-rollback', request: body, status: res.status, before, after });
+  });
+
+  it('rolls back all SQL children when an error follows actual pattern upsert', async () => {
+    const b = await create(); const before = await snapshot(b.id);
+    failAfterPatternWrite = true;
+    const eventStart = evidence.length;
+    const res = await call('patch','/projects/'+b.id,variant(b,'B')).expect(500);
+    expect(evidence.slice(eventStart)).toContainEqual({ stage: 'late-failure-after-real-pattern-upsert', id: b.id });
+    const after = await snapshot(b.id);
+    expect(after).toEqual(before);
+    evidence.push({ case: 'late-child-rollback', status: res.status, before, after });
+  });
+
+  it('advances every version even when the stored clock is ahead and rejects future client tokens', async () => {
+    const b = await create();
+    const time = new Date(Date.now()+3600000);
+    await db.project.update({ where: { id: b.id }, data: { updatedAt: time } });
+    b.baseUpdatedAt = time.toISOString();
+    const first = await call('patch','/projects/'+b.id,b).expect(200);
+    expect(new Date(first.body.updatedAt).getTime()).toBe(time.getTime()+1);
+    await call('patch','/projects/'+b.id,b).expect(409);
+    const second = await call('patch','/projects/'+b.id,{...b,baseUpdatedAt:first.body.updatedAt}).expect(200);
+    expect(new Date(second.body.updatedAt).getTime()).toBe(time.getTime()+2);
+    await call('patch','/projects/'+b.id,{...b,baseUpdatedAt:new Date(time.getTime()+100).toISOString()}).expect(409);
+    const equivalent = second.body.updatedAt.replace('Z','+00:00');
+    await call('patch','/projects/'+b.id,{...b,baseUpdatedAt:equivalent}).expect(200);
+    evidence.push({ case:'monotonic-clock', base:b.baseUpdatedAt, first:first.body.updatedAt, second:second.body.updatedAt });
+  });
+
+  it('returns fresh 409/latest when another write commits between read and CAS', async () => {
+    const b = await create(); target=b.id;
+    afterRead=async value => { await db.project.update({where:{id:b.id},data:{memo:'intervening',updatedAt:new Date(value.updatedAt.getTime()+1)}}); };
+    const res=await call('patch','/projects/'+b.id,b).expect(409);
+    expect(res.body.details.latest.memo).toBe('intervening');
+    expect((await snapshot(b.id)).rowCounter!.currentRow).toBe(0);
+    evidence.push({case:'cas-zero-latest',response:res.body});
+  });
+
+  it('returns 404 when the project is deleted between read and CAS', async () => {
+    const b=await create(); target=b.id;
+    afterRead=async () => {await db.project.update({where:{id:b.id},data:{deletedAt:new Date()}});};
+    await call('patch','/projects/'+b.id,b).expect(404);
+  });
+
+  it('preserves 409 even if the latest project has no convertible row counter', async () => {
+    const b=await create();target=b.id;
+    afterRead=async value => {
+      await db.rowCounter.delete({where:{projectId:b.id}});
+      await db.project.update({where:{id:b.id},data:{updatedAt:new Date(value.updatedAt.getTime()+1)}});
+    };
+    const res=await call('patch','/projects/'+b.id,b).expect(409);
+    expect(res.body.details.latest).toBeNull();
+  });
+
+  it('preserves validation, ownership and row-counter compatibility contracts', async () => {
+    const b=await create();const before=await snapshot(b.id);
+    const noBase={...b};delete (noBase as any).baseUpdatedAt;
+    await call('patch','/projects/'+b.id,noBase).expect(400);
+    await call('patch','/projects/'+b.id,{...b,baseUpdatedAt:null}).expect(400);
+    await call('patch','/projects/'+b.id,{...b,baseUpdatedAt:'invalid'}).expect(400);
+    await call('patch','/projects/'+b.id,{...b,id:randomUUID()}).expect(404);
+    await call('patch','/projects/'+randomUUID(),b).expect(404);
+    const foreignOwner=await db.userProfile.create({data:{id:randomUUID(),displayName:'Other'}});
+    await db.project.update({where:{id:b.id},data:{ownerId:foreignOwner.id}});
+    await call('patch','/projects/'+b.id,b).expect(404);
+    await db.project.update({where:{id:b.id},data:{ownerId:owner,updatedAt:before.updatedAt}});
+    expect(await snapshot(b.id)).toEqual(before);
+    const mismatched=variant(b,'A');mismatched.rowCounter.id=randomUUID();
+    mismatched.rowCounter.rowInstructions[0].rowCounterId=mismatched.rowCounter.id;
+    await call('patch','/projects/'+b.id,mismatched).expect(400);
+    mismatched.rowCounter.rowInstructions=[];
+    await call('patch','/projects/'+b.id,mismatched).expect(200);
+    expect((await snapshot(b.id)).rowCounter!.id).toBe(b.rowCounter.id);
+  });
+
+  // Diagnostic acceptance tests: deliberately red until separately scoped defects
+  // are fixed. Opt in explicitly; the CI gate above covers full PATCH vs PATCH.
+  const knownGap = process.env.QA_RUN_KNOWN_GAPS === '1' ? it : it.skip;
+  knownGap('KNOWN GAP: rejects a stale whole save after a child-only counter save', async () => {
+    const b = await create();
+    const child = await call('patch', '/projects/'+b.id+'/row-counter',
+      { ...b.rowCounter, currentRow: 77 }).expect(200);
+    const afterChild = await snapshot(b.id);
+    const stale = await call('patch', '/projects/'+b.id, b);
+    const final = await snapshot(b.id);
+    evidence.push({ case: 'child-then-stale-whole', request: b, child: child.body,
+      afterChild, status: stale.status, response: stale.body, final });
+    expect(stale.status).toBe(409);
+    expect(final.rowCounter!.currentRow).toBe(77);
+  });
+
+  knownGap('KNOWN GAP: detects a child API write between the whole save read and CAS', async () => {
+    const b = await create(); target = b.id;
+    let child: any;
+    afterRead = async () => {
+      child = await call('patch', '/projects/'+b.id+'/row-counter',
+        { ...b.rowCounter, currentRow: 88 }).expect(200);
+    };
+    const stale = await call('patch', '/projects/'+b.id, b);
+    const final = await snapshot(b.id);
+    evidence.push({ case: 'child-between-read-and-cas', request: b, child: child.body,
+      status: stale.status, response: stale.body, final });
+    expect(stale.status).toBe(409);
+    expect(final.rowCounter!.currentRow).toBe(88);
+  });
+
+  async function sourcePattern() {
+    const id = randomUUID(), fileId = randomUUID();
+    const key = 'patterns/'+owner+'/'+id+'/'+fileId+'.pdf';
+    const buffer = Buffer.from('%PDF-1.4\n% QA fixture\n%%EOF\n');
+    await fs.mkdir(join(storage, 'patterns', owner, id), { recursive: true });
+    await fs.writeFile(join(storage, key), buffer);
+    await db.storedFile.create({ data: { id: fileId, ownerId: owner, kind: 'PATTERN_PDF',
+      originalFileName: 'qa.pdf', contentType: 'application/pdf', byteSize: buffer.length, storageKey: key } });
+    await db.patternDocument.create({ data: { id, ownerId: owner, title: 'QA source', storedFileId: fileId } });
+    return id;
+  }
+  knownGap('KNOWN GAP: removes materialized files when the SQL transaction rolls back', async () => {
+    const b = await create(), before = await snapshot(b.id);
+    const body = variant(b, 'A');
+    body.patternCopy.sourcePatternDocumentId = await sourcePattern();
+    failAfterPatternWrite = true;
+    const res = await call('patch', '/projects/'+b.id, body).expect(500);
+    const after = await snapshot(b.id);
+    const files = await fs.readdir(storage, { recursive: true });
+    const orphans = files.filter(p => p.startsWith('projects/') && p.endsWith('.pdf'));
+    evidence.push({ case: 'filesystem-after-sql-rollback', request: body, status: res.status,
+      before, after, orphanFiles: orphans });
+    expect(after).toEqual(before);
+    expect(orphans).toEqual([]);
+  });
+
+  knownGap('KNOWN GAP: cleans an unreferenced PDF after pattern copy replacement', async () => {
+    const b = await create(), body = variant(b, 'A');
+    body.patternCopy.sourcePatternDocumentId = await sourcePattern();
+    const first = await call('patch', '/projects/'+b.id, body).expect(200);
+    const oldCopy = (await snapshot(b.id)).patternCopy!;
+    const replacement = structuredClone(body);
+    replacement.baseUpdatedAt = first.body.updatedAt;
+    replacement.patternCopy.id = randomUUID();
+    await call('patch', '/projects/'+b.id, replacement).expect(200);
+    const final = await snapshot(b.id);
+    const oldFileExists = await fs.stat(join(storage, oldCopy.fileStorageKey!)).then(() => true, () => false);
+    evidence.push({ case: 'filesystem-after-copy-replacement', oldCopy, final, oldFileExists });
+    expect(final.patternCopy!.id).toBe(replacement.patternCopy.id);
+    expect(final.patternCopy!.fileStorageKey).not.toBe(oldCopy.fileStorageKey);
+    expect(oldFileExists).toBe(false);
+  });
+});

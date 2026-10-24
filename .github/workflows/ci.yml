@@ -33,6 +33,58 @@ env:
   FILE_STORAGE_ROOT: ./storage
 
 jobs:
+  project-concurrency:
+    name: Project Concurrency (Real PostgreSQL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://knitgether:knitgether@127.0.0.1:5432/knitgether_qa_sync11_ci?connection_limit=6
+      QA_REAL_DATABASE_URL: postgresql://knitgether:knitgether@127.0.0.1:5432/knitgether_qa_sync11_ci?connection_limit=6
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: knitgether_qa_sync11_ci
+          POSTGRES_USER: knitgether
+          POSTGRES_PASSWORD: knitgether
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U knitgether -d knitgether_qa_sync11_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - name: Install dependencies and generate Prisma Client
+        working-directory: server
+        run: |
+          npm ci
+          npm run prisma:generate
+      - name: Migrate isolated test database
+        working-directory: server
+        run: npx prisma migrate deploy
+      - name: Verify atomic project saves against real SQL
+        working-directory: server
+        env:
+          QA_DB_EVIDENCE_PATH: ${{ runner.temp }}/project-concurrency-evidence.json
+        run: npm run test:db:projects -- --json --outputFile="${{ runner.temp }}/project-concurrency-results.json"
+      - name: Upload concurrency requests, responses, and DB snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-concurrency-diagnostics
+          path: |
+            ${{ runner.temp }}/project-concurrency-evidence.json
+            ${{ runner.temp }}/project-concurrency-results.json
+          if-no-files-found: warn
+
   server:
     name: Server Build And Test
     runs-on: ubuntu-latest

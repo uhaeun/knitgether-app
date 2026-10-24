@@ -1,0 +1,50 @@
+[
+  {
+    "case": "has exactly one winner with no loser children after both read the same baseline",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "rolls back parent/version and early children when row instruction replacement fails",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "rolls back all SQL children when an error follows actual pattern upsert",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "advances every version even when the stored clock is ahead and rejects future client tokens",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "returns fresh 409/latest when another write commits between read and CAS",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "returns 404 when the project is deleted between read and CAS",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "preserves 409 even if the latest project has no convertible row counter",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  },
+  {
+    "case": "preserves validation, ownership and row-counter compatibility contracts",
+    "status": "PASS",
+    "evidence": "real-db-tests.log",
+    "basis": "Full unfiltered suite: 8 passed / 8 total; corresponding test source has exactly 8 cases"
+  }
+]

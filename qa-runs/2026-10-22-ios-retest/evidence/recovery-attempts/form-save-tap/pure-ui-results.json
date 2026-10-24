@@ -1,0 +1,75 @@
+[
+  {
+    "case": "PURE-A-UI-OTHER-FIELDS-SAVE",
+    "status": "FAIL",
+    "detail": {
+      "name": "SYNC11 A UI NAME verified",
+      "isFavorite": false
+    },
+    "at": "2026-10-22T14:57:58.024731+00:00"
+  },
+  {
+    "case": "PURE-B-CONFLICT",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+          "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+          "name": "SYNC11 A UI NAME verified",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "B pure UI pending",
+          "startDate": "2026-10-22T14:45:16.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "a6124c4c-2028-4d90-bc07-cf5dfa7151d1",
+            "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+            "projectId": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-22T14:45:16.321Z",
+            "updatedAt": "2026-10-22T14:54:56.993Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-22T14:45:16.316Z",
+          "updatedAt": "2026-10-22T14:54:56.984Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-22T14:58:08.367184+00:00"
+  },
+  {
+    "case": "PURE-B-DRAFT-KEPT",
+    "status": "PASS",
+    "detail": "B pure UI final draft",
+    "at": "2026-10-22T14:58:14.681847+00:00"
+  }
+]

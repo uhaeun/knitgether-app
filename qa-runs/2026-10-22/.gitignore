@@ -1,0 +1,7 @@
+build/
+pgdata/
+venv/
+storage/
+wda-*/
+evidence/driver-sessions.json
+evidence/isolated-db.dump
