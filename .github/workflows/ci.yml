@@ -41,7 +41,6 @@ jobs:
       NODE_ENV: test
       DATABASE_URL: postgresql://knitgether:knitgether@127.0.0.1:5432/knitgether_qa_sync11_ci?connection_limit=6
       QA_REAL_DATABASE_URL: postgresql://knitgether:knitgether@127.0.0.1:5432/knitgether_qa_sync11_ci?connection_limit=6
-      QA_DB_EVIDENCE_PATH: ${{ runner.temp }}/project-concurrency-evidence.json
     services:
       postgres:
         image: postgres:14
@@ -73,6 +72,8 @@ jobs:
         run: npx prisma migrate deploy
       - name: Verify atomic project saves against real SQL
         working-directory: server
+        env:
+          QA_DB_EVIDENCE_PATH: ${{ runner.temp }}/project-concurrency-evidence.json
         run: npm run test:db:projects -- --json --outputFile="${{ runner.temp }}/project-concurrency-results.json"
       - name: Upload concurrency requests, responses, and DB snapshots
         if: always()

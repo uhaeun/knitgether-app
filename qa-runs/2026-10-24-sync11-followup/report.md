@@ -12,7 +12,7 @@
 | CHILD-02: 전체 저장의 읽기와 CAS 사이 자식 API 저장 | 실제 요청을 중간에 실행. 자식88단 저장200 후 전체 저장200, DB 0단 | FAIL · 제품 결함 |
 | FILES-01: SQL rollback 후 물리 파일 | 실제 원본 fixture를 복사하고 실제 upsert 뒤 실패 주입. 부모·자식 SQL은 완전 rollback, 새 PDF 1개는 파일시스템에 남음 | FAIL · RC-08 재현 |
 | FILES-02: 도안 사본 교체 후 이전 파일 | 새 사본 ID·파일 키로 정상200 저장. DB 참조가 끊긴 이전 PDF가 여전히 존재 | FAIL · RC-08 재현 |
-| GitHub Actions 실행 | PR 생성 후 원격 실행 결과를 아래 후속 상태에서 기록 | 실행 상태 별도 확인 |
+| GitHub Actions 실행 | [Draft PR #48](https://github.com/uhaeun/knitgether-app/pull/48), Checks에서 최신 실행 상태 확인 | 로컬 결과와 별도 |
 
 [8개 PASS 원본](evidence/gate-results.json), [PASS HTTP·DB](evidence/gate-db.json), [4개 FAIL 원본](evidence/known-gaps-results.json), [FAIL HTTP·DB·파일목록](evidence/known-gaps-db.json). 테스트 오류나 환경 실패를 제품 FAIL로 대신 집계하지 않았다. FILES-01의500 자체는 테스트 실패 주입의 결과이며 제품에서 자연 발생하는500을 주장하지 않는다. 파일 fixture는 복사 경로 검사용 최소 바이트이며 PDF 렌더러 검증이 아니다. 테스트 종료 시 자신이 만든 임시 파일 저장소만 정리했고, 관찰한 잔존 상태는 JSON에 보존했다. DB UUID fixture는 전용 QA DB에 보존했다.
 
@@ -46,3 +46,9 @@ SYNC-11에는 “전체 PATCH 간 버전 검사”와 “모든 자식 쓰기를
 사용자는 데이터 보존·수동 재저장·cm 고정과 검증 기준을 직접 지정하고 후속 진행을 지시했다. Codex는 CAS 설계·구현, CI 구성, 실제 SQL/HTTP 테스트와 이전 두 시뮬레이터 조작, 증거 수집·판정을 수행했다. 사용자가 이 테스트를 직접 수동 실행했다고 표현하지 않는다.
 
 포트폴리오 요약: 요구사항과 수용 기준을 정하고 Codex의 실행 결과를 검토하는 방식으로 QA를 진행했다. 전체 저장 간 경합 수정은 실제 DB와 두 iOS 시뮬레이터로 확인했고, 후속 경계 검사에서는 자식 API의 갱신 유실과 파일 고아화를 별도 재현했다. 범위별 PASS·FAIL 및 자동화의 미실행 범위를 공개하고 실제 DB 회귀를 CI에 연결했다.
+
+## PR·원격 실행 추적
+
+[Draft PR #48](https://github.com/uhaeun/knitgether-app/pull/48)을 생성했다. 최초 커밋 ee84115에 기존 로컬 수정·회귀·증거를 보존했다. 이전 보고서의 “미커밋/로컬”은 그 보고서 작성 시점의 기록이다.
+
+최초 원격 run [40081089713](https://github.com/uhaeun/knitgether-app/actions/runs/40081089713)은 잡 시작 전 workflow validation 단계에서 실패했다. Codex가 추가한 job env의 runner.temp 표현식 위치 문제였고 step env로 옮겼다. [GitHub 공식 context 표](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#context-availability)에 따르면 job env에서는 runner가 허용되지 않고 step env에서는 허용된다. YAML syntax 검사만으로 이 제한을 잡지 못했다. 제품 결함·DB 테스트 FAIL로 집계하지 않는다. 최신 원격 판정은 해당 PR의 Checks 및 artifact를 기준으로 확인한다. 이 문서에는 아직 통과하지 않은 원격 실행을 PASS로 미리 기록하지 않는다.
