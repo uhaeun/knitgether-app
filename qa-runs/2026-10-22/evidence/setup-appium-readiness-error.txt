@@ -1,0 +1,131 @@
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connection.py", line 239, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 499, in _make_request
+    conn.request(
+    ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<6 lines>...
+        enforce_content_length=enforce_content_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connection.py", line 567, in request
+    self.endheaders()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1362, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1122, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1066, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connection.py", line 398, in connect
+    self.sock = self._new_conn()
+                ~~~~~~~~~~~~~~^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connection.py", line 254, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: HTTPConnection(host='127.0.0.1', port=14723): Failed to establish a new connection: [Errno 61] Connection refused
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/run_sync.py", line 65, in <module>
+    d=webdriver.Remote('http://127.0.0.1:14723',options=o); drivers.append(d)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py", line 249, in __init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        command_executor=command_executor,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        client_config=client_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 296, in __init__
+    self.start_session(capabilities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py", line 343, in start_session
+    response = self.execute(RemoteCommand.NEW_SESSION, w3c_caps)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 503, in execute
+    response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/remote_connection.py", line 435, in execute
+    return self._request(command_info[0], url, body=data)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/remote_connection.py", line 459, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        method, url, fields=fields, headers=headers, **urlopen_kw
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/poolmanager.py", line 459, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 886, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 886, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 886, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/urllib3/util/retry.py", line 555, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=14723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=14723): Failed to establish a new connection: [Errno 61] Connection refused"))

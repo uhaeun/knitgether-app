@@ -1,0 +1,1 @@
+knitgether_qa_sync11_20261024|55434|read committed|PostgreSQL 14.18 (Homebrew) on aarch64-apple-darwin24.4.0, compiled by Apple clang version 17.0.0 (clang-1700.0.13.3), 64-bit

@@ -1,0 +1,154 @@
+[
+  {
+    "case": "PURE-A-UI-OTHER-FIELDS-SAVE",
+    "status": "PASS",
+    "detail": {
+      "name": "SYNC11 A UI final verified",
+      "isFavorite": false
+    },
+    "at": "2026-10-24T08:44:55.319714+00:00"
+  },
+  {
+    "case": "PURE-B-CONFLICT",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "e532dcf6-5338-4bef-a029-d8039a7962b5",
+          "ownerId": "7816841c-dc5e-47ac-b6f6-f456eba3e08d",
+          "name": "SYNC11 A UI final verified",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "B repeated conflict pending",
+          "startDate": "2026-10-24T08:37:34.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "072585f2-3ab1-43cf-b0ed-e824dd1805d4",
+            "ownerId": "7816841c-dc5e-47ac-b6f6-f456eba3e08d",
+            "projectId": "e532dcf6-5338-4bef-a029-d8039a7962b5",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-24T08:37:34.208Z",
+            "updatedAt": "2026-10-24T08:44:42.042Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:37:34.189Z",
+          "updatedAt": "2026-10-24T08:44:42.034Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-24T08:45:04.794299+00:00"
+  },
+  {
+    "case": "PURE-B-DRAFT-KEPT",
+    "status": "PASS",
+    "detail": "B pure UI verified draft",
+    "at": "2026-10-24T08:45:10.645164+00:00"
+  },
+  {
+    "case": "PURE-A-INTERVENING-SAVE",
+    "status": "PASS",
+    "detail": "A intervening UI memo",
+    "at": "2026-10-24T08:45:29.044267+00:00"
+  },
+  {
+    "case": "PURE-B-RECONFLICT",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "e532dcf6-5338-4bef-a029-d8039a7962b5",
+          "ownerId": "7816841c-dc5e-47ac-b6f6-f456eba3e08d",
+          "name": "SYNC11 A UI final verified",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "A intervening UI memo",
+          "startDate": "2026-10-24T08:37:34.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "072585f2-3ab1-43cf-b0ed-e824dd1805d4",
+            "ownerId": "7816841c-dc5e-47ac-b6f6-f456eba3e08d",
+            "projectId": "e532dcf6-5338-4bef-a029-d8039a7962b5",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-24T08:37:34.208Z",
+            "updatedAt": "2026-10-24T08:45:17.760Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:37:34.189Z",
+          "updatedAt": "2026-10-24T08:45:17.743Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-24T08:45:37.304201+00:00"
+  },
+  {
+    "case": "PURE-B-RECOVERY",
+    "status": "PASS",
+    "detail": "B pure UI verified draft",
+    "at": "2026-10-24T08:45:53.763475+00:00"
+  },
+  {
+    "case": "PURE-B-OTHER-FIELDS-PRESERVED",
+    "status": "PASS",
+    "detail": {
+      "name": "SYNC11 A UI final verified",
+      "isFavorite": false
+    },
+    "at": "2026-10-24T08:45:53.764922+00:00"
+  }
+]

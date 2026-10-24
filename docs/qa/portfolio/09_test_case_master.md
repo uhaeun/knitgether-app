@@ -234,3 +234,34 @@ API-25는 8/29에 구현하고 실행해 4건 전부 통과했다(`test_07_last_
 | 2 | 시트 상태 열이 8/25~26 Appium 스위트를 반영하지 않는 문제 | 8/29 해소. 자동 실행 판정 열을 따로 두고 시트 열은 발견 시점 구분을 위해 남겼다 |
 | 3 | UI-04, 05, 06을 함수 하나로 합친 것이 추적성에 문제가 되는가. 실패 시 어느 케이스인지 구분되는가 | 미정 |
 | 4 | 번호 미배정 3건(7절)의 카탈로그 번호 부여와, 그 전에 짧은 백그라운드 케이스의 검출력 확인 절차를 밟을지 | 미정 (원본 9/15) |
+
+#### 2026-10-24 후속 RTM — SYNC-11 / UI-03
+
+아래는 새 후속 실행이며 본문의 과거 건수·1차 RTM을 소급 변경하지 않는다. 실제 실행 수와 반복 횟수는 [수정 검증 보고서](../../../qa-runs/2026-10-24-sync11-fix/report.md)에서 구분한다.
+
+| SPEC | 후속 TC / 실행 코드 | 상태와 근거 |
+|---|---|---|
+| SYNC-11 원자성 | RACE-01~04 / projects-concurrency.real-db-spec.ts의 같은 기준 경합 검사 | 실제 DB+HTTP PASS. 5쌍의 읽기 barrier와 승자 부모/자식·기존 세션·패자 수동 재요청 확인. 기준 코드 red [200,200]와 수정 green 분리 |
+| SYNC-11 버전 경계 | RACE-05/06, CONTRACT-01 / monotonic-clock 및 validation 검사 | 실제 DB PASS. 연속+1ms, 시계 역전 대응, 과거/미래 불일치409·유효 동일 시각200 |
+| SYNC-11 rollback | RACE-07 / early-child 및 late-child rollback | 실제 SQL PASS. 삭제된 기존 행안내 복구, 실제 도안사본 upsert 후 강제 실패 시 DB 전체 복구 |
+| SYNC-11 CAS 실패·권한 | RACE-08 / 최신본·삭제·자식 결손 및 contract 검사 | 실제 DB PASS.409/latest·404·latest=null, 기존 권한/카운터 호환 유지 |
+| SYNC-11 기존 계약 | CONTRACT-02/03 / test_02·03·11·17·19 | 외부 API18 PASS. 기존 서버 suite147 PASS는 mock 기반을 포함하며 DB 원자성 증거로 대체하지 않음 |
+| SYNC-11 메모 복구 | IOS-01/02, TC-SYNC11-01~04 / run_sync.py·run_pure_ui.py | 수정 서버의 A/B 실제 UI에서12+7 확인 항목 PASS.30초 자동 재저장 관찰과 직접 복구, 다른 필드·재충돌·SQL 확인 |
+| SYNC-11 운영 경로 대조 | TC-SYNC11-05 / probe_concurrency.py | 서버 직접20쌍·프록시20쌍 모두 [200,409] 및 패자 자식 무변경. 내부 겹침 증명은 별도 barrier 검사 |
+| UI-03 단위 정책 | TC-UNIT-01~06 / 앞선 run_ui03.py | [앞선 양 기기 결과](../../../qa-runs/2026-10-22-ios-retest/report.md) PASS. 이번 서버 수정 후 UI-03 전체 재실행으로 합산하지 않음 |
+| 별도 후속 | FILES-01, 자식 전용 API의 통합 버전 | 이번 미실행·범위 밖. DB rollback과 물리 파일 회수 혼동 금지 |
+
+신규 실제 DB8개는 명시적 QA_REAL_DATABASE_URL을 요구하는 별도 npm test:db:projects로 실행한다. 기존 projects.e2e-spec.ts의 route mock 통과와 구분한다. 자동화 ID UI-03(중복 이메일 가입)과 SPEC-UI-03/TC-UNIT(단위 정책)은 다른 번호 체계다.
+
+### 2026-10-24 후속 경계 검사
+
+[후속 보고서](../../../qa-runs/2026-10-24-sync11-followup/report.md). 기존 전체 PATCH 회귀 8 PASS와 별개로 다음을 기록한다.
+
+| ID | 요구/범위 | 실제 결과 | 결함 연결 |
+|---|---|---|---|
+| CHILD-01 | 자식 카운터 저장 뒤 오래된 전체 저장 거절 | FAIL · 77→0, 두200 | QA-SYNC11-CHILD |
+| CHILD-02 | 전체 읽기/CAS 사이 자식 카운터 저장 보호 | FAIL · 88→0, 두200 | QA-SYNC11-CHILD |
+| FILES-01 | SQL rollback의 물리 파일 보상 | FAIL · PDF 1개 잔존 | RC-08 기존 범위 |
+| FILES-02 | 도안 교체 후 참조 해제 파일 정리 | FAIL · 이전 PDF 잔존 | RC-08 기존 범위 |
+
+CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수용 검사는 명시 opt-in이며 기본 실행의4 SKIPPED는 PASS로 계산하지 않는다. 자식 API 전수 검증·파일 정리 SLA·물리 iPhone은 여전히 미검증이다.

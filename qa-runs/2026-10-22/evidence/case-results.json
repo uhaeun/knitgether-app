@@ -1,0 +1,255 @@
+[
+  {
+    "layer": "API integration",
+    "case": "test_update_without_base_updated_at_is_rejected",
+    "source": "qa.api-tests.test_02_last_write_wins",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_second_update_from_same_baseline_is_rejected_and_first_survives",
+    "source": "qa.api-tests.test_02_last_write_wins",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_update_with_refreshed_baseline_succeeds",
+    "source": "qa.api-tests.test_02_last_write_wins",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_duplicate_create_is_rejected_and_row_stays_single",
+    "source": "qa.api-tests.test_03_create_idempotency",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_resend_reaches_server_through_update_path",
+    "source": "qa.api-tests.test_03_create_idempotency",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_18_partial_payload_does_not_delete_existing_sessions",
+    "source": "qa.api-tests.test_11_sync_loss_regression",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_18_resend_does_not_duplicate_or_drop",
+    "source": "qa.api-tests.test_11_sync_loss_regression",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_19_rejected_request_preserves_server_state",
+    "source": "qa.api-tests.test_11_sync_loss_regression",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_20_rejected_update_does_not_discard_previous_value",
+    "source": "qa.api-tests.test_11_sync_loss_regression",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_20_rejected_update_keeps_children_intact",
+    "source": "qa.api-tests.test_11_sync_loss_regression",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_26_exact_millisecond_timestamp_allows_save",
+    "source": "qa.api-tests.test_17_conflict_timestamp_precision",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_26_truncated_timestamp_is_rejected_without_mutation",
+    "source": "qa.api-tests.test_17_conflict_timestamp_precision",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_28_dictionary_patch_rejects_partial_body",
+    "source": "qa.api-tests.test_19_patch_replace_contract",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_28_project_patch_rejects_partial_body",
+    "source": "qa.api-tests.test_19_patch_replace_contract",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_28_project_patch_accepts_full_body",
+    "source": "qa.api-tests.test_19_patch_replace_contract",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_28_library_patch_rejects_partial_body[yarn]",
+    "source": "qa.api-tests.test_19_patch_replace_contract",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_28_library_patch_rejects_partial_body[needle]",
+    "source": "qa.api-tests.test_19_patch_replace_contract",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API integration",
+    "case": "test_api_28_library_patch_rejects_partial_body[tool]",
+    "source": "qa.api-tests.test_19_patch_replace_contract",
+    "status": "PASS",
+    "evidence": "api-existing.xml"
+  },
+  {
+    "layer": "API + PostgreSQL",
+    "case": "Sequential stale save, refreshed retry, metadata retention",
+    "status": "PASS",
+    "evidence": "api-sequential-db.json"
+  },
+  {
+    "layer": "API + PostgreSQL",
+    "case": "api-concurrency",
+    "status": "FAIL",
+    "trials": 10,
+    "reproductions": 10,
+    "evidence": "api-concurrency.json"
+  },
+  {
+    "layer": "API + PostgreSQL",
+    "case": "api-concurrency-direct",
+    "status": "FAIL",
+    "trials": 10,
+    "reproductions": 9,
+    "evidence": "api-concurrency-direct.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-2-iOS-same-account-same-project",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-B-unsaved-A-save-B-409",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-server-A-preserved-in-iOS-flow",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-B-input-preserved",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-B-conflict-notice",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-no-auto-retry",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-B-explicit-retry-final-DB",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-other-fields-retained-in-iOS-flow",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "SYNC11-reconflict-and-recovery",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "UI03-onboarding-unit-picker-removed",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "UI03-signup-unit-picker-removed",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "UI03-profile-unit-picker-removed",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "UI03-settings-copy",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "UI03-cm-gauge-calculation",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  },
+  {
+    "layer": "iOS E2E",
+    "case": "UI03-legacy-preferredUnits-ignored",
+    "status": "NOT_RUN",
+    "reason": "Simulator/WDA setup did not reach app UI control; API and static findings are not substituted.",
+    "evidence": "environment-issues.json"
+  }
+]

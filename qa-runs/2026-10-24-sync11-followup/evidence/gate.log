@@ -1,0 +1,10 @@
+
+> knitgether-api@0.1.0 test:db:projects
+> jest --config ./test/jest-real-db.json --runInBand --json --outputFile=/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-24-sync11-followup/evidence/gate-results.json
+
+Test Suites: 1 passed, 1 total
+Tests:       4 skipped, 8 passed, 12 total
+Snapshots:   0 total
+Time:        4.458 s, estimated 29 s
+Ran all test suites.
+Test results written to: ../qa-runs/2026-10-24-sync11-followup/evidence/gate-results.json

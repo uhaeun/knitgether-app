@@ -1,0 +1,84 @@
+
+> knitgether-api@0.1.0 test:db:projects
+> jest --config ./test/jest-real-db.json --runInBand --testNamePattern=KNOWN GAP --json --outputFile=/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-24-sync11-followup/evidence/known-gaps-results.json
+
+FAIL test/projects-concurrency.real-db-spec.ts
+  ● Project concurrency on real PostgreSQL › KNOWN GAP: rejects a stale whole save after a child-only counter save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      286 |     evidence.push({ case: 'child-then-stale-whole', request: b, child: child.body,
+      287 |       afterChild, status: stale.status, response: stale.body, final });
+    > 288 |     expect(stale.status).toBe(409);
+          |                          ^
+      289 |     expect(final.rowCounter!.currentRow).toBe(77);
+      290 |   });
+      291 |
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:288:26)
+
+  ● Project concurrency on real PostgreSQL › KNOWN GAP: detects a child API write between the whole save read and CAS
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      301 |     evidence.push({ case: 'child-between-read-and-cas', request: b, child: child.body,
+      302 |       status: stale.status, response: stale.body, final });
+    > 303 |     expect(stale.status).toBe(409);
+          |                          ^
+      304 |     expect(final.rowCounter!.currentRow).toBe(88);
+      305 |   });
+      306 |
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:303:26)
+
+  ● Project concurrency on real PostgreSQL › KNOWN GAP: removes materialized files when the SQL transaction rolls back
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "projects/bb9e0793-dc4d-49a4-ae77-b73d7782a858/cc86a184-8050-4551-8025-52d943edf8e3/pattern-copies/ff038961-282f-4160-9ce1-ca6daddb6b0d/9936e061-aa42-4511-b780-b199af88e9e4.pdf",
+    + ]
+
+      328 |       before, after, orphanFiles: orphans });
+      329 |     expect(after).toEqual(before);
+    > 330 |     expect(orphans).toEqual([]);
+          |                     ^
+      331 |   });
+      332 |
+      333 |   knownGap('KNOWN GAP: cleans an unreferenced PDF after pattern copy replacement', async () => {
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:330:21)
+
+  ● Project concurrency on real PostgreSQL › KNOWN GAP: cleans an unreferenced PDF after pattern copy replacement
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      345 |     expect(final.patternCopy!.id).toBe(replacement.patternCopy.id);
+      346 |     expect(final.patternCopy!.fileStorageKey).not.toBe(oldCopy.fileStorageKey);
+    > 347 |     expect(oldFileExists).toBe(false);
+          |                           ^
+      348 |   });
+      349 | });
+      350 |
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:347:27)
+
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 8 skipped, 12 total
+Snapshots:   0 total
+Time:        2.363 s, estimated 5 s
+Ran all test suites with tests matching "KNOWN GAP".
+Test results written to: ../qa-runs/2026-10-24-sync11-followup/evidence/known-gaps-results.json

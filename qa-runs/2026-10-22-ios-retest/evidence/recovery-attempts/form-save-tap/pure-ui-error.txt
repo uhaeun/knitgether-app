@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22-ios-retest/run_pure_ui.py", line 68, in <module>
+    dismiss(b);record('PURE-B-DRAFT-KEPT',pb.memo_value()=='B pure UI pending',pb.memo_value())
+    ~~~~~~~^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22-ios-retest/run_pure_ui.py", line 38, in dismiss
+    assert alerts,'Expected a native conflict alert'
+           ^^^^^^
+AssertionError: Expected a native conflict alert
