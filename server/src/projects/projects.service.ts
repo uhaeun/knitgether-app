@@ -5,6 +5,8 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  OnModuleInit,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import {
   Prisma,
@@ -67,13 +69,86 @@ type ProjectPatternCopyFile = {
 };
 
 @Injectable()
-export class ProjectsService {
+export class ProjectsService implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly prisma: PrismaService,
     private readonly fileStorage: LocalFileStorageService,
   ) {}
 
   private readonly logger = new Logger(ProjectsService.name);
+
+  private cleanupTimer?: ReturnType<typeof setInterval>;
+  private cleanupRunning = false;
+
+  onModuleInit() {
+    // Durable candidates survive process restarts. A one-hour grace exceeds
+    // transaction timeouts; do not collect files of a still-running request.
+    this.cleanupTimer = setInterval(() => { void this.retryPatternFileCleanup(); }, 60_000);
+    this.cleanupTimer.unref();
+    void this.retryPatternFileCleanup();
+  }
+
+  onModuleDestroy() {
+    clearInterval(this.cleanupTimer);
+  }
+
+  async retryPatternFileCleanup() {
+    if (this.cleanupRunning) return;
+    this.cleanupRunning = true;
+    try {
+      const keys = await this.fileStorage.pendingProjectPatternRemovals(Date.now() - 3_600_000);
+      await this.cleanupPatternFiles(keys);
+    } catch (error) {
+      this.logger.warn(`Pattern cleanup deferred: ${String(error)}`);
+    } finally {
+      this.cleanupRunning = false;
+    }
+  }
+
+  private async cleanupPatternFiles(keys: string[]) {
+    for (const key of new Set(keys)) {
+      try {
+        // Include soft-deleted rows too: retained data must remain recoverable.
+        const referenced = await this.prisma.projectPatternCopy.findFirst({
+          where: { OR: [{ fileStorageKey: key }, { drawingStorageKey: key }] },
+        });
+        if (referenced) continue;
+        await this.fileStorage.remove(key);
+        await this.fileStorage.completeProjectPatternRemoval(key);
+      } catch (error) {
+        // Keep the durable marker for retry. Cleanup failure must not turn a
+        // committed save into a misleading HTTP error.
+        this.logger.warn(`Pattern cleanup deferred for ${key}: ${String(error)}`);
+      }
+    }
+  }
+
+  private async retirePatternFiles(
+    copy: { fileStorageKey: string | null; drawingStorageKey: string | null } | null,
+    files: { retired: string[] },
+  ) {
+    for (const key of [copy?.fileStorageKey, copy?.drawingStorageKey]) {
+      if (!key) continue;
+      await this.fileStorage.queueProjectPatternRemoval(key);
+      files.retired.push(key);
+    }
+  }
+
+  private async withPatternFileCleanup<T>(
+    work: (files: { created: string[]; retired: string[] }) => Promise<T>,
+  ): Promise<T> {
+    const files = { created: [] as string[], retired: [] as string[] };
+    let result: T;
+    try {
+      result = await work(files);
+    } catch (error) {
+      // SQL rollback has finished before removing newly materialized files.
+      await this.cleanupPatternFiles(files.created);
+      throw error;
+    }
+    await this.cleanupPatternFiles(files.retired);
+    return result;
+  }
 
   async listProjects(ownerId: string): Promise<ProjectResponseDto[]> {
     const projects = await this.prisma.project.findMany({
@@ -133,7 +208,7 @@ export class ProjectsService {
   ): Promise<ProjectResponseDto> {
     this.assertProjectChildReferences(body);
 
-    return this.prisma.$transaction(async (transaction) => {
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
       await this.ensureUserProfile(transaction, ownerId);
 
       const existingProject = await transaction.project.findFirst({
@@ -205,7 +280,7 @@ export class ProjectsService {
         }
       }
 
-      await this.saveProjectChildren(transaction, ownerId, body);
+      await this.saveProjectChildren(transaction, ownerId, body, files);
 
       const project = await transaction.project.findFirstOrThrow({
         where: {
@@ -217,7 +292,7 @@ export class ProjectsService {
       });
 
       return this.toResponse(project, ownerId);
-    });
+    }));
   }
 
   async updateProject(
@@ -234,7 +309,7 @@ export class ProjectsService {
 
     this.assertProjectChildReferences(body);
 
-    return this.prisma.$transaction(async (transaction) => {
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
       const existingProject = await transaction.project.findFirst({
         where: {
           id,
@@ -285,7 +360,7 @@ export class ProjectsService {
         }
         this.throwProjectConflict(latest, ownerId);
       }
-      await this.saveProjectChildren(transaction, ownerId, body);
+      await this.saveProjectChildren(transaction, ownerId, body, files);
 
       const project = await transaction.project.findFirstOrThrow({
         where: {
@@ -297,7 +372,7 @@ export class ProjectsService {
       });
 
       return this.toResponse(project, ownerId);
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   async deleteProject(ownerId: string, id: string): Promise<void> {
@@ -372,8 +447,6 @@ export class ProjectsService {
     projectId: string,
     body: SaveRowCounterDto,
   ): Promise<RowCounterResponseDto> {
-    await this.findActiveProject(ownerId, projectId);
-
     if (body.projectId !== projectId) {
       throw new BadRequestException({
         code: 'VALIDATION_FAILED',
@@ -381,24 +454,38 @@ export class ProjectsService {
       });
     }
 
-    const updated = await this.prisma.rowCounter.update({
-      where: {
-        projectId,
-      },
-      data: {
-        ownerId,
-        name: body.name,
-        mode: this.normalizedCounterMode(body.mode),
-        sectionName: this.trimmedOrNull(body.sectionName),
-        memo: this.trimmedOrNull(body.memo),
-        currentRow: body.currentRow,
-        targetRow: body.targetRow,
-        deletedAt: null,
-      },
-      include: this.rowCounterInclude(ownerId),
-    });
-
-    return this.toRowCounterResponse(updated);
+    return this.prisma.$transaction(async (transaction) => {
+      // Acquire the same parent write lock as whole-project CAS before changing
+      // the child. Retry only the version acquisition, never a stale whole save.
+      for (;;) {
+        const parent = await transaction.project.findFirst({
+          where: { id: projectId, ownerId, deletedAt: null },
+        });
+        if (!parent) {
+          throw new NotFoundException({ code: 'PROJECT_NOT_FOUND', message: 'Project not found.' });
+        }
+        const changed = await transaction.project.updateMany({
+          where: { id: projectId, ownerId, deletedAt: null, updatedAt: parent.updatedAt },
+          data: { updatedAt: new Date(Math.max(Date.now(), parent.updatedAt.getTime() + 1)) },
+        });
+        if (changed.count === 1) break;
+      }
+      const updated = await transaction.rowCounter.update({
+        where: { projectId },
+        data: {
+          ownerId,
+          name: body.name,
+          mode: this.normalizedCounterMode(body.mode),
+          sectionName: this.trimmedOrNull(body.sectionName),
+          memo: this.trimmedOrNull(body.memo),
+          currentRow: body.currentRow,
+          targetRow: body.targetRow,
+          deletedAt: null,
+        },
+        include: this.rowCounterInclude(ownerId),
+      });
+      return this.toRowCounterResponse(updated);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async upsertProjectRowInstruction(
@@ -1597,6 +1684,7 @@ export class ProjectsService {
     transaction: Prisma.TransactionClient,
     ownerId: string,
     body: SaveProjectDto,
+    files: { created: string[]; retired: string[] },
   ): Promise<void> {
     await transaction.rowCounter.upsert({
       where: { projectId: body.id },
@@ -1651,7 +1739,7 @@ export class ProjectsService {
       });
     }
 
-    await this.saveProjectPatternCopy(transaction, ownerId, body);
+    await this.saveProjectPatternCopy(transaction, ownerId, body, files);
   }
 
   private async saveRowInstructions(
@@ -1720,12 +1808,15 @@ export class ProjectsService {
     transaction: Prisma.TransactionClient,
     ownerId: string,
     body: SaveProjectDto,
+    files: { created: string[]; retired: string[] },
   ): Promise<void> {
     if (body.patternCopy === undefined) {
       return;
     }
 
     if (body.patternCopy === null) {
+      const previous = await transaction.projectPatternCopy.findUnique({ where: { projectId: body.id } });
+      await this.retirePatternFiles(previous, files);
       await transaction.projectPatternCopy.deleteMany({
         where: {
           ownerId,
@@ -1808,6 +1899,7 @@ export class ProjectsService {
         buffer,
       });
 
+      files.created.push(stored.storageKey);
       return {
         fileStorageKey: stored.storageKey,
         fileContentType: sourceStoredFile.contentType,
@@ -1818,8 +1910,9 @@ export class ProjectsService {
     // 다른 도안으로 교체되는 경우(복사본 id가 바뀜) 기존 레코드를 지우고 새로 만든다.
     // upsert의 update 브랜치는 scalarInput에 없는 파일/드로잉 키를 갱신하지 않아
     // 이전 도안의 파일과 드로잉이 새 도안에 그대로 계승된다(결함 37). 완전 교체로 참조를 끊는다.
-    // 교체로 참조가 끊긴 물리 파일 정리는 RC-08(파일 고아화)에서 별도로 다룬다.
+    // Retire old keys durably before detaching them; delete only after commit.
     if (existing && existing.id !== copy.id) {
+      await this.retirePatternFiles(existing, files);
       await transaction.projectPatternCopy.delete({
         where: { projectId: body.id },
       });

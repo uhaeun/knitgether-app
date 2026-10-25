@@ -180,7 +180,7 @@ def test_rc_08_orphan_census(db):
     on_disk = {
         str(p.relative_to(STORAGE_ROOT))
         for p in STORAGE_ROOT.rglob("*")
-        if p.is_file() and ".omc" not in p.parts
+        if p.is_file() and ".omc" not in p.parts and ".pattern-cleanup" not in p.parts
     } if STORAGE_ROOT.exists() else set()
 
     referenced = set()

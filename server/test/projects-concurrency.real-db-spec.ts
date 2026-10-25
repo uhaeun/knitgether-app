@@ -10,6 +10,8 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { setupApp } from '../src/app.setup';
 import { PrismaService } from '../src/database/prisma.service';
+import { ProjectsService } from '../src/projects/projects.service';
+import { LocalFileStorageService } from '../src/storage/local-file-storage.service';
 
 const realUrl = process.env.QA_REAL_DATABASE_URL;
 if (!realUrl) throw new Error('QA_REAL_DATABASE_URL is required; no default database is used.');
@@ -27,6 +29,7 @@ describe('Project concurrency on real PostgreSQL', () => {
   let target: string | null = null;
   let afterRead: ((value: any) => Promise<void>) | null = null;
   let failAfterPatternWrite = false;
+  let afterCas: (() => Promise<void>) | null = null;
   const oldEnv = { ...process.env };
 
   beforeAll(async () => {
@@ -56,16 +59,24 @@ describe('Project concurrency on real PostgreSQL', () => {
               }
               return value;
             };
+            if (key === 'updateMany') return async (args: any) => {
+              const result = await delegate.updateMany(args);
+              if (result.count === 1 && target === args.where.id && afterCas) {
+                const hook = afterCas; afterCas = null;
+                await hook();
+              }
+              return result;
+            };
             const value = Reflect.get(delegate, key);
             return typeof value === 'function' ? value.bind(delegate) : value;
           },
         });
         const pattern = new Proxy(tx.projectPatternCopy, {
           get(delegate, key) {
-            if (key === 'upsert') return async (args: any) => {
-              const value = await delegate.upsert(args);
+            if (key === 'upsert' || key === 'create') return async (args: any) => {
+              const value = await (delegate[key] as any)(args);
               if (failAfterPatternWrite) {
-                evidence.push({ stage: 'late-failure-after-real-pattern-upsert', id: args.where.projectId });
+                evidence.push({ stage: 'late-failure-after-real-pattern-upsert', id: args.where?.projectId ?? args.data.projectId });
                 throw new Error('Injected failure after actual child SQL');
               }
               return value;
@@ -92,7 +103,7 @@ describe('Project concurrency on real PostgreSQL', () => {
     await app.init();
     evidence.push({ isolation: await db.$queryRaw`SHOW transaction_isolation` });
   });
-  afterEach(() => { target = null; afterRead = null; failAfterPatternWrite = false; });
+  afterEach(() => { target = null; afterRead = null; afterCas = null; failAfterPatternWrite = false; });
   afterAll(async () => {
     try {
       if (process.env.QA_DB_EVIDENCE_PATH) {
@@ -273,10 +284,8 @@ describe('Project concurrency on real PostgreSQL', () => {
     expect((await snapshot(b.id)).rowCounter!.id).toBe(b.rowCounter.id);
   });
 
-  // Diagnostic acceptance tests: deliberately red until separately scoped defects
-  // are fixed. Opt in explicitly; the CI gate above covers full PATCH vs PATCH.
-  const knownGap = process.env.QA_RUN_KNOWN_GAPS === '1' ? it : it.skip;
-  knownGap('KNOWN GAP: rejects a stale whole save after a child-only counter save', async () => {
+  // Former known gaps are now mandatory CI acceptance tests.
+  it('Regression: rejects a stale whole save after a child-only counter save', async () => {
     const b = await create();
     const child = await call('patch', '/projects/'+b.id+'/row-counter',
       { ...b.rowCounter, currentRow: 77 }).expect(200);
@@ -289,10 +298,11 @@ describe('Project concurrency on real PostgreSQL', () => {
     expect(final.rowCounter!.currentRow).toBe(77);
   });
 
-  knownGap('KNOWN GAP: detects a child API write between the whole save read and CAS', async () => {
+  it('Regression: detects a child API write between the whole save read and CAS', async () => {
     const b = await create(); target = b.id;
     let child: any;
     afterRead = async () => {
+      afterRead = null; // Do not intercept the child transaction's own parent read.
       child = await call('patch', '/projects/'+b.id+'/row-counter',
         { ...b.rowCounter, currentRow: 88 }).expect(200);
     };
@@ -315,7 +325,7 @@ describe('Project concurrency on real PostgreSQL', () => {
     await db.patternDocument.create({ data: { id, ownerId: owner, title: 'QA source', storedFileId: fileId } });
     return id;
   }
-  knownGap('KNOWN GAP: removes materialized files when the SQL transaction rolls back', async () => {
+  it('Regression: removes materialized files when the SQL transaction rolls back', async () => {
     const b = await create(), before = await snapshot(b.id);
     const body = variant(b, 'A');
     body.patternCopy.sourcePatternDocumentId = await sourcePattern();
@@ -323,14 +333,14 @@ describe('Project concurrency on real PostgreSQL', () => {
     const res = await call('patch', '/projects/'+b.id, body).expect(500);
     const after = await snapshot(b.id);
     const files = await fs.readdir(storage, { recursive: true });
-    const orphans = files.filter(p => p.startsWith('projects/') && p.endsWith('.pdf'));
+    const orphans = files.filter(p => p.startsWith('projects/'+owner+'/'+b.id+'/') && p.endsWith('.pdf'));
     evidence.push({ case: 'filesystem-after-sql-rollback', request: body, status: res.status,
       before, after, orphanFiles: orphans });
     expect(after).toEqual(before);
     expect(orphans).toEqual([]);
   });
 
-  knownGap('KNOWN GAP: cleans an unreferenced PDF after pattern copy replacement', async () => {
+  it('Regression: cleans an unreferenced PDF after pattern copy replacement', async () => {
     const b = await create(), body = variant(b, 'A');
     body.patternCopy.sourcePatternDocumentId = await sourcePattern();
     const first = await call('patch', '/projects/'+b.id, body).expect(200);
@@ -346,4 +356,128 @@ describe('Project concurrency on real PostgreSQL', () => {
     expect(final.patternCopy!.fileStorageKey).not.toBe(oldCopy.fileStorageKey);
     expect(oldFileExists).toBe(false);
   });
+  it('serializes a child write after a whole-save CAS without losing the child', async () => {
+    const b = await create();
+    const whole = await call('patch', '/projects/'+b.id, variant(b, 'A')).expect(200);
+    await call('patch', '/projects/'+b.id+'/row-counter', { ...b.rowCounter, currentRow: 99 }).expect(200);
+    const final = await snapshot(b.id);
+    expect(final.memo).toBe('A');
+    expect(final.rowCounter!.currentRow).toBe(99);
+    expect(final.updatedAt.getTime()).toBeGreaterThan(new Date(whole.body.updatedAt).getTime());
+    evidence.push({ case: 'whole-then-child', final });
+  });
+
+  it('rolls back the parent version if the child update fails', async () => {
+    const b = await create(), before = await snapshot(b.id);
+    await db.rowCounter.delete({ where: { projectId: b.id } });
+    await call('patch', '/projects/'+b.id+'/row-counter', { ...b.rowCounter, currentRow: 99 }).expect(500);
+    const final = await snapshot(b.id);
+    expect(final.updatedAt).toEqual(before.updatedAt);
+    evidence.push({ case: 'failed-child-parent-rollback', before, final });
+  });
+
+  it('keeps the old PDF and drawing on rollback, then removes both on detach', async () => {
+    const b = await create(), body = variant(b, 'A');
+    body.patternCopy.sourcePatternDocumentId = await sourcePattern();
+    const first = await call('patch', '/projects/'+b.id, body).expect(200);
+    const storageService = app.get(LocalFileStorageService);
+    const drawing = await storageService.saveProjectPatternDrawing({ ownerId: owner, projectId: b.id,
+      copyId: body.patternCopy.id, buffer: Buffer.from('QA drawing') });
+    await db.projectPatternCopy.update({ where: { projectId: b.id }, data: { drawingStorageKey: drawing.storageKey } });
+    const old = (await snapshot(b.id)).patternCopy!;
+    const failed = structuredClone(body); failed.baseUpdatedAt = first.body.updatedAt;
+    failed.patternCopy.id = randomUUID();
+    // Failure after actual upsert must keep the committed old file intact.
+    failAfterPatternWrite = true;
+    await call('patch', '/projects/'+b.id, failed).expect(500);
+    await fs.access(join(storage, old.fileStorageKey!));
+    await fs.access(join(storage, drawing.storageKey));
+    const projectPdfs = (await fs.readdir(storage, { recursive: true })).filter(p =>
+      p.startsWith('projects/'+owner+'/'+b.id+'/') && p.endsWith('.pdf'));
+    expect(projectPdfs).toEqual([old.fileStorageKey!]);
+    failAfterPatternWrite = false;
+    await call('patch', '/projects/'+b.id, { ...body, baseUpdatedAt: first.body.updatedAt, patternCopy: null }).expect(200);
+    expect(await fs.stat(join(storage, old.fileStorageKey!)).then(() => true, () => false)).toBe(false);
+    expect(await fs.stat(join(storage, drawing.storageKey)).then(() => true, () => false)).toBe(false);
+    evidence.push({ case: 'rollback-preserves-old-and-detach-cleans-pdf-drawing', old });
+  });
+
+  it('retries durable failed removals and preserves referenced files after restart', async () => {
+    const b = await create(), body = variant(b, 'A');
+    body.patternCopy.sourcePatternDocumentId = await sourcePattern();
+    const first = await call('patch', '/projects/'+b.id, body).expect(200);
+    const old = (await snapshot(b.id)).patternCopy!;
+    const storageService = app.get(LocalFileStorageService);
+    const fail = jest.spyOn(storageService, 'remove').mockRejectedValueOnce(new Error('Injected unlink failure'));
+    const replacement = structuredClone(body); replacement.baseUpdatedAt = first.body.updatedAt;
+    replacement.patternCopy.id = randomUUID();
+    await call('patch', '/projects/'+b.id, replacement).expect(200);
+    await fs.access(join(storage, old.fileStorageKey!));
+    fail.mockRestore();
+    // Simulate persisted candidates older than the crash recovery grace period.
+    for (const name of await fs.readdir(join(storage, '.pattern-cleanup'))) {
+      const path = join(storage, '.pattern-cleanup', name);
+      const entry = JSON.parse(await fs.readFile(path, 'utf8'));
+      entry.queuedAt = Date.now() - 3_600_001;
+      await fs.writeFile(path, JSON.stringify(entry));
+    }
+    const candidates = await storageService.pendingProjectPatternRemovals(Date.now());
+    expect(candidates).toContain(old.fileStorageKey);
+    // New storage instance reads durable markers, independent of in-memory state.
+    const restartedStorage = new LocalFileStorageService({ get: () => storage } as any);
+    const restartedService = new ProjectsService(db, restartedStorage);
+    await restartedService.retryPatternFileCleanup();
+    expect(await fs.stat(join(storage, old.fileStorageKey!)).then(() => true, () => false)).toBe(false);
+    const final = await snapshot(b.id);
+    await fs.access(join(storage, final.patternCopy!.fileStorageKey!));
+    const source = await db.patternDocument.findUniqueOrThrow({ where: { id: body.patternCopy.sourcePatternDocumentId }, include: { storedFile: true } });
+    await fs.access(join(storage, source.storedFile!.storageKey));
+    evidence.push({ case: 'durable-cleanup-retry-and-live-reference-preserved', candidates, final });
+  });
+
+  it('blocks the counter on the parent lock while a whole save is uncommitted', async () => {
+    const b = await create(); target = b.id;
+    let signal!: () => void, release!: () => void;
+    const locked = new Promise<void>(resolve => { signal = resolve; });
+    const resume = new Promise<void>(resolve => { release = resolve; });
+    afterCas = async () => { signal(); await resume; };
+    const whole = call('patch', '/projects/'+b.id, variant(b, 'A')).then(res => res);
+    await locked;
+    const child = call('patch', '/projects/'+b.id+'/row-counter', { ...b.rowCounter, currentRow: 99 }).then(res => res);
+    let blocked = false;
+    try {
+      for (let attempt = 0; attempt < 100; attempt++) {
+        const rows = await db.$queryRaw<Array<{ blocked: boolean }>>`
+          SELECT EXISTS(SELECT 1 FROM pg_stat_activity
+            WHERE datname = current_database() AND wait_event_type = 'Lock'
+            AND query LIKE '%UPDATE%Project%') AS blocked`;
+        if (rows[0].blocked) { blocked = true; break; }
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+    } finally { release(); }
+    const [wholeResult, childResult] = await Promise.all([whole, child]);
+    expect(blocked).toBe(true);
+    expect(wholeResult.status).toBe(200); expect(childResult.status).toBe(200);
+    const final = await snapshot(b.id);
+    expect(final.memo).toBe('A'); expect(final.rowCounter!.currentRow).toBe(99);
+    expect(final.updatedAt.getTime()).toBeGreaterThan(new Date(wholeResult.body.updatedAt).getTime());
+    evidence.push({ case: 'child-blocked-on-whole-parent-lock', blocked, final });
+  });
+
+  it('compensates files when project creation rolls back', async () => {
+    const id = randomUUID(), counterId = randomUUID();
+    const body = variant({ id, name: 'Create rollback', memo: '', status: 'WIP', isFavorite: false,
+      startDate: '2026-10-26T00:00:00.000Z', relatedSkillIds: [],
+      rowCounter: { id: counterId, projectId: id, name: 'Main', currentRow: 0, rowInstructions: [] },
+      workSessions: [], patternCopy: null }, 'A');
+    body.patternCopy.sourcePatternDocumentId = await sourcePattern();
+    failAfterPatternWrite = true;
+    await call('post', '/projects', body).expect(500);
+    expect(await db.project.findUnique({ where: { id } })).toBeNull();
+    const files = (await fs.readdir(storage, { recursive: true })).filter(p =>
+      p.startsWith('projects/'+owner+'/'+id+'/') && p.endsWith('.pdf'));
+    expect(files).toEqual([]);
+    evidence.push({ case: 'create-rollback-files-compensated', id, files });
+  });
+
 });

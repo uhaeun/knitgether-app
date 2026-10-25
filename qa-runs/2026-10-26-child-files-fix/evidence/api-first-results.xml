@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="75" time="11.999" timestamp="2026-10-26T02:46:11.784461+09:00" hostname="haeun.local"><testcase classname="qa.api-tests.test_01_ownership_isolation" name="test_cross_owner_access_is_blocked_and_db_unchanged" time="0.236" /><testcase classname="qa.api-tests.test_02_last_write_wins" name="test_update_without_base_updated_at_is_rejected" time="0.011" /><testcase classname="qa.api-tests.test_02_last_write_wins" name="test_second_update_from_same_baseline_is_rejected_and_first_survives" time="0.018" /><testcase classname="qa.api-tests.test_02_last_write_wins" name="test_update_with_refreshed_baseline_succeeds" time="0.023" /><testcase classname="qa.api-tests.test_03_create_idempotency" name="test_duplicate_create_is_rejected_and_row_stays_single" time="0.011" /><testcase classname="qa.api-tests.test_03_create_idempotency" name="test_resend_reaches_server_through_update_path" time="0.018" /><testcase classname="qa.api-tests.test_04_delete_cascade" name="test_delete_soft_cascades_to_children" time="0.020" /><testcase classname="qa.api-tests.test_05_transaction_atomicity" name="test_child_failure_rolls_back_parent_update" time="0.018" /><testcase classname="qa.api-tests.test_05_transaction_atomicity" name="test_injection_actually_injects" time="0.013" /><testcase classname="qa.api-tests.test_05_transaction_atomicity" name="test_unknown_row_counter_id_is_rejected_without_mutation" time="0.010" /><testcase classname="qa.api-tests.test_06_auth_and_boundaries" name="test_missing_token_is_401" time="0.001" /><testcase classname="qa.api-tests.test_06_auth_and_boundaries" name="test_tampered_token_is_401" time="0.001" /><testcase classname="qa.api-tests.test_06_auth_and_boundaries" name="test_garbage_bearer_is_401" time="0.001" /><testcase classname="qa.api-tests.test_06_auth_and_boundaries" name="test_current_row_zero_is_accepted" time="0.009" /><testcase classname="qa.api-tests.test_06_auth_and_boundaries" name="test_negative_current_row_is_rejected_400" time="0.006" /><testcase classname="qa.api-tests.test_06_auth_and_boundaries" name="test_time_reversed_work_session_behavior" time="0.002" /><testcase classname="qa.api-tests.test_07_last_worked_at" name="test_api_25_last_worked_at_round_trip" time="0.007" /><testcase classname="qa.api-tests.test_07_last_worked_at" name="test_api_25_update_moves_last_worked_at" time="0.011" /><testcase classname="qa.api-tests.test_07_last_worked_at" name="test_api_25_list_sorted_by_last_worked_at" time="0.012" /><testcase classname="qa.api-tests.test_07_last_worked_at" name="test_api_25_server_does_not_derive_from_sessions" time="0.005" /><testcase classname="qa.api-tests.test_08_network_degradation" name="test_gate_is_transparent_when_healthy" time="0.480"><failure message="AssertionError: assert 401 == 201&#10; +  where 401 = &lt;Response [401]&gt;.status_code&#10; +    where &lt;Response [401]&gt; = create_project({'id': 'd9a77ea8-b4a3-4928-bc7d-d2a9dc146637', 'name': 'NET-기준선', 'status': 'WIP', 'isFavorite': False, ...})&#10; +      where create_project = &lt;helpers.Api object at 0x108ad9090&gt;.create_project">gate = &lt;support.netgate.NetGate object at 0x108ab1160&gt;
+account_a = Account(email='pytest-1792950371-4083136e@example.com', token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTQxOD...fEfGgbFOKutv7froNFsW-0d5sKyw', user_id='a9418080-61af-4817-b484-72aa9cc5f17e', api=&lt;helpers.Api object at 0x108ab1940&gt;)
+
+    def test_gate_is_transparent_when_healthy(gate, account_a):
+        """기준선. 조건을 안 걸면 프록시를 거쳐도 결과가 같아야 한다.
+    
+        이게 깨지면 뒤의 모든 판정이 프록시 결함과 구분되지 않는다.
+        """
+        api = _api(gate, account_a)
+        payload = project_payload(name="NET-기준선")
+&gt;       assert api.create_project(payload).status_code == 201
+E       AssertionError: assert 401 == 201
+E        +  where 401 = &lt;Response [401]&gt;.status_code
+E        +    where &lt;Response [401]&gt; = create_project({'id': 'd9a77ea8-b4a3-4928-bc7d-d2a9dc146637', 'name': 'NET-기준선', 'status': 'WIP', 'isFavorite': False, ...})
+E        +      where create_project = &lt;helpers.Api object at 0x108ad9090&gt;.create_project
+
+qa/api-tests/test_08_network_degradation.py:51: AssertionError</failure></testcase><testcase classname="qa.api-tests.test_08_network_degradation" name="test_latency_actually_applies" time="1.005" /><testcase classname="qa.api-tests.test_08_network_degradation" name="test_complete_outage_then_recovery" time="0.504"><failure message="AssertionError: assert 401 == 201&#10; +  where 401 = &lt;Response [401]&gt;.status_code&#10; +    where &lt;Response [401]&gt; = create_project({'id': 'a9b2293a-432c-4978-900c-961a2d6d52a9', 'name': 'NET-단절복구', 'status': 'WIP', 'isFavorite': False, ...})&#10; +      where create_project = &lt;helpers.Api object at 0x108b7e3f0&gt;.create_project">gate = &lt;support.netgate.NetGate object at 0x108b76490&gt;
+account_a = Account(email='pytest-1792950371-4083136e@example.com', token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTQxOD...fEfGgbFOKutv7froNFsW-0d5sKyw', user_id='a9418080-61af-4817-b484-72aa9cc5f17e', api=&lt;helpers.Api object at 0x108ab1940&gt;)
+
+    def test_complete_outage_then_recovery(gate, account_a):
+        """완전 단절 중에는 실패하고 복구하면 통하는가."""
+        api = _api(gate, account_a)
+        payload = project_payload(name="NET-단절복구")
+&gt;       assert api.create_project(payload).status_code == 201
+E       AssertionError: assert 401 == 201
+E        +  where 401 = &lt;Response [401]&gt;.status_code
+E        +    where &lt;Response [401]&gt; = create_project({'id': 'a9b2293a-432c-4978-900c-961a2d6d52a9', 'name': 'NET-단절복구', 'status': 'WIP', 'isFavorite': False, ...})
+E        +      where create_project = &lt;helpers.Api object at 0x108b7e3f0&gt;.create_project
+
+qa/api-tests/test_08_network_degradation.py:76: AssertionError</failure></testcase><testcase classname="qa.api-tests.test_08_network_degradation" name="test_frozen_response_still_commits_on_server" time="4.503"><failure message="AssertionError: 요청 방향을 열어 뒀는데 서버에 프로젝트가 없다. 열화 도구가 요청까지 막고 있다는 뜻이라 이 판정은 무효다&#10;assert 0 == 1">gate = &lt;support.netgate.NetGate object at 0x108b7e650&gt;
+account_a = Account(email='pytest-1792950371-4083136e@example.com', token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTQxOD...fEfGgbFOKutv7froNFsW-0d5sKyw', user_id='a9418080-61af-4817-b484-72aa9cc5f17e', api=&lt;helpers.Api object at 0x108ab1940&gt;)
+db = &lt;connection object at 0x108ab17e0; dsn: 'user=knitgether password=xxx dbname=knitgether_qa_sync11_20261024 host=127.0.0.1 port=55434', closed: 0&gt;
+
+    def test_frozen_response_still_commits_on_server(gate, account_a, db):
+        """응답만 막고 클라이언트가 포기하면 서버는 어떻게 되는가.
+    
+        사용자가 기다리다 이탈하는 상황이다. 요청은 서버까지 갔고 처리도 끝났는데
+        응답이 못 돌아와 클라이언트만 모른다. 이때 서버가 절반만 쓰고 멈추면
+        데이터가 조용히 깨진다.
+    
+        요청 방향은 열어 둔다. 양방향을 막으면 서버에 아무것도 닿지 않아
+        0건과 0건을 비교하는 공허한 판정이 된다.
+        """
+        payload = project_payload(name="NET-응답정지")
+        pid = payload["id"]
+    
+        gate.freeze("down")
+        with pytest.raises(requests.exceptions.RequestException):
+            requests.post(f"{gate.base_url}/projects", json=payload,
+                          headers={"Authorization": f"Bearer {account_a.token}"}, timeout=3)
+        gate.thaw()
+        time.sleep(1.0)
+    
+        with db.cursor() as cur:
+            cur.execute('SELECT COUNT(*) FROM "Project" WHERE id = %s', (pid,))
+            projects = cur.fetchone()[0]
+            cur.execute('SELECT COUNT(*) FROM "RowCounter" WHERE "projectId" = %s', (pid,))
+            counters = cur.fetchone()[0]
+    
+&gt;       assert projects == 1, (
+            "요청 방향을 열어 뒀는데 서버에 프로젝트가 없다. 열화 도구가 요청까지 "
+            "막고 있다는 뜻이라 이 판정은 무효다"
+        )
+E       AssertionError: 요청 방향을 열어 뒀는데 서버에 프로젝트가 없다. 열화 도구가 요청까지 막고 있다는 뜻이라 이 판정은 무효다
+E       assert 0 == 1
+
+qa/api-tests/test_08_network_degradation.py:115: AssertionError</failure></testcase><testcase classname="qa.api-tests.test_08_network_degradation" name="test_connection_reset_after_commit_leaves_no_orphan" time="2.997"><failure message="AssertionError: 응답 방향만 막았는데 서버에 프로젝트가 없다. 요청이 도달하지 않았으므로 이 판정은 공허하다&#10;assert 0 == 1">gate = &lt;support.netgate.NetGate object at 0x108b7e3f0&gt;
+account_a = Account(email='pytest-1792950371-4083136e@example.com', token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTQxOD...fEfGgbFOKutv7froNFsW-0d5sKyw', user_id='a9418080-61af-4817-b484-72aa9cc5f17e', api=&lt;helpers.Api object at 0x108ab1940&gt;)
+db = &lt;connection object at 0x108ab17e0; dsn: 'user=knitgether password=xxx dbname=knitgether_qa_sync11_20261024 host=127.0.0.1 port=55434', closed: 0&gt;
+
+    def test_connection_reset_after_commit_leaves_no_orphan(gate, account_a, db):
+        """서버가 쓴 뒤 회선이 끊어져도 고아 자식 레코드가 남지 않는가.
+    
+        앞 케이스(freeze)는 응답이 안 와서 클라이언트가 스스로 포기하는 상황이고,
+        이 케이스는 연결이 끊어져 버리는 상황이다. 클라이언트가 보는 결과는 둘 다
+        실패지만 서버가 겪는 일은 다르다.
+    
+        요청은 대역폭 제한 없이 온전히 보내고, 응답 방향을 세운 뒤 끊는다. 이렇게
+        해야 요청이 서버에 닿은 것이 보장되어 판정이 공허해지지 않는다.
+        RowCounter는 Project와 1:1이라 부모 없이 자식만 남으면 정합성이 깨진 것이다.
+        """
+        import threading
+    
+        payload = project_payload(name="NET-리셋")
+        pid = payload["id"]
+    
+        gate.freeze("down")                       # 요청은 통과, 응답만 붙잡는다
+        threading.Timer(1.5, gate.cut).start()    # 서버가 다 쓴 뒤 회선을 끊는다
+        with pytest.raises(requests.exceptions.RequestException):
+            requests.post(f"{gate.base_url}/projects", json=payload,
+                          headers={"Authorization": f"Bearer {account_a.token}"}, timeout=8)
+        gate.reset()
+        time.sleep(1.0)
+    
+        with db.cursor() as cur:
+            cur.execute('SELECT COUNT(*) FROM "Project" WHERE id = %s', (pid,))
+            reached = cur.fetchone()[0]
+            cur.execute(
+                'SELECT COUNT(*) FROM "RowCounter" c '
+                'LEFT JOIN "Project" p ON p.id = c."projectId" '
+                'WHERE c."projectId" = %s AND p.id IS NULL', (pid,))
+            orphans = cur.fetchone()[0]
+            cur.execute('SELECT COUNT(*) FROM "RowCounter" WHERE "projectId" = %s', (pid,))
+            counters = cur.fetchone()[0]
+    
+&gt;       assert reached == 1, (
+            "응답 방향만 막았는데 서버에 프로젝트가 없다. 요청이 도달하지 않았으므로 "
+            "이 판정은 공허하다"
+        )
+E       AssertionError: 응답 방향만 막았는데 서버에 프로젝트가 없다. 요청이 도달하지 않았으므로 이 판정은 공허하다
+E       assert 0 == 1
+
+qa/api-tests/test_08_network_degradation.py:160: AssertionError</failure></testcase><testcase classname="qa.api-tests.test_08_network_degradation" name="test_retry_after_recovery_is_idempotent" time="1.000"><failure message="AssertionError: {&quot;code&quot;:&quot;UNAUTHENTICATED&quot;,&quot;message&quot;:&quot;Missing or invalid bearer token.&quot;,&quot;details&quot;:{}}&#10;assert 401 in (200, 201)&#10; +  where 401 = &lt;Response [401]&gt;.status_code">gate = &lt;support.netgate.NetGate object at 0x108b6da30&gt;
+account_a = Account(email='pytest-1792950371-4083136e@example.com', token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTQxOD...fEfGgbFOKutv7froNFsW-0d5sKyw', user_id='a9418080-61af-4817-b484-72aa9cc5f17e', api=&lt;helpers.Api object at 0x108ab1940&gt;)
+db = &lt;connection object at 0x108ab17e0; dsn: 'user=knitgether password=xxx dbname=knitgether_qa_sync11_20261024 host=127.0.0.1 port=55434', closed: 0&gt;
+
+    def test_retry_after_recovery_is_idempotent(gate, account_a, db):
+        """단절 후 재전송이 중복 생성을 만들지 않는가.
+    
+        offline-first 구조라 복구 시 재전송이 반드시 일어난다. 클라이언트가 UUID를
+        만들어 보내므로 같은 요청은 한 건으로 수렴해야 한다.
+        """
+        api = _api(gate, account_a)
+        payload = project_payload(name="NET-재전송")
+        pid = payload["id"]
+    
+        gate.close()
+        with pytest.raises(requests.exceptions.RequestException):
+            api.create_project(payload)
+    
+        gate.open()
+        api = _api(gate, account_a)
+        first = api.create_project(payload)
+        second = api.create_project(payload)
+&gt;       assert first.status_code in (200, 201), first.text
+E       AssertionError: {"code":"UNAUTHENTICATED","message":"Missing or invalid bearer token.","details":{}}
+E       assert 401 in (200, 201)
+E        +  where 401 = &lt;Response [401]&gt;.status_code
+
+qa/api-tests/test_08_network_degradation.py:186: AssertionError</failure></testcase><testcase classname="qa.api-tests.test_09_transferred_from_06" name="test_sync_03_post_upserts_and_patch_requires_existing" time="0.034" /><testcase classname="qa.api-tests.test_09_transferred_from_06" name="test_auth_01_token_expiry_follows_setting" time="0.000" /><testcase classname="qa.api-tests.test_09_transferred_from_06" name="test_rc_08_deleted_project_leaves_pattern_file_on_disk" time="0.032" /><testcase classname="qa.api-tests.test_09_transferred_from_06" name="test_rc_08_orphan_census" time="0.001" /><testcase classname="qa.api-tests.test_10_auth_contract" name="test_api_02_password_length_boundaries" time="0.037" /><testcase classname="qa.api-tests.test_10_auth_contract" name="test_api_03_duplicate_email_rejected" time="0.017" /><testcase classname="qa.api-tests.test_10_auth_contract" name="test_api_04_login_success_and_credential_rejection" time="0.048" /><testcase classname="qa.api-tests.test_10_auth_contract" name="test_api_08_unknown_field_is_rejected" time="0.001" /><testcase classname="qa.api-tests.test_10_auth_contract" name="test_api_08_type_error_is_rejected" time="0.001" /><testcase classname="qa.api-tests.test_11_sync_loss_regression" name="test_api_18_partial_payload_does_not_delete_existing_sessions" time="0.012" /><testcase classname="qa.api-tests.test_11_sync_loss_regression" name="test_api_18_resend_does_not_duplicate_or_drop" time="0.012" /><testcase classname="qa.api-tests.test_11_sync_loss_regression" name="test_api_19_rejected_request_preserves_server_state" time="0.009" /><testcase classname="qa.api-tests.test_11_sync_loss_regression" name="test_api_20_rejected_update_does_not_discard_previous_value" time="0.007" /><testcase classname="qa.api-tests.test_11_sync_loss_regression" name="test_api_20_rejected_update_keeps_children_intact" time="0.008" /><testcase classname="qa.api-tests.test_12_library_crud" name="test_api_17_library_crud_cycle[yarns]" time="0.010" /><testcase classname="qa.api-tests.test_12_library_crud" name="test_api_17_library_crud_cycle[needles]" time="0.009" /><testcase classname="qa.api-tests.test_12_library_crud" name="test_api_17_library_crud_cycle[tools]" time="0.014" /><testcase classname="qa.api-tests.test_13_row_counter_isolation" name="test_api_21_row_counter_missing_project_is_skipped_not_fatal" time="0.016" /><testcase classname="qa.api-tests.test_14_skill_soft_delete" name="test_api_22_deleted_skill_is_excluded_from_list_and_single_get" time="0.014" /><testcase classname="qa.api-tests.test_15_pattern_copy_file_integrity" name="test_api_23_library_linked_pattern_gets_server_file_key" time="0.018" /><testcase classname="qa.api-tests.test_15_pattern_copy_file_integrity" name="test_api_24_pattern_replace_severs_db_reference_but_leaves_old_file" time="0.038"><failure message="AssertionError: 이전 드로잉 파일이 디스크에서 사라졌다. RC-08 정리 경로가 생겼다면 이 테스트와 07/09_test_case_master.md의 'DB 참조 정리와 물리 파일 삭제는 다른 동작' 기재를 갱신할 것&#10;assert False&#10; +  where False = exists()&#10; +    where exists = PosixPath('/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-26-child-files-fix/storage/projects/a94180...aa9cc5f17e/ab68b324-036f-4262-a506-1807a7ae625e/pattern-copies/083dd762-245d-4b2e-ae98-ba1a20b9268b/drawing.pkdrawing').exists">account_a = Account(email='pytest-1792950371-4083136e@example.com', token='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhOTQxOD...fEfGgbFOKutv7froNFsW-0d5sKyw', user_id='a9418080-61af-4817-b484-72aa9cc5f17e', api=&lt;helpers.Api object at 0x108ab1940&gt;)
+db = &lt;connection object at 0x108ab17e0; dsn: 'user=knitgether password=xxx dbname=knitgether_qa_sync11_20261024 host=127.0.0.1 port=55434', closed: 0&gt;
+
+    def test_api_24_pattern_replace_severs_db_reference_but_leaves_old_file(account_a, db):
+        pattern_a = _create_library_pattern(account_a, "API24-원본도안")
+        pattern_b = _create_library_pattern(account_a, "API24-교체도안")
+    
+        payload = project_payload(name="API24-프로젝트")
+        pid = payload["id"]
+        copy_a_id = uid()
+        payload["patternCopy"] = {
+            "id": copy_a_id,
+            "projectId": pid,
+            "sourcePatternDocumentId": pattern_a,
+            "titleSnapshot": "API24-원본도안",
+            "designerSnapshot": None,
+            "fileNameSnapshot": "api24-a.pdf",
+            "localCopyPath": None,
+            "copiedAt": "2026-08-31T00:00:00.000Z",
+        }
+        assert account_a.api.create_project(payload).status_code == 201
+    
+        # 사전조건: 교체 전에 원본 복사본에 실제로 드로잉이 있어야 "정리됐는지" 검증이 의미 있다
+        drawing_up = account_a.api.s.post(
+            f"{account_a.api.base}/projects/{pid}/pattern-copy/drawing",
+            headers={"Authorization": f"Bearer {account_a.token}"},
+            files={"file": ("drawing.pkdrawing", TINY_DRAWING, "application/octet-stream")},
+            timeout=15,
+        )
+        assert drawing_up.status_code in (200, 201), drawing_up.text
+    
+        before = _pattern_copy_row(db, pid)
+        assert before is not None
+        _copy_id_before, file_key_before, _ct, _bs, drawing_key_before = before
+        assert _copy_id_before == copy_a_id
+        assert file_key_before is not None, "사전조건 실패: 교체 전 fileStorageKey가 비어 있다"
+        assert drawing_key_before is not None, "사전조건 실패: 교체 전 drawingStorageKey가 비어 있다"
+    
+        old_drawing_path = STORAGE_ROOT / drawing_key_before
+        assert old_drawing_path.exists(), "사전조건 실패: 교체 전 드로잉 파일이 디스크에 없다"
+    
+        # ---- 도안 B로 교체: patternCopy.id를 바꿔 replace 분기(existing.id !== copy.id)를 태운다 ----
+        replace_payload = project_payload(project_id=pid, name="API24-프로젝트")
+        replace_payload["id"] = pid
+        copy_b_id = uid()
+        replace_payload["patternCopy"] = {
+            "id": copy_b_id,
+            "projectId": pid,
+            "sourcePatternDocumentId": pattern_b,
+            "titleSnapshot": "API24-교체도안",
+            "designerSnapshot": None,
+            "fileNameSnapshot": "api24-b.pdf",
+            "localCopyPath": None,
+            "copiedAt": "2026-08-31T01:00:00.000Z",
+        }
+        replaced = account_a.api.patch_project(pid, replace_payload)
+        assert replaced.status_code == 200, replaced.text
+        assert replaced.json()["patternCopy"]["sourcePatternDocumentId"] == pattern_b
+    
+        # ---- DB 참조 정리 판정 ----
+        assert _row_by_copy_id(db, copy_a_id) is None, (
+            "교체 뒤에도 이전 ProjectPatternCopy 행(copy A)이 남아 있다. "
+            "하드 삭제+재생성 계약(DEF-14 수정)과 다르다"
+        )
+    
+        after = _pattern_copy_row(db, pid)
+        assert after is not None
+        copy_id_after, file_key_after, _ct2, _bs2, drawing_key_after = after
+        assert copy_id_after == copy_b_id, "교체 후 행의 id가 새 copy id가 아니다"
+        assert file_key_after is not None, "교체된 도안(B)의 fileStorageKey가 비어 있다"
+        assert drawing_key_after != drawing_key_before, (
+            "새 행이 이전 드로잉 키를 그대로 물려받았다 (결함 37 재발)"
+        )
+        assert drawing_key_after is None, (
+            "새 행에 drawingStorageKey가 채워져 있다. SaveProjectPatternCopyDto에 없는 필드라 "
+            "채워질 수 없어야 하는데 값이 있다면 계약이 바뀐 것이다"
+        )
+    
+        # ---- 물리 파일 정리 판정 (DB 판정과 분리) ----
+        # 코드 주석이 명시하듯 이 경로는 참조만 끊고 파일은 지우지 않는다(RC-08로 이관).
+        # 파일이 사라져 있다면 RC-08이 해소된 것이므로 이 단언과 07/10의 기재를 갱신할 것.
+&gt;       assert old_drawing_path.exists(), (
+            "이전 드로잉 파일이 디스크에서 사라졌다. RC-08 정리 경로가 생겼다면 이 테스트와 "
+            "07/09_test_case_master.md의 'DB 참조 정리와 물리 파일 삭제는 다른 동작' 기재를 갱신할 것"
+        )
+E       AssertionError: 이전 드로잉 파일이 디스크에서 사라졌다. RC-08 정리 경로가 생겼다면 이 테스트와 07/09_test_case_master.md의 'DB 참조 정리와 물리 파일 삭제는 다른 동작' 기재를 갱신할 것
+E       assert False
+E        +  where False = exists()
+E        +    where exists = PosixPath('/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-26-child-files-fix/storage/projects/a94180...aa9cc5f17e/ab68b324-036f-4262-a506-1807a7ae625e/pattern-copies/083dd762-245d-4b2e-ae98-ba1a20b9268b/drawing.pkdrawing').exists
+
+qa/api-tests/test_15_pattern_copy_file_integrity.py:202: AssertionError</failure></testcase><testcase classname="qa.api-tests.test_16_coverage_promotions" name="test_api_01_register_creates_user_account_row" time="0.000" /><testcase classname="qa.api-tests.test_16_coverage_promotions" name="test_api_07_missing_scalar_field_is_rejected" time="0.001" /><testcase classname="qa.api-tests.test_16_coverage_promotions" name="test_api_07_missing_row_counter_is_rejected_without_insert" time="0.001" /><testcase classname="qa.api-tests.test_16_coverage_promotions" name="test_api_12_work_session_missing_started_at_is_rejected" time="0.001" /><testcase classname="qa.api-tests.test_16_coverage_promotions" name="test_api_12_work_session_malformed_started_at_is_rejected" time="0.001" /><testcase classname="qa.api-tests.test_16_coverage_promotions" name="test_api_15_single_get_matches_db_row" time="0.007" /><testcase classname="qa.api-tests.test_17_conflict_timestamp_precision" name="test_api_26_exact_millisecond_timestamp_allows_save" time="0.009" /><testcase classname="qa.api-tests.test_17_conflict_timestamp_precision" name="test_api_26_truncated_timestamp_is_rejected_without_mutation" time="0.007" /><testcase classname="qa.api-tests.test_18_library_input_limits" name="test_api_27_library_field_accepts_n_and_rejects_n_plus_one[yarn-name]" time="0.003" /><testcase classname="qa.api-tests.test_18_library_input_limits" name="test_api_27_library_field_accepts_n_and_rejects_n_plus_one[needle-name]" time="0.003" /><testcase classname="qa.api-tests.test_18_library_input_limits" name="test_api_27_library_field_accepts_n_and_rejects_n_plus_one[tool-name]" time="0.003" /><testcase classname="qa.api-tests.test_18_library_input_limits" name="test_api_27_library_field_accepts_n_and_rejects_n_plus_one[tool-link]" time="0.003" /><testcase classname="qa.api-tests.test_19_patch_replace_contract" name="test_api_28_dictionary_patch_rejects_partial_body" time="0.005" /><testcase classname="qa.api-tests.test_19_patch_replace_contract" name="test_api_28_project_patch_rejects_partial_body" time="0.005" /><testcase classname="qa.api-tests.test_19_patch_replace_contract" name="test_api_28_project_patch_accepts_full_body" time="0.010" /><testcase classname="qa.api-tests.test_19_patch_replace_contract" name="test_api_28_library_patch_rejects_partial_body[yarn]" time="0.003" /><testcase classname="qa.api-tests.test_19_patch_replace_contract" name="test_api_28_library_patch_rejects_partial_body[needle]" time="0.003" /><testcase classname="qa.api-tests.test_19_patch_replace_contract" name="test_api_28_library_patch_rejects_partial_body[tool]" time="0.003" /><testcase classname="qa.api-tests.test_20_login_attempt_limit" name="test_api_29_account_locks_after_five_failures" time="0.096" /><testcase classname="qa.api-tests.test_20_login_attempt_limit" name="test_api_29_locked_account_rejects_the_correct_password" time="0.100" /><testcase classname="qa.api-tests.test_20_login_attempt_limit" name="test_api_29_success_clears_the_failure_count" time="0.179" /><testcase classname="qa.api-tests.test_20_login_attempt_limit" name="test_api_29_lock_does_not_reveal_account_existence" time="0.007" /><testcase classname="qa.api-tests.test_21_library_photos" name="test_library_photo_roundtrip_replacement_deletion_and_owner_isolation[yarns]" time="0.019" /><testcase classname="qa.api-tests.test_21_library_photos" name="test_library_photo_roundtrip_replacement_deletion_and_owner_isolation[needles]" time="0.017" /><testcase classname="qa.api-tests.test_21_library_photos" name="test_library_photo_roundtrip_replacement_deletion_and_owner_isolation[tools]" time="0.017" /><testcase classname="qa.api-tests.test_21_library_photos" name="test_invalid_or_missing_photo_preserves_existing_photo[yarns]" time="0.008" /><testcase classname="qa.api-tests.test_21_library_photos" name="test_invalid_or_missing_photo_preserves_existing_photo[needles]" time="0.007" /><testcase classname="qa.api-tests.test_21_library_photos" name="test_invalid_or_missing_photo_preserves_existing_photo[tools]" time="0.025" /></testsuite></testsuites>

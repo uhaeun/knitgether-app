@@ -1,0 +1,15 @@
+{
+  "realDbPassed": 18,
+  "realDbFailed": 0,
+  "realDbSkipped": 0,
+  "serverPassed": 147,
+  "apiPassed": 75,
+  "originalAcceptanceBeforeFailed": 4,
+  "originalAcceptanceAfterPassed": 4,
+  "buildPassed": true,
+  "diffCheckPassed": true,
+  "reportLinksExist": true,
+  "iosSourceUnchanged": true,
+  "commitPushRemoteCiDeployPerformed": false,
+  "testApiAndDbStopped": true
+}
