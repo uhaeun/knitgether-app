@@ -1,42 +1,25 @@
-# QA 기록 안내
+# QA 상세 기록
 
-처음 읽는 분은 [포트폴리오 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf) 또는 [포트폴리오 본문](../submission/portfolio.md)을 먼저 확인해 주세요. 아래 문서는 사례의 설계와 판정 근거를 더 자세히 볼 때 사용합니다.
+프로젝트와 담당 역할은 [제출용 본문](../submission/portfolio.md)에 있습니다. 여기서는 사례의 원래 조건과 결과를 확인할 수 있습니다.
 
-## 권장 읽기 순서
+- [검증 기준](02_functional_spec.md)과 [테스트 설계](05_test_cases.md)
+- [수동 수행](06_manual_execution.md)과 [API·DB·네트워크 확인](07_api_and_network.md)
+- [결함·수정 대장](10_defect_catalog.md)
+- [회차별 실행 결과](11_execution_results.md)
+- [자동화 코드 안내](13_automation_showcase.md)
 
-[05 테스트 설계](05_test_cases.md) → [06 수동 실행](06_manual_execution.md) → [10 결함과 수정](10_defect_catalog.md) → [11 결과](11_execution_results.md)
+설계 수와 수행 수, 최초 결과와 수정 후 결과는 구분합니다. 각 기록은 본문에 적힌 날짜·빌드 기준입니다. [2026-10-04 재검증](../validation/2026-10-04/README.md)은 과거 QA 수행 이력과 별도입니다.
 
-## 전체 문서
+<details>
+<summary>나머지 분석·과거 기록</summary>
 
-| 문서 | 내용 |
-|---|---|
-| [00_프로젝트 배경](00_project_background.md) | 프로젝트 배경 |
-| [01_테스트 대상 분석](01_test_target_analysis.md) | 상세 QA 기록 |
-| [02_기능 동작 정의서](02_functional_spec.md) | 당시 검증 기준과 명세 변경 |
-| [03_품질리스크맵](03_quality_risk_map.md) | 상세 QA 기록 |
-| [04_테스트전략](04_test_strategy.md) | 상세 QA 기록 |
-| [05_테스트케이스](05_test_cases.md) | 상세 QA 기록 |
-| [06_수동 실행 로그](06_manual_execution.md) | 상세 QA 기록 |
-| [07_API와 네트워크 검증](07_api_and_network.md) | 상세 QA 기록 |
-| [08_자동화 도구 비교](08_automation_comparison.md) | 상세 QA 기록 |
-| [09_테스트 케이스 마스터](09_test_case_master.md) | 설계 ID와 케이스 목록 |
-| [10_결함 카탈로그](10_defect_catalog.md) | 결함 번호, 수정과 근거 |
-| [11_실행 결과](11_execution_results.md) | 회차별 결과와 정정 이력 |
-| [12_품질 지표 스코어카드](12_quality_metrics.md) | 측정 기준별 수치 |
-| [13_자동화 구성과 검증 범위](13_automation_showcase.md) | 현재 자동화 구성 안내 |
-| [14_관찰과 개선 제안](14_observations.md) | 상세 QA 기록 |
-| [15_릴리즈 판정](15_release_decision.md) | 과거 내부 릴리즈 판단 |
-| [16_테스트 차터](16_test_charters.md) | 탐색 기록의 사후 재구성 |
+- [프로젝트 배경](00_project_background.md) · [대상 분석](01_test_target_analysis.md)
+- [리스크](03_quality_risk_map.md) · [테스트 전략](04_test_strategy.md) · [케이스 목록](09_test_case_master.md)
+- [도구 비교 기록](08_automation_comparison.md) · [과거 지표 집계](12_quality_metrics.md)
+- [관찰·개선 제안](14_observations.md) · [당시 내부 릴리즈 판단](15_release_decision.md)
+- [탐색 관찰의 사후 정리](16_test_charters.md)
+- [문서·도구 검토](../repository-review/README.md)
 
-## 기록을 읽는 기준
+</details>
 
-- 1차 설계는 22건, 수동 수행 기록은 21건입니다. 최초 10 PASS/11 FAIL과 카운터 수정 후 값을 포함한 11 PASS/10 FAIL 집계는 구분합니다.
-- DEF는 결함 번호, TC와 UI 및 API 번호는 테스트 항목입니다. 서로 일대일 관계가 아닙니다.
-- 대장 30개 항목은 DEF 29개와 명세 항목 1개입니다. 발견 경위, 수정 여부와 실행 검증 여부도 별도입니다.
-- 과거 로그, 시트와 이미지는 당시 상태를 보존합니다. 로그가 없는 문서 집계는 이번 실행 결과로 인용하지 않습니다.
-- 15의 Go는 과거 개인 프로젝트 내부 판단이며 실제 배포 승인 기록이 아닙니다.
-- 16은 수행 뒤 기록을 재구성한 문서입니다. 사전에 차터를 작성해 수행했다는 근거로 사용하지 않습니다.
-
-[이번 저장소 검토](../repository-review/README.md)에서 수정 내용과 확인 범위를 볼 수 있습니다.
-
-현재 코드의 별도 실행 결과는 [2026-10-04 전체 재검증](../validation/2026-10-04/README.md)에서 확인할 수 있습니다. 과거 QA 기록과 구분합니다.
+과거 내부 Go 판정은 실제 배포 승인이 아니며, 사후 정리는 사전 테스트 계획이나 추가 수행 실적으로 세지 않습니다.
