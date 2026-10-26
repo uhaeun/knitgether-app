@@ -1,0 +1,112 @@
+
+> knitgether-api@0.1.0 test:db:projects
+> jest --config ./test/jest-real-db.json --runInBand
+
+FAIL test/projects-concurrency.real-db-spec.ts (18.764 s)
+  ● Project concurrency on real PostgreSQL › protects row instruction create from a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      580 |       const stale = await call('patch', '/projects/'+b.id, body);
+      581 |       evidence.push({ case: 'row-instruction-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+    > 582 |       expect(stale.status).toBe(409);
+          |                            ^
+      583 |       expect(await snapshot(b.id)).toEqual(saved);
+      584 |     });
+      585 |   }
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:582:28)
+
+  ● Project concurrency on real PostgreSQL › protects row instruction update from a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      580 |       const stale = await call('patch', '/projects/'+b.id, body);
+      581 |       evidence.push({ case: 'row-instruction-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+    > 582 |       expect(stale.status).toBe(409);
+          |                            ^
+      583 |       expect(await snapshot(b.id)).toEqual(saved);
+      584 |     });
+      585 |   }
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:582:28)
+
+  ● Project concurrency on real PostgreSQL › protects row instruction delete from a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      580 |       const stale = await call('patch', '/projects/'+b.id, body);
+      581 |       evidence.push({ case: 'row-instruction-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+    > 582 |       expect(stale.status).toBe(409);
+          |                            ^
+      583 |       expect(await snapshot(b.id)).toEqual(saved);
+      584 |     });
+      585 |   }
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:582:28)
+
+  ● Project concurrency on real PostgreSQL › protects pattern pdf from a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      602 |       const stale = await call('patch', '/projects/'+b.id, body);
+      603 |       evidence.push({ case: 'pattern-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+    > 604 |       expect(stale.status).toBe(409);
+          |                            ^
+      605 |       expect(await snapshot(b.id)).toEqual(saved);
+      606 |     });
+      607 |   }
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:604:28)
+
+  ● Project concurrency on real PostgreSQL › protects pattern drawing from a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      602 |       const stale = await call('patch', '/projects/'+b.id, body);
+      603 |       evidence.push({ case: 'pattern-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+    > 604 |       expect(stale.status).toBe(409);
+          |                            ^
+      605 |       expect(await snapshot(b.id)).toEqual(saved);
+      606 |     });
+      607 |   }
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:604:28)
+
+  ● Project concurrency on real PostgreSQL › protects pattern delete-drawing from a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      602 |       const stale = await call('patch', '/projects/'+b.id, body);
+      603 |       evidence.push({ case: 'pattern-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+    > 604 |       expect(stale.status).toBe(409);
+          |                            ^
+      605 |       expect(await snapshot(b.id)).toEqual(saved);
+      606 |     });
+      607 |   }
+
+      at Object.<anonymous> (test/projects-concurrency.real-db-spec.ts:604:28)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 24 passed, 30 total
+Snapshots:   0 total
+Time:        19.613 s
+Ran all test suites.

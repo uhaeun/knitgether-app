@@ -1,0 +1,2 @@
+840CB58F-9AD8-4403-A8C3-3E2D5F93B0C5
+UUID: A4EAA2CF-FBDA-38E2-ACC2-930BC3563327 (arm64) /Users/yuha/Library/Developer/CoreSimulator/Devices/840CB58F-9AD8-4403-A8C3-3E2D5F93B0C5/data/Containers/Bundle/Application/91417518-0735-45B3-92CB-EA05ADB8F0AF/KnitGether.app/KnitGether.debug.dylib

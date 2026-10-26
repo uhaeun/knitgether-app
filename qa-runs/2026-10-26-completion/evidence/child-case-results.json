@@ -1,0 +1,202 @@
+[
+  {
+    "case": "has exactly one winner with no loser children after both read the same baseline",
+    "status": "passed",
+    "durationMs": 1147
+  },
+  {
+    "case": "rolls back parent/version and early children when row instruction replacement fails",
+    "status": "passed",
+    "durationMs": 122
+  },
+  {
+    "case": "rolls back all SQL children when an error follows actual pattern upsert",
+    "status": "passed",
+    "durationMs": 81
+  },
+  {
+    "case": "advances every version even when the stored clock is ahead and rejects future client tokens",
+    "status": "passed",
+    "durationMs": 142
+  },
+  {
+    "case": "returns fresh 409/latest when another write commits between read and CAS",
+    "status": "passed",
+    "durationMs": 44
+  },
+  {
+    "case": "returns 404 when the project is deleted between read and CAS",
+    "status": "passed",
+    "durationMs": 37
+  },
+  {
+    "case": "preserves 409 even if the latest project has no convertible row counter",
+    "status": "passed",
+    "durationMs": 37
+  },
+  {
+    "case": "preserves validation, ownership and row-counter compatibility contracts",
+    "status": "passed",
+    "durationMs": 106
+  },
+  {
+    "case": "Regression: rejects a stale whole save after a child-only counter save",
+    "status": "passed",
+    "durationMs": 52
+  },
+  {
+    "case": "Regression: detects a child API write between the whole save read and CAS",
+    "status": "passed",
+    "durationMs": 193
+  },
+  {
+    "case": "session create invalidates a stale whole save",
+    "status": "passed",
+    "durationMs": 53
+  },
+  {
+    "case": "session update invalidates a stale whole save",
+    "status": "passed",
+    "durationMs": 52
+  },
+  {
+    "case": "session delete invalidates a stale whole save",
+    "status": "passed",
+    "durationMs": 49
+  },
+  {
+    "case": "session deletion between whole read and CAS rejects the stale whole save",
+    "status": "passed",
+    "durationMs": 57
+  },
+  {
+    "case": "rolls back the parent version if the session mutation fails",
+    "status": "passed",
+    "durationMs": 50
+  },
+  {
+    "case": "serializes session deletion behind an uncommitted whole save",
+    "status": "passed",
+    "durationMs": 106
+  },
+  {
+    "case": "Regression: removes materialized files when the SQL transaction rolls back",
+    "status": "passed",
+    "durationMs": 148
+  },
+  {
+    "case": "Regression: cleans an unreferenced PDF after pattern copy replacement",
+    "status": "passed",
+    "durationMs": 159
+  },
+  {
+    "case": "serializes a child write after a whole-save CAS without losing the child",
+    "status": "passed",
+    "durationMs": 60
+  },
+  {
+    "case": "rolls back the parent version if the child update fails",
+    "status": "passed",
+    "durationMs": 57
+  },
+  {
+    "case": "keeps the old PDF and drawing on rollback, then removes both on detach",
+    "status": "passed",
+    "durationMs": 167
+  },
+  {
+    "case": "retries durable failed removals and preserves referenced files after restart",
+    "status": "passed",
+    "durationMs": 136
+  },
+  {
+    "case": "blocks the counter on the parent lock while a whole save is uncommitted",
+    "status": "passed",
+    "durationMs": 93
+  },
+  {
+    "case": "compensates files when project creation rolls back",
+    "status": "passed",
+    "durationMs": 42
+  },
+  {
+    "case": "protects row instruction create from a stale whole save",
+    "status": "passed",
+    "durationMs": 102
+  },
+  {
+    "case": "protects row instruction update from a stale whole save",
+    "status": "passed",
+    "durationMs": 141
+  },
+  {
+    "case": "protects row instruction delete from a stale whole save",
+    "status": "passed",
+    "durationMs": 110
+  },
+  {
+    "case": "protects pattern pdf from a stale whole save",
+    "status": "passed",
+    "durationMs": 102
+  },
+  {
+    "case": "protects pattern drawing from a stale whole save",
+    "status": "passed",
+    "durationMs": 81
+  },
+  {
+    "case": "protects pattern delete-drawing from a stale whole save",
+    "status": "passed",
+    "durationMs": 115
+  },
+  {
+    "case": "preserves committed drawing bytes if dedicated upload SQL rolls back",
+    "status": "passed",
+    "durationMs": 96
+  },
+  {
+    "case": "preserves committed drawing bytes if dedicated delete SQL rolls back",
+    "status": "passed",
+    "durationMs": 129
+  },
+  {
+    "case": "serializes duplicate instruction creates and rolls back the rejected parent version",
+    "status": "passed",
+    "durationMs": 73
+  },
+  {
+    "case": "preserves independent usage, photo and material links across whole saves",
+    "status": "passed",
+    "durationMs": 165
+  },
+  {
+    "case": "rejects instruction ID reuse from another project (foreign owner: false) without changing either project",
+    "status": "passed",
+    "durationMs": 110
+  },
+  {
+    "case": "rejects session ID reuse from another project (foreign owner: false) without changing either project",
+    "status": "passed",
+    "durationMs": 117
+  },
+  {
+    "case": "rejects whole-session ID reuse from another project (foreign owner: false) without changing either project",
+    "status": "passed",
+    "durationMs": 106
+  },
+  {
+    "case": "rejects instruction ID reuse from another project (foreign owner: true) without changing either project",
+    "status": "passed",
+    "durationMs": 126
+  },
+  {
+    "case": "rejects session ID reuse from another project (foreign owner: true) without changing either project",
+    "status": "passed",
+    "durationMs": 174
+  },
+  {
+    "case": "rejects whole-session ID reuse from another project (foreign owner: true) without changing either project",
+    "status": "passed",
+    "durationMs": 112
+  }
+]

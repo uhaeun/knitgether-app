@@ -319,3 +319,20 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 [추가 발견·수정·검증](../../../qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
 
 사용자가 보존·제거 정책을 선택했고 Codex가 누락 발견·구현·시험·판정을 수행했다. 앞선 세션·두 기기·초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24·API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA·완료 상태로 확인한다. Draft 유지, 병합·배포 없음.
+
+
+## 2026-10-26 최종 자식 API·UI-03·병합 검증
+
+[최종 실행 보고서](../../../qa-runs/2026-10-26-completion/report.md) · [TC별 결과](../../../qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](../../../qa-runs/2026-10-26-completion/code-review.md). | 추적 | 실제 실행/보강 |
+|---|---|
+| SYNC11-CHILD-ROW-C/U/D | 오래된 전체 PATCH200 재현3 FAIL →409 및 SQL 보존3 PASS |
+| SYNC11-CHILD-PDF/DRAW/DELETE | 오래된 전체 저장200 재현3 FAIL →409 및 SQL 보존3 PASS |
+| SYNC11-DRAW-ROLLBACK | 드로잉 업로드/삭제 SQL 실패500 후 기존 메타데이터·바이트 보존2 PASS |
+| SYNC11-ROW-DUPLICATE | 동시 생성201/400, 실패404 시 부모 버전 롤백1 PASS |
+| SYNC11-INDEPENDENT-CHILD | 사용량·사진·실/바늘/도구 연결 생성 후 전체 저장·SQL/파일 동일1 PASS |
+| SYNC11-CHILD-ID-SCOPE | 다른 프로젝트 ID 재사용3 FAIL → 같은/다른 계정6 PASS,404 및 양쪽 불변 |
+| SYNC11 실제DB 회귀 | 기존24+신규16=40 PASS/0 SKIP |
+| iOS 드로잉 저장 순서 | 온라인 중복 PATCH 생략 / 로컬·오프라인 유지 / 캐시 파일 미재업로드 / pending삭제 DELETE를 Swift359에 포함 |
+| UI-03 최종 앱 | 두 기기별 설정·프로필·회원가입·온보딩5·legacy4. 개별 최종 결과는 링크 보고서 |
+
+서버147·API75·Swift359는 독립 층이며40이나 UI TC에 합산하지 않는다. 이전626 앱 E2E의19·초안3·목록삭제1·오프라인2 및300초 관찰은 당시 근거로 유지한다. 이번 최종 앱에서 전체를 다시 실행했다고 표시하지 않는다.
