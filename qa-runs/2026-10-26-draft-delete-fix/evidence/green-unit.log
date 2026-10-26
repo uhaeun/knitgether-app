@@ -1,0 +1,1260 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project KnitGether.xcodeproj -scheme KnitGether -configuration Debug -destination "platform=iOS Simulator,id=840CB58F-9AD8-4403-A8C3-3E2D5F93B0C5" -derivedDataPath /tmp/knitgether-qa-draft-20261026 -resultBundlePath /tmp/knitgether-qa-draft-delete-green.xcresult -jobs 2 -parallel-testing-enabled NO "-only-testing:KnitGetherTests" CODE_SIGN_IDENTITY=- CODE_SIGNING_ALLOWED=YES test
+
+Build settings from command line:
+    CODE_SIGN_IDENTITY = -
+    CODE_SIGNING_ALLOWED = YES
+
+Writing result bundle at path:
+	/tmp/knitgether-qa-draft-delete-green.xcresult
+
+Build Preparation
+Build task concurrency set to 2 via user default IDEBuildOperationMaxNumberOfConcurrentCompileTasks
+
+note: Using codesigning identity override: -
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (4 targets)
+    Target 'KnitGetherQAUITests' in project 'KnitGether'
+        ➜ Explicit dependency on target 'KnitGether' in project 'KnitGether'
+    Target 'KnitGetherUITests' in project 'KnitGether'
+        ➜ Explicit dependency on target 'KnitGether' in project 'KnitGether'
+    Target 'KnitGetherTests' in project 'KnitGether'
+        ➜ Explicit dependency on target 'KnitGether' in project 'KnitGether'
+    Target 'KnitGether' in project 'KnitGether' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /tmp/knitgether-qa-latest-20261026/KnitGether/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+Build description signature: 50535bbae6f18576f8a7731dbe28d17a
+Build description path: /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/XCBuildData/50535bbae6f18576f8a7731dbe28d17a.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk /tmp/knitgether-qa-draft-20261026/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-6cfe768891a92b912361537c460fe42b.sdkstatcache
+    cd /tmp/knitgether-qa-latest-20261026/KnitGether.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -o /tmp/knitgether-qa-draft-20261026/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-6cfe768891a92b912361537c460fe42b.sdkstatcache
+
+SwiftDriver KnitGether normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name KnitGether -Onone @/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/knitgether-qa-draft-20261026/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -F /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/knitgether-qa-draft-20261026/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -sdk-module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-generated-files.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-own-target-headers.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-project-headers.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/include -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources-normal/arm64 -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources/arm64 -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-Swift.h -working-directory /tmp/knitgether-qa-latest-20261026 -experimental-emit-module-separately -disable-cmo
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ KnitGether (in target 'KnitGether' from project 'KnitGether')
+
+EmitSwiftModule normal arm64 (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for KnitGether (in target 'KnitGether' from project 'KnitGether')
+
+SwiftDriver\ Compilation\ Requirements KnitGether normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name KnitGether -Onone @/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/knitgether-qa-draft-20261026/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -F /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/knitgether-qa-draft-20261026/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -sdk-module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-generated-files.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-own-target-headers.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-project-headers.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/include -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources-normal/arm64 -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources/arm64 -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-Swift.h -working-directory /tmp/knitgether-qa-latest-20261026 -experimental-emit-module-separately -disable-cmo
+
+Copy /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.swiftsourceinfo (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.swiftsourceinfo /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo
+
+Copy /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.swiftmodule/arm64-apple-ios-simulator.abi.json /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.abi.json (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.abi.json /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.swiftmodule/arm64-apple-ios-simulator.abi.json
+
+ProcessInfoPlistFile /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/Info.plist /tmp/knitgether-qa-latest-20261026/KnitGether-Info.plist (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-infoPlistUtility /tmp/knitgether-qa-latest-20261026/KnitGether-Info.plist -producttype com.apple.product-type.application -genpkginfo /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/assetcatalog_generated_info.plist -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/Info.plist
+
+SwiftCompile normal arm64 Compiling\ MyKnittingViewModel.swift /tmp/knitgether-qa-latest-20261026/KnitGether/ViewModels/MyKnittingViewModel.swift (in target 'KnitGether' from project 'KnitGether')
+
+SwiftCompile normal arm64 /tmp/knitgether-qa-latest-20261026/KnitGether/ViewModels/MyKnittingViewModel.swift (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling MyKnittingViewModel.swift (in target 'KnitGether' from project 'KnitGether')
+
+SwiftDriver\ Compilation KnitGether normal arm64 com.apple.xcode.tools.swift.compiler (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name KnitGether -Onone @/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -target arm64-apple-ios16.0-simulator -g -module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/knitgether-qa-draft-20261026/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -F /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -emit-localized-strings -emit-localized-strings-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64 -c -j8 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/knitgether-qa-draft-20261026/SDKStatCaches.noindex/iphonesimulator26.5-23F81a-6cfe768891a92b912361537c460fe42b.sdkstatcache -output-file-map /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -sdk-module-cache-path /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/knitgether-qa-draft-20261026/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-generated-files.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-own-target-headers.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-project-headers.hmap -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/include -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources-normal/arm64 -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources/arm64 -Xcc -I/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-Swift.h -working-directory /tmp/knitgether-qa-latest-20261026 -experimental-emit-module-separately -disable-cmo
+
+Ld /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib normal (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -F/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -filelist /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.LinkFileList -install_name @rpath/KnitGether.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.swiftmodule @/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether-linker-args.resp -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -Xlinker -no_adhoc_codesign -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib
+
+ConstructStubExecutorLinkFileList /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-ExecutorLinkFileList-normal-arm64.txt (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    construct-stub-executor-link-file-list /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'KnitGether' from project 'KnitGether')
+
+Ld /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether normal (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -F/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether-ExecutorLinkFileList-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether.app-Simulated.xcent.der /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether
+
+CopySwiftLibs /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/Frameworks --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/SystemExtensions --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name KnitGether --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F113 --platform-family iOS --deployment-target 16.0 --bundle-identifier com.uhaeun.KnitGether --output /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app --target-triple arm64-apple-ios16.0-simulator --binary-file /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether --dependency-file /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether_dependency_info.dat --stringsdata-file /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.SwiftFileList --metadata-file-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether.DependencyMetadataFileList --static-metadata-file-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/KnitGether.DependencyStaticMetadataFileList --swift-const-vals-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGether.build/Objects-normal/arm64/KnitGether.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-26 22:14:46.456 appintentsmetadataprocessor[75327:36726837] Starting appintentsmetadataprocessor export
+2026-10-26 22:14:46.461 appintentsmetadataprocessor[75327:36726837] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+ProcessInfoPlistFile /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/Info.plist /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/empty-KnitGetherTests.plist (in target 'KnitGetherTests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-infoPlistUtility /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/empty-KnitGetherTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -format binary -platform iphonesimulator -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/Info.plist
+
+Ld /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/KnitGetherTests normal (in target 'KnitGetherTests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-ios16.0-simulator -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk -O0 -L/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -L/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -L/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib -F/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator -F/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks -iframework /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/Developer/Library/Frameworks -filelist /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests.LinkFileList -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @loader_path/Frameworks -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -bundle_loader /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether -Xlinker -object_path_lto -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests.swiftmodule @/tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/KnitGetherTests
+
+ExtractAppIntentsMetadata (in target 'KnitGetherTests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name KnitGetherTests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk --xcode-version 17F113 --platform-family iOS --deployment-target 16.0 --bundle-identifier com.uhaeun.KnitGetherTests --output /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest --target-triple arm64-apple-ios16.0-simulator --binary-file /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/KnitGetherTests --dependency-file /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests_dependency_info.dat --stringsdata-file /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests.SwiftFileList --metadata-file-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/KnitGetherTests.DependencyMetadataFileList --static-metadata-file-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/KnitGetherTests.DependencyStaticMetadataFileList --swift-const-vals-list /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/Objects-normal/arm64/KnitGetherTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-26 22:14:46.944 appintentsmetadataprocessor[75332:36726861] Starting appintentsmetadataprocessor export
+2026-10-26 22:14:46.945 appintentsmetadataprocessor[75332:36726861] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CopySwiftLibs /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest (in target 'KnitGetherTests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/KnitGetherTests --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/Frameworks --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/PlugIns --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/SystemExtensions --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+CodeSign /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest (in target 'KnitGetherTests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/PlugIns/KnitGetherTests.xctest
+
+CodeSign /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib
+
+CodeSign /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/__preview.dylib (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/__preview.dylib
+/tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/__preview.dylib: replacing existing signature
+
+CodeSign /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app
+
+Validate /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app (in target 'KnitGether' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-validationUtility /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app -shallow-bundle -infoplist-subpath Info.plist
+
+ProcessInfoPlistFile /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/Info.plist /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherQAUITests.build/empty-KnitGetherQAUITests.plist (in target 'KnitGetherQAUITests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-infoPlistUtility /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherQAUITests.build/empty-KnitGetherQAUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherQAUITests.build/ProductTypeInfoPlistAdditions.plist -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/Info.plist
+
+ProcessInfoPlistFile /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/Info.plist /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherUITests.build/empty-KnitGetherUITests.plist (in target 'KnitGetherUITests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-infoPlistUtility /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherUITests.build/empty-KnitGetherUITests.plist -producttype com.apple.product-type.bundle.ui-testing -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherUITests.build/ProductTypeInfoPlistAdditions.plist -o /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/Info.plist
+
+CopySwiftLibs /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest (in target 'KnitGetherUITests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/KnitGetherUITests --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/Frameworks --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/PlugIns --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/SystemExtensions --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherUITests-Runner.app/PlugIns/KnitGetherUITests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+CopySwiftLibs /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest (in target 'KnitGetherQAUITests' from project 'KnitGether')
+    cd /tmp/knitgether-qa-latest-20261026
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/KnitGetherQAUITests --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/Frameworks --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/PlugIns --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/SystemExtensions --scan-folder /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/Extensions --platform iphonesimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/knitgether-qa-draft-20261026/Build/Products/Debug-iphonesimulator/KnitGetherQAUITests-Runner.app/PlugIns/KnitGetherQAUITests.xctest/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/knitgether-qa-draft-20261026/Build/Intermediates.noindex/KnitGether.build/Debug-iphonesimulator/KnitGetherQAUITests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+[KnitGether API] REQUEST GET http://haeun.local:3000/api/v1/profile auth=present(dev-token...)
+2026-10-26 22:16:51.806357+0900 KnitGether[75748:36735371] [connection] nw_socket_handle_socket_event [C1.1.1:2] Socket SO_ERROR [61: Connection refused]
+2026-10-26 22:16:51.820551+0900 KnitGether[75748:36735371] [connection] nw_endpoint_flow_failed_with_error [C1.1.1 ::1.3000 in_progress socket-flow (satisfied (Path is satisfied), interface: lo0)] already failing, returning
+2026-10-26 22:16:51.875787+0900 KnitGether[75748:36735371] [connection] nw_socket_handle_socket_event [C1.1.2:2] Socket SO_ERROR [61: Connection refused]
+2026-10-26 22:16:51.879514+0900 KnitGether[75748:36735371] [connection] nw_endpoint_flow_failed_with_error [C1.1.2 fe80::1%lo0.3000 in_progress socket-flow (satisfied (Path is satisfied), interface: lo0)] already failing, returning
+[KnitGether API] RESPONSE GET http://haeun.local:3000/api/v1/profile status=200
+Test Suite 'All tests' started at 2026-10-26 22:16:52.542.
+Test Suite 'All tests' passed at 2026-10-26 22:16:52.543.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64-apple-ios13.0-simulator
+◇ Suite APIClientTests started.
+◇ Test getAddsAuthorizationHeaderAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=200
+✔ Test getAddsAuthorizationHeaderAndDecodesResponse() passed after 0.012 seconds.
+◇ Test getThrowsStructuredErrorForHTTPFailure() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=401 code=UNAUTHENTICATED message=Missing or invalid bearer token.
+✔ Test getThrowsStructuredErrorForHTTPFailure() passed after 0.002 seconds.
+◇ Test getNotifiesAuthFailureWhenTokenWasSent() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=present(expired-toke...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=401 code=UNAUTHENTICATED message=Missing or invalid bearer token.
+✔ Test getNotifiesAuthFailureWhenTokenWasSent() passed after 0.004 seconds.
+◇ Test getDoesNotNotifyAuthFailureForNonUnauthorizedHTTPFailure() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=403 code=FORBIDDEN message=Access denied.
+✔ Test getDoesNotNotifyAuthFailureForNonUnauthorizedHTTPFailure() passed after 0.003 seconds.
+◇ Test uploadMultipartAddsAuthorizationAndDecodesResponse() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/patterns auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/patterns status=200
+✔ Test uploadMultipartAddsAuthorizationAndDecodesResponse() passed after 0.004 seconds.
+◇ Test downloadDataReturnsBinaryResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file status=200
+✔ Test downloadDataReturnsBinaryResponse() passed after 0.001 seconds.
+✔ Suite APIClientTests passed after 0.051 seconds.
+◇ Suite AppRepositoryContainerTests started.
+◇ Test makeDefaultUsesLocalRepositoriesWhenAPIBaseURLIsMissing() started.
+✔ Test makeDefaultUsesLocalRepositoriesWhenAPIBaseURLIsMissing() passed after 0.020 seconds.
+◇ Test makeDefaultUsesOfflineFirstRepositoriesWhenAPIBaseURLIsConfigured() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/patterns auth=present(dev-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/patterns status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/skills auth=present(dev-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/skills status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/library/yarns auth=present(dev-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/library/yarns status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/library/needles auth=present(dev-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/library/needles status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/profile auth=present(dev-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/profile status=200
+✔ Test makeDefaultUsesOfflineFirstRepositoriesWhenAPIBaseURLIsConfigured() passed after 0.061 seconds.
+◇ Test apiModeSignedOutProfileRepositoryUsesAnonymousLocalCache() started.
+✔ Test apiModeSignedOutProfileRepositoryUsesAnonymousLocalCache() passed after 0.002 seconds.
+◇ Test apiModeProjectRepositoryCachesRemoteProjectsAndFallsBackToCacheWhenServerFails() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=MISSING
+2026-10-26 22:16:52.731666+0900 KnitGether[75748:36735366] [Default] Task <6014F52E-D27C-4C4B-B256-FE07AC368553>.<1> finished with error [-1009] Error Domain=NSURLErrorDomain Code=-1009 "(null)" UserInfo={_NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDataTask <6014F52E-D27C-4C4B-B256-FE07AC368553>.<1>"
+), _NSURLErrorFailingURLSessionTaskErrorKey=LocalDataTask <6014F52E-D27C-4C4B-B256-FE07AC368553>.<1>}
+[KnitGether API] ERROR GET https://api.knitgether.test/api/v1/projects Error Domain=NSURLErrorDomain Code=-1009 "(null)" UserInfo={_NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDataTask <6014F52E-D27C-4C4B-B256-FE07AC368553>.<1>"
+), _NSURLErrorFailingURLSessionTaskErrorKey=LocalDataTask <6014F52E-D27C-4C4B-B256-FE07AC368553>.<1>}
+✔ Test apiModeProjectRepositoryCachesRemoteProjectsAndFallsBackToCacheWhenServerFails() passed after 0.016 seconds.
+◇ Test apiModeProjectWriteRetryableFailurePreservesPendingAndSyncsAfterNetworkRecovery() started.
+[KnitGether API] REQUEST POST https://api.knitgether.test/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE POST https://api.knitgether.test/api/v1/projects status=503 code=TEMPORARY_UNAVAILABLE message=Try later.
+[KnitGether API] REQUEST POST https://api.knitgether.test/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE POST https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=MISSING
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+✔ Test apiModeProjectWriteRetryableFailurePreservesPendingAndSyncsAfterNetworkRecovery() passed after 0.018 seconds.
+◇ Test apiModeProjectFetchWithoutServerAndWithoutCacheThrowsOfflineError() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=MISSING
+2026-10-26 22:16:52.759761+0900 KnitGether[75748:36735367] [Default] Task <B21FF2FF-C469-4AB5-8A82-E908731E0CEA>.<1> finished with error [-1009] Error Domain=NSURLErrorDomain Code=-1009 "(null)" UserInfo={_NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDataTask <B21FF2FF-C469-4AB5-8A82-E908731E0CEA>.<1>"
+), _NSURLErrorFailingURLSessionTaskErrorKey=LocalDataTask <B21FF2FF-C469-4AB5-8A82-E908731E0CEA>.<1>}
+[KnitGether API] ERROR GET https://api.knitgether.test/api/v1/projects Error Domain=NSURLErrorDomain Code=-1009 "(null)" UserInfo={_NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDataTask <B21FF2FF-C469-4AB5-8A82-E908731E0CEA>.<1>"
+), _NSURLErrorFailingURLSessionTaskErrorKey=LocalDataTask <B21FF2FF-C469-4AB5-8A82-E908731E0CEA>.<1>}
+✔ Test apiModeProjectFetchWithoutServerAndWithoutCacheThrowsOfflineError() passed after 0.002 seconds.
+◇ Test makeDefaultUsesAPIAuthTokenWhenConfigured() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(api-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+✔ Test makeDefaultUsesAPIAuthTokenWhenConfigured() passed after 0.003 seconds.
+◇ Test makeDefaultUsesStoredSessionTokenBeforeDevToken() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(jwt-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+✔ Test makeDefaultUsesStoredSessionTokenBeforeDevToken() passed after 0.005 seconds.
+◇ Test apiModeCreatesJSONDataCachesPerAccount() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(token-a...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(token-b...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+✔ Test apiModeCreatesJSONDataCachesPerAccount() passed after 0.008 seconds.
+◇ Test apiModeCacheScopeSeparatesBaseURLAndUser() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(token-a...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://staging.knitgether.test/api/v1/projects auth=present(token-a...)
+[KnitGether API] RESPONSE GET https://staging.knitgether.test/api/v1/projects status=200
+✔ Test apiModeCacheScopeSeparatesBaseURLAndUser() passed after 0.009 seconds.
+◇ Test repositoryStoreRebuildsContainerWhenStoredAccountChanges() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(token-a...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(token-b...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=MISSING
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=200
+✔ Test repositoryStoreRebuildsContainerWhenStoredAccountChanges() passed after 0.032 seconds.
+◇ Test unauthorizedResponseClearsStoredSessionToken() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(jwt-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=401 code=UNAUTHENTICATED message=Token expired.
+✔ Test unauthorizedResponseClearsStoredSessionToken() passed after 0.005 seconds.
+◇ Test unauthorizedExplicitAPIAuthTokenDoesNotClearStoredSession() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/projects auth=present(api-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/projects status=401 code=UNAUTHENTICATED message=Token expired.
+✔ Test unauthorizedExplicitAPIAuthTokenDoesNotClearStoredSession() passed after 0.004 seconds.
+◇ Test apiModeCanDisableSchemeDevTokenForAuthenticatedUITestSessions() started.
+[KnitGether API] REQUEST GET https://api.knitgether.test/api/v1/profile auth=present(jwt-token...)
+[KnitGether API] RESPONSE GET https://api.knitgether.test/api/v1/profile status=200
+✔ Test apiModeCanDisableSchemeDevTokenForAuthenticatedUITestSessions() passed after 0.004 seconds.
+◇ Test removeCachedDataDeletesOnlyTheSignedOutAccountDirectory() started.
+✔ Test removeCachedDataDeletesOnlyTheSignedOutAccountDirectory() passed after 0.002 seconds.
+◇ Test removeCachedDataDoesNothingWithoutAPIBaseURL() started.
+✔ Test removeCachedDataDoesNothingWithoutAPIBaseURL() passed after 0.001 seconds.
+✔ Suite AppRepositoryContainerTests passed after 0.204 seconds.
+◇ Suite AuthAccountViewModelTests started.
+◇ Test loginSavesSessionAndLoadsCurrentUser() started.
+✔ Test loginSavesSessionAndLoadsCurrentUser() passed after 0.003 seconds.
+◇ Test registerSavesSession() started.
+✔ Test registerSavesSession() passed after 0.002 seconds.
+◇ Test registerShowsDuplicateEmailMessage() started.
+[KnitGether Auth] register failed: requestFailed(statusCode: 409, code: Optional("EMAIL_ALREADY_REGISTERED"), message: Optional("Email is already registered."))
+✔ Test registerShowsDuplicateEmailMessage() passed after 0.008 seconds.
+◇ Test registerShowsConnectionMessageForNetworkFailure() started.
+[KnitGether Auth] register failed: Error Domain=NSURLErrorDomain Code=-1004 "(null)"
+✔ Test registerShowsConnectionMessageForNetworkFailure() passed after 0.001 seconds.
+◇ Test signOutClearsStoredSession() started.
+✔ Test signOutClearsStoredSession() passed after 0.003 seconds.
+◇ Test loadSessionShowsRefreshErrorWhenCurrentUserCannotLoad() started.
+✔ Test loadSessionShowsRefreshErrorWhenCurrentUserCannotLoad() passed after 0.003 seconds.
+◇ Test retryLoadSessionReloadsCurrentUserAndClearsRefreshError() started.
+✔ Test retryLoadSessionReloadsCurrentUserAndClearsRefreshError() passed after 0.002 seconds.
+✔ Suite AuthAccountViewModelTests passed after 0.026 seconds.
+◇ Suite AuthSessionStoreTests started.
+◇ Test saveRestoreAndClearSession() started.
+✔ Test saveRestoreAndClearSession() passed after 0.004 seconds.
+✔ Suite AuthSessionStoreTests passed after 0.004 seconds.
+◇ Suite DataBackupExportViewModelTests started.
+◇ Test exportBackupWritesReadableSnapshotFile() started.
+✔ Test exportBackupWritesReadableSnapshotFile() passed after 0.016 seconds.
+◇ Test importBackupRestoresSnapshotIntoRepositories() started.
+✔ Test importBackupRestoresSnapshotIntoRepositories() passed after 0.008 seconds.
+✔ Suite DataBackupExportViewModelTests passed after 0.025 seconds.
+◇ Suite DictionaryViewModelTests started.
+◇ Test loadTermsSortsDefaultOrderAndSearchesAcrossFields() started.
+✔ Test loadTermsSortsDefaultOrderAndSearchesAcrossFields() passed after 0.001 seconds.
+◇ Test filterOptionsSeparateAbbreviationKoreanAndRelatedSkillTerms() started.
+✔ Test filterOptionsSeparateAbbreviationKoreanAndRelatedSkillTerms() passed after 0.001 seconds.
+◇ Test resolveRelatedSkillsMatchesRegisteredAndUnregisteredTags() started.
+✔ Test resolveRelatedSkillsMatchesRegisteredAndUnregisteredTags() passed after 0.001 seconds.
+✔ Suite DictionaryViewModelTests passed after 0.002 seconds.
+◇ Suite GaugeCalculatorViewModelTests started.
+◇ Test saveCurrentGaugeRecordPersistsCalculationWithProjectSnapshot() started.
+✔ Test saveCurrentGaugeRecordPersistsCalculationWithProjectSnapshot() passed after 0.009 seconds.
+◇ Test loadPatternsExposesPatternDocumentsForGaugeLinking() started.
+✔ Test loadPatternsExposesPatternDocumentsForGaugeLinking() passed after 0.001 seconds.
+◇ Test oversizedGaugeInputsDoNotCrashCalculation() started.
+✔ Test oversizedGaugeInputsDoNotCrashCalculation() passed after 0.011 seconds.
+◇ Test saveCurrentGaugeRecordUsesSelectedPatternSnapshot() started.
+✔ Test saveCurrentGaugeRecordUsesSelectedPatternSnapshot() passed after 0.007 seconds.
+◇ Test saveCurrentGaugeTargetPersistsDetailedManualMeasurement() started.
+✔ Test saveCurrentGaugeTargetPersistsDetailedManualMeasurement() passed after 0.006 seconds.
+◇ Test manualPatternNameOverridesSelectedPatternAndProjectPattern() started.
+✔ Test manualPatternNameOverridesSelectedPatternAndProjectPattern() passed after 0.006 seconds.
+◇ Test washComparisonUsesLatestBeforeAndAfterRecords() started.
+✔ Test washComparisonUsesLatestBeforeAndAfterRecords() passed after 0.001 seconds.
+◇ Test loadGaugeRecordRestoresInputsAndProjectSelection() started.
+✔ Test loadGaugeRecordRestoresInputsAndProjectSelection() passed after 0.005 seconds.
+◇ Test deleteGaugeRecordRemovesRecordFromRepositoryAndList() started.
+✔ Test deleteGaugeRecordRemovesRecordFromRepositoryAndList() passed after 0.001 seconds.
+◇ Test updateLoadedGaugeRecordSavesChangesWithoutCreatingDuplicateRecord() started.
+✔ Test updateLoadedGaugeRecordSavesChangesWithoutCreatingDuplicateRecord() passed after 0.008 seconds.
+◇ Test reloadAfterAccountChangeFetchesProjectsAndGaugeRecordsAgain() started.
+✔ Test reloadAfterAccountChangeFetchesProjectsAndGaugeRecordsAgain() passed after 0.004 seconds.
+◇ Test reloadAfterAccountChangeClearsStaleGaugeDataWhenFetchFails() started.
+✔ Test reloadAfterAccountChangeClearsStaleGaugeDataWhenFetchFails() passed after 0.004 seconds.
+✔ Suite GaugeCalculatorViewModelTests passed after 0.068 seconds.
+◇ Suite GaugeMeasureViewModelTests started.
+◇ Test saveTargetCreatesTrimmedGaugeTarget() started.
+✔ Test saveTargetCreatesTrimmedGaugeTarget() passed after 0.001 seconds.
+◇ Test saveExistingTargetUpdatesRepositoryTarget() started.
+✔ Test saveExistingTargetUpdatesRepositoryTarget() passed after 0.001 seconds.
+◇ Test saveSwatchAddsSwatchToExistingTarget() started.
+✔ Test saveSwatchAddsSwatchToExistingTarget() passed after 0.001 seconds.
+◇ Test saveManualMeasurementAddsMeasurementToSwatch() started.
+✔ Test saveManualMeasurementAddsMeasurementToSwatch() passed after 0.001 seconds.
+◇ Test savePhotoMeasurementStoresUserCorrectedCounts() started.
+✔ Test savePhotoMeasurementStoresUserCorrectedCounts() passed after 0.001 seconds.
+✔ Suite GaugeMeasureViewModelTests passed after 0.003 seconds.
+◇ Suite GaugeMeasurementInputTests started.
+◇ Test manualMeasurementInputNormalizesStitchesAndRowsPer10cm() started.
+✔ Test manualMeasurementInputNormalizesStitchesAndRowsPer10cm() passed after 0.001 seconds.
+◇ Test manualMeasurementInputAcceptsCommaDecimalsAndOptionalRows() started.
+✔ Test manualMeasurementInputAcceptsCommaDecimalsAndOptionalRows() passed after 0.001 seconds.
+◇ Test gaugeTargetInputRequiresNamedPositiveTarget() started.
+✔ Test gaugeTargetInputRequiresNamedPositiveTarget() passed after 0.001 seconds.
+◇ Test photoMeasurementSourcesFallbackToPhotoLibraryInTests() started.
+✔ Test photoMeasurementSourcesFallbackToPhotoLibraryInTests() passed after 0.015 seconds.
+◇ Test autoCounterRejectsSelectionsThatAreNotFourPoints() started.
+✔ Test autoCounterRejectsSelectionsThatAreNotFourPoints() passed after 0.001 seconds.
+✔ Suite GaugeMeasurementInputTests passed after 0.016 seconds.
+◇ Suite HomeDashboardSummaryTests started.
+◇ Test summaryCountsProjectsAndChoosesContinueProject() started.
+✔ Test summaryCountsProjectsAndChoosesContinueProject() passed after 0.001 seconds.
+✔ Suite HomeDashboardSummaryTests passed after 0.001 seconds.
+◇ Suite KnitGetherTests started.
+◇ Test example() started.
+✔ Test example() passed after 0.001 seconds.
+✔ Suite KnitGetherTests passed after 0.001 seconds.
+◇ Suite LibraryItemViewModelTests started.
+◇ Test allLibraryKindsReportLinkedProjectCountForDeletionNotice() started.
+✔ Test allLibraryKindsReportLinkedProjectCountForDeletionNotice() passed after 0.004 seconds.
+◇ Test deletionMessageOmitsLinkNoticeWhenCountIsZero() started.
+✔ Test deletionMessageOmitsLinkNoticeWhenCountIsZero() passed after 0.001 seconds.
+◇ Test deletionMessageUsesSameLinkNoticeAcrossLibraryKinds() started.
+✔ Test deletionMessageUsesSameLinkNoticeAcrossLibraryKinds() passed after 0.001 seconds.
+◇ Test linkedProjectCountFallsBackToZeroWhenServerFails() started.
+✔ Test linkedProjectCountFallsBackToZeroWhenServerFails() passed after 0.001 seconds.
+◇ Test addYarnSavesTrimmedFormAndReloadsYarns() started.
+✔ Test addYarnSavesTrimmedFormAndReloadsYarns() passed after 0.001 seconds.
+◇ Test addYarnRejectsMissingName() started.
+✔ Test addYarnRejectsMissingName() passed after 0.001 seconds.
+◇ Test deleteYarnDeletesAndReloadsYarns() started.
+✔ Test deleteYarnDeletesAndReloadsYarns() passed after 0.001 seconds.
+◇ Test deleteYarnReturnsFalseAndKeepsExistingYarnsWhenDeleteFails() started.
+✔ Test deleteYarnReturnsFalseAndKeepsExistingYarnsWhenDeleteFails() passed after 0.001 seconds.
+◇ Test deletionPresentationKeepsSelectedDetailWhenDeleteFails() started.
+✔ Test deletionPresentationKeepsSelectedDetailWhenDeleteFails() passed after 0.001 seconds.
+◇ Test deletionPresentationClearsSelectedDetailOnlyForMatchingSuccessfulDelete() started.
+✔ Test deletionPresentationClearsSelectedDetailOnlyForMatchingSuccessfulDelete() passed after 0.001 seconds.
+◇ Test deletionPresentationClearsPendingDeletionOnlyWhenDeleteSucceeds() started.
+✔ Test deletionPresentationClearsPendingDeletionOnlyWhenDeleteSucceeds() passed after 0.001 seconds.
+◇ Test yarnDetailRowsHideEmptyOptionalMetadataAndKeepQuantity() started.
+✔ Test yarnDetailRowsHideEmptyOptionalMetadataAndKeepQuantity() passed after 0.001 seconds.
+◇ Test filteredYarnsMatchesNameBrandColorwayWeightAndNotes() started.
+✔ Test filteredYarnsMatchesNameBrandColorwayWeightAndNotes() passed after 0.001 seconds.
+◇ Test loadYarnUsagesStoresUsageRecordsAndTotalQuantity() started.
+✔ Test loadYarnUsagesStoresUsageRecordsAndTotalQuantity() passed after 0.001 seconds.
+◇ Test retryYarnSyncReloadsYarnsAndClearsPendingStatus() started.
+✔ Test retryYarnSyncReloadsYarnsAndClearsPendingStatus() passed after 0.001 seconds.
+◇ Test addNeedleSavesTrimmedFormAndReloadsNeedles() started.
+✔ Test addNeedleSavesTrimmedFormAndReloadsNeedles() passed after 0.001 seconds.
+◇ Test addNeedleRejectsMissingRequiredFields() started.
+✔ Test addNeedleRejectsMissingRequiredFields() passed after 0.001 seconds.
+◇ Test deleteNeedleDeletesAndReloadsNeedles() started.
+✔ Test deleteNeedleDeletesAndReloadsNeedles() passed after 0.001 seconds.
+◇ Test deleteNeedleReturnsFalseAndKeepsExistingNeedlesWhenDeleteFails() started.
+✔ Test deleteNeedleReturnsFalseAndKeepsExistingNeedlesWhenDeleteFails() passed after 0.001 seconds.
+◇ Test needleDetailRowsHideEmptyLengthAndKeepRequiredMetadata() started.
+✔ Test needleDetailRowsHideEmptyLengthAndKeepRequiredMetadata() passed after 0.001 seconds.
+◇ Test filteredNeedlesMatchesNameTypeSizeLengthAndNotes() started.
+✔ Test filteredNeedlesMatchesNameTypeSizeLengthAndNotes() passed after 0.001 seconds.
+◇ Test retryNeedleSyncReloadsNeedlesAndClearsPendingStatus() started.
+✔ Test retryNeedleSyncReloadsNeedlesAndClearsPendingStatus() passed after 0.001 seconds.
+◇ Test addToolSavesTrimmedFormAndReloadsTools() started.
+✔ Test addToolSavesTrimmedFormAndReloadsTools() passed after 0.001 seconds.
+◇ Test addToolRejectsMissingRequiredFields() started.
+✔ Test addToolRejectsMissingRequiredFields() passed after 0.001 seconds.
+◇ Test deleteToolDeletesAndReloadsTools() started.
+✔ Test deleteToolDeletesAndReloadsTools() passed after 0.001 seconds.
+◇ Test filteredToolsMatchesNameTypeLinkAndMemo() started.
+✔ Test filteredToolsMatchesNameTypeLinkAndMemo() passed after 0.001 seconds.
+◇ Test retryToolSyncReloadsToolsAndClearsPendingStatus() started.
+✔ Test retryToolSyncReloadsToolsAndClearsPendingStatus() passed after 0.013 seconds.
+◇ Test toolDetailRowsHideEmptyLinkAndKeepUsageCount() started.
+✔ Test toolDetailRowsHideEmptyLinkAndKeepUsageCount() passed after 0.001 seconds.
+✔ Suite LibraryItemViewModelTests passed after 0.050 seconds.
+◇ Suite LibraryViewModelTests started.
+◇ Test reloadAfterAccountChangeFetchesLibraryAgain() started.
+✔ Test reloadAfterAccountChangeFetchesLibraryAgain() passed after 0.001 seconds.
+◇ Test reloadAfterAccountChangeClearsStaleLibraryWhenFetchFails() started.
+✔ Test reloadAfterAccountChangeClearsStaleLibraryWhenFetchFails() passed after 0.001 seconds.
+✔ Suite LibraryViewModelTests passed after 0.001 seconds.
+◇ Suite LocalPatternFileStoreTests started.
+◇ Test storeLibraryPatternDataWritesFileUnderPatternDirectory() started.
+✔ Test storeLibraryPatternDataWritesFileUnderPatternDirectory() passed after 0.001 seconds.
+◇ Test copyLibraryPatternFileToProjectCopiesCachedPattern() started.
+✔ Test copyLibraryPatternFileToProjectCopiesCachedPattern() passed after 0.003 seconds.
+✔ Suite LocalPatternFileStoreTests passed after 0.004 seconds.
+◇ Suite LocalRepositoryPersistenceTests started.
+◇ Test projectRepositoryCanLoadDiskCacheWithoutSeedingSamples() started.
+✔ Test projectRepositoryCanLoadDiskCacheWithoutSeedingSamples() passed after 0.011 seconds.
+◇ Test patternRepositoryCanStartEmptyWithoutSeedingSamples() started.
+✔ Test patternRepositoryCanStartEmptyWithoutSeedingSamples() passed after 0.001 seconds.
+◇ Test skillRepositoryCanLoadDiskCacheWithoutSeedingSamples() started.
+✔ Test skillRepositoryCanLoadDiskCacheWithoutSeedingSamples() passed after 0.001 seconds.
+◇ Test libraryRepositoryCanLoadDiskCacheWithoutSeedingSamples() started.
+✔ Test libraryRepositoryCanLoadDiskCacheWithoutSeedingSamples() passed after 0.005 seconds.
+◇ Test libraryRepositoryCanStartEmptyWithoutSeedingSamples() started.
+✔ Test libraryRepositoryCanStartEmptyWithoutSeedingSamples() passed after 0.001 seconds.
+◇ Test profileRepositoryCanLoadDiskCacheWithoutSeedingSample() started.
+✔ Test profileRepositoryCanLoadDiskCacheWithoutSeedingSample() passed after 0.001 seconds.
+◇ Test gaugeTargetRepositoryCanLoadDiskCacheAfterRecreation() started.
+✔ Test gaugeTargetRepositoryCanLoadDiskCacheAfterRecreation() passed after 0.002 seconds.
+◇ Test gaugeTargetRepositoryPersistsUpdatesWithoutDuplicatingTargets() started.
+✔ Test gaugeTargetRepositoryPersistsUpdatesWithoutDuplicatingTargets() passed after 0.001 seconds.
+◇ Test gaugeTargetRepositoryPersistsDeletesAfterRecreation() started.
+✔ Test gaugeTargetRepositoryPersistsDeletesAfterRecreation() passed after 0.002 seconds.
+◇ Test gaugeTargetRepositoryStartsEmptyWhenCacheFileDoesNotExist() started.
+✔ Test gaugeTargetRepositoryStartsEmptyWhenCacheFileDoesNotExist() passed after 0.001 seconds.
+✔ Suite LocalRepositoryPersistenceTests passed after 0.032 seconds.
+◇ Suite MyKnittingViewModelTests started.
+◇ Test addProjectSavesSelectedYarnAndNeedleSnapshots() started.
+✔ Test addProjectSavesSelectedYarnAndNeedleSnapshots() passed after 0.002 seconds.
+◇ Test addProjectReturnsFalseAndKeepsErrorWhenSaveFails() started.
+✔ Test addProjectReturnsFalseAndKeepsErrorWhenSaveFails() passed after 0.003 seconds.
+◇ Test updateProjectReturnsFalseAndKeepsExistingListWhenSaveFails() started.
+✔ Test updateProjectReturnsFalseAndKeepsExistingListWhenSaveFails() passed after 0.001 seconds.
+◇ Test deleteProjectReturnsFalseAndKeepsExistingListWhenDeleteFails() started.
+✔ Test deleteProjectReturnsFalseAndKeepsExistingListWhenDeleteFails() passed after 0.003 seconds.
+◇ Test updateProjectSetsSuccessStatusMessage() started.
+✔ Test updateProjectSetsSuccessStatusMessage() passed after 0.001 seconds.
+◇ Test deleteProjectSetsSuccessStatusMessage() started.
+✔ Test deleteProjectSetsSuccessStatusMessage() passed after 0.026 seconds.
+◇ Test addProjectSavesSelectedPatternDocumentAsProjectPatternCopy() started.
+✔ Test addProjectSavesSelectedPatternDocumentAsProjectPatternCopy() passed after 0.001 seconds.
+◇ Test manualPatternNameClearsPreviouslySelectedPatternDocument() started.
+✔ Test manualPatternNameClearsPreviouslySelectedPatternDocument() passed after 0.001 seconds.
+◇ Test projectFormDataInitializesMaterialSelectionFromProject() started.
+✔ Test projectFormDataInitializesMaterialSelectionFromProject() passed after 0.001 seconds.
+◇ Test reloadAfterAccountChangeFetchesProjectsAgain() started.
+✔ Test reloadAfterAccountChangeFetchesProjectsAgain() passed after 0.021 seconds.
+◇ Test reloadAfterAccountChangeClearsStaleProjectsWhenFetchFails() started.
+✔ Test reloadAfterAccountChangeClearsStaleProjectsWhenFetchFails() passed after 0.001 seconds.
+◇ Test retrySyncReloadsProjectsAndClearsPendingStatus() started.
+✔ Test retrySyncReloadsProjectsAndClearsPendingStatus() passed after 0.001 seconds.
+✔ Suite MyKnittingViewModelTests passed after 0.061 seconds.
+◇ Suite OfflineFirstGaugeRecordRepositoryTests started.
+◇ Test fetchGaugeRecordsFallsBackToLocalCacheWhenRemoteIsOffline() started.
+✔ Test fetchGaugeRecordsFallsBackToLocalCacheWhenRemoteIsOffline() passed after 0.001 seconds.
+◇ Test saveGaugeRecordKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() started.
+✔ Test saveGaugeRecordKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() passed after 0.003 seconds.
+◇ Test savePendingGaugeRecordKeepsPendingUploadWhenRemoteIsOffline() started.
+✔ Test savePendingGaugeRecordKeepsPendingUploadWhenRemoteIsOffline() passed after 0.001 seconds.
+◇ Test updateGaugeRecordKeepsPendingUploadAndFlushesWithPatchOnNextFetch() started.
+✔ Test updateGaugeRecordKeepsPendingUploadAndFlushesWithPatchOnNextFetch() passed after 0.002 seconds.
+◇ Test deleteGaugeRecordKeepsHiddenPendingDeleteAndFlushesOnNextFetch() started.
+✔ Test deleteGaugeRecordKeepsHiddenPendingDeleteAndFlushesOnNextFetch() passed after 0.001 seconds.
+◇ Test deleteLocalOnlyGaugeRecordDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyGaugeRecordDoesNotCallRemoteDelete() passed after 0.004 seconds.
+◇ Test rejectedPendingGaugeRecordRemovesUnacceptedLocalOnlyChangeOnFetch() started.
+✔ Test rejectedPendingGaugeRecordRemovesUnacceptedLocalOnlyChangeOnFetch() passed after 0.001 seconds.
+◇ Test rejectedPendingGaugeRecordDeleteClearsTombstoneOnFetch() started.
+✔ Test rejectedPendingGaugeRecordDeleteClearsTombstoneOnFetch() passed after 0.001 seconds.
+✔ Suite OfflineFirstGaugeRecordRepositoryTests passed after 0.016 seconds.
+◇ Suite OfflineFirstLibraryRepositoryTests started.
+◇ Test fetchYarnsFallsBackToLocalCacheWhenRemoteIsOffline() started.
+✔ Test fetchYarnsFallsBackToLocalCacheWhenRemoteIsOffline() passed after 0.001 seconds.
+◇ Test saveYarnKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() started.
+✔ Test saveYarnKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() passed after 0.001 seconds.
+◇ Test savePendingYarnUploadsAsExistingYarnWhenRemoteIsAvailable() started.
+✔ Test savePendingYarnUploadsAsExistingYarnWhenRemoteIsAvailable() passed after 0.014 seconds.
+◇ Test saveYarnCachesServerVersionAfterSuccessfulUpload() started.
+✔ Test saveYarnCachesServerVersionAfterSuccessfulUpload() passed after 0.001 seconds.
+◇ Test savePendingNeedleUploadsAsExistingNeedleWhenRemoteIsAvailable() started.
+✔ Test savePendingNeedleUploadsAsExistingNeedleWhenRemoteIsAvailable() passed after 0.001 seconds.
+◇ Test saveNeedleCachesServerVersionAfterSuccessfulUpload() started.
+✔ Test saveNeedleCachesServerVersionAfterSuccessfulUpload() passed after 0.001 seconds.
+◇ Test saveToolKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() started.
+✔ Test saveToolKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() passed after 0.001 seconds.
+◇ Test saveToolCachesServerVersionAfterSuccessfulUpload() started.
+✔ Test saveToolCachesServerVersionAfterSuccessfulUpload() passed after 0.001 seconds.
+◇ Test deleteLocalOnlyYarnDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyYarnDoesNotCallRemoteDelete() passed after 0.001 seconds.
+◇ Test deleteLocalOnlyNeedleDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyNeedleDoesNotCallRemoteDelete() passed after 0.001 seconds.
+◇ Test deleteLocalOnlyToolDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyToolDoesNotCallRemoteDelete() passed after 0.001 seconds.
+◇ Test recordYarnUsageKeepsLocalChangeAndFlushesOnNextUsageFetch() started.
+✔ Test recordYarnUsageKeepsLocalChangeAndFlushesOnNextUsageFetch() passed after 0.001 seconds.
+◇ Test recordYarnUsageRollsBackInventoryWhenRemoteRejectsChange() started.
+✔ Test recordYarnUsageRollsBackInventoryWhenRemoteRejectsChange() passed after 0.001 seconds.
+◇ Test saveYarnRollsBackLocalChangeWhenRemoteRejectsChange() started.
+✔ Test saveYarnRollsBackLocalChangeWhenRemoteRejectsChange() passed after 0.001 seconds.
+◇ Test deleteYarnRollsBackLocalDeletionWhenRemoteRejectsChange() started.
+✔ Test deleteYarnRollsBackLocalDeletionWhenRemoteRejectsChange() passed after 0.001 seconds.
+◇ Test deleteLocalOnlyYarnUsageDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyYarnUsageDoesNotCallRemoteDelete() passed after 0.001 seconds.
+✔ Suite OfflineFirstLibraryRepositoryTests passed after 0.031 seconds.
+◇ Suite OfflineFirstPatternRepositoryTests started.
+◇ Test fetchPatternsFallsBackToLocalCacheWhenRemoteIsOffline() started.
+✔ Test fetchPatternsFallsBackToLocalCacheWhenRemoteIsOffline() passed after 0.002 seconds.
+◇ Test createPatternKeepsLocalFileAndFlushesUploadOnNextFetch() started.
+✔ Test createPatternKeepsLocalFileAndFlushesUploadOnNextFetch() passed after 0.003 seconds.
+◇ Test savePendingPatternUploadsAsExistingPatternWhenRemoteIsAvailable() started.
+✔ Test savePendingPatternUploadsAsExistingPatternWhenRemoteIsAvailable() passed after 0.003 seconds.
+◇ Test savePatternCachesServerVersionAndKeepsLocalFileAfterSuccessfulUpload() started.
+✔ Test savePatternCachesServerVersionAndKeepsLocalFileAfterSuccessfulUpload() passed after 0.004 seconds.
+◇ Test deletePatternKeepsHiddenPendingDeleteAndFlushesOnNextFetch() started.
+✔ Test deletePatternKeepsHiddenPendingDeleteAndFlushesOnNextFetch() passed after 0.008 seconds.
+◇ Test deleteLocalOnlyPatternDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyPatternDoesNotCallRemoteDelete() passed after 0.009 seconds.
+◇ Test createProjectPatternCopyKeepsDirectFileLocalForProjectUpload() started.
+✔ Test createProjectPatternCopyKeepsDirectFileLocalForProjectUpload() passed after 0.002 seconds.
+✔ Suite OfflineFirstPatternRepositoryTests passed after 0.035 seconds.
+◇ Suite OfflineFirstProfileRepositoryTests started.
+◇ Test fetchProfileFallsBackToLocalCacheWhenRemoteIsOffline() started.
+✔ Test fetchProfileFallsBackToLocalCacheWhenRemoteIsOffline() passed after 0.001 seconds.
+◇ Test saveProfileKeepsPendingUploadAndFlushesOnNextSuccessfulFetch() started.
+✔ Test saveProfileKeepsPendingUploadAndFlushesOnNextSuccessfulFetch() passed after 0.001 seconds.
+◇ Test savePendingProfileUploadsAsExistingProfileWhenRemoteIsAvailable() started.
+✔ Test savePendingProfileUploadsAsExistingProfileWhenRemoteIsAvailable() passed after 0.001 seconds.
+◇ Test saveProfileCachesServerVersionAfterSuccessfulUpload() started.
+✔ Test saveProfileCachesServerVersionAfterSuccessfulUpload() passed after 0.001 seconds.
+✔ Suite OfflineFirstProfileRepositoryTests passed after 0.013 seconds.
+◇ Suite OfflineFirstProjectRepositoryTests started.
+◇ Test fetchProjectsFallsBackToLocalCacheWhenRemoteIsOffline() started.
+✔ Test fetchProjectsFallsBackToLocalCacheWhenRemoteIsOffline() passed after 0.001 seconds.
+◇ Test fetchProjectsThrowsWhenRemoteIsOfflineAndLocalCacheIsMissing() started.
+✔ Test fetchProjectsThrowsWhenRemoteIsOfflineAndLocalCacheIsMissing() passed after 0.001 seconds.
+◇ Test saveNewProjectKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() started.
+✔ Test saveNewProjectKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() passed after 0.002 seconds.
+◇ Test saveSyncedProjectKeepsPendingUploadAndFlushesAsSyncedOnNextFetch() started.
+✔ Test saveSyncedProjectKeepsPendingUploadAndFlushesAsSyncedOnNextFetch() passed after 0.001 seconds.
+◇ Test savePendingProjectUploadsAsExistingProjectWhenRemoteIsAvailable() started.
+✔ Test savePendingProjectUploadsAsExistingProjectWhenRemoteIsAvailable() passed after 0.001 seconds.
+◇ Test saveProjectCachesServerVersionAfterSuccessfulUpload() started.
+✔ Test saveProjectCachesServerVersionAfterSuccessfulUpload() passed after 0.007 seconds.
+◇ Test deleteProjectKeepsHiddenPendingDeleteAndFlushesOnNextFetch() started.
+✔ Test deleteProjectKeepsHiddenPendingDeleteAndFlushesOnNextFetch() passed after 0.002 seconds.
+◇ Test deleteLocalOnlyProjectDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlyProjectDoesNotCallRemoteDelete() passed after 0.001 seconds.
+◇ Test rejectedPendingLocalOnlyProjectIsPreservedAsConflictOnFetch() started.
+✔ Test rejectedPendingLocalOnlyProjectIsPreservedAsConflictOnFetch() passed after 0.001 seconds.
+◇ Test rejectedPendingProjectDeleteClearsTombstoneOnFetch() started.
+✔ Test rejectedPendingProjectDeleteClearsTombstoneOnFetch() passed after 0.001 seconds.
+◇ Test saveRowCounterRetryableFailurePersistsParentProjectPendingForRestart() started.
+✔ Test saveRowCounterRetryableFailurePersistsParentProjectPendingForRestart() passed after 0.001 seconds.
+◇ Test pendingRowCounterRetriesAfterRepositoryRecreationAndClearsPending() started.
+✔ Test pendingRowCounterRetriesAfterRepositoryRecreationAndClearsPending() passed after 0.002 seconds.
+◇ Test pendingRowInstructionRetriesAfterRepositoryRecreation() started.
+✔ Test pendingRowInstructionRetriesAfterRepositoryRecreation() passed after 0.003 seconds.
+◇ Test pendingNewWorkSessionRetriesWithPostAfterRepositoryRecreationWithoutDuplicateCreate() started.
+✔ Test pendingNewWorkSessionRetriesWithPostAfterRepositoryRecreationWithoutDuplicateCreate() passed after 0.003 seconds.
+◇ Test successfulImmediateChildRemoteSaveLeavesNoParentPending() started.
+✔ Test successfulImmediateChildRemoteSaveLeavesNoParentPending() passed after 0.001 seconds.
+◇ Test nonRetryableRowCounterFailureRestoresSnapshotAndLeavesNoPending() started.
+✔ Test nonRetryableRowCounterFailureRestoresSnapshotAndLeavesNoPending() passed after 0.001 seconds.
+◇ Test nonRetryableRowInstructionFailureRestoresSnapshotAndLeavesNoPending() started.
+✔ Test nonRetryableRowInstructionFailureRestoresSnapshotAndLeavesNoPending() passed after 0.001 seconds.
+◇ Test pendingProjectScalarAndNewRowInstructionRetryUploadsAggregateProject() started.
+✔ Test pendingProjectScalarAndNewRowInstructionRetryUploadsAggregateProject() passed after 0.002 seconds.
+◇ Test pendingRowCounterScalarAndChildRetryUploadsAggregateProject() started.
+✔ Test pendingRowCounterScalarAndChildRetryUploadsAggregateProject() passed after 0.002 seconds.
+◇ Test pendingAggregateRetryFailureKeepsParentPendingUntilFullUploadSucceeds() started.
+✔ Test pendingAggregateRetryFailureKeepsParentPendingUntilFullUploadSucceeds() passed after 0.001 seconds.
+◇ Test retryableRowInstructionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry() started.
+✔ Test retryableRowInstructionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry() passed after 0.002 seconds.
+◇ Test retryableWorkSessionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry() started.
+✔ Test retryableWorkSessionDeletePersistsPendingAggregateAndDoesNotResurrectAfterRetry() passed after 0.004 seconds.
+◇ Test successfulDirectChildDeleteLeavesNoParentPending() started.
+✔ Test successfulDirectChildDeleteLeavesNoParentPending() passed after 0.001 seconds.
+◇ Test alreadyDeletedChildKeepsLocalDeleteWithoutPending() started.
+✔ Test alreadyDeletedChildKeepsLocalDeleteWithoutPending() passed after 0.001 seconds.
+◇ Test nonRetryableChildDeleteRestoresSnapshotAndLeavesNoPending() started.
+✔ Test nonRetryableChildDeleteRestoresSnapshotAndLeavesNoPending() passed after 0.001 seconds.
+✔ Suite OfflineFirstProjectRepositoryTests passed after 0.079 seconds.
+◇ Suite OfflineFirstSkillRepositoryTests started.
+◇ Test fetchSkillsFallsBackToLocalCacheWhenRemoteIsOffline() started.
+✔ Test fetchSkillsFallsBackToLocalCacheWhenRemoteIsOffline() passed after 0.001 seconds.
+◇ Test saveNewSkillKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() started.
+✔ Test saveNewSkillKeepsLocalChangeAndFlushesOnNextSuccessfulFetch() passed after 0.001 seconds.
+◇ Test saveSyncedSkillKeepsPendingUploadAndFlushesAsSyncedOnNextFetch() started.
+✔ Test saveSyncedSkillKeepsPendingUploadAndFlushesAsSyncedOnNextFetch() passed after 0.001 seconds.
+◇ Test savePendingSkillUploadsAsExistingSkillWhenRemoteIsAvailable() started.
+✔ Test savePendingSkillUploadsAsExistingSkillWhenRemoteIsAvailable() passed after 0.001 seconds.
+◇ Test saveSkillCachesServerVersionAfterSuccessfulUpload() started.
+✔ Test saveSkillCachesServerVersionAfterSuccessfulUpload() passed after 0.001 seconds.
+◇ Test saveSystemSkillLevelUsesLevelEndpointInsteadOfFullSkillUpdate() started.
+✔ Test saveSystemSkillLevelUsesLevelEndpointInsteadOfFullSkillUpdate() passed after 0.001 seconds.
+◇ Test pendingSystemSkillLevelRetriesWithLevelEndpoint() started.
+✔ Test pendingSystemSkillLevelRetriesWithLevelEndpoint() passed after 0.001 seconds.
+◇ Test deleteSkillKeepsHiddenPendingDeleteAndFlushesOnNextFetch() started.
+✔ Test deleteSkillKeepsHiddenPendingDeleteAndFlushesOnNextFetch() passed after 0.001 seconds.
+◇ Test deleteLocalOnlySkillDoesNotCallRemoteDelete() started.
+✔ Test deleteLocalOnlySkillDoesNotCallRemoteDelete() passed after 0.001 seconds.
+✔ Suite OfflineFirstSkillRepositoryTests passed after 0.027 seconds.
+◇ Suite OnboardingViewModelTests started.
+◇ Test onboardingStepsIncludeAccountAndSkillTestPrompts() started.
+✔ Test onboardingStepsIncludeAccountAndSkillTestPrompts() passed after 0.001 seconds.
+◇ Test loadExistingProfilePopulatesForm() started.
+✔ Test loadExistingProfilePopulatesForm() passed after 0.001 seconds.
+◇ Test completeOnboardingSavesDefaultDisplayNameWhenBlank() started.
+✔ Test completeOnboardingSavesDefaultDisplayNameWhenBlank() passed after 0.001 seconds.
+◇ Test completeOnboardingPreservesExistingProfileIdentity() started.
+✔ Test completeOnboardingPreservesExistingProfileIdentity() passed after 0.001 seconds.
+◇ Test replacingProfileRepositoryUsesNewScopeWhenCompletingOnboarding() started.
+✔ Test replacingProfileRepositoryUsesNewScopeWhenCompletingOnboarding() passed after 0.001 seconds.
+✔ Suite OnboardingViewModelTests passed after 0.014 seconds.
+◇ Suite PatternLibraryViewModelTests started.
+◇ Test formDataInitializesFromExistingPattern() started.
+✔ Test formDataInitializesFromExistingPattern() passed after 0.001 seconds.
+◇ Test updatePatternSavesExistingIdentityAndReloadsPatterns() started.
+✔ Test updatePatternSavesExistingIdentityAndReloadsPatterns() passed after 0.004 seconds.
+◇ Test preparePatternForViewingFetchesMissingFileAndUpdatesList() started.
+✔ Test preparePatternForViewingFetchesMissingFileAndUpdatesList() passed after 0.001 seconds.
+◇ Test retrySyncReloadsPatternsAndClearsPendingStatus() started.
+✔ Test retrySyncReloadsPatternsAndClearsPendingStatus() passed after 0.001 seconds.
+◇ Test deletePatternDeletesAndReloadsPatterns() started.
+✔ Test deletePatternDeletesAndReloadsPatterns() passed after 0.001 seconds.
+◇ Test deletePatternReturnsFalseAndKeepsExistingPatternsWhenDeleteFails() started.
+✔ Test deletePatternReturnsFalseAndKeepsExistingPatternsWhenDeleteFails() passed after 0.001 seconds.
+◇ Test patternFileURLUsesRepositoryFileURL() started.
+✔ Test patternFileURLUsesRepositoryFileURL() passed after 0.001 seconds.
+◇ Test filteredPatternsMatchesTitleDesignerFileNameAndNotes() started.
+✔ Test filteredPatternsMatchesTitleDesignerFileNameAndNotes() passed after 0.001 seconds.
+✔ Suite PatternLibraryViewModelTests passed after 0.015 seconds.
+◇ Suite ProfileSettingsViewModelTests started.
+◇ Test loadProfilePopulatesFormData() started.
+✔ Test loadProfilePopulatesFormData() passed after 0.001 seconds.
+◇ Test loadProfileWithoutSavedLocalProfileKeepsEditableDefaults() started.
+✔ Test loadProfileWithoutSavedLocalProfileKeepsEditableDefaults() passed after 0.001 seconds.
+◇ Test authenticatedProfileLoadAfterSignOutKeepsEditableDefaultsWithoutError() started.
+✔ Test authenticatedProfileLoadAfterSignOutKeepsEditableDefaultsWithoutError() passed after 0.003 seconds.
+◇ Test saveProfilePersistsTrimmedProfileAndReloads() started.
+✔ Test saveProfilePersistsTrimmedProfileAndReloads() passed after 0.001 seconds.
+◇ Test saveProfileRejectsMissingDisplayName() started.
+✔ Test saveProfileRejectsMissingDisplayName() passed after 0.001 seconds.
+◇ Test retrySyncReloadsProfileAndClearsPendingStatus() started.
+✔ Test retrySyncReloadsProfileAndClearsPendingStatus() passed after 0.001 seconds.
+✔ Suite ProfileSettingsViewModelTests passed after 0.022 seconds.
+◇ Suite ProjectWorkspaceViewModelTests started.
+◇ Test memoDraftSurvivesRecreationAndSaveClearsIt() started.
+✔ Test memoDraftSurvivesRecreationAndSaveClearsIt() passed after 0.005 seconds.
+◇ Test memoDraftIsAccountScopedAndExplicitDiscardRemovesIt() started.
+✔ Test memoDraftIsAccountScopedAndExplicitDiscardRemovesIt() passed after 0.001 seconds.
+◇ Test conflictAndRefreshRetainPersistentDraftAndDeleteRemovesIt() started.
+✔ Test conflictAndRefreshRetainPersistentDraftAndDeleteRemovesIt() passed after 0.002 seconds.
+◇ Test projectSaveConflictKeepsUnsavedMemoInsteadOfServerValue() started.
+✔ Test projectSaveConflictKeepsUnsavedMemoInsteadOfServerValue() passed after 0.002 seconds.
+◇ Test projectSaveConflictRefetchesServerProjectToRefreshLockBaseline() started.
+✔ Test projectSaveConflictRefetchesServerProjectToRefreshLockBaseline() passed after 0.001 seconds.
+◇ Test failedMemoSaveKeepsErrorMessageVisibleAfterFollowUpLoad() started.
+✔ Test failedMemoSaveKeepsErrorMessageVisibleAfterFollowUpLoad() passed after 0.002 seconds.
+◇ Test projectSaveConflictMessageSaysInputIsKept() started.
+✔ Test projectSaveConflictMessageSaysInputIsKept() passed after 0.001 seconds.
+◇ Test resetCurrentRowPersistsZeroAndKeepsCounterMetadata() started.
+✔ Test resetCurrentRowPersistsZeroAndKeepsCounterMetadata() passed after 0.001 seconds.
+◇ Test completeProjectPersistsFOStatus() started.
+✔ Test completeProjectPersistsFOStatus() passed after 0.001 seconds.
+◇ Test unlinkPatternRemovesPatternAndDrawingState() started.
+✔ Test unlinkPatternRemovesPatternAndDrawingState() passed after 0.001 seconds.
+◇ Test attachManualPatternReturnsFalseAndKeepsExistingPatternWhenSaveFails() started.
+✔ Test attachManualPatternReturnsFalseAndKeepsExistingPatternWhenSaveFails() passed after 0.001 seconds.
+◇ Test resolvedSkillTagsMarksRegisteredAndUnregisteredTags() started.
+✔ Test resolvedSkillTagsMarksRegisteredAndUnregisteredTags() passed after 0.001 seconds.
+◇ Test currentLearningSkillTagsPrioritizesUnknownAndUnsureCurrentRowSkills() started.
+✔ Test currentLearningSkillTagsPrioritizesUnknownAndUnsureCurrentRowSkills() passed after 0.001 seconds.
+◇ Test loadRelatedSkillsIncludesAbbreviationsExtractedFromAttachedPDFText() started.
+✔ Test loadRelatedSkillsIncludesAbbreviationsExtractedFromAttachedPDFText() passed after 0.049 seconds.
+◇ Test loadRelatedSkillsIncludesAbbreviationsRecognizedFromScannedPDFImage() started.
+✔ Test loadRelatedSkillsIncludesAbbreviationsRecognizedFromScannedPDFImage() passed after 8.767 seconds.
+◇ Test attachNewPatternCanStoreFileInLibraryBeforeProjectConnection() started.
+✔ Test attachNewPatternCanStoreFileInLibraryBeforeProjectConnection() passed after 0.046 seconds.
+◇ Test attachNewPatternCanKeepFileProjectOnly() started.
+✔ Test attachNewPatternCanKeepFileProjectOnly() passed after 0.006 seconds.
+◇ Test loadRelatedSkillsBuildsRowInstructionSuggestionsFromPatternText() started.
+✔ Test loadRelatedSkillsBuildsRowInstructionSuggestionsFromPatternText() passed after 0.025 seconds.
+◇ Test addPatternRowInstructionSuggestionPersistsRowInstruction() started.
+✔ Test addPatternRowInstructionSuggestionPersistsRowInstruction() passed after 0.003 seconds.
+◇ Test recordYarnUsageSavesUsageAndRefreshesRemainingYarn() started.
+✔ Test recordYarnUsageSavesUsageAndRefreshesRemainingYarn() passed after 0.001 seconds.
+◇ Test updateYarnUsageRefreshesAdjustedRemainingYarn() started.
+✔ Test updateYarnUsageRefreshesAdjustedRemainingYarn() passed after 0.001 seconds.
+◇ Test deleteYarnUsageRefreshesRestoredRemainingYarn() started.
+✔ Test deleteYarnUsageRefreshesRestoredRemainingYarn() passed after 0.001 seconds.
+◇ Test finishWorkSessionDoesNotPersistVeryShortAutomaticSession() started.
+✔ Test finishWorkSessionDoesNotPersistVeryShortAutomaticSession() passed after 0.002 seconds.
+◇ Test manualStopKeepsTimerOffWhenScreenIsReopened() started.
+✔ Test manualStopKeepsTimerOffWhenScreenIsReopened() passed after 0.001 seconds.
+◇ Test manualStartClearsSuppressionForLaterAutoStart() started.
+✔ Test manualStartClearsSuppressionForLaterAutoStart() passed after 0.001 seconds.
+◇ Test leavingScreenDoesNotSuppressAutoStartOnReturn() started.
+✔ Test leavingScreenDoesNotSuppressAutoStartOnReturn() passed after 0.003 seconds.
+◇ Test manualStopKeepsTimerOffAfterAppReturnsFromBackground() started.
+✔ Test manualStopKeepsTimerOffAfterAppReturnsFromBackground() passed after 0.001 seconds.
+◇ Test backgroundEndsSessionAndActivationStartsANewOne() started.
+✔ Test backgroundEndsSessionAndActivationStartsANewOne() passed after 0.003 seconds.
+◇ Test recordingWorkSessionCreatesLocalOnlySessionForSyncedProject() started.
+✔ Test recordingWorkSessionCreatesLocalOnlySessionForSyncedProject() passed after 0.008 seconds.
+◇ Test recordingWorkSessionKeepsLocalProjectSessionLocalOnly() started.
+✔ Test recordingWorkSessionKeepsLocalProjectSessionLocalOnly() passed after 0.001 seconds.
+◇ Test workSessionsByMostRecentSortsSessionsDescending() started.
+✔ Test workSessionsByMostRecentSortsSessionsDescending() passed after 0.001 seconds.
+◇ Test workSessionStatisticsSummarizesTodayTotalAndAverage() started.
+✔ Test workSessionStatisticsSummarizesTodayTotalAndAverage() passed after 0.001 seconds.
+◇ Test updateWorkSessionMemoPersistsTrimmedMemo() started.
+✔ Test updateWorkSessionMemoPersistsTrimmedMemo() passed after 0.001 seconds.
+◇ Test deleteWorkSessionRemovesSessionAndPersists() started.
+✔ Test deleteWorkSessionRemovesSessionAndPersists() passed after 0.001 seconds.
+◇ Test loadGaugeRecordsKeepsLinkedRecordsForCurrentProject() started.
+✔ Test loadGaugeRecordsKeepsLinkedRecordsForCurrentProject() passed after 0.001 seconds.
+◇ Test linkGaugeRecordPersistsProjectSnapshot() started.
+✔ Test linkGaugeRecordPersistsProjectSnapshot() passed after 0.001 seconds.
+◇ Test unlinkGaugeRecordClearsProjectConnection() started.
+✔ Test unlinkGaugeRecordClearsProjectConnection() passed after 0.001 seconds.
+◇ Test loadNeedlesSetsAvailableNeedlesAndAttachedNeedle() started.
+✔ Test loadNeedlesSetsAvailableNeedlesAndAttachedNeedle() passed after 0.001 seconds.
+◇ Test attachNeedlePersistsNeedleSnapshot() started.
+✔ Test attachNeedlePersistsNeedleSnapshot() passed after 0.001 seconds.
+◇ Test unlinkNeedleClearsNeedleSnapshot() started.
+✔ Test unlinkNeedleClearsNeedleSnapshot() passed after 0.001 seconds.
+◇ Test loadToolsSetsAvailableAndLinkedProjectTools() started.
+✔ Test loadToolsSetsAvailableAndLinkedProjectTools() passed after 0.001 seconds.
+◇ Test linkToolConnectsProjectTool() started.
+✔ Test linkToolConnectsProjectTool() passed after 0.001 seconds.
+◇ Test unlinkToolDisconnectsProjectTool() started.
+✔ Test unlinkToolDisconnectsProjectTool() passed after 0.001 seconds.
+◇ Test loadProgressPhotosSetsProjectPhotos() started.
+✔ Test loadProgressPhotosSetsProjectPhotos() passed after 0.001 seconds.
+◇ Test addProgressPhotoStoresPhotoAndSortsByTakenAtDescending() started.
+✔ Test addProgressPhotoStoresPhotoAndSortsByTakenAtDescending() passed after 0.001 seconds.
+◇ Test updateProgressPhotoReplacesExistingPhoto() started.
+✔ Test updateProgressPhotoReplacesExistingPhoto() passed after 0.001 seconds.
+◇ Test deleteProgressPhotoRemovesPhotoFromWorkspace() started.
+✔ Test deleteProgressPhotoRemovesPhotoFromWorkspace() passed after 0.001 seconds.
+◇ Test retrySyncFetchesLatestProjectAndRefreshesWorkspaceState() started.
+✔ Test retrySyncFetchesLatestProjectAndRefreshesWorkspaceState() passed after 0.001 seconds.
+◇ Test incrementRowAppliesFetchedProjectAfterSave() started.
+✔ Test incrementRowAppliesFetchedProjectAfterSave() passed after 0.001 seconds.
+◇ Test addRowInstructionReturnsFalseAndKeepsRowsWhenRowNumberAlreadyExists() started.
+✔ Test addRowInstructionReturnsFalseAndKeepsRowsWhenRowNumberAlreadyExists() passed after 0.008 seconds.
+◇ Test addBulkRowInstructionsReturnsTrueWhenRowsAreSaved() started.
+✔ Test addBulkRowInstructionsReturnsTrueWhenRowsAreSaved() passed after 0.002 seconds.
+✔ Suite ProjectWorkspaceViewModelTests passed after 8.981 seconds.
+◇ Suite RemoteAuthRepositoryTests started.
+◇ Test loginPostsCredentialsAndDecodesSession() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/auth/login auth=MISSING
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/auth/login status=200
+✔ Test loginPostsCredentialsAndDecodesSession() passed after 0.008 seconds.
+◇ Test registerPostsProfileDataAndDecodesSession() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/auth/register auth=MISSING
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/auth/register status=201
+✔ Test registerPostsProfileDataAndDecodesSession() passed after 0.001 seconds.
+◇ Test fetchCurrentUserRequestsMeEndpointWithBearerToken() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/auth/me auth=present(jwt-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/auth/me status=200
+✔ Test fetchCurrentUserRequestsMeEndpointWithBearerToken() passed after 0.002 seconds.
+✔ Suite RemoteAuthRepositoryTests passed after 0.012 seconds.
+◇ Suite RemoteDictionaryRepositoryTests started.
+◇ Test fetchTermsRequestsDictionaryEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/dictionary-terms auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/dictionary-terms status=200
+✔ Test fetchTermsRequestsDictionaryEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test saveNewTermPostsDictionaryPayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/dictionary-terms auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/dictionary-terms status=200
+✔ Test saveNewTermPostsDictionaryPayload() passed after 0.001 seconds.
+◇ Test saveSyncedTermPatchesDictionaryPayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/dictionary-terms/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/dictionary-terms/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=200
+✔ Test saveSyncedTermPatchesDictionaryPayload() passed after 0.001 seconds.
+◇ Test deleteTermDeletesDictionaryEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/dictionary-terms/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/dictionary-terms/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=204
+✔ Test deleteTermDeletesDictionaryEndpoint() passed after 0.001 seconds.
+✔ Suite RemoteDictionaryRepositoryTests passed after 0.005 seconds.
+◇ Suite RemoteGaugeRecordRepositoryTests started.
+◇ Test fetchGaugeRecordsLoadsServerRecords() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/gauge-records auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/gauge-records status=200
+✔ Test fetchGaugeRecordsLoadsServerRecords() passed after 0.001 seconds.
+◇ Test saveGaugeRecordPostsRecordToServer() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/gauge-records auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/gauge-records status=201
+✔ Test saveGaugeRecordPostsRecordToServer() passed after 0.003 seconds.
+◇ Test updateGaugeRecordPatchesExistingRecordOnServer() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/gauge-records/88888888-8888-4888-8888-888888888888 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/gauge-records/88888888-8888-4888-8888-888888888888 status=200
+✔ Test updateGaugeRecordPatchesExistingRecordOnServer() passed after 0.001 seconds.
+✔ Suite RemoteGaugeRecordRepositoryTests passed after 0.006 seconds.
+◇ Suite RemoteGaugeTargetRepositoryTests started.
+◇ Test fetchGaugeTargetsLoadsNestedSwatchesAndMeasurements() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/gauge-targets auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/gauge-targets status=200
+✔ Test fetchGaugeTargetsLoadsNestedSwatchesAndMeasurements() passed after 0.005 seconds.
+◇ Test saveGaugeTargetPostsNestedMeasurementData() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/gauge-targets auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/gauge-targets status=201
+✔ Test saveGaugeTargetPostsNestedMeasurementData() passed after 0.005 seconds.
+◇ Test updateGaugeTargetPatchesExistingTargetWithNestedMeasurementData() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/gauge-targets/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/gauge-targets/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=200
+✔ Test updateGaugeTargetPatchesExistingTargetWithNestedMeasurementData() passed after 0.002 seconds.
+◇ Test deleteGaugeTargetDeletesServerTarget() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/gauge-targets/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/gauge-targets/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=204
+✔ Test deleteGaugeTargetDeletesServerTarget() passed after 0.001 seconds.
+✔ Suite RemoteGaugeTargetRepositoryTests passed after 0.014 seconds.
+◇ Suite RemoteLibraryRepositoryTests started.
+◇ Test fetchYarnsRequestsYarnsEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/library/yarns auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/library/yarns status=200
+✔ Test fetchYarnsRequestsYarnsEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test fetchNeedlesRequestsNeedlesEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/library/needles auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/library/needles status=200
+✔ Test fetchNeedlesRequestsNeedlesEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test saveNewYarnPostsYarnPayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/library/yarns auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/library/yarns status=201
+✔ Test saveNewYarnPostsYarnPayload() passed after 0.002 seconds.
+◇ Test saveSyncedYarnPatchesYarnPayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/library/yarns/cccccccc-cccc-4ccc-8ccc-cccccccccccc auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/library/yarns/cccccccc-cccc-4ccc-8ccc-cccccccccccc status=200
+✔ Test saveSyncedYarnPatchesYarnPayload() passed after 0.001 seconds.
+◇ Test deleteYarnRequestsDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/library/yarns/cccccccc-cccc-4ccc-8ccc-cccccccccccc auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/library/yarns/cccccccc-cccc-4ccc-8ccc-cccccccccccc status=204
+✔ Test deleteYarnRequestsDeleteEndpoint() passed after 0.001 seconds.
+◇ Test fetchYarnUsagesRequestsProjectYarnUsageEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages status=200
+✔ Test fetchYarnUsagesRequestsProjectYarnUsageEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test fetchYarnUsagesForYarnRequestsYarnUsageEndpointAndDecodesProjectName() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/library/yarns/cccccccc-cccc-4ccc-8ccc-cccccccccccc/usages auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/library/yarns/cccccccc-cccc-4ccc-8ccc-cccccccccccc/usages status=200
+✔ Test fetchYarnUsagesForYarnRequestsYarnUsageEndpointAndDecodesProjectName() passed after 0.003 seconds.
+◇ Test recordYarnUsagePostsProjectYarnUsagePayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages status=201
+✔ Test recordYarnUsagePostsProjectYarnUsagePayload() passed after 0.002 seconds.
+◇ Test updateYarnUsagePatchesProjectYarnUsagePayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages/99999999-9999-4999-8999-999999999999 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages/99999999-9999-4999-8999-999999999999 status=200
+✔ Test updateYarnUsagePatchesProjectYarnUsagePayload() passed after 0.001 seconds.
+◇ Test deleteYarnUsageRequestsProjectYarnUsageDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages/99999999-9999-4999-8999-999999999999 auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/yarn-usages/99999999-9999-4999-8999-999999999999 status=204
+✔ Test deleteYarnUsageRequestsProjectYarnUsageDeleteEndpoint() passed after 0.001 seconds.
+◇ Test saveNewNeedlePostsNeedlePayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/library/needles auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/library/needles status=201
+✔ Test saveNewNeedlePostsNeedlePayload() passed after 0.001 seconds.
+◇ Test saveSyncedNeedlePatchesNeedlePayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/library/needles/dddddddd-dddd-4ddd-8ddd-dddddddddddd auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/library/needles/dddddddd-dddd-4ddd-8ddd-dddddddddddd status=200
+✔ Test saveSyncedNeedlePatchesNeedlePayload() passed after 0.001 seconds.
+◇ Test deleteNeedleRequestsDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/library/needles/dddddddd-dddd-4ddd-8ddd-dddddddddddd auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/library/needles/dddddddd-dddd-4ddd-8ddd-dddddddddddd status=204
+✔ Test deleteNeedleRequestsDeleteEndpoint() passed after 0.001 seconds.
+◇ Test fetchToolsRequestsToolsEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/library/tools auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/library/tools status=200
+✔ Test fetchToolsRequestsToolsEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test saveNewToolPostsToolPayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/library/tools auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/library/tools status=201
+✔ Test saveNewToolPostsToolPayload() passed after 0.001 seconds.
+◇ Test deleteToolRequestsDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/library/tools/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/library/tools/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee status=204
+✔ Test deleteToolRequestsDeleteEndpoint() passed after 0.001 seconds.
+◇ Test fetchProjectToolsRequestsProjectToolEndpoint() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/library/projects/11111111-1111-4111-8111-111111111111/tools auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/library/projects/11111111-1111-4111-8111-111111111111/tools status=200
+✔ Test fetchProjectToolsRequestsProjectToolEndpoint() passed after 0.001 seconds.
+◇ Test linkToolRequestsProjectToolLinkEndpoint() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/library/projects/11111111-1111-4111-8111-111111111111/tools/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/library/projects/11111111-1111-4111-8111-111111111111/tools/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee status=201
+✔ Test linkToolRequestsProjectToolLinkEndpoint() passed after 0.001 seconds.
+◇ Test unlinkToolRequestsProjectToolUnlinkEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/library/projects/11111111-1111-4111-8111-111111111111/tools/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/library/projects/11111111-1111-4111-8111-111111111111/tools/eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee status=204
+✔ Test unlinkToolRequestsProjectToolUnlinkEndpoint() passed after 0.001 seconds.
+✔ Suite RemoteLibraryRepositoryTests passed after 0.029 seconds.
+◇ Suite RemotePatternRepositoryTests started.
+◇ Test fetchPatternsRequestsPatternsEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/patterns auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/patterns status=200
+✔ Test fetchPatternsRequestsPatternsEndpointAndDecodesResponse() passed after 0.003 seconds.
+◇ Test createPatternUploadsPdfAndCachesDownload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/patterns auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/patterns status=201
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file status=200
+✔ Test createPatternUploadsPdfAndCachesDownload() passed after 0.004 seconds.
+◇ Test fetchPatternDownloadsFileWhenCacheIsMissing() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444 status=200
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file status=200
+✔ Test fetchPatternDownloadsFileWhenCacheIsMissing() passed after 0.002 seconds.
+◇ Test deletePatternRequestsDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444 auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444 status=204
+✔ Test deletePatternRequestsDeleteEndpoint() passed after 0.001 seconds.
+◇ Test saveLocalOnlyPatternUploadsPdfWithStableID() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/patterns auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/patterns status=201
+✔ Test saveLocalOnlyPatternUploadsPdfWithStableID() passed after 0.003 seconds.
+◇ Test createProjectPatternCopyUploadsPdfToLibraryAndCachesProjectCopy() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/patterns auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/patterns status=201
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/patterns/44444444-4444-4444-8444-444444444444/file status=200
+✔ Test createProjectPatternCopyUploadsPdfToLibraryAndCachesProjectCopy() passed after 0.004 seconds.
+◇ Test saveDrawingDataUploadsDrawingAndCachesLocalCopy() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/drawing auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/drawing status=201
+✔ Test saveDrawingDataUploadsDrawingAndCachesLocalCopy() passed after 0.003 seconds.
+✔ Suite RemotePatternRepositoryTests passed after 0.024 seconds.
+◇ Suite RemoteProfileRepositoryTests started.
+◇ Test fetchCurrentProfileRequestsProfileEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/profile auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/profile status=200
+✔ Test fetchCurrentProfileRequestsProfileEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test saveCurrentProfilePatchesProfilePayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/profile auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/profile status=200
+✔ Test saveCurrentProfilePatchesProfilePayload() passed after 0.002 seconds.
+✔ Suite RemoteProfileRepositoryTests passed after 0.003 seconds.
+◇ Suite RemoteProjectProgressPhotoRepositoryTests started.
+◇ Test fetchProgressPhotosDownloadsRemoteFilesIntoLocalStore() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos status=200
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos/22222222-2222-4222-8222-222222222222/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos/22222222-2222-4222-8222-222222222222/file status=200
+✔ Test fetchProgressPhotosDownloadsRemoteFilesIntoLocalStore() passed after 0.003 seconds.
+◇ Test createProgressPhotoUploadsMultipartAndCachesImage() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos status=200
+✔ Test createProgressPhotoUploadsMultipartAndCachesImage() passed after 0.003 seconds.
+◇ Test updateProgressPhotoPatchesMetadataAndPreservesLocalFilePath() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos/22222222-2222-4222-8222-222222222222 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos/22222222-2222-4222-8222-222222222222 status=200
+✔ Test updateProgressPhotoPatchesMetadataAndPreservesLocalFilePath() passed after 0.003 seconds.
+◇ Test deleteProgressPhotoDeletesRemoteRecordAndCachedFile() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos/22222222-2222-4222-8222-222222222222 auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/progress-photos/22222222-2222-4222-8222-222222222222 status=204
+✔ Test deleteProgressPhotoDeletesRemoteRecordAndCachedFile() passed after 0.003 seconds.
+✔ Suite RemoteProjectProgressPhotoRepositoryTests passed after 0.014 seconds.
+◇ Suite RemoteProjectRepositoryTests started.
+◇ Test fetchProjectsRequestsProjectsEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=200
+✔ Test fetchProjectsRequestsProjectsEndpointAndDecodesResponse() passed after 0.009 seconds.
+◇ Test fetchProjectsDownloadsPatternCopyFileWhenCacheIsMissing() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=200
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/file status=200
+✔ Test fetchProjectsDownloadsPatternCopyFileWhenCacheIsMissing() passed after 0.075 seconds.
+◇ Test fetchProjectsDownloadsPatternCopyDrawingWhenCacheIsMissing() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects status=200
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/file auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/file status=200
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/drawing auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/drawing status=200
+✔ Test fetchProjectsDownloadsPatternCopyDrawingWhenCacheIsMissing() passed after 0.021 seconds.
+◇ Test fetchProjectRequestsProjectEndpointAndReturnsNilForNotFound() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=404 code=PROJECT_NOT_FOUND message=Project not found.
+✔ Test fetchProjectRequestsProjectEndpointAndReturnsNilForNotFound() passed after 0.008 seconds.
+◇ Test saveNewProjectPostsProjectPayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects status=200
+✔ Test saveNewProjectPostsProjectPayload() passed after 0.015 seconds.
+◇ Test saveProjectIncludesPatternCopyPayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test saveProjectIncludesPatternCopyPayload() passed after 0.010 seconds.
+◇ Test saveProjectUploadsDirectPatternCopyFileAfterSavingProject() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects status=200
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/file auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/file status=201
+✔ Test saveProjectUploadsDirectPatternCopyFileAfterSavingProject() passed after 0.015 seconds.
+◇ Test saveProjectUploadsPatternCopyDrawingAfterSavingProject() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects status=200
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/drawing auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/pattern-copy/drawing status=201
+✔ Test saveProjectUploadsPatternCopyDrawingAfterSavingProject() passed after 0.021 seconds.
+◇ Test saveSyncedProjectPatchesProjectPayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test saveSyncedProjectPatchesProjectPayload() passed after 0.009 seconds.
+◇ Test saveSyncedProjectSendsBaseUpdatedAtWithMilliseconds() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test saveSyncedProjectSendsBaseUpdatedAtWithMilliseconds() passed after 0.018 seconds.
+◇ Test baseUpdatedAtSurvivesRepositoryRecreation() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test baseUpdatedAtSurvivesRepositoryRecreation() passed after 0.018 seconds.
+◇ Test saveFetchesBaseUpdatedAtWhenNoneIsKnown() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test saveFetchesBaseUpdatedAtWhenNoneIsKnown() passed after 0.012 seconds.
+◇ Test conflictedProjectKnownToServerIsSentAsUpdateWithBaseline() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test conflictedProjectKnownToServerIsSentAsUpdateWithBaseline() passed after 0.010 seconds.
+◇ Test conflictedProjectUnknownToServerIsSentAsCreate() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=404 code=PROJECT_NOT_FOUND message=-
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects status=200
+✔ Test conflictedProjectUnknownToServerIsSentAsCreate() passed after 0.008 seconds.
+◇ Test createRetriesAsUpdateWhenServerSaysProjectAlreadyExists() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects status=409 code=PROJECT_ALREADY_EXISTS message=-
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=200
+✔ Test createRetriesAsUpdateWhenServerSaysProjectAlreadyExists() passed after 0.011 seconds.
+◇ Test deleteProjectRequestsProjectDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111 status=204
+✔ Test deleteProjectRequestsProjectDeleteEndpoint() passed after 0.003 seconds.
+◇ Test saveRowCounterPatchesPartialEndpoint() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-counter auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-counter status=200
+✔ Test saveRowCounterPatchesPartialEndpoint() passed after 0.008 seconds.
+◇ Test saveLocalOnlyRowInstructionPostsPartialEndpoint() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-instructions auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-instructions status=201
+✔ Test saveLocalOnlyRowInstructionPostsPartialEndpoint() passed after 0.005 seconds.
+◇ Test saveSyncedRowInstructionPatchesPartialEndpoint() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-instructions/88888888-8888-4888-8888-888888888888 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-instructions/88888888-8888-4888-8888-888888888888 status=200
+✔ Test saveSyncedRowInstructionPatchesPartialEndpoint() passed after 0.002 seconds.
+◇ Test deleteRowInstructionUsesPartialEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-instructions/88888888-8888-4888-8888-888888888888 auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/row-instructions/88888888-8888-4888-8888-888888888888 status=204
+✔ Test deleteRowInstructionUsesPartialEndpoint() passed after 0.005 seconds.
+◇ Test saveLocalOnlyWorkSessionPostsPartialEndpoint() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions status=201
+✔ Test saveLocalOnlyWorkSessionPostsPartialEndpoint() passed after 0.006 seconds.
+◇ Test saveNewWorkSessionRecordedFromSyncedProjectPostsPartialEndpoint() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions status=201
+✔ Test saveNewWorkSessionRecordedFromSyncedProjectPostsPartialEndpoint() passed after 0.005 seconds.
+◇ Test saveSyncedWorkSessionPatchesPartialEndpoint() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions/77777777-7777-4777-8777-777777777777 auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions/77777777-7777-4777-8777-777777777777 status=200
+✔ Test saveSyncedWorkSessionPatchesPartialEndpoint() passed after 0.003 seconds.
+◇ Test deleteWorkSessionUsesPartialEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions/77777777-7777-4777-8777-777777777777 auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/projects/11111111-1111-4111-8111-111111111111/work-sessions/77777777-7777-4777-8777-777777777777 status=204
+✔ Test deleteWorkSessionUsesPartialEndpoint() passed after 0.002 seconds.
+✔ Suite RemoteProjectRepositoryTests passed after 0.315 seconds.
+◇ Suite RemoteSkillRepositoryTests started.
+◇ Test fetchSkillsRequestsSkillsEndpointAndDecodesResponse() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/skills auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/skills status=200
+✔ Test fetchSkillsRequestsSkillsEndpointAndDecodesResponse() passed after 0.001 seconds.
+◇ Test fetchSkillRequestsSkillEndpointAndReturnsNilForNotFound() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=200
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=404 code=SKILL_NOT_FOUND message=-
+✔ Test fetchSkillRequestsSkillEndpointAndReturnsNilForNotFound() passed after 0.004 seconds.
+◇ Test saveNewSkillPostsSkillPayload() started.
+[KnitGether API] REQUEST POST http://127.0.0.1:3000/api/v1/skills auth=present(dev-token...)
+[KnitGether API] RESPONSE POST http://127.0.0.1:3000/api/v1/skills status=201
+✔ Test saveNewSkillPostsSkillPayload() passed after 0.003 seconds.
+◇ Test saveSyncedSkillPatchesSkillPayload() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=200
+✔ Test saveSyncedSkillPatchesSkillPayload() passed after 0.003 seconds.
+◇ Test saveSkillLevelPatchesLevelEndpoint() started.
+[KnitGether API] REQUEST PATCH http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/level auth=present(dev-token...)
+[KnitGether API] RESPONSE PATCH http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa/level status=200
+✔ Test saveSkillLevelPatchesLevelEndpoint() passed after 0.008 seconds.
+◇ Test deleteSkillRequestsDeleteEndpoint() started.
+[KnitGether API] REQUEST DELETE http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa auth=present(dev-token...)
+[KnitGether API] RESPONSE DELETE http://127.0.0.1:3000/api/v1/skills/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa status=204
+✔ Test deleteSkillRequestsDeleteEndpoint() passed after 0.001 seconds.
+◇ Test fetchSkillAnimationsRequestsSkillAnimationsEndpoint() started.
+[KnitGether API] REQUEST GET http://127.0.0.1:3000/api/v1/skill-animations auth=present(dev-token...)
+[KnitGether API] RESPONSE GET http://127.0.0.1:3000/api/v1/skill-animations status=200
+✔ Test fetchSkillAnimationsRequestsSkillAnimationsEndpoint() passed after 0.002 seconds.
+✔ Suite RemoteSkillRepositoryTests passed after 0.025 seconds.
+◇ Suite SettingsStatisticsTests started.
+◇ Test workTimeSummaryAggregatesSessionsAcrossProjects() started.
+✔ Test workTimeSummaryAggregatesSessionsAcrossProjects() passed after 0.001 seconds.
+✔ Suite SettingsStatisticsTests passed after 0.001 seconds.
+◇ Suite SkillAnimationViewModelTests started.
+◇ Test loadSkillsFetchesSkillsAndAnimations() started.
+✔ Test loadSkillsFetchesSkillsAndAnimations() passed after 0.001 seconds.
+◇ Test quickSkillsReturnsUnknownSkillsInCreatedOrder() started.
+✔ Test quickSkillsReturnsUnknownSkillsInCreatedOrder() passed after 0.001 seconds.
+◇ Test displayedSkillsAppliesLevelFilterSearchAndSort() started.
+✔ Test displayedSkillsAppliesLevelFilterSearchAndSort() passed after 0.001 seconds.
+◇ Test relatedDictionaryTermsMatchSkillAbbreviation() started.
+✔ Test relatedDictionaryTermsMatchSkillAbbreviation() passed after 0.001 seconds.
+◇ Test frameSequenceUsesSkillStepsForProceduralAnimation() started.
+✔ Test frameSequenceUsesSkillStepsForProceduralAnimation() passed after 0.001 seconds.
+✔ Suite SkillAnimationViewModelTests passed after 0.003 seconds.
+◇ Suite SkillLibraryViewModelTests started.
+◇ Test formDataInitializesFromExistingSkill() started.
+✔ Test formDataInitializesFromExistingSkill() passed after 0.001 seconds.
+◇ Test updateSkillSavesExistingIdentityAndReloadsSkills() started.
+✔ Test updateSkillSavesExistingIdentityAndReloadsSkills() passed after 0.002 seconds.
+◇ Test deleteSkillDeletesAndReloadsSkills() started.
+✔ Test deleteSkillDeletesAndReloadsSkills() passed after 0.004 seconds.
+◇ Test deleteSkillReturnsFalseAndKeepsExistingSkillsWhenDeleteFails() started.
+✔ Test deleteSkillReturnsFalseAndKeepsExistingSkillsWhenDeleteFails() passed after 0.001 seconds.
+◇ Test systemSkillCannotBeUpdatedOrDeleted() started.
+✔ Test systemSkillCannotBeUpdatedOrDeleted() passed after 0.001 seconds.
+◇ Test retrySyncReloadsSkillsAndClearsPendingStatus() started.
+✔ Test retrySyncReloadsSkillsAndClearsPendingStatus() passed after 0.001 seconds.
+◇ Test animationSkillsOnlyIncludesSkillsWithAnimationMetadata() started.
+✔ Test animationSkillsOnlyIncludesSkillsWithAnimationMetadata() passed after 0.001 seconds.
+◇ Test animationSkillsIsEmptyWhenNoSkillsHaveAnimationMetadata() started.
+✔ Test animationSkillsIsEmptyWhenNoSkillsHaveAnimationMetadata() passed after 0.001 seconds.
+◇ Test animationSkillsIncludesSkillsWithAnimationRecords() started.
+✔ Test animationSkillsIncludesSkillsWithAnimationRecords() passed after 0.001 seconds.
+◇ Test animationsForSkillMatchesAnimationRecordsBySkillIDAndAnimationIDs() started.
+✔ Test animationsForSkillMatchesAnimationRecordsBySkillIDAndAnimationIDs() passed after 0.001 seconds.
+✔ Suite SkillLibraryViewModelTests passed after 0.009 seconds.
+◇ Suite SkillTestViewModelTests started.
+◇ Test skillLevelFormatterUsesTrafficLightLabelsAndAcceptsLegacyUnsureText() started.
+✔ Test skillLevelFormatterUsesTrafficLightLabelsAndAcceptsLegacyUnsureText() passed after 0.001 seconds.
+◇ Test loadSkillsSortsByCreatedAtThenAbbreviation() started.
+✔ Test loadSkillsSortsByCreatedAtThenAbbreviation() passed after 0.009 seconds.
+◇ Test selectingLevelsAndSavingResultsPersistsAllSkillsAndBuildsSummary() started.
+✔ Test selectingLevelsAndSavingResultsPersistsAllSkillsAndBuildsSummary() passed after 0.001 seconds.
+◇ Test savePartialAndExitPersistsOnlyAnsweredSkills() started.
+✔ Test savePartialAndExitPersistsOnlyAnsweredSkills() passed after 0.001 seconds.
+◇ Test navigationClampsToValidSkillRange() started.
+✔ Test navigationClampsToValidSkillRange() passed after 0.001 seconds.
+✔ Suite SkillTestViewModelTests passed after 0.011 seconds.
+◇ Suite SyncStatusPresentationTests started.
+◇ Test syncStatusProvidesUserFacingKoreanCopy() started.
+✔ Test syncStatusProvidesUserFacingKoreanCopy() passed after 0.001 seconds.
+◇ Test syncStatusProvidesBadgeSystemImages() started.
+✔ Test syncStatusProvidesBadgeSystemImages() passed after 0.001 seconds.
+◇ Test syncStatusProvidesUserFacingDetailText() started.
+✔ Test syncStatusProvidesUserFacingDetailText() passed after 0.001 seconds.
+◇ Test syncStatusDistinguishesSyncedPendingAndAttentionStates() started.
+✔ Test syncStatusDistinguishesSyncedPendingAndAttentionStates() passed after 0.001 seconds.
+✔ Suite SyncStatusPresentationTests passed after 0.012 seconds.
+✔ Test run with 354 tests in 41 suites passed after 10.286 seconds.
+2026-10-26 22:17:03.377 xcodebuild[75279:36726080] [MT] IDETestOperationsObserverDebug: 136.012 elapsed -- Testing started completed.
+2026-10-26 22:17:03.377 xcodebuild[75279:36726080] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-26 22:17:03.377 xcodebuild[75279:36726080] [MT] IDETestOperationsObserverDebug: 136.012 sec, +136.012 sec -- end
+
+Test session results, code coverage, and logs:
+	/tmp/knitgether-qa-draft-delete-green.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

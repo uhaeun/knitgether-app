@@ -21,6 +21,7 @@ final class MyKnittingViewModel: ObservableObject {
     /// 서버 응답 대신 캐시로 폴백해 표시 중임을 알린다(CNT-03 잔여 무통보).
     @Published private(set) var isShowingCacheFallbackNotice = false
 
+    private let memoDraftStore: ProjectMemoDraftStore
     private let projectRepository: any ProjectRepository
     private let patternRepository: (any PatternRepository)?
     private let libraryRepository: (any LibraryRepository)?
@@ -39,8 +40,10 @@ final class MyKnittingViewModel: ObservableObject {
     init(
         projectRepository: any ProjectRepository,
         patternRepository: (any PatternRepository)? = nil,
-        libraryRepository: (any LibraryRepository)? = nil
+        libraryRepository: (any LibraryRepository)? = nil,
+        memoDraftStore: ProjectMemoDraftStore? = nil
     ) {
+        self.memoDraftStore = memoDraftStore ?? .shared
         self.projectRepository = projectRepository
         self.patternRepository = patternRepository
         self.libraryRepository = libraryRepository
@@ -243,6 +246,7 @@ final class MyKnittingViewModel: ObservableObject {
     func deleteProject(_ project: KnittingProject) async -> Bool {
         do {
             try await projectRepository.deleteProject(id: project.id)
+            try? memoDraftStore.remove(ownerId: project.ownerId, projectId: project.id)
             projects = try await projectRepository.fetchProjects()
             errorMessage = nil
             statusMessage = "프로젝트를 삭제했어요."
