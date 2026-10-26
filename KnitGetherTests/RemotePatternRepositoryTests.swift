@@ -287,10 +287,12 @@ struct RemotePatternRepositoryTests {
             session: session,
             cacheRootURL: tempDirectory.appendingPathComponent("cache", isDirectory: true)
         )
-        let updatedPatternCopy = try await repository.saveDrawingData(
+        let change = try await repository.saveDrawingChange(
             drawingData,
             for: patternCopy
         )
+        #expect(change.requiresProjectSave == false)
+        let updatedPatternCopy = change.patternCopy
 
         #expect(callCount == 1)
         let drawingPath = try #require(updatedPatternCopy.drawingDataPath)

@@ -335,6 +335,7 @@ final class RemoteProjectRepository: ProjectRepository {
         guard
             let patternCopy = project.patternCopy,
             patternCopy.sourcePatternDocumentId == nil,
+            patternCopy.syncStatus == .localOnly,
             let localCopyURL = fileStore.fileURL(for: patternCopy.localCopyPath),
             FileManager.default.fileExists(atPath: localCopyURL.path)
         else {
@@ -355,8 +356,13 @@ final class RemoteProjectRepository: ProjectRepository {
     }
 
     private func uploadPatternCopyDrawingIfNeeded(for project: KnittingProject) async throws {
+        if let copy = project.patternCopy, copy.syncStatus == .pendingUpload, copy.drawingDataPath == nil {
+            try await apiClient.delete("projects/\(project.id.uuidString.lowercased())/pattern-copy/drawing")
+            return
+        }
         guard
             let patternCopy = project.patternCopy,
+            patternCopy.syncStatus == .localOnly || patternCopy.syncStatus == .pendingUpload,
             let drawingDataPath = patternCopy.drawingDataPath,
             let drawingURL = fileStore.fileURL(for: drawingDataPath),
             FileManager.default.fileExists(atPath: drawingURL.path)

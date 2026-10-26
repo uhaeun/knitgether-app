@@ -466,12 +466,12 @@ final class LocalPatternRepository: PatternRepository {
             copyId: patternCopy.id
         )
 
-        return patternCopy.updatingDrawingDataPath(relativePath)
+        return patternCopy.updatingDrawingDataPath(relativePath).copy(syncStatus: patternCopy.syncStatus == .localOnly ? .localOnly : .pendingUpload)
     }
 
     func deleteDrawingData(for patternCopy: ProjectPatternCopy) async throws -> ProjectPatternCopy {
         try fileStore.removeFile(at: patternCopy.drawingDataPath)
-        return patternCopy.updatingDrawingDataPath(nil)
+        return patternCopy.updatingDrawingDataPath(nil).copy(syncStatus: patternCopy.syncStatus == .localOnly ? .localOnly : .pendingUpload)
     }
 
     private func persistPatterns() throws {

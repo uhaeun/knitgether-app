@@ -171,41 +171,38 @@ final class OfflineFirstPatternRepository: PatternRepository {
         return try await remote.drawingData(for: patternCopy)
     }
 
-    func saveDrawingData(
-        _ data: Data,
-        for patternCopy: ProjectPatternCopy
-    ) async throws -> ProjectPatternCopy {
+    func saveDrawingChange(_ data: Data, for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
         let localCopy = try await local.saveDrawingData(data, for: patternCopy)
-
         do {
-            let remoteCopy = try await remote.saveDrawingData(data, for: patternCopy)
-            return remoteCopy.copy(
-                localCopyPath: remoteCopy.localCopyPath ?? localCopy.localCopyPath,
+            let change = try await remote.saveDrawingChange(data, for: patternCopy)
+            return ProjectDrawingChange(patternCopy: change.patternCopy.copy(
+                localCopyPath: change.patternCopy.localCopyPath ?? localCopy.localCopyPath,
                 drawingDataPath: localCopy.drawingDataPath,
-                drawingUpdatedAt: remoteCopy.drawingUpdatedAt ?? localCopy.drawingUpdatedAt
-            )
+                drawingUpdatedAt: change.patternCopy.drawingUpdatedAt ?? localCopy.drawingUpdatedAt
+            ), requiresProjectSave: change.requiresProjectSave)
         } catch {
-            guard shouldDefer(error) else {
-                throw error
-            }
-
-            return localCopy
+            guard shouldDefer(error) else { throw error }
+            return ProjectDrawingChange(patternCopy: localCopy, requiresProjectSave: true)
         }
     }
 
-    func deleteDrawingData(for patternCopy: ProjectPatternCopy) async throws -> ProjectPatternCopy {
+    func deleteDrawingChange(for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
         let localCopy = try await local.deleteDrawingData(for: patternCopy)
-
         do {
-            _ = try await remote.deleteDrawingData(for: patternCopy)
-            return localCopy
+            let change = try await remote.deleteDrawingChange(for: patternCopy)
+            return ProjectDrawingChange(patternCopy: localCopy.copy(syncStatus: change.requiresProjectSave ? localCopy.syncStatus : .synced), requiresProjectSave: change.requiresProjectSave)
         } catch {
-            guard shouldDefer(error) else {
-                throw error
-            }
-
-            return localCopy
+            guard shouldDefer(error) else { throw error }
+            return ProjectDrawingChange(patternCopy: localCopy, requiresProjectSave: true)
         }
+    }
+
+    func saveDrawingData(_ data: Data, for patternCopy: ProjectPatternCopy) async throws -> ProjectPatternCopy {
+        try await saveDrawingChange(data, for: patternCopy).patternCopy
+    }
+
+    func deleteDrawingData(for patternCopy: ProjectPatternCopy) async throws -> ProjectPatternCopy {
+        try await deleteDrawingChange(for: patternCopy).patternCopy
     }
 
     private func syncPendingChanges() async {

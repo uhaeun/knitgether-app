@@ -487,80 +487,89 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
       });
     }
 
-    const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId);
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId, transaction);
 
-    if (body.rowCounterId !== rowCounter.id) {
-      throw new NotFoundException({
-        code: 'ROW_COUNTER_NOT_FOUND',
-        message: 'Row counter not found.',
+      if (body.rowCounterId !== rowCounter.id) {
+        throw new NotFoundException({
+          code: 'ROW_COUNTER_NOT_FOUND',
+          message: 'Row counter not found.',
+        });
+      }
+
+      if (body.instructionText.trim().length === 0) {
+        throw new BadRequestException({
+          code: 'VALIDATION_FAILED',
+          message: 'Row instruction text is required.',
+        });
+      }
+
+      if (instructionId) {
+        await this.findActiveRowInstruction(
+          ownerId,
+          projectId,
+          rowCounter.id,
+          instructionId,
+          transaction,
+        );
+      }
+
+      const existing = await transaction.rowInstruction.findFirst({ where: { id: body.id } });
+      if (existing && (existing.ownerId !== ownerId || existing.projectId !== projectId || existing.rowCounterId !== rowCounter.id)) {
+        throw new NotFoundException({ code: 'ROW_INSTRUCTION_NOT_FOUND', message: 'Row instruction not found.' });
+      }
+
+      const duplicate = await transaction.rowInstruction.findFirst({
+        where: {
+          ownerId,
+          projectId,
+          rowCounterId: rowCounter.id,
+          rowNumber: body.rowNumber,
+          deletedAt: null,
+          NOT: {
+            id: body.id,
+          },
+        },
       });
-    }
 
-    if (body.instructionText.trim().length === 0) {
-      throw new BadRequestException({
-        code: 'VALIDATION_FAILED',
-        message: 'Row instruction text is required.',
-      });
-    }
+      if (duplicate) {
+        throw new BadRequestException({
+          code: 'ROW_INSTRUCTION_ROW_DUPLICATED',
+          message: 'A row instruction for this row already exists.',
+        });
+      }
 
-    if (instructionId) {
-      await this.findActiveRowInstruction(
-        ownerId,
-        projectId,
-        rowCounter.id,
-        instructionId,
-      );
-    }
-
-    const duplicate = await this.prisma.rowInstruction.findFirst({
-      where: {
+      const data = {
         ownerId,
         projectId,
         rowCounterId: rowCounter.id,
         rowNumber: body.rowNumber,
+        instructionText: body.instructionText.trim(),
+        skillTags: body.skillTags?.trim() ?? '',
         deletedAt: null,
-        NOT: {
-          id: body.id,
-        },
-      },
-    });
+      };
 
-    if (duplicate) {
-      throw new BadRequestException({
-        code: 'ROW_INSTRUCTION_ROW_DUPLICATED',
-        message: 'A row instruction for this row already exists.',
-      });
-    }
+      const instruction = instructionId
+        ? await transaction.rowInstruction.update({
+            where: {
+              id: instructionId,
+            },
+            data,
+          })
+        : await transaction.rowInstruction.upsert({
+            where: {
+              id: body.id, ownerId, projectId,
+            },
+            create: {
+              id: body.id,
+              ...data,
+            },
+            update: data,
+          });
 
-    const data = {
-      ownerId,
-      projectId,
-      rowCounterId: rowCounter.id,
-      rowNumber: body.rowNumber,
-      instructionText: body.instructionText.trim(),
-      skillTags: body.skillTags?.trim() ?? '',
-      deletedAt: null,
-    };
-
-    const instruction = instructionId
-      ? await this.prisma.rowInstruction.update({
-          where: {
-            id: instructionId,
-          },
-          data,
-        })
-      : await this.prisma.rowInstruction.upsert({
-          where: {
-            id: body.id,
-          },
-          create: {
-            id: body.id,
-            ...data,
-          },
-          update: data,
-        });
-
-    return this.toRowInstructionResponse(instruction);
+      return this.toRowInstructionResponse(instruction);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async deleteProjectRowInstruction(
@@ -568,22 +577,26 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     projectId: string,
     instructionId: string,
   ): Promise<void> {
-    const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId);
-    await this.findActiveRowInstruction(
-      ownerId,
-      projectId,
-      rowCounter.id,
-      instructionId,
-    );
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId, transaction);
+      await this.findActiveRowInstruction(
+        ownerId,
+        projectId,
+        rowCounter.id,
+        instructionId,
+        transaction,
+      );
 
-    await this.prisma.rowInstruction.update({
-      where: {
-        id: instructionId,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
+      await transaction.rowInstruction.update({
+        where: {
+          id: instructionId,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async listProjectWorkSessions(
@@ -643,6 +656,7 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     return this.prisma.$transaction(async (transaction) => {
       await this.advanceProjectVersion(transaction, ownerId, projectId);
       if (sessionId) await this.findActiveWorkSession(ownerId, projectId, sessionId, transaction);
+      await this.assertWorkSessionScope(transaction, body.id, ownerId, projectId);
       const session = sessionId
         ? await transaction.workSession.update({
             where: {
@@ -652,7 +666,7 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
           })
         : await transaction.workSession.upsert({
             where: {
-              id: body.id,
+              id: body.id, ownerId, projectId,
             },
             create: {
               id: body.id,
@@ -1047,54 +1061,60 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
   ): Promise<ProjectPatternCopyResponseDto> {
     this.assertPdf(file);
 
-    const patternCopy = await this.findActiveProjectPatternCopy(
-      ownerId,
-      projectId,
-    );
-    const previousStorageKey = patternCopy.fileStorageKey;
-    const stored = await this.fileStorage.saveProjectPatternCopyPdf({
-      ownerId,
-      projectId,
-      copyId: patternCopy.id,
-      fileId: randomUUID(),
-      buffer: file.buffer,
-    });
-    const updated = await this.prisma.projectPatternCopy.update({
-      where: {
-        id: patternCopy.id,
-      },
-      data: {
-        fileNameSnapshot: this.trimmedOrDefault(
-          file.originalname,
-          patternCopy.fileNameSnapshot ?? 'pattern.pdf',
-        ),
-        fileStorageKey: stored.storageKey,
-        fileContentType: file.mimetype || 'application/pdf',
-        fileByteSize: stored.byteSize,
-      },
-      include: {
-        sourcePatternDocument: {
-          include: {
-            storedFile: true,
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const patternCopy = await this.findActiveProjectPatternCopy(
+        ownerId,
+        projectId,
+        transaction,
+      );
+      const previousStorageKey = patternCopy.fileStorageKey;
+      const stored = await this.fileStorage.saveProjectPatternCopyPdf({
+        ownerId,
+        projectId,
+        copyId: patternCopy.id,
+        fileId: randomUUID(),
+        buffer: file.buffer,
+      });
+      files.created.push(stored.storageKey);
+      const updated = await transaction.projectPatternCopy.update({
+        where: {
+          id: patternCopy.id,
+        },
+        data: {
+          fileNameSnapshot: this.trimmedOrDefault(
+            file.originalname,
+            patternCopy.fileNameSnapshot ?? 'pattern.pdf',
+          ),
+          fileStorageKey: stored.storageKey,
+          fileContentType: file.mimetype || 'application/pdf',
+          fileByteSize: stored.byteSize,
+        },
+        include: {
+          sourcePatternDocument: {
+            include: {
+              storedFile: true,
+            },
           },
         },
-      },
-    });
-
-    if (previousStorageKey && previousStorageKey !== stored.storageKey) {
-      await this.fileStorage.remove(previousStorageKey);
-    }
-
-    const response = this.toProjectPatternCopyResponse(updated, ownerId);
-
-    if (!response) {
-      throw new NotFoundException({
-        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
-        message: 'Project pattern copy not found.',
       });
-    }
 
-    return response;
+      if (previousStorageKey && previousStorageKey !== stored.storageKey) {
+        await this.fileStorage.queueProjectPatternRemoval(previousStorageKey);
+        files.retired.push(previousStorageKey);
+      }
+
+      const response = this.toProjectPatternCopyResponse(updated, ownerId);
+
+      if (!response) {
+        throw new NotFoundException({
+          code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+          message: 'Project pattern copy not found.',
+        });
+      }
+
+      return response;
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   async uploadProjectPatternCopyDrawing(
@@ -1104,44 +1124,54 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
   ): Promise<ProjectPatternCopyResponseDto> {
     this.assertDrawingFile(file);
 
-    const patternCopy = await this.findActiveProjectPatternCopy(
-      ownerId,
-      projectId,
-    );
-    const stored = await this.fileStorage.saveProjectPatternDrawing({
-      ownerId,
-      projectId,
-      copyId: patternCopy.id,
-      buffer: file.buffer,
-    });
-    const updated = await this.prisma.projectPatternCopy.update({
-      where: {
-        id: patternCopy.id,
-      },
-      data: {
-        drawingStorageKey: stored.storageKey,
-        drawingContentType: file.mimetype || 'application/octet-stream',
-        drawingByteSize: stored.byteSize,
-        drawingUpdatedAt: new Date(),
-      },
-      include: {
-        sourcePatternDocument: {
-          include: {
-            storedFile: true,
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const patternCopy = await this.findActiveProjectPatternCopy(
+        ownerId,
+        projectId,
+        transaction,
+      );
+      const stored = await this.fileStorage.saveProjectPatternDrawing({
+        ownerId,
+        projectId,
+        copyId: patternCopy.id,
+        fileId: randomUUID(),
+        buffer: file.buffer,
+      });
+      files.created.push(stored.storageKey);
+      const updated = await transaction.projectPatternCopy.update({
+        where: {
+          id: patternCopy.id,
+        },
+        data: {
+          drawingStorageKey: stored.storageKey,
+          drawingContentType: file.mimetype || 'application/octet-stream',
+          drawingByteSize: stored.byteSize,
+          drawingUpdatedAt: new Date(),
+        },
+        include: {
+          sourcePatternDocument: {
+            include: {
+              storedFile: true,
+            },
           },
         },
-      },
-    });
-    const response = this.toProjectPatternCopyResponse(updated, ownerId);
-
-    if (!response) {
-      throw new NotFoundException({
-        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
-        message: 'Project pattern copy not found.',
       });
-    }
+      if (patternCopy.drawingStorageKey && patternCopy.drawingStorageKey !== stored.storageKey) {
+        await this.fileStorage.queueProjectPatternRemoval(patternCopy.drawingStorageKey);
+        files.retired.push(patternCopy.drawingStorageKey);
+      }
+      const response = this.toProjectPatternCopyResponse(updated, ownerId);
 
-    return response;
+      if (!response) {
+        throw new NotFoundException({
+          code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+          message: 'Project pattern copy not found.',
+        });
+      }
+
+      return response;
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   async getProjectPatternCopyDrawing(
@@ -1168,23 +1198,30 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     ownerId: string,
     projectId: string,
   ): Promise<void> {
-    const patternCopy = await this.findActiveProjectPatternCopy(
-      ownerId,
-      projectId,
-    );
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const patternCopy = await this.findActiveProjectPatternCopy(
+        ownerId,
+        projectId,
+        transaction,
+      );
 
-    await this.fileStorage.remove(patternCopy.drawingStorageKey);
-    await this.prisma.projectPatternCopy.update({
-      where: {
-        id: patternCopy.id,
-      },
-      data: {
-        drawingStorageKey: null,
-        drawingContentType: null,
-        drawingByteSize: null,
-        drawingUpdatedAt: null,
-      },
-    });
+      if (patternCopy.drawingStorageKey) {
+        await this.fileStorage.queueProjectPatternRemoval(patternCopy.drawingStorageKey);
+        files.retired.push(patternCopy.drawingStorageKey);
+      }
+      await transaction.projectPatternCopy.update({
+        where: {
+          id: patternCopy.id,
+        },
+        data: {
+          drawingStorageKey: null,
+          drawingContentType: null,
+          drawingByteSize: null,
+          drawingUpdatedAt: null,
+        },
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   openFileReadStream(storageKey: string) {
@@ -1213,10 +1250,11 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
   private async findActiveProjectRowCounter(
     ownerId: string,
     projectId: string,
+    transaction: Prisma.TransactionClient = this.prisma,
   ): Promise<RowCounterWithInstructions> {
-    await this.findActiveProject(ownerId, projectId);
 
-    const rowCounter = await this.prisma.rowCounter.findFirst({
+
+    const rowCounter = await transaction.rowCounter.findFirst({
       where: {
         ownerId,
         projectId,
@@ -1240,8 +1278,9 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     projectId: string,
     rowCounterId: string,
     instructionId: string,
+    transaction: Prisma.TransactionClient = this.prisma,
   ): Promise<RowInstruction> {
-    const instruction = await this.prisma.rowInstruction.findFirst({
+    const instruction = await transaction.rowInstruction.findFirst({
       where: {
         id: instructionId,
         ownerId,
@@ -1280,6 +1319,15 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
         data: { updatedAt: new Date(Math.max(Date.now(), parent.updatedAt.getTime() + 1)) },
       });
       if (changed.count === 1) break;
+    }
+  }
+
+  private async assertWorkSessionScope(
+    transaction: Prisma.TransactionClient, id: string, ownerId: string, projectId: string,
+  ): Promise<void> {
+    const existing = await transaction.workSession.findFirst({ where: { id } });
+    if (existing && (existing.ownerId !== ownerId || existing.projectId !== projectId)) {
+      throw new NotFoundException({ code: 'WORK_SESSION_NOT_FOUND', message: 'Work session not found.' });
     }
   }
 
@@ -1383,8 +1431,9 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
   private async findActiveProjectPatternCopy(
     ownerId: string,
     projectId: string,
+    transaction: Prisma.TransactionClient = this.prisma,
   ): Promise<ProjectPatternCopyWithSource> {
-    const project = await this.prisma.project.findFirst({
+    const project = await transaction.project.findFirst({
       where: {
         id: projectId,
         ownerId,
@@ -1726,8 +1775,9 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     // 증분 upsert로 바꿔 요청에 담긴 세션만 갱신/생성하고 나머지는 보존한다.
     // 세션 삭제는 전용 DELETE 엔드포인트(deleteWorkSession)가 담당한다.
     for (const session of body.workSessions) {
+      await this.assertWorkSessionScope(transaction, session.id, ownerId, body.id);
       await transaction.workSession.upsert({
-        where: { id: session.id },
+        where: { id: session.id, ownerId, projectId: body.id },
         create: {
           id: session.id,
           ownerId,

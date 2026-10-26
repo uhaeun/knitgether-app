@@ -7,6 +7,43 @@ import UIKit
 
 @MainActor
 struct ProjectWorkspaceViewModelTests {
+    @Test(arguments: [true, false])
+    func drawingSaveOnlyPersistsWholeProjectForLocalChanges(requiresProjectSave: Bool) async throws {
+        let project = Self.makeProject().copy(patternCopy: Self.makePatternCopy())
+        let repository = ProjectRepositorySpy(project: project)
+        if !requiresProjectSave {
+            repository.saveError = APIError.requestFailed(statusCode: 409, code: "PROJECT_CONFLICT", message: "No duplicate whole save")
+        }
+        let model = ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+            patternRepository: PatternRepositoryFake(requiresProjectSave: requiresProjectSave),
+            skillRepository: SkillRepositoryFake(), libraryRepository: LibraryRepositorySpy())
+        model.memoText = "Keep unsaved memo"
+        await model.saveDrawingData(Data("drawing bytes".utf8))
+        #expect(repository.savedProjects.count == (requiresProjectSave ? 1 : 0))
+        #expect(model.errorMessage == nil)
+        #expect(model.drawingData == Data("drawing bytes".utf8))
+        #expect(model.memoText == "Keep unsaved memo")
+    }
+
+    @Test(arguments: [true, false])
+    func drawingDeleteOnlyPersistsWholeProjectForLocalChanges(requiresProjectSave: Bool) async throws {
+        let project = Self.makeProject().copy(patternCopy: Self.makePatternCopy())
+        let repository = ProjectRepositorySpy(project: project)
+        if !requiresProjectSave {
+            repository.saveError = APIError.requestFailed(statusCode: 409, code: "PROJECT_CONFLICT", message: "No duplicate whole save")
+            repository.projects = [project.copy(patternCopy: project.patternCopy!.updatingDrawingDataPath(nil))]
+        }
+        let model = ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+            patternRepository: PatternRepositoryFake(requiresProjectSave: requiresProjectSave),
+            skillRepository: SkillRepositoryFake(), libraryRepository: LibraryRepositorySpy())
+        model.memoText = "Keep unsaved memo"
+        await model.clearDrawingData()
+        #expect(repository.savedProjects.count == (requiresProjectSave ? 1 : 0))
+        #expect(model.errorMessage == nil)
+        #expect(model.drawingData == nil)
+        #expect(model.memoText == "Keep unsaved memo")
+    }
+
     @Test func memoDraftSurvivesRecreationAndSaveClearsIt() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
@@ -1869,6 +1906,15 @@ struct ProjectWorkspaceViewModelTests {
 
     struct PatternRepositoryFake: PatternRepository {
         var patternCopyFileURLs: [UUID: URL] = [:]
+        var requiresProjectSave = true
+
+        func saveDrawingChange(_ data: Data, for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+            ProjectDrawingChange(patternCopy: try await saveDrawingData(data, for: patternCopy), requiresProjectSave: requiresProjectSave)
+        }
+
+        func deleteDrawingChange(for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+            ProjectDrawingChange(patternCopy: try await deleteDrawingData(for: patternCopy), requiresProjectSave: requiresProjectSave)
+        }
 
         func fetchPatterns() async throws -> [PatternDocument] {
             []

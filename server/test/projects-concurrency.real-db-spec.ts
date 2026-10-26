@@ -73,7 +73,7 @@ describe('Project concurrency on real PostgreSQL', () => {
         });
         const pattern = new Proxy(tx.projectPatternCopy, {
           get(delegate, key) {
-            if (key === 'upsert' || key === 'create') return async (args: any) => {
+            if (key === 'upsert' || key === 'create' || key === 'update') return async (args: any) => {
               const value = await (delegate[key] as any)(args);
               if (failAfterPatternWrite) {
                 evidence.push({ stage: 'late-failure-after-real-pattern-upsert', id: args.where?.projectId ?? args.data.projectId });
@@ -563,5 +563,126 @@ describe('Project concurrency on real PostgreSQL', () => {
     expect(files).toEqual([]);
     evidence.push({ case: 'create-rollback-files-compensated', id, files });
   });
+
+  for (const operation of ['create', 'update', 'delete'] as const) {
+    it(`protects row instruction ${operation} from a stale whole save`, async () => {
+      const b = await create(), body = variant(b, 'A');
+      const first = await call('patch', '/projects/'+b.id, body).expect(200);
+      body.baseUpdatedAt = first.body.updatedAt;
+      const instruction = operation === 'create'
+        ? { ...body.rowCounter.rowInstructions[0], id: randomUUID(), rowNumber: 2 }
+        : { ...body.rowCounter.rowInstructions[0], instructionText: 'Child edit' };
+      const path = '/projects/'+b.id+'/row-instructions';
+      if (operation === 'create') await call('post', path, instruction).expect(201);
+      else if (operation === 'update') await call('patch', path+'/'+instruction.id, instruction).expect(200);
+      else await call('delete', path+'/'+instruction.id).expect(204);
+      const saved = await snapshot(b.id);
+      const stale = await call('patch', '/projects/'+b.id, body);
+      evidence.push({ case: 'row-instruction-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+      expect(stale.status).toBe(409);
+      expect(await snapshot(b.id)).toEqual(saved);
+    });
+  }
+  for (const operation of ['pdf', 'drawing', 'delete-drawing'] as const) {
+    it(`protects pattern ${operation} from a stale whole save`, async () => {
+      const b = await create(), body = variant(b, 'A');
+      let first = await call('patch', '/projects/'+b.id, body).expect(200);
+      if (operation === 'delete-drawing') {
+        await call('post', '/projects/'+b.id+'/pattern-copy/drawing')
+          .attach('file', Buffer.from('original drawing'), { filename: 'drawing.pkdrawing', contentType: 'application/octet-stream' }).expect(201);
+        first = await call('get', '/projects/'+b.id).expect(200);
+      }
+      body.baseUpdatedAt = first.body.updatedAt;
+      if (operation === 'pdf') await call('post', '/projects/'+b.id+'/pattern-copy/file')
+        .attach('file', Buffer.from('%PDF-1.4\nQA'), { filename: 'fresh.pdf', contentType: 'application/pdf' }).expect(201);
+      else if (operation === 'drawing') await call('post', '/projects/'+b.id+'/pattern-copy/drawing')
+        .attach('file', Buffer.from('new drawing'), { filename: 'drawing.pkdrawing', contentType: 'application/octet-stream' }).expect(201);
+      else await call('delete', '/projects/'+b.id+'/pattern-copy/drawing').expect(204);
+      const saved = await snapshot(b.id);
+      const stale = await call('patch', '/projects/'+b.id, body);
+      evidence.push({ case: 'pattern-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+      expect(stale.status).toBe(409);
+      expect(await snapshot(b.id)).toEqual(saved);
+    });
+  }
+
+  for (const operation of ['upload', 'delete'] as const) {
+    it(`preserves committed drawing bytes if dedicated ${operation} SQL rolls back`, async () => {
+      const b = await create(), body = variant(b, 'A');
+      await call('patch', '/projects/'+b.id, body).expect(200);
+      await call('post', '/projects/'+b.id+'/pattern-copy/drawing')
+        .attach('file', Buffer.from('committed bytes'), { filename: 'drawing.pkdrawing', contentType: 'application/octet-stream' }).expect(201);
+      const before = await snapshot(b.id), oldKey = before.patternCopy!.drawingStorageKey!;
+      failAfterPatternWrite = true;
+      const response = operation === 'upload'
+        ? await call('post', '/projects/'+b.id+'/pattern-copy/drawing')
+          .attach('file', Buffer.from('uncommitted bytes'), { filename: 'drawing.pkdrawing', contentType: 'application/octet-stream' })
+        : await call('delete', '/projects/'+b.id+'/pattern-copy/drawing');
+      expect(response.status).toBe(500);
+      expect(await snapshot(b.id)).toEqual(before);
+      expect((await fs.readFile(join(storage, oldKey))).toString()).toBe('committed bytes');
+      const files = (await fs.readdir(storage, { recursive: true })).filter(p =>
+        p.startsWith('projects/'+owner+'/'+b.id+'/') && p.endsWith('.pkdrawing'));
+      expect(files).toEqual([oldKey]);
+      evidence.push({ case: 'drawing-'+operation+'-rollback', status: response.status, before, final: await snapshot(b.id), files });
+    });
+  }
+  it('serializes duplicate instruction creates and rolls back the rejected parent version', async () => {
+    const b = await create();
+    const make = () => ({ id: randomUUID(), rowCounterId: b.rowCounter.id, rowNumber: 7, instructionText: 'Unique row', skillTags: '' });
+    const results = await Promise.all([call('post', '/projects/'+b.id+'/row-instructions', make()), call('post', '/projects/'+b.id+'/row-instructions', make())]);
+    expect(results.map(r => r.status).sort()).toEqual([201, 400]);
+    const before = await snapshot(b.id);
+    expect(before.rowInstructions.filter(i => !i.deletedAt)).toHaveLength(1);
+    await call('delete', '/projects/'+b.id+'/row-instructions/'+randomUUID()).expect(404);
+    expect(await snapshot(b.id)).toEqual(before);
+    evidence.push({ case: 'duplicate-instruction-serialization-and-rejected-version-rollback', statuses: results.map(r => r.status), final: before });
+  });
+
+  it('preserves independent usage, photo and material links across whole saves', async () => {
+    const b = await create();
+    const yarn = await call('post', '/library/yarns', { name: 'Independent yarn', quantity: 10 }).expect(201);
+    const needle = await call('post', '/library/needles', { name: 'Independent needle', needleType: 'Circular', size: '4mm' }).expect(201);
+    const tool = await call('post', '/library/tools', { name: 'Independent tool', type: 'Other' }).expect(201);
+    await call('post', '/projects/'+b.id+'/yarn-usages', { yarnId: yarn.body.id, quantityUsed: 2, memo: 'Keep usage' }).expect(201);
+    await call('post', '/projects/'+b.id+'/progress-photos').field('caption', 'Keep photo')
+      .attach('file', Buffer.from('QA image bytes'), { filename: 'photo.png', contentType: 'image/png' }).expect(201);
+    await call('post', '/library/projects/'+b.id+'/yarns/'+yarn.body.id).expect(201);
+    await call('post', '/library/projects/'+b.id+'/needles/'+needle.body.id).expect(201);
+    await call('post', '/library/projects/'+b.id+'/tools/'+tool.body.id).expect(201);
+    const related = async () => ({
+      usage: await db.projectYarnUsage.findMany({ where: { projectId: b.id } }),
+      photo: await db.projectProgressPhoto.findMany({ where: { projectId: b.id } }),
+      yarn: await db.yarn.findUnique({ where: { id: yarn.body.id } }),
+      yarnLinks: await db.projectYarnLink.findMany({ where: { projectId: b.id } }),
+      needleLinks: await db.projectNeedleLink.findMany({ where: { projectId: b.id } }),
+      toolLinks: await db.projectToolLink.findMany({ where: { projectId: b.id } }),
+    });
+    const before = await related();
+    await call('patch', '/projects/'+b.id, { ...b, memo: 'Whole save' }).expect(200);
+    expect(await related()).toEqual(before);
+    expect(before.yarn!.quantity).toBe(8);
+    for (const photo of before.photo) await fs.access(join(storage, photo.storageKey));
+    evidence.push({ case: 'independent-usage-photo-material-links-preserved', before, final: await related() });
+  });
+
+  for (const operation of ['instruction', 'session', 'whole-session'] as const) {
+    it(`rejects ${operation} ID reuse from another project without changing either project`, async () => {
+      const victim = await create(), victimBody = variant(victim, 'A');
+      await call('patch', '/projects/'+victim.id, victimBody).expect(200);
+      const b = await create(), before = await snapshot(b.id), victimBefore = await snapshot(victim.id);
+      let response;
+      if (operation === 'instruction') response = await call('post', '/projects/'+b.id+'/row-instructions',
+        { ...victimBody.rowCounter.rowInstructions[0], rowCounterId: b.rowCounter.id });
+      else if (operation === 'session') response = await call('post', '/projects/'+b.id+'/work-sessions',
+        { ...victimBody.workSessions[0], projectId: b.id });
+      else response = await call('patch', '/projects/'+b.id,
+        { ...b, workSessions: [{ ...victimBody.workSessions[0], projectId: b.id }] });
+      evidence.push({ case: 'cross-project-id-'+operation, status: response.status, victimBefore, victimFinal: await snapshot(victim.id) });
+      expect(response.status).toBe(404);
+      expect(await snapshot(victim.id)).toEqual(victimBefore);
+      expect(await snapshot(b.id)).toEqual(before);
+    });
+  }
 
 });

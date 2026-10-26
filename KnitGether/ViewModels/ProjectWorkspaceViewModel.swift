@@ -1050,9 +1050,13 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
 
         do {
-            let updatedPatternCopy = try await patternRepository.saveDrawingData(data, for: patternCopy)
-            let updatedProject = project.copy(patternCopy: updatedPatternCopy)
-            try await projectRepository.saveProject(updatedProject)
+            let change = try await patternRepository.saveDrawingChange(data, for: patternCopy)
+            let updatedProject = project.copy(patternCopy: change.patternCopy)
+            // A committed child mutation has already advanced the server version.
+            // Only local/offline changes need a whole-project save.
+            if change.requiresProjectSave {
+                try await projectRepository.saveProject(updatedProject)
+            }
             let savedProject = await latestProjectState(afterSaving: updatedProject)
             applyProjectState(savedProject)
             drawingData = data
@@ -1069,9 +1073,13 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
 
         do {
-            let updatedPatternCopy = try await patternRepository.deleteDrawingData(for: patternCopy)
-            let updatedProject = project.copy(patternCopy: updatedPatternCopy)
-            try await projectRepository.saveProject(updatedProject)
+            let change = try await patternRepository.deleteDrawingChange(for: patternCopy)
+            let updatedProject = project.copy(patternCopy: change.patternCopy)
+            // A committed child mutation has already advanced the server version.
+            // Only local/offline changes need a whole-project save.
+            if change.requiresProjectSave {
+                try await projectRepository.saveProject(updatedProject)
+            }
             let savedProject = await latestProjectState(afterSaving: updatedProject)
             applyProjectState(savedProject)
             drawingData = nil

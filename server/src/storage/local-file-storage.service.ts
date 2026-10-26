@@ -51,6 +51,7 @@ export class LocalFileStorageService {
     projectId: string;
     copyId: string;
     buffer: Buffer;
+    fileId?: string;
   }): Promise<StoredPatternPdf> {
     const storageKey = [
       'projects',
@@ -58,10 +59,11 @@ export class LocalFileStorageService {
       params.projectId,
       'pattern-copies',
       params.copyId,
-      'drawing.pkdrawing',
+      params.fileId ? `${params.fileId}.pkdrawing` : 'drawing.pkdrawing',
     ].join('/');
     const absolutePath = this.absolutePath(storageKey);
 
+    await this.queueProjectPatternRemoval(storageKey);
     await fs.mkdir(dirname(absolutePath), { recursive: true });
     await fs.writeFile(absolutePath, params.buffer);
 

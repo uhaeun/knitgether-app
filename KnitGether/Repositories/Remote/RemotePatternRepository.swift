@@ -201,6 +201,14 @@ final class RemotePatternRepository: PatternRepository {
         try fileStore.loadData(at: patternCopy.drawingDataPath)
     }
 
+    func saveDrawingChange(_ data: Data, for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+        ProjectDrawingChange(patternCopy: try await saveDrawingData(data, for: patternCopy), requiresProjectSave: false)
+    }
+
+    func deleteDrawingChange(for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+        ProjectDrawingChange(patternCopy: try await deleteDrawingData(for: patternCopy), requiresProjectSave: false)
+    }
+
     func saveDrawingData(
         _ data: Data,
         for patternCopy: ProjectPatternCopy
