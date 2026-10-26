@@ -619,7 +619,8 @@ struct ProjectWorkspaceView: View {
                 Task {
                     await viewModel.saveMemo()
                 }
-            }
+            },
+            discardAction: { viewModel.discardMemoDraft() }
         )
         relatedSkillsSection
     }

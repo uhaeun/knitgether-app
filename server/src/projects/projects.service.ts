@@ -455,21 +455,7 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     }
 
     return this.prisma.$transaction(async (transaction) => {
-      // Acquire the same parent write lock as whole-project CAS before changing
-      // the child. Retry only the version acquisition, never a stale whole save.
-      for (;;) {
-        const parent = await transaction.project.findFirst({
-          where: { id: projectId, ownerId, deletedAt: null },
-        });
-        if (!parent) {
-          throw new NotFoundException({ code: 'PROJECT_NOT_FOUND', message: 'Project not found.' });
-        }
-        const changed = await transaction.project.updateMany({
-          where: { id: projectId, ownerId, deletedAt: null, updatedAt: parent.updatedAt },
-          data: { updatedAt: new Date(Math.max(Date.now(), parent.updatedAt.getTime() + 1)) },
-        });
-        if (changed.count === 1) break;
-      }
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
       const updated = await transaction.rowCounter.update({
         where: { projectId },
         data: {
@@ -626,8 +612,6 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     body: SaveWorkSessionDto,
     sessionId?: string,
   ): Promise<WorkSessionResponseDto> {
-    await this.findActiveProject(ownerId, projectId);
-
     if (sessionId && sessionId !== body.id) {
       throw new BadRequestException({
         code: 'VALIDATION_FAILED',
@@ -640,10 +624,6 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
         code: 'VALIDATION_FAILED',
         message: 'Work session project ID must match the project ID.',
       });
-    }
-
-    if (sessionId) {
-      await this.findActiveWorkSession(ownerId, projectId, sessionId);
     }
 
     this.assertWorkSessionTimes(body);
@@ -660,25 +640,29 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
       deletedAt: null,
     };
 
-    const session = sessionId
-      ? await this.prisma.workSession.update({
-          where: {
-            id: sessionId,
-          },
-          data,
-        })
-      : await this.prisma.workSession.upsert({
-          where: {
-            id: body.id,
-          },
-          create: {
-            id: body.id,
-            ...data,
-          },
-          update: data,
-        });
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      if (sessionId) await this.findActiveWorkSession(ownerId, projectId, sessionId, transaction);
+      const session = sessionId
+        ? await transaction.workSession.update({
+            where: {
+              id: sessionId,
+            },
+            data,
+          })
+        : await transaction.workSession.upsert({
+            where: {
+              id: body.id,
+            },
+            create: {
+              id: body.id,
+              ...data,
+            },
+            update: data,
+          });
 
-    return this.toWorkSessionResponse(session);
+      return this.toWorkSessionResponse(session);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async deleteProjectWorkSession(
@@ -686,16 +670,18 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     projectId: string,
     sessionId: string,
   ): Promise<void> {
-    await this.findActiveWorkSession(ownerId, projectId, sessionId);
-
-    await this.prisma.workSession.update({
-      where: {
-        id: sessionId,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
+    await this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      await this.findActiveWorkSession(ownerId, projectId, sessionId, transaction);
+      await transaction.workSession.update({
+        where: {
+          id: sessionId,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async listProjectYarnUsages(
@@ -1275,14 +1261,35 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     return instruction;
   }
 
+  private async advanceProjectVersion(
+    transaction: Prisma.TransactionClient,
+    ownerId: string,
+    projectId: string,
+  ): Promise<void> {
+    // Acquire the same parent write lock as whole-project CAS before changing
+    // the child. Retry only the version acquisition, never a stale whole save.
+    for (;;) {
+      const parent = await transaction.project.findFirst({
+        where: { id: projectId, ownerId, deletedAt: null },
+      });
+      if (!parent) {
+        throw new NotFoundException({ code: 'PROJECT_NOT_FOUND', message: 'Project not found.' });
+      }
+      const changed = await transaction.project.updateMany({
+        where: { id: projectId, ownerId, deletedAt: null, updatedAt: parent.updatedAt },
+        data: { updatedAt: new Date(Math.max(Date.now(), parent.updatedAt.getTime() + 1)) },
+      });
+      if (changed.count === 1) break;
+    }
+  }
+
   private async findActiveWorkSession(
     ownerId: string,
     projectId: string,
     sessionId: string,
+    transaction: Prisma.TransactionClient,
   ): Promise<WorkSession> {
-    await this.findActiveProject(ownerId, projectId);
-
-    const session = await this.prisma.workSession.findFirst({
+    const session = await transaction.workSession.findFirst({
       where: {
         id: sessionId,
         ownerId,

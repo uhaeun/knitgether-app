@@ -4,6 +4,7 @@ struct ProjectMemoPanelView: View {
     @Binding var memoText: String
     let hasUnsavedChanges: Bool
     let saveAction: () -> Void
+    let discardAction: () -> Void
 
     var body: some View {
         WorkspaceSectionView(
@@ -23,6 +24,14 @@ struct ProjectMemoPanelView: View {
         ) {
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
+                    if hasUnsavedChanges {
+                        Button("초안 버리기", action: discardAction)
+                            .font(.caption)
+                            .accessibilityIdentifier("workspace.memo.discard")
+                        Text("저장 전 초안")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                     Spacer()
                     Text("\(memoText.count)/\(AppInputLimit.memo)")
                         .font(.caption2)

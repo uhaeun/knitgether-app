@@ -118,7 +118,7 @@ describe('Project concurrency on real PostgreSQL', () => {
     }
     // Dedicated database records are preserved as evidence; no reset/delete-all.
   });
-  const call = (method: 'get'|'post'|'patch', path: string, body?: any) => {
+  const call = (method: 'get'|'post'|'patch'|'delete', path: string, body?: any) => {
     const req = request(app.getHttpServer())[method]('/api/v1'+path)
       .set('Authorization', 'Bearer real-db-token');
     return body ? req.send(body) : req;
@@ -312,6 +312,90 @@ describe('Project concurrency on real PostgreSQL', () => {
       status: stale.status, response: stale.body, final });
     expect(stale.status).toBe(409);
     expect(final.rowCounter!.currentRow).toBe(88);
+  });
+
+  it.each(['create', 'update', 'delete'])('session %s invalidates a stale whole save', async (operation) => {
+    const b = await create();
+    const session = { id: randomUUID(), projectId: b.id,
+      startedAt: '2026-10-24T00:00:00.000Z', endedAt: '2026-10-24T00:01:00.000Z', memo: 'original' };
+    if (operation !== 'create') {
+      await db.workSession.create({ data: { ...session, ownerId: owner } });
+      b.workSessions = [session];
+    }
+    const path = '/projects/'+b.id+'/work-sessions';
+    const child = operation === 'delete'
+      ? await call('delete', path+'/'+session.id).expect(204)
+      : await call(operation === 'create' ? 'post' : 'patch',
+          path+(operation === 'update' ? '/'+session.id : ''), { ...session, memo: 'child' })
+          .expect(operation === 'create' ? 201 : 200);
+    const before = await snapshot(b.id);
+    const stale = await call('patch', '/projects/'+b.id, { ...b, memo: 'stale' });
+    const final = await snapshot(b.id);
+    evidence.push({ case: 'session-'+operation+'-stale-whole', request: b,
+      childStatus: child.status, before, status: stale.status, response: stale.body, final });
+    expect(stale.status).toBe(409);
+    expect(final).toEqual(before);
+    expect(before.updatedAt.getTime()).toBeGreaterThan(new Date(b.baseUpdatedAt).getTime());
+    expect(final.workSessions[0].deletedAt !== null).toBe(operation === 'delete');
+  });
+
+  it('session deletion between whole read and CAS rejects the stale whole save', async () => {
+    const b = await create();
+    const session = { id: randomUUID(), projectId: b.id, ownerId: owner,
+      startedAt: new Date('2026-10-24T00:00:00.000Z'), memo: 'keep deleted' };
+    await db.workSession.create({ data: session });
+    b.workSessions = [{ id: session.id, projectId: b.id, startedAt: session.startedAt.toISOString(), memo: session.memo }];
+    target = b.id;
+    afterRead = async () => {
+      afterRead = null;
+      await call('delete', '/projects/'+b.id+'/work-sessions/'+session.id).expect(204);
+    };
+    await call('patch', '/projects/'+b.id, b).expect(409);
+    const final = await snapshot(b.id);
+    expect(final.workSessions[0].deletedAt).not.toBeNull();
+    evidence.push({ case: 'session-delete-between-read-and-cas', final });
+  });
+
+  it('rolls back the parent version if the session mutation fails', async () => {
+    const b = await create();
+    const before = await snapshot(b.id);
+    await call('delete', '/projects/'+b.id+'/work-sessions/'+randomUUID()).expect(404);
+    const final = await snapshot(b.id);
+    expect(final).toEqual(before);
+    evidence.push({ case: 'missing-session-parent-rollback', before, final });
+  });
+
+  it('serializes session deletion behind an uncommitted whole save', async () => {
+    const b = await create();
+    const body = variant(b, 'A');
+    const session = body.workSessions[0];
+    await db.workSession.create({ data: { ...session, ownerId: owner } });
+    target = b.id;
+    let signal!: () => void, release!: () => void;
+    const locked = new Promise<void>(resolve => { signal = resolve; });
+    const resume = new Promise<void>(resolve => { release = resolve; });
+    afterCas = async () => { signal(); await resume; };
+    const whole = call('patch', '/projects/'+b.id, body).then(res => res);
+    await locked;
+    const child = call('delete', '/projects/'+b.id+'/work-sessions/'+session.id).then(res => res);
+    let blocked = false;
+    try {
+      for (let attempt = 0; attempt < 100; attempt++) {
+        const rows = await db.$queryRaw<Array<{ blocked: boolean }>>`
+          SELECT EXISTS(SELECT 1 FROM pg_stat_activity
+            WHERE datname = current_database() AND wait_event_type = 'Lock'
+            AND query LIKE '%UPDATE%Project%') AS blocked`;
+        if (rows[0].blocked) { blocked = true; break; }
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+    } finally { release(); }
+    const [wholeResult, childResult] = await Promise.all([whole, child]);
+    expect(blocked).toBe(true);
+    expect(wholeResult.status).toBe(200); expect(childResult.status).toBe(204);
+    const final = await snapshot(b.id);
+    expect(final.memo).toBe('A'); expect(final.workSessions[0].deletedAt).not.toBeNull();
+    expect(final.updatedAt.getTime()).toBeGreaterThan(new Date(wholeResult.body.updatedAt).getTime());
+    evidence.push({ case: 'session-delete-blocked-on-whole-parent-lock', blocked, final });
   });
 
   async function sourcePattern() {
