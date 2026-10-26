@@ -1,0 +1,26 @@
+{
+  "baseline": "6df5c4ef9473ac97437e3022a602eddd9ce92bbe",
+  "copiedVerbatim": {
+    "api-concurrency-direct.json": {
+      "destination": "main-red-concurrency.json",
+      "sha256": "8231b3e9d2748360df28eb954536a2ec51ec19496d1ec0476024b1695d3b297b"
+    },
+    "ui03-results-A.json": {
+      "destination": "ui03-main-baseline.json",
+      "sha256": "3d8fb2dee58e0f58445ac4e4be759d063b51256dc7ba8efd90097fe6dd89da5d"
+    },
+    "A-ui03-gauge-Imperial.png": {
+      "destination": "ui03-main-gauge-Imperial.png",
+      "sha256": "d6e820d65a4c61134f484ebd15c76ee737b3ce168f7d29d4ac0caafcadc150a3"
+    },
+    "A-ui03-02-profile.png": {
+      "destination": "ui03-main-profile.png",
+      "sha256": "738564418265c121cd8de9d88ed05a24d93331826c1b2d9191dc166bb715749e"
+    },
+    "built-app-uuid.txt": {
+      "destination": "built-app-uuid.txt",
+      "sha256": "f68c61b93c3594b259c498292f22589e1e91e998a8184cce8ad348ca23341457"
+    }
+  },
+  "ui03ReexecutedInThisRun": false
+}

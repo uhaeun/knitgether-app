@@ -277,3 +277,20 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 - 기존 known-gap opt-in을 제거해 수용 검사4개를 기본 실제DB CI 게이트에 포함했다. 원격 CI와 iOS는 이번 변경에서 미실행이며 로컬 검증과 구분한다.
 
 이 절은 위 과거 FAIL/미실행 판정의 후속 이력이다. 과거 증거를 삭제하거나 RC-08 전체 및 제품 릴리즈를 일괄 완료 처리하지 않는다.
+
+## 2026-10-26 최신 main 통합 후보 재검증
+
+[수정 후보 보고서](../../../qa-runs/2026-10-26-main-revalidation/report.md). 기존 실행의 FAIL·SKIP 수는 당시 이력으로 유지한다.
+
+| 추적 | 이번 판정 | 근거 |
+|---|---|---|
+| SYNC-11 전체 저장·카운터·rollback·파일 | 실제DB18 PASS/0 SKIP | projects-concurrency.real-db-spec.ts 기본 게이트 |
+| SYNC-11 실제 외부 경합 | 20쌍 모두200/409 및 승자 일관성 | probe_concurrency.py; main의20쌍200/200과 별도 대조 |
+| SYNC-11 두 기기 메모 복구 | 기본12+화면 전용7 PASS | run_sync.py·run_pure_ui.py, 자동 재저장 관찰300초 |
+| SYNC-11 기존 회귀 | 서버147 / API75 PASS | mock·HTTP·DB 층을 구분하며 E2E 수에 합산하지 않음 |
+| UI-78 오프라인 생성·복구 | 2확인 항목 PASS | 로컬 전용/서버0개→복구 후 중복 없이 서버1개 |
+| UI-03 cm 정책 | 앞선 main12 PASS, 이번 전체 미재실행 | ui03-main-baseline.json, iOS 제품 소스 동일 |
+| 초안 종료 수명 | CHARACTERIZED, 수용 기준 공백 유지 | 종료 전후 화면·서버 버전 대조 |
+| 작업 세션 삭제와 전체 저장 | CHARACTERIZED, 잔여 데이터 복원 위험 | 삭제204→이전 전체200→세션 복원; 카운터 보호와 분리 |
+
+물리 iPhone·모든 자식 API 조합·장기 SLA는 미실행이다. 기존 원격0ae2c64의4개 job success는 해당 커밋 결과이며 새 문서 통합 커밋의 CI와 별도 추적한다.

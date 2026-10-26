@@ -48,10 +48,10 @@ API 첫 실행은 **69 PASS / 6 FAIL**이다. 5개는 네트워크 게이트가 
 ```sh
 npm --prefix server run build
 npm --prefix server run test:e2e
-QA_REAL_DATAc0943ca41de4a5bc7fbeff6cb58957f3e4b09626_URL='postgresql://knitgether@127.0.0.1:55434/knitgether_qa_sync11_20261024?connection_limit=6' npm --prefix server run test:db:projects
+QA_REAL_DATABASE_URL='postgresql://knitgether@127.0.0.1:55434/knitgether_qa_sync11_20261024?connection_limit=6' npm --prefix server run test:db:projects
 ```
 
-API 회귀는 동일 DB/파일 저장소의 서버3302를 먼저 띄우고 `API_c0943ca41de4a5bc7fbeff6cb58957f3e4b09626_URL=http://127.0.0.1:3302/api/v1 KG_NETGATE_FORWARD_PORT=3302 DB_HOST=127.0.0.1 DB_PORT=55434 DB_USER=knitgether DB_PASSWORD=knitgether DB_NAME=knitgether_qa_sync11_20261024 FILE_STORAGE_ROOT=<이 실행 폴더/storage 절대경로>`와 기존 QA venv로 pytest를 실행한다.
+API 회귀는 동일 DB/파일 저장소의 서버3302를 먼저 띄우고 `API_BASE_URL=http://127.0.0.1:3302/api/v1 KG_NETGATE_FORWARD_PORT=3302 DB_HOST=127.0.0.1 DB_PORT=55434 DB_USER=knitgether DB_PASSWORD=knitgether DB_NAME=knitgether_qa_sync11_20261024 FILE_STORAGE_ROOT=<이 실행 폴더/storage 절대경로>`와 기존 QA venv로 pytest를 실행한다.
 
 ## 판정 범위
 
@@ -62,3 +62,6 @@ iOS 제품 소스는 변경하지 않았고 이번에는 시뮬레이터·실기
 사용자는 두 결함의 수정·재검증을 승인했다. Codex는 원인 분석·설계·제품 구현·테스트 수정·실제 실행과 판정·문서화를 수행했다. 사용자 직접 수동 실행으로 기록하지 않는다.
 
 최종 [소스·증거 점검](evidence/final-audit.json), [변경 패치](evidence/changes.patch), [소스 해시](evidence/source-sha256.json), [환경 종료 기록](evidence/shutdown.txt)을 보존했다. 전용 DB dump도 로컬에 보존한다.
+
+
+2026-10-26 재현 명령 정정: 위 환경변수명의 커밋 문자열 혼입을 QA_REAL_DATABASE_URL과 API_BASE_URL로 바로잡았다. 당시 실행 결과와 원본 증거는 변경하지 않았다.

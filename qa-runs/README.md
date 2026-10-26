@@ -1,5 +1,6 @@
 # QA 실행 기록
 
+- [최신 main 대조와 수정 후보 재검증](2026-10-26-main-revalidation/report.md)
 - [최초 분석·경합 FAIL](2026-10-22/report.md)
 - [양 iOS 시뮬레이터 SYNC-11·UI-03 실행](2026-10-22-ios-retest/report.md)
 - [수정 설계](2026-10-24-sync11-design/fix-design.md)
@@ -10,4 +11,4 @@
 
 스크린샷·UI XML·마스킹한 HTTP·DB snapshot·검증 결과를 보관한다. DB 클러스터·덤프·venv·앱 빌드·Appium 원본·세션 자격은 Git에서 제외하고 로컬에만 보존한다. 따라서 원본 SHA256 목록의 로컬 전용 파일과 dump 링크는 GitHub 체크아웃에 존재하지 않을 수 있다. 과거 로그·패치의 공백을 정규화하면 증거 해시가 달라지므로 원문 그대로 보존한다. 제품 코드·문서의 diff whitespace 검사는 별도로 수행한다.
 
-현재 실제 DB CI는 전체 PATCH 보호8개를 검사한다. 알려진 결함4개는 명시적으로 실행하면 FAIL이며 기본 CI에서는 SKIPPED다. 이 범위를 앱 전체 동시성 보장이나 두 iOS E2E의 매 PR 자동 실행으로 확대하지 않는다.
+수정 브랜치의 현재 실제 DB CI는18개 검사를 기본 실행하며 known-gap opt-in은 제거됐다. 과거8 PASS/4 SKIPPED 기록은 당시 이력이다. 이 범위를 앱 전체 동시성 보장이나 두 iOS E2E의 매 PR 자동 실행으로 확대하지 않는다. 최신 main과 수정 후보의 차이 및 실제 재검증은 아래 기준선 보고서를 따른다.

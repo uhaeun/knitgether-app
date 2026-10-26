@@ -1,0 +1,10 @@
+[
+  {
+    "device": "A",
+    "uuidMatchesBuild": true
+  },
+  {
+    "device": "B",
+    "uuidMatchesBuild": true
+  }
+]
