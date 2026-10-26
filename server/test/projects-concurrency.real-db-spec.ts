@@ -578,7 +578,7 @@ describe('Project concurrency on real PostgreSQL', () => {
       else await call('delete', path+'/'+instruction.id).expect(204);
       const saved = await snapshot(b.id);
       const stale = await call('patch', '/projects/'+b.id, body);
-      evidence.push({ case: 'row-instruction-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+      evidence.push({ case: 'row-instruction-'+operation, request: body, response: stale.body, status: stale.status, saved, final: await snapshot(b.id) });
       expect(stale.status).toBe(409);
       expect(await snapshot(b.id)).toEqual(saved);
     });
@@ -600,7 +600,7 @@ describe('Project concurrency on real PostgreSQL', () => {
       else await call('delete', '/projects/'+b.id+'/pattern-copy/drawing').expect(204);
       const saved = await snapshot(b.id);
       const stale = await call('patch', '/projects/'+b.id, body);
-      evidence.push({ case: 'pattern-'+operation, status: stale.status, saved, final: await snapshot(b.id) });
+      evidence.push({ case: 'pattern-'+operation, request: body, response: stale.body, status: stale.status, saved, final: await snapshot(b.id) });
       expect(stale.status).toBe(409);
       expect(await snapshot(b.id)).toEqual(saved);
     });
@@ -666,10 +666,17 @@ describe('Project concurrency on real PostgreSQL', () => {
     evidence.push({ case: 'independent-usage-photo-material-links-preserved', before, final: await related() });
   });
 
-  for (const operation of ['instruction', 'session', 'whole-session'] as const) {
-    it(`rejects ${operation} ID reuse from another project without changing either project`, async () => {
+  for (const foreignOwner of [false, true]) for (const operation of ['instruction', 'session', 'whole-session'] as const) {
+    it(`rejects ${operation} ID reuse from another project (foreign owner: ${foreignOwner}) without changing either project`, async () => {
       const victim = await create(), victimBody = variant(victim, 'A');
       await call('patch', '/projects/'+victim.id, victimBody).expect(200);
+      if (foreignOwner) {
+        const other = randomUUID();
+        await db.userProfile.create({ data: { id: other, displayName: 'Scope victim' } });
+        for (const table of ['project', 'rowCounter', 'rowInstruction', 'workSession', 'projectPatternCopy'] as const) {
+          await (db[table] as any).updateMany({ where: table === 'project' ? { id: victim.id } : { projectId: victim.id }, data: { ownerId: other } });
+        }
+      }
       const b = await create(), before = await snapshot(b.id), victimBefore = await snapshot(victim.id);
       let response;
       if (operation === 'instruction') response = await call('post', '/projects/'+b.id+'/row-instructions',
@@ -678,7 +685,7 @@ describe('Project concurrency on real PostgreSQL', () => {
         { ...victimBody.workSessions[0], projectId: b.id });
       else response = await call('patch', '/projects/'+b.id,
         { ...b, workSessions: [{ ...victimBody.workSessions[0], projectId: b.id }] });
-      evidence.push({ case: 'cross-project-id-'+operation, status: response.status, victimBefore, victimFinal: await snapshot(victim.id) });
+      evidence.push({ case: 'cross-project-id-'+operation, foreignOwner, status: response.status, response: response.body, victimBefore, victimFinal: await snapshot(victim.id) });
       expect(response.status).toBe(404);
       expect(await snapshot(victim.id)).toEqual(victimBefore);
       expect(await snapshot(b.id)).toEqual(before);
