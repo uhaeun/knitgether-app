@@ -72,7 +72,9 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     @Published private(set) var displayMode: ProjectWorkspaceDisplayMode
     @Published private(set) var sheetPosition: ProjectWorkspaceSheetPosition
     @Published var interactionMode: PatternInteractionMode = .viewer
-    @Published var memoText: String
+    @Published var memoText: String {
+        didSet { preserveMemoDraft() }
+    }
     @Published private(set) var currentRow: Int
     @Published private(set) var currentSessionElapsed: TimeInterval = 0
     @Published private(set) var relatedSkills: [Skill] = []
@@ -96,6 +98,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     @Published private(set) var isRetryingSync = false
     @Published private(set) var errorMessage: String?
 
+    private let memoDraftStore: ProjectMemoDraftStore
     private let projectRepository: any ProjectRepository
     private let patternRepository: any PatternRepository
     private let skillRepository: any SkillRepository
@@ -118,8 +121,10 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         libraryRepository: any LibraryRepository,
         gaugeRecordRepository: (any GaugeRecordRepository)? = nil,
         progressPhotoRepository: (any ProjectProgressPhotoRepository)? = nil,
-        workTimerSuppressionStore: WorkTimerSuppressionStore? = nil
+        workTimerSuppressionStore: WorkTimerSuppressionStore? = nil,
+        memoDraftStore: ProjectMemoDraftStore? = nil
     ) {
+        self.memoDraftStore = memoDraftStore ?? .shared
         self.project = project
         self.projectRepository = projectRepository
         self.patternRepository = patternRepository
@@ -130,7 +135,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         self.workTimerSuppressionStore = workTimerSuppressionStore ?? .shared
         displayMode = project.workspaceDisplayMode ?? .patternAndCounter
         sheetPosition = Self.resolvedSheetPosition(for: project)
-        memoText = project.memo
+        memoText = self.memoDraftStore.text(ownerId: project.ownerId, projectId: project.id) ?? project.memo
         currentRow = project.rowCounter.currentRow
         attachedPatternFileURL = project.patternCopy.flatMap { patternRepository.fileURL(for: $0) }
     }
@@ -771,10 +776,12 @@ final class ProjectWorkspaceViewModel: ObservableObject {
                 return
             }
 
+            let hadUnsavedMemo = hasUnsavedMemoChanges
             project = refreshedProject
             displayMode = refreshedProject.workspaceDisplayMode ?? displayMode
             sheetPosition = Self.resolvedSheetPosition(for: refreshedProject)
-            memoText = refreshedProject.memo
+            if !hadUnsavedMemo { memoText = refreshedProject.memo }
+            preserveMemoDraft()
             currentRow = refreshedProject.rowCounter.currentRow
             refreshAttachedPatternFileURL()
             errorMessage = nil
@@ -1043,9 +1050,13 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
 
         do {
-            let updatedPatternCopy = try await patternRepository.saveDrawingData(data, for: patternCopy)
-            let updatedProject = project.copy(patternCopy: updatedPatternCopy)
-            try await projectRepository.saveProject(updatedProject)
+            let change = try await patternRepository.saveDrawingChange(data, for: patternCopy)
+            let updatedProject = project.copy(patternCopy: change.patternCopy)
+            // A committed child mutation has already advanced the server version.
+            // Only local/offline changes need a whole-project save.
+            if change.requiresProjectSave {
+                try await projectRepository.saveProject(updatedProject)
+            }
             let savedProject = await latestProjectState(afterSaving: updatedProject)
             applyProjectState(savedProject)
             drawingData = data
@@ -1062,9 +1073,13 @@ final class ProjectWorkspaceViewModel: ObservableObject {
         }
 
         do {
-            let updatedPatternCopy = try await patternRepository.deleteDrawingData(for: patternCopy)
-            let updatedProject = project.copy(patternCopy: updatedPatternCopy)
-            try await projectRepository.saveProject(updatedProject)
+            let change = try await patternRepository.deleteDrawingChange(for: patternCopy)
+            let updatedProject = project.copy(patternCopy: change.patternCopy)
+            // A committed child mutation has already advanced the server version.
+            // Only local/offline changes need a whole-project save.
+            if change.requiresProjectSave {
+                try await projectRepository.saveProject(updatedProject)
+            }
             let savedProject = await latestProjectState(afterSaving: updatedProject)
             applyProjectState(savedProject)
             drawingData = nil
@@ -1401,6 +1416,7 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     func deleteProject() async -> Bool {
         do {
             try await projectRepository.deleteProject(id: project.id)
+            try? memoDraftStore.remove(ownerId: project.ownerId, projectId: project.id)
             isDeleted = true
             sessionStartedAt = nil
             isTrackingTime = false
@@ -1486,15 +1502,29 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     ///   덮어쓰지 않는다. 저장 충돌 복구에서 쓴다(DEF-24). 편집 중인 값을 지우면
     ///   사용자가 다시 시도할 재료가 없어진다.
     private func applyProjectState(_ updatedProject: KnittingProject, preservingUserEdits: Bool = false) {
+        let hadUnsavedMemo = hasUnsavedMemoChanges
         project = updatedProject
         displayMode = updatedProject.workspaceDisplayMode ?? displayMode
         sheetPosition = Self.resolvedSheetPosition(for: updatedProject)
         if !preservingUserEdits {
-            memoText = updatedProject.memo
+            if !hadUnsavedMemo { memoText = updatedProject.memo }
             currentRow = updatedProject.rowCounter.currentRow
         }
+        preserveMemoDraft()
         refreshAttachedPatternFileURL()
         refreshAttachedNeedle()
+    }
+
+    func discardMemoDraft() {
+        memoText = project.memo
+    }
+
+    private func preserveMemoDraft() {
+        do {
+            try memoDraftStore.update(memoText, savedText: project.memo, ownerId: project.ownerId, projectId: project.id)
+        } catch {
+            errorMessage = "메모 초안을 이 기기에 보관하지 못했어요. 메모 저장을 눌러 주세요."
+        }
     }
 
     private func upsertLinkedTool(_ tool: ToolItem) {

@@ -4,6 +4,24 @@ import Testing
 
 @MainActor
 struct OfflineFirstPatternRepositoryTests {
+    @Test(arguments: [true, false])
+    func drawingChangeReportsWhetherWholeProjectSaveIsRequired(online: Bool) async throws {
+        let directory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let pattern = try Self.makeStoredPattern(in: directory, fileName: "drawing.pdf", syncStatus: .synced)
+        let local = Self.makeLocalRepository(patterns: [pattern], tempDirectory: directory)
+        let copy = try await local.importPattern(pattern, forProjectId: UUID())
+        let remote = PatternRepositoryFake()
+        remote.drawingError = online ? nil : URLError(.notConnectedToInternet)
+        let repository = OfflineFirstPatternRepository(local: local, remote: remote)
+        let change = try await repository.saveDrawingChange(Data("new strokes".utf8), for: copy)
+        #expect(change.requiresProjectSave == !online)
+        #expect(try await local.drawingData(for: change.patternCopy) == Data("new strokes".utf8))
+        let deletion = try await repository.deleteDrawingChange(for: change.patternCopy)
+        #expect(deletion.requiresProjectSave == !online)
+        #expect(deletion.patternCopy.drawingDataPath == nil)
+    }
+
     @Test func fetchPatternsFallsBackToLocalCacheWhenRemoteIsOffline() async throws {
         let tempDirectory = try Self.makeTempDirectory()
         defer { try? FileManager.default.removeItem(at: tempDirectory) }
@@ -240,6 +258,15 @@ struct OfflineFirstPatternRepositoryTests {
 
 @MainActor
 private final class PatternRepositoryFake: PatternRepository {
+    var drawingError: Error?
+    func saveDrawingChange(_ data: Data, for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+        if let drawingError { throw drawingError }
+        return ProjectDrawingChange(patternCopy: try await saveDrawingData(data, for: patternCopy), requiresProjectSave: false)
+    }
+    func deleteDrawingChange(for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+        if let drawingError { throw drawingError }
+        return ProjectDrawingChange(patternCopy: try await deleteDrawingData(for: patternCopy), requiresProjectSave: false)
+    }
     var remotePatterns: [PatternDocument] = []
     var savedPatterns: [PatternDocument] = []
     var deletedPatternIDs: [UUID] = []

@@ -276,6 +276,50 @@ struct RemoteProjectRepositoryTests {
         try await repository.saveProject(project)
     }
 
+    @Test func memoSaveDoesNotUploadCachedSyncedPatternFiles() async throws {
+        let directory = try Self.makeTempDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let cache = directory.appendingPathComponent("cache")
+        let fileStore = LocalPatternFileStore(rootDirectoryURL: cache)
+        let source = directory.appendingPathComponent("cached.pdf")
+        try Data("%PDF-1.4 stale cache".utf8).write(to: source)
+        let projectID = UUID(uuidString: "11111111-1111-4111-8111-111111111111")!
+        let copyID = UUID(uuidString: "66666666-6666-4666-8666-666666666666")!
+        let file = try fileStore.storeProjectPatternFile(from: source, projectId: projectID, copyId: copyID)
+        let drawing = try fileStore.storeProjectPatternDrawingData(Data("old strokes".utf8), projectId: projectID, copyId: copyID)
+        let copy = Self.directPatternCopy(localCopyPath: file.relativePath).copy(
+            drawingDataPath: drawing, drawingUpdatedAt: Self.date("2026-07-05T13:00:00.000Z"), syncStatus: .synced)
+        var methods: [String] = []
+        let session = MockURLProtocol.makeSession { request in
+            methods.append(request.httpMethod ?? "")
+            #expect(request.url!.path == "/api/v1/projects/11111111-1111-4111-8111-111111111111")
+            #expect(request.httpMethod == "GET" || request.httpMethod == "PATCH")
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"])!, Data(Self.projectResponseJSON.utf8))
+        }
+        let store = UserDefaults(suiteName: UUID().uuidString)!
+        let repository = Self.makeRepository(session: session, cacheRootURL: cache, serverUpdatedAtStore: store)
+        try await repository.saveProject(Self.project(syncStatus: .synced, patternCopy: copy).updatingMemo(to: "Memo edit"))
+        #expect(methods == ["GET", "PATCH"])
+    }
+
+    @Test func pendingDrawingDeletionUsesDedicatedDeleteAfterWholeSave() async throws {
+        var methods: [String] = []
+        let copy = Self.patternCopy().updatingDrawingDataPath(nil).copy(syncStatus: .pendingUpload)
+        let session = MockURLProtocol.makeSession { request in
+            methods.append(request.httpMethod ?? "")
+            if request.httpMethod == "DELETE" {
+                #expect(request.url!.path.hasSuffix("/pattern-copy/drawing"))
+                return (HTTPURLResponse(url: request.url!, statusCode: 204, httpVersion: nil, headerFields: nil)!, Data())
+            }
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"])!, Data(Self.projectResponseJSON.utf8))
+        }
+        let repository = Self.makeRepository(session: session, serverUpdatedAtStore: UserDefaults(suiteName: UUID().uuidString)!)
+        try await repository.saveProject(Self.project(syncStatus: .synced, patternCopy: copy))
+        #expect(methods == ["GET", "PATCH", "DELETE"])
+    }
+
     @Test func saveProjectUploadsDirectPatternCopyFileAfterSavingProject() async throws {
         let tempDirectory = try Self.makeTempDirectory()
         defer { try? FileManager.default.removeItem(at: tempDirectory) }

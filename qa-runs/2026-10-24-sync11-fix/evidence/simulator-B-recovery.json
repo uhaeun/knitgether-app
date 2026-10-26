@@ -1,0 +1,10 @@
+[
+  {
+    "pid": 72485,
+    "command": "/Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/containermanagerd_system --runmode=privileged --user-container-mode=none --bundle-container-mode=per-user --bundle-container-owner=- --system-container-mode=per-user --system-container-owner=-"
+  },
+  {
+    "pid": 72510,
+    "command": "/Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/containermanagerd --runmode=agent --user-container-mode=current --bundle-container-mode=proxy --bundle-container-owner=- --system-container-mode=proxy --system-container-owner=-"
+  }
+]

@@ -1,0 +1,3 @@
+evidence/*private*
+evidence/*sessions*.json
+__pycache__/

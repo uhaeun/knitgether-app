@@ -1,0 +1,61 @@
+
+> knitgether-api@0.1.0 test:db:projects
+> jest --config ./test/jest-real-db.json --runInBand --testNamePattern=session .* invalidates
+
+FAIL test/projects-concurrency.real-db-spec.ts
+  ● Project concurrency on real PostgreSQL › session create invalidates a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      334 |     evidence.push({ case: 'session-'+operation+'-stale-whole', request: b,
+      335 |       childStatus: child.status, before, status: stale.status, response: stale.body, final });
+    > 336 |     expect(stale.status).toBe(409);
+          |                          ^
+      337 |     expect(final).toEqual(before);
+      338 |     expect(before.updatedAt.getTime()).toBeGreaterThan(new Date(b.baseUpdatedAt).getTime());
+      339 |     expect(final.workSessions[0].deletedAt !== null).toBe(operation === 'delete');
+
+      at test/projects-concurrency.real-db-spec.ts:336:26
+
+  ● Project concurrency on real PostgreSQL › session update invalidates a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      334 |     evidence.push({ case: 'session-'+operation+'-stale-whole', request: b,
+      335 |       childStatus: child.status, before, status: stale.status, response: stale.body, final });
+    > 336 |     expect(stale.status).toBe(409);
+          |                          ^
+      337 |     expect(final).toEqual(before);
+      338 |     expect(before.updatedAt.getTime()).toBeGreaterThan(new Date(b.baseUpdatedAt).getTime());
+      339 |     expect(final.workSessions[0].deletedAt !== null).toBe(operation === 'delete');
+
+      at test/projects-concurrency.real-db-spec.ts:336:26
+
+  ● Project concurrency on real PostgreSQL › session delete invalidates a stale whole save
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 200
+
+      334 |     evidence.push({ case: 'session-'+operation+'-stale-whole', request: b,
+      335 |       childStatus: child.status, before, status: stale.status, response: stale.body, final });
+    > 336 |     expect(stale.status).toBe(409);
+          |                          ^
+      337 |     expect(final).toEqual(before);
+      338 |     expect(before.updatedAt.getTime()).toBeGreaterThan(new Date(b.baseUpdatedAt).getTime());
+      339 |     expect(final.workSessions[0].deletedAt !== null).toBe(operation === 'delete');
+
+      at test/projects-concurrency.real-db-spec.ts:336:26
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 18 skipped, 21 total
+Snapshots:   0 total
+Time:        3.242 s, estimated 40 s
+Ran all test suites with tests matching "session .* invalidates".

@@ -1,0 +1,2 @@
+UUID: 240265D5-65A7-3FD2-9735-6696D12E2821 (arm64) qa-runs/2026-10-22/build/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib
+UUID: 240265D5-65A7-3FD2-9735-6696D12E2821 (arm64) /tmp/knitgether-qa-20261022/KnitGether.app/KnitGether.debug.dylib

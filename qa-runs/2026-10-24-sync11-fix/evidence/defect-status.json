@@ -1,0 +1,19 @@
+{
+  "id": "QA-SYNC11-RACE",
+  "baselineCommit": "75a9882eb841044aba1067ddbc703a985a4515d2",
+  "historicalStatus": "FAIL:19/20 overlapping API pairs; controlled baseline [200,200]",
+  "currentStatus": "FIXED / VERIFIED LOCALLY",
+  "serverWorkingTreeModified": true,
+  "controlledPairsPassed": 5,
+  "externalPairs": {
+    "direct": 20,
+    "proxy": 20
+  },
+  "iosAssertionsPassed": 19,
+  "githubIssueChanged": false,
+  "deployed": false,
+  "limits": [
+    "Full project PATCH vs full project PATCH only",
+    "Child-only APIs and physical file cleanup remain separate"
+  ]
+}

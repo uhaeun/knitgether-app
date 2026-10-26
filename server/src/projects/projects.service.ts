@@ -5,6 +5,8 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  OnModuleInit,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import {
   Prisma,
@@ -67,13 +69,86 @@ type ProjectPatternCopyFile = {
 };
 
 @Injectable()
-export class ProjectsService {
+export class ProjectsService implements OnModuleInit, OnModuleDestroy {
   constructor(
     private readonly prisma: PrismaService,
     private readonly fileStorage: LocalFileStorageService,
   ) {}
 
   private readonly logger = new Logger(ProjectsService.name);
+
+  private cleanupTimer?: ReturnType<typeof setInterval>;
+  private cleanupRunning = false;
+
+  onModuleInit() {
+    // Durable candidates survive process restarts. A one-hour grace exceeds
+    // transaction timeouts; do not collect files of a still-running request.
+    this.cleanupTimer = setInterval(() => { void this.retryPatternFileCleanup(); }, 60_000);
+    this.cleanupTimer.unref();
+    void this.retryPatternFileCleanup();
+  }
+
+  onModuleDestroy() {
+    clearInterval(this.cleanupTimer);
+  }
+
+  async retryPatternFileCleanup() {
+    if (this.cleanupRunning) return;
+    this.cleanupRunning = true;
+    try {
+      const keys = await this.fileStorage.pendingProjectPatternRemovals(Date.now() - 3_600_000);
+      await this.cleanupPatternFiles(keys);
+    } catch (error) {
+      this.logger.warn(`Pattern cleanup deferred: ${String(error)}`);
+    } finally {
+      this.cleanupRunning = false;
+    }
+  }
+
+  private async cleanupPatternFiles(keys: string[]) {
+    for (const key of new Set(keys)) {
+      try {
+        // Include soft-deleted rows too: retained data must remain recoverable.
+        const referenced = await this.prisma.projectPatternCopy.findFirst({
+          where: { OR: [{ fileStorageKey: key }, { drawingStorageKey: key }] },
+        });
+        if (referenced) continue;
+        await this.fileStorage.remove(key);
+        await this.fileStorage.completeProjectPatternRemoval(key);
+      } catch (error) {
+        // Keep the durable marker for retry. Cleanup failure must not turn a
+        // committed save into a misleading HTTP error.
+        this.logger.warn(`Pattern cleanup deferred for ${key}: ${String(error)}`);
+      }
+    }
+  }
+
+  private async retirePatternFiles(
+    copy: { fileStorageKey: string | null; drawingStorageKey: string | null } | null,
+    files: { retired: string[] },
+  ) {
+    for (const key of [copy?.fileStorageKey, copy?.drawingStorageKey]) {
+      if (!key) continue;
+      await this.fileStorage.queueProjectPatternRemoval(key);
+      files.retired.push(key);
+    }
+  }
+
+  private async withPatternFileCleanup<T>(
+    work: (files: { created: string[]; retired: string[] }) => Promise<T>,
+  ): Promise<T> {
+    const files = { created: [] as string[], retired: [] as string[] };
+    let result: T;
+    try {
+      result = await work(files);
+    } catch (error) {
+      // SQL rollback has finished before removing newly materialized files.
+      await this.cleanupPatternFiles(files.created);
+      throw error;
+    }
+    await this.cleanupPatternFiles(files.retired);
+    return result;
+  }
 
   async listProjects(ownerId: string): Promise<ProjectResponseDto[]> {
     const projects = await this.prisma.project.findMany({
@@ -133,7 +208,7 @@ export class ProjectsService {
   ): Promise<ProjectResponseDto> {
     this.assertProjectChildReferences(body);
 
-    return this.prisma.$transaction(async (transaction) => {
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
       await this.ensureUserProfile(transaction, ownerId);
 
       const existingProject = await transaction.project.findFirst({
@@ -205,7 +280,7 @@ export class ProjectsService {
         }
       }
 
-      await this.saveProjectChildren(transaction, ownerId, body);
+      await this.saveProjectChildren(transaction, ownerId, body, files);
 
       const project = await transaction.project.findFirstOrThrow({
         where: {
@@ -217,7 +292,7 @@ export class ProjectsService {
       });
 
       return this.toResponse(project, ownerId);
-    });
+    }));
   }
 
   async updateProject(
@@ -234,7 +309,7 @@ export class ProjectsService {
 
     this.assertProjectChildReferences(body);
 
-    return this.prisma.$transaction(async (transaction) => {
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
       const existingProject = await transaction.project.findFirst({
         where: {
           id,
@@ -255,12 +330,37 @@ export class ProjectsService {
       this.assertNoSaveConflict(existingProject, body, ownerId);
       this.assertStoredRowCounterIdentity(existingProject.rowCounter, body);
 
-      await transaction.project.update({
-        where: { id },
-        data: this.toProjectUpdateInput(ownerId, body),
-        include: this.projectInclude(ownerId),
+      // Compare and update in the same SQL statement. A transaction alone does
+      // not stop two readers from accepting the same previous version.
+      const nextUpdatedAt = new Date(
+        Math.max(Date.now(), existingProject.updatedAt.getTime() + 1),
+      );
+      if (!Number.isFinite(nextUpdatedAt.getTime())) {
+        throw new InternalServerErrorException('Project version timestamp is out of range.');
+      }
+      const changed = await transaction.project.updateMany({
+        where: {
+          id,
+          ownerId,
+          deletedAt: null,
+          updatedAt: existingProject.updatedAt,
+        },
+        data: this.toProjectUpdateInput(ownerId, body, nextUpdatedAt),
       });
-      await this.saveProjectChildren(transaction, ownerId, body);
+      if (changed.count !== 1) {
+        const latest = await transaction.project.findFirst({
+          where: { id, ownerId, deletedAt: null },
+          include: this.projectInclude(ownerId),
+        });
+        if (!latest) {
+          throw new NotFoundException({
+            code: 'PROJECT_NOT_FOUND',
+            message: 'Project not found.',
+          });
+        }
+        this.throwProjectConflict(latest, ownerId);
+      }
+      await this.saveProjectChildren(transaction, ownerId, body, files);
 
       const project = await transaction.project.findFirstOrThrow({
         where: {
@@ -272,7 +372,7 @@ export class ProjectsService {
       });
 
       return this.toResponse(project, ownerId);
-    });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   async deleteProject(ownerId: string, id: string): Promise<void> {
@@ -347,8 +447,6 @@ export class ProjectsService {
     projectId: string,
     body: SaveRowCounterDto,
   ): Promise<RowCounterResponseDto> {
-    await this.findActiveProject(ownerId, projectId);
-
     if (body.projectId !== projectId) {
       throw new BadRequestException({
         code: 'VALIDATION_FAILED',
@@ -356,24 +454,24 @@ export class ProjectsService {
       });
     }
 
-    const updated = await this.prisma.rowCounter.update({
-      where: {
-        projectId,
-      },
-      data: {
-        ownerId,
-        name: body.name,
-        mode: this.normalizedCounterMode(body.mode),
-        sectionName: this.trimmedOrNull(body.sectionName),
-        memo: this.trimmedOrNull(body.memo),
-        currentRow: body.currentRow,
-        targetRow: body.targetRow,
-        deletedAt: null,
-      },
-      include: this.rowCounterInclude(ownerId),
-    });
-
-    return this.toRowCounterResponse(updated);
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const updated = await transaction.rowCounter.update({
+        where: { projectId },
+        data: {
+          ownerId,
+          name: body.name,
+          mode: this.normalizedCounterMode(body.mode),
+          sectionName: this.trimmedOrNull(body.sectionName),
+          memo: this.trimmedOrNull(body.memo),
+          currentRow: body.currentRow,
+          targetRow: body.targetRow,
+          deletedAt: null,
+        },
+        include: this.rowCounterInclude(ownerId),
+      });
+      return this.toRowCounterResponse(updated);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async upsertProjectRowInstruction(
@@ -389,80 +487,89 @@ export class ProjectsService {
       });
     }
 
-    const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId);
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId, transaction);
 
-    if (body.rowCounterId !== rowCounter.id) {
-      throw new NotFoundException({
-        code: 'ROW_COUNTER_NOT_FOUND',
-        message: 'Row counter not found.',
+      if (body.rowCounterId !== rowCounter.id) {
+        throw new NotFoundException({
+          code: 'ROW_COUNTER_NOT_FOUND',
+          message: 'Row counter not found.',
+        });
+      }
+
+      if (body.instructionText.trim().length === 0) {
+        throw new BadRequestException({
+          code: 'VALIDATION_FAILED',
+          message: 'Row instruction text is required.',
+        });
+      }
+
+      if (instructionId) {
+        await this.findActiveRowInstruction(
+          ownerId,
+          projectId,
+          rowCounter.id,
+          instructionId,
+          transaction,
+        );
+      }
+
+      const existing = await transaction.rowInstruction.findFirst({ where: { id: body.id } });
+      if (existing && (existing.ownerId !== ownerId || existing.projectId !== projectId || existing.rowCounterId !== rowCounter.id)) {
+        throw new NotFoundException({ code: 'ROW_INSTRUCTION_NOT_FOUND', message: 'Row instruction not found.' });
+      }
+
+      const duplicate = await transaction.rowInstruction.findFirst({
+        where: {
+          ownerId,
+          projectId,
+          rowCounterId: rowCounter.id,
+          rowNumber: body.rowNumber,
+          deletedAt: null,
+          NOT: {
+            id: body.id,
+          },
+        },
       });
-    }
 
-    if (body.instructionText.trim().length === 0) {
-      throw new BadRequestException({
-        code: 'VALIDATION_FAILED',
-        message: 'Row instruction text is required.',
-      });
-    }
+      if (duplicate) {
+        throw new BadRequestException({
+          code: 'ROW_INSTRUCTION_ROW_DUPLICATED',
+          message: 'A row instruction for this row already exists.',
+        });
+      }
 
-    if (instructionId) {
-      await this.findActiveRowInstruction(
-        ownerId,
-        projectId,
-        rowCounter.id,
-        instructionId,
-      );
-    }
-
-    const duplicate = await this.prisma.rowInstruction.findFirst({
-      where: {
+      const data = {
         ownerId,
         projectId,
         rowCounterId: rowCounter.id,
         rowNumber: body.rowNumber,
+        instructionText: body.instructionText.trim(),
+        skillTags: body.skillTags?.trim() ?? '',
         deletedAt: null,
-        NOT: {
-          id: body.id,
-        },
-      },
-    });
+      };
 
-    if (duplicate) {
-      throw new BadRequestException({
-        code: 'ROW_INSTRUCTION_ROW_DUPLICATED',
-        message: 'A row instruction for this row already exists.',
-      });
-    }
+      const instruction = instructionId
+        ? await transaction.rowInstruction.update({
+            where: {
+              id: instructionId,
+            },
+            data,
+          })
+        : await transaction.rowInstruction.upsert({
+            where: {
+              id: body.id, ownerId, projectId,
+            },
+            create: {
+              id: body.id,
+              ...data,
+            },
+            update: data,
+          });
 
-    const data = {
-      ownerId,
-      projectId,
-      rowCounterId: rowCounter.id,
-      rowNumber: body.rowNumber,
-      instructionText: body.instructionText.trim(),
-      skillTags: body.skillTags?.trim() ?? '',
-      deletedAt: null,
-    };
-
-    const instruction = instructionId
-      ? await this.prisma.rowInstruction.update({
-          where: {
-            id: instructionId,
-          },
-          data,
-        })
-      : await this.prisma.rowInstruction.upsert({
-          where: {
-            id: body.id,
-          },
-          create: {
-            id: body.id,
-            ...data,
-          },
-          update: data,
-        });
-
-    return this.toRowInstructionResponse(instruction);
+      return this.toRowInstructionResponse(instruction);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async deleteProjectRowInstruction(
@@ -470,22 +577,26 @@ export class ProjectsService {
     projectId: string,
     instructionId: string,
   ): Promise<void> {
-    const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId);
-    await this.findActiveRowInstruction(
-      ownerId,
-      projectId,
-      rowCounter.id,
-      instructionId,
-    );
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const rowCounter = await this.findActiveProjectRowCounter(ownerId, projectId, transaction);
+      await this.findActiveRowInstruction(
+        ownerId,
+        projectId,
+        rowCounter.id,
+        instructionId,
+        transaction,
+      );
 
-    await this.prisma.rowInstruction.update({
-      where: {
-        id: instructionId,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
+      await transaction.rowInstruction.update({
+        where: {
+          id: instructionId,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async listProjectWorkSessions(
@@ -514,8 +625,6 @@ export class ProjectsService {
     body: SaveWorkSessionDto,
     sessionId?: string,
   ): Promise<WorkSessionResponseDto> {
-    await this.findActiveProject(ownerId, projectId);
-
     if (sessionId && sessionId !== body.id) {
       throw new BadRequestException({
         code: 'VALIDATION_FAILED',
@@ -528,10 +637,6 @@ export class ProjectsService {
         code: 'VALIDATION_FAILED',
         message: 'Work session project ID must match the project ID.',
       });
-    }
-
-    if (sessionId) {
-      await this.findActiveWorkSession(ownerId, projectId, sessionId);
     }
 
     this.assertWorkSessionTimes(body);
@@ -548,25 +653,30 @@ export class ProjectsService {
       deletedAt: null,
     };
 
-    const session = sessionId
-      ? await this.prisma.workSession.update({
-          where: {
-            id: sessionId,
-          },
-          data,
-        })
-      : await this.prisma.workSession.upsert({
-          where: {
-            id: body.id,
-          },
-          create: {
-            id: body.id,
-            ...data,
-          },
-          update: data,
-        });
+    return this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      if (sessionId) await this.findActiveWorkSession(ownerId, projectId, sessionId, transaction);
+      await this.assertWorkSessionScope(transaction, body.id, ownerId, projectId);
+      const session = sessionId
+        ? await transaction.workSession.update({
+            where: {
+              id: sessionId,
+            },
+            data,
+          })
+        : await transaction.workSession.upsert({
+            where: {
+              id: body.id, ownerId, projectId,
+            },
+            create: {
+              id: body.id,
+              ...data,
+            },
+            update: data,
+          });
 
-    return this.toWorkSessionResponse(session);
+      return this.toWorkSessionResponse(session);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async deleteProjectWorkSession(
@@ -574,16 +684,18 @@ export class ProjectsService {
     projectId: string,
     sessionId: string,
   ): Promise<void> {
-    await this.findActiveWorkSession(ownerId, projectId, sessionId);
-
-    await this.prisma.workSession.update({
-      where: {
-        id: sessionId,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
+    await this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      await this.findActiveWorkSession(ownerId, projectId, sessionId, transaction);
+      await transaction.workSession.update({
+        where: {
+          id: sessionId,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
   }
 
   async listProjectYarnUsages(
@@ -949,54 +1061,60 @@ export class ProjectsService {
   ): Promise<ProjectPatternCopyResponseDto> {
     this.assertPdf(file);
 
-    const patternCopy = await this.findActiveProjectPatternCopy(
-      ownerId,
-      projectId,
-    );
-    const previousStorageKey = patternCopy.fileStorageKey;
-    const stored = await this.fileStorage.saveProjectPatternCopyPdf({
-      ownerId,
-      projectId,
-      copyId: patternCopy.id,
-      fileId: randomUUID(),
-      buffer: file.buffer,
-    });
-    const updated = await this.prisma.projectPatternCopy.update({
-      where: {
-        id: patternCopy.id,
-      },
-      data: {
-        fileNameSnapshot: this.trimmedOrDefault(
-          file.originalname,
-          patternCopy.fileNameSnapshot ?? 'pattern.pdf',
-        ),
-        fileStorageKey: stored.storageKey,
-        fileContentType: file.mimetype || 'application/pdf',
-        fileByteSize: stored.byteSize,
-      },
-      include: {
-        sourcePatternDocument: {
-          include: {
-            storedFile: true,
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const patternCopy = await this.findActiveProjectPatternCopy(
+        ownerId,
+        projectId,
+        transaction,
+      );
+      const previousStorageKey = patternCopy.fileStorageKey;
+      const stored = await this.fileStorage.saveProjectPatternCopyPdf({
+        ownerId,
+        projectId,
+        copyId: patternCopy.id,
+        fileId: randomUUID(),
+        buffer: file.buffer,
+      });
+      files.created.push(stored.storageKey);
+      const updated = await transaction.projectPatternCopy.update({
+        where: {
+          id: patternCopy.id,
+        },
+        data: {
+          fileNameSnapshot: this.trimmedOrDefault(
+            file.originalname,
+            patternCopy.fileNameSnapshot ?? 'pattern.pdf',
+          ),
+          fileStorageKey: stored.storageKey,
+          fileContentType: file.mimetype || 'application/pdf',
+          fileByteSize: stored.byteSize,
+        },
+        include: {
+          sourcePatternDocument: {
+            include: {
+              storedFile: true,
+            },
           },
         },
-      },
-    });
-
-    if (previousStorageKey && previousStorageKey !== stored.storageKey) {
-      await this.fileStorage.remove(previousStorageKey);
-    }
-
-    const response = this.toProjectPatternCopyResponse(updated, ownerId);
-
-    if (!response) {
-      throw new NotFoundException({
-        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
-        message: 'Project pattern copy not found.',
       });
-    }
 
-    return response;
+      if (previousStorageKey && previousStorageKey !== stored.storageKey) {
+        await this.fileStorage.queueProjectPatternRemoval(previousStorageKey);
+        files.retired.push(previousStorageKey);
+      }
+
+      const response = this.toProjectPatternCopyResponse(updated, ownerId);
+
+      if (!response) {
+        throw new NotFoundException({
+          code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+          message: 'Project pattern copy not found.',
+        });
+      }
+
+      return response;
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   async uploadProjectPatternCopyDrawing(
@@ -1006,44 +1124,54 @@ export class ProjectsService {
   ): Promise<ProjectPatternCopyResponseDto> {
     this.assertDrawingFile(file);
 
-    const patternCopy = await this.findActiveProjectPatternCopy(
-      ownerId,
-      projectId,
-    );
-    const stored = await this.fileStorage.saveProjectPatternDrawing({
-      ownerId,
-      projectId,
-      copyId: patternCopy.id,
-      buffer: file.buffer,
-    });
-    const updated = await this.prisma.projectPatternCopy.update({
-      where: {
-        id: patternCopy.id,
-      },
-      data: {
-        drawingStorageKey: stored.storageKey,
-        drawingContentType: file.mimetype || 'application/octet-stream',
-        drawingByteSize: stored.byteSize,
-        drawingUpdatedAt: new Date(),
-      },
-      include: {
-        sourcePatternDocument: {
-          include: {
-            storedFile: true,
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const patternCopy = await this.findActiveProjectPatternCopy(
+        ownerId,
+        projectId,
+        transaction,
+      );
+      const stored = await this.fileStorage.saveProjectPatternDrawing({
+        ownerId,
+        projectId,
+        copyId: patternCopy.id,
+        fileId: randomUUID(),
+        buffer: file.buffer,
+      });
+      files.created.push(stored.storageKey);
+      const updated = await transaction.projectPatternCopy.update({
+        where: {
+          id: patternCopy.id,
+        },
+        data: {
+          drawingStorageKey: stored.storageKey,
+          drawingContentType: file.mimetype || 'application/octet-stream',
+          drawingByteSize: stored.byteSize,
+          drawingUpdatedAt: new Date(),
+        },
+        include: {
+          sourcePatternDocument: {
+            include: {
+              storedFile: true,
+            },
           },
         },
-      },
-    });
-    const response = this.toProjectPatternCopyResponse(updated, ownerId);
-
-    if (!response) {
-      throw new NotFoundException({
-        code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
-        message: 'Project pattern copy not found.',
       });
-    }
+      if (patternCopy.drawingStorageKey && patternCopy.drawingStorageKey !== stored.storageKey) {
+        await this.fileStorage.queueProjectPatternRemoval(patternCopy.drawingStorageKey);
+        files.retired.push(patternCopy.drawingStorageKey);
+      }
+      const response = this.toProjectPatternCopyResponse(updated, ownerId);
 
-    return response;
+      if (!response) {
+        throw new NotFoundException({
+          code: 'PROJECT_PATTERN_COPY_NOT_FOUND',
+          message: 'Project pattern copy not found.',
+        });
+      }
+
+      return response;
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   async getProjectPatternCopyDrawing(
@@ -1070,23 +1198,30 @@ export class ProjectsService {
     ownerId: string,
     projectId: string,
   ): Promise<void> {
-    const patternCopy = await this.findActiveProjectPatternCopy(
-      ownerId,
-      projectId,
-    );
+    return this.withPatternFileCleanup(async (files) => this.prisma.$transaction(async (transaction) => {
+      await this.advanceProjectVersion(transaction, ownerId, projectId);
+      const patternCopy = await this.findActiveProjectPatternCopy(
+        ownerId,
+        projectId,
+        transaction,
+      );
 
-    await this.fileStorage.remove(patternCopy.drawingStorageKey);
-    await this.prisma.projectPatternCopy.update({
-      where: {
-        id: patternCopy.id,
-      },
-      data: {
-        drawingStorageKey: null,
-        drawingContentType: null,
-        drawingByteSize: null,
-        drawingUpdatedAt: null,
-      },
-    });
+      if (patternCopy.drawingStorageKey) {
+        await this.fileStorage.queueProjectPatternRemoval(patternCopy.drawingStorageKey);
+        files.retired.push(patternCopy.drawingStorageKey);
+      }
+      await transaction.projectPatternCopy.update({
+        where: {
+          id: patternCopy.id,
+        },
+        data: {
+          drawingStorageKey: null,
+          drawingContentType: null,
+          drawingByteSize: null,
+          drawingUpdatedAt: null,
+        },
+      });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }));
   }
 
   openFileReadStream(storageKey: string) {
@@ -1115,10 +1250,11 @@ export class ProjectsService {
   private async findActiveProjectRowCounter(
     ownerId: string,
     projectId: string,
+    transaction: Prisma.TransactionClient = this.prisma,
   ): Promise<RowCounterWithInstructions> {
-    await this.findActiveProject(ownerId, projectId);
 
-    const rowCounter = await this.prisma.rowCounter.findFirst({
+
+    const rowCounter = await transaction.rowCounter.findFirst({
       where: {
         ownerId,
         projectId,
@@ -1142,8 +1278,9 @@ export class ProjectsService {
     projectId: string,
     rowCounterId: string,
     instructionId: string,
+    transaction: Prisma.TransactionClient = this.prisma,
   ): Promise<RowInstruction> {
-    const instruction = await this.prisma.rowInstruction.findFirst({
+    const instruction = await transaction.rowInstruction.findFirst({
       where: {
         id: instructionId,
         ownerId,
@@ -1163,14 +1300,44 @@ export class ProjectsService {
     return instruction;
   }
 
+  private async advanceProjectVersion(
+    transaction: Prisma.TransactionClient,
+    ownerId: string,
+    projectId: string,
+  ): Promise<void> {
+    // Acquire the same parent write lock as whole-project CAS before changing
+    // the child. Retry only the version acquisition, never a stale whole save.
+    for (;;) {
+      const parent = await transaction.project.findFirst({
+        where: { id: projectId, ownerId, deletedAt: null },
+      });
+      if (!parent) {
+        throw new NotFoundException({ code: 'PROJECT_NOT_FOUND', message: 'Project not found.' });
+      }
+      const changed = await transaction.project.updateMany({
+        where: { id: projectId, ownerId, deletedAt: null, updatedAt: parent.updatedAt },
+        data: { updatedAt: new Date(Math.max(Date.now(), parent.updatedAt.getTime() + 1)) },
+      });
+      if (changed.count === 1) break;
+    }
+  }
+
+  private async assertWorkSessionScope(
+    transaction: Prisma.TransactionClient, id: string, ownerId: string, projectId: string,
+  ): Promise<void> {
+    const existing = await transaction.workSession.findFirst({ where: { id } });
+    if (existing && (existing.ownerId !== ownerId || existing.projectId !== projectId)) {
+      throw new NotFoundException({ code: 'WORK_SESSION_NOT_FOUND', message: 'Work session not found.' });
+    }
+  }
+
   private async findActiveWorkSession(
     ownerId: string,
     projectId: string,
     sessionId: string,
+    transaction: Prisma.TransactionClient,
   ): Promise<WorkSession> {
-    await this.findActiveProject(ownerId, projectId);
-
-    const session = await this.prisma.workSession.findFirst({
+    const session = await transaction.workSession.findFirst({
       where: {
         id: sessionId,
         ownerId,
@@ -1264,8 +1431,9 @@ export class ProjectsService {
   private async findActiveProjectPatternCopy(
     ownerId: string,
     projectId: string,
+    transaction: Prisma.TransactionClient = this.prisma,
   ): Promise<ProjectPatternCopyWithSource> {
-    const project = await this.prisma.project.findFirst({
+    const project = await transaction.project.findFirst({
       where: {
         id: projectId,
         ownerId,
@@ -1462,36 +1630,38 @@ export class ProjectsService {
     });
   }
 
-  // 낙관적 잠금. 클라이언트가 baseUpdatedAt을 보낸 경우에만 동작하며,
-  // 서버 updatedAt이 그보다 뒤면 409와 함께 서버 최신 본을 details.latest로 돌려준다.
+  // The token must identify the exact server version, including milliseconds.
   private assertNoSaveConflict(
     existing: ProjectWithChildren,
     body: SaveProjectDto,
     ownerId: string,
   ): void {
-    if (!body.baseUpdatedAt) {
-      return;
-    }
-
+    if (!body.baseUpdatedAt) return;
     const baseUpdatedAt = new Date(body.baseUpdatedAt).getTime();
-
-    if (existing.updatedAt.getTime() > baseUpdatedAt) {
-      // 최신 본 변환이 실패해도(예: 소프트 삭제된 행의 카운터 결손) 409 자체는 유지한다.
-      let latest: ProjectResponseDto | null = null;
-      try {
-        latest = this.toResponse(existing, ownerId);
-      } catch {
-        latest = null;
-      }
-
-      throw new ConflictException({
-        code: 'PROJECT_CONFLICT',
-        message: 'Project was modified after the provided base version.',
-        details: {
-          latest,
-        },
+    if (!Number.isFinite(baseUpdatedAt)) {
+      throw new BadRequestException({
+        code: 'VALIDATION_FAILED',
+        message: 'baseUpdatedAt must be a valid date.',
       });
     }
+    if (existing.updatedAt.getTime() !== baseUpdatedAt) {
+      this.throwProjectConflict(existing, ownerId);
+    }
+  }
+
+  private throwProjectConflict(existing: ProjectWithChildren, ownerId: string): never {
+    // Preserve the conflict response even if the latest child data is incomplete.
+    let latest: ProjectResponseDto | null = null;
+    try {
+      latest = this.toResponse(existing, ownerId);
+    } catch {
+      latest = null;
+    }
+    throw new ConflictException({
+      code: 'PROJECT_CONFLICT',
+      message: 'Project was modified after the provided base version.',
+      details: { latest },
+    });
   }
 
   private toProjectCreateInput(
@@ -1530,10 +1700,12 @@ export class ProjectsService {
   private toProjectUpdateInput(
     ownerId: string,
     body: SaveProjectDto,
-  ): Prisma.ProjectUncheckedUpdateInput {
+    updatedAt: Date,
+  ): Prisma.ProjectUncheckedUpdateManyInput {
     return {
       ownerId,
       ...this.toProjectScalarInput(body),
+      updatedAt,
       deletedAt: null,
     };
   }
@@ -1568,6 +1740,7 @@ export class ProjectsService {
     transaction: Prisma.TransactionClient,
     ownerId: string,
     body: SaveProjectDto,
+    files: { created: string[]; retired: string[] },
   ): Promise<void> {
     await transaction.rowCounter.upsert({
       where: { projectId: body.id },
@@ -1602,8 +1775,9 @@ export class ProjectsService {
     // 증분 upsert로 바꿔 요청에 담긴 세션만 갱신/생성하고 나머지는 보존한다.
     // 세션 삭제는 전용 DELETE 엔드포인트(deleteWorkSession)가 담당한다.
     for (const session of body.workSessions) {
+      await this.assertWorkSessionScope(transaction, session.id, ownerId, body.id);
       await transaction.workSession.upsert({
-        where: { id: session.id },
+        where: { id: session.id, ownerId, projectId: body.id },
         create: {
           id: session.id,
           ownerId,
@@ -1622,7 +1796,7 @@ export class ProjectsService {
       });
     }
 
-    await this.saveProjectPatternCopy(transaction, ownerId, body);
+    await this.saveProjectPatternCopy(transaction, ownerId, body, files);
   }
 
   private async saveRowInstructions(
@@ -1691,12 +1865,15 @@ export class ProjectsService {
     transaction: Prisma.TransactionClient,
     ownerId: string,
     body: SaveProjectDto,
+    files: { created: string[]; retired: string[] },
   ): Promise<void> {
     if (body.patternCopy === undefined) {
       return;
     }
 
     if (body.patternCopy === null) {
+      const previous = await transaction.projectPatternCopy.findUnique({ where: { projectId: body.id } });
+      await this.retirePatternFiles(previous, files);
       await transaction.projectPatternCopy.deleteMany({
         where: {
           ownerId,
@@ -1779,6 +1956,7 @@ export class ProjectsService {
         buffer,
       });
 
+      files.created.push(stored.storageKey);
       return {
         fileStorageKey: stored.storageKey,
         fileContentType: sourceStoredFile.contentType,
@@ -1789,8 +1967,9 @@ export class ProjectsService {
     // 다른 도안으로 교체되는 경우(복사본 id가 바뀜) 기존 레코드를 지우고 새로 만든다.
     // upsert의 update 브랜치는 scalarInput에 없는 파일/드로잉 키를 갱신하지 않아
     // 이전 도안의 파일과 드로잉이 새 도안에 그대로 계승된다(결함 37). 완전 교체로 참조를 끊는다.
-    // 교체로 참조가 끊긴 물리 파일 정리는 RC-08(파일 고아화)에서 별도로 다룬다.
+    // Retire old keys durably before detaching them; delete only after commit.
     if (existing && existing.id !== copy.id) {
+      await this.retirePatternFiles(existing, files);
       await transaction.projectPatternCopy.delete({
         where: { projectId: body.id },
       });

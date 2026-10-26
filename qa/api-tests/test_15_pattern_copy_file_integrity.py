@@ -10,10 +10,8 @@ API-23 (DEF-13, `a74945a` 수정): 창고 경로(`PatternDocument`)로 도안을
 API-24 (DEF-14, `0109898` 수정): 도안을 다른 도안으로 교체하면(=`patternCopy.id`가
 바뀌면) `projects.service.ts:1634-1653`는 기존 행을 하드 삭제하고 새 행을
 만든다("결함 37" 주석). `drawingStorageKey`는 `SaveProjectPatternCopyDto`에 없는
-필드라 새 행에 절대 계승되지 않는다. 단, 같은 소스코드 주석이 "교체로 참조가
-끊긴 물리 파일 정리는 RC-08에서 별도로 다룬다"고 명시한다. 즉 DB 참조 절단과
-물리 파일 삭제는 서로 다른 동작이고, 이 사이클 기준 물리 파일은 지워지지
-않는다. 두 판정을 분리해서 본다.
+필드라 새 행에 절대 계승되지 않는다. 2026-10-26부터 커밋 후 이전 PDF와
+드로잉도 회수한다. DB 참조와 물리 파일 삭제를 각각 검증한다.
 """
 import base64
 import os
@@ -121,7 +119,7 @@ def test_api_23_library_linked_pattern_gets_server_file_key(account_a, db):
 
 # ---------------------------------------------------------------- API-24
 
-def test_api_24_pattern_replace_severs_db_reference_but_leaves_old_file(account_a, db):
+def test_api_24_pattern_replace_severs_db_reference_and_removes_old_files(account_a, db):
     pattern_a = _create_library_pattern(account_a, "API24-원본도안")
     pattern_b = _create_library_pattern(account_a, "API24-교체도안")
 
@@ -197,9 +195,6 @@ def test_api_24_pattern_replace_severs_db_reference_but_leaves_old_file(account_
     )
 
     # ---- 물리 파일 정리 판정 (DB 판정과 분리) ----
-    # 코드 주석이 명시하듯 이 경로는 참조만 끊고 파일은 지우지 않는다(RC-08로 이관).
-    # 파일이 사라져 있다면 RC-08이 해소된 것이므로 이 단언과 07/10의 기재를 갱신할 것.
-    assert old_drawing_path.exists(), (
-        "이전 드로잉 파일이 디스크에서 사라졌다. RC-08 정리 경로가 생겼다면 이 테스트와 "
-        "07/09_test_case_master.md의 'DB 참조 정리와 물리 파일 삭제는 다른 동작' 기재를 갱신할 것"
-    )
+    assert not old_drawing_path.exists(), "교체 후 참조가 끊긴 드로잉이 남아 있다"
+    assert not (STORAGE_ROOT / file_key_before).exists(), "교체 후 이전 PDF가 남아 있다"
+    assert (STORAGE_ROOT / file_key_after).exists(), "새 도안 PDF까지 삭제됐다"

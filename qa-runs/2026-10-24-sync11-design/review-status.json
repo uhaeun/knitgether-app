@@ -1,0 +1,12 @@
+{
+  "baseline": "75a9882eb841044aba1067ddbc703a985a4515d2",
+  "productTrackedDiffEmpty": true,
+  "deliverables": [
+    "fix-design.md",
+    "regression-plan.md"
+  ],
+  "newTestsImplemented": false,
+  "newTestsExecuted": false,
+  "defectStatus": "FAIL / OPEN",
+  "review": "Source paths, local Prisma 6.19.3 generated types and evidence links checked; no product patch applied"
+}

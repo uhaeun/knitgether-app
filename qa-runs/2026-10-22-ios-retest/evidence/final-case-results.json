@@ -1,0 +1,1334 @@
+[
+  {
+    "case": "SYNC11-B-DRAFT-NOT-SAVED",
+    "status": "PASS",
+    "detail": "B draft present on UI; server memo remains empty",
+    "at": "2026-10-22T14:48:00.564130+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-A-SAVE",
+    "status": "PASS",
+    "detail": "A first saved memo 20261022",
+    "at": "2026-10-22T14:48:08.011084+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-409",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+          "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+          "name": "SYNC11 preserved name",
+          "status": "WIP",
+          "isFavorite": true,
+          "memo": "A first saved memo 20261022",
+          "startDate": "2026-10-22T14:45:16.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "a6124c4c-2028-4d90-bc07-cf5dfa7151d1",
+            "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+            "projectId": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-22T14:45:16.321Z",
+            "updatedAt": "2026-10-22T14:48:08.040Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-22T14:45:16.316Z",
+          "updatedAt": "2026-10-22T14:48:08.038Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-22T14:48:42.407490+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-SAME-BASELINE",
+    "status": "PASS",
+    "detail": {
+      "A": "2026-10-22T14:45:16.316Z",
+      "B": "2026-10-22T14:45:16.316Z"
+    },
+    "at": "2026-10-22T14:48:42.421275+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-SERVER-A-KEPT",
+    "status": "PASS",
+    "detail": "A first saved memo 20261022",
+    "at": "2026-10-22T14:48:42.422456+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-B-INPUT",
+    "status": "PASS",
+    "detail": "B unsaved memo 20261022",
+    "at": "2026-10-22T14:48:44.146724+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-B-NOTICE",
+    "status": "PASS",
+    "detail": [
+      "오류",
+      "다른 기기에서 먼저 수정돼서 저장하지 못했어요. 입력하신 내용은 그대로 있어요. 다시 저장하면 이 기기의 내용으로 저장돼요.",
+      "SYNC11 preserved name",
+      "WIP",
+      "최근 작업",
+      "없음",
+      "프로젝트 요약",
+      "진행",
+      "0단 · 총 단수 미설정",
+      "일정",
+      "목표일 없음",
+      "시작일",
+      "Oct 22",
+      "총 작업시간",
+      "0초",
+      "진행 사진",
+      "아직 진행 사진이 없어요.",
+      "프로젝트 변화나 피팅 상태를 사진으로 남겨두세요.",
+      "실 사용량",
+      "연결된 실 없음",
+      "연결된 실 없음",
+      "추가 연결",
+      "대표 실 외에 함께 쓰는 실을 연결할 수 있어요.",
+      "프로젝트 수정에서 실을 먼저 연결해 주세요.",
+      "사용 바늘",
+      "아직 연결된 바늘이 없어요.",
+      "바늘 창고에 바늘을 먼저 추가해 주세요.",
+      "추가 연결",
+      "대표 바늘 외에 함께 쓰는 바늘을 연결할 수 있어요.",
+      "사용 도구",
+      "아직 연결된 도구가 없어요.",
+      "도구 창고에 도구를 먼저 추가해 주세요.",
+      "게이지 기록",
+      "0개 연결됨",
+      "게이지 계산기에서 저장한 세탁 전/후 기록을 프로젝트에 연결해요.",
+      "연결된 게이지 기록이 없어요.",
+      "게이지 계산기에서 기록을 저장한 뒤 연결할 수 있어요.",
+      "작업 메모",
+      "23/500",
+      "관련 스킬",
+      "아직 연결된 스킬이 없어요.",
+      "행안내나 메모에 뜨개 약어를 적으면 여기에 표시돼요.",
+      "실 연결",
+      "바늘 연결"
+    ],
+    "at": "2026-10-22T14:48:44.147618+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-NO-AUTO-RETRY",
+    "status": "PASS",
+    "detail": {
+      "observationSeconds": 30,
+      "before": 3,
+      "after": 3
+    },
+    "at": "2026-10-22T14:49:14.182419+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-EXPLICIT-RESAVE",
+    "status": "PASS",
+    "detail": "B unsaved memo 20261022",
+    "at": "2026-10-22T14:49:21.079760+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-OTHER-FIELDS",
+    "status": "PASS",
+    "detail": {
+      "name": "SYNC11 preserved name",
+      "isFavorite": true,
+      "currentRow": 7
+    },
+    "at": "2026-10-22T14:49:21.080272+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-RECONFLICT",
+    "status": "PASS",
+    "detail": {
+      "serverMemo": "Intervening writer 2",
+      "input": "B repeated conflict pending"
+    },
+    "at": "2026-10-22T14:49:36.345148+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "SYNC11-RECONFLICT-RECOVERY",
+    "status": "PASS",
+    "detail": "B repeated conflict pending",
+    "at": "2026-10-22T14:49:39.286319+00:00",
+    "suite": "SYNC11"
+  },
+  {
+    "case": "PURE-A-UI-OTHER-FIELDS-SAVE",
+    "status": "PASS",
+    "detail": {
+      "name": "SYNC11 A UI final verified",
+      "isFavorite": false
+    },
+    "at": "2026-10-22T15:00:08.806418+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "PURE-B-CONFLICT",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+          "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+          "name": "SYNC11 A UI final verified",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "B pure UI pending",
+          "startDate": "2026-10-22T14:45:16.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "a6124c4c-2028-4d90-bc07-cf5dfa7151d1",
+            "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+            "projectId": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-22T14:45:16.321Z",
+            "updatedAt": "2026-10-22T14:59:57.396Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-22T14:45:16.316Z",
+          "updatedAt": "2026-10-22T14:59:57.373Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-22T15:00:17.612515+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "PURE-B-DRAFT-KEPT",
+    "status": "PASS",
+    "detail": "B pure UI verified draft",
+    "at": "2026-10-22T15:00:23.142041+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "PURE-A-INTERVENING-SAVE",
+    "status": "PASS",
+    "detail": "A intervening UI memo",
+    "at": "2026-10-22T15:00:40.260047+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "PURE-B-RECONFLICT",
+    "status": "PASS",
+    "detail": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+          "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+          "name": "SYNC11 A UI final verified",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "A intervening UI memo",
+          "startDate": "2026-10-22T14:45:16.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "a6124c4c-2028-4d90-bc07-cf5dfa7151d1",
+            "ownerId": "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+            "projectId": "04ad05ac-0236-4450-bfce-a4a6d2b0ddbd",
+            "name": "메인",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 7,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-22T14:45:16.321Z",
+            "updatedAt": "2026-10-22T15:00:31.875Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-22T14:45:16.316Z",
+          "updatedAt": "2026-10-22T15:00:31.865Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    },
+    "at": "2026-10-22T15:00:47.990728+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "PURE-B-RECOVERY",
+    "status": "PASS",
+    "detail": "B pure UI verified draft",
+    "at": "2026-10-22T15:01:03.362301+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "PURE-B-OTHER-FIELDS-PRESERVED",
+    "status": "PASS",
+    "detail": {
+      "name": "SYNC11 A UI final verified",
+      "isFavorite": false
+    },
+    "at": "2026-10-22T15:01:03.363542+00:00",
+    "suite": "SYNC11-PURE-UI"
+  },
+  {
+    "case": "UI03-SETTINGS",
+    "device": "A",
+    "at": "2026-10-24T07:31:40.074372+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "설정",
+        "설정",
+        "계정, 데이터, 작업 기록을 관리해요",
+        "SYNC11 QA",
+        "서버 계정 연결됨 · de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "학습 / 온보딩",
+        "스킬 테스트 다시 하기",
+        "신호등 상태 갱신",
+        "계정 / 프로필",
+        "계정 연동",
+        "로그인 / 회원가입",
+        "프로필 편집",
+        "표시 이름",
+        "통계",
+        "작업시간 통계",
+        "세션 / 프로젝트별",
+        "작업 세션 목록",
+        "메모 / 수정 / 삭제",
+        "데이터",
+        "데이터 백업",
+        "JSON 내보내기 / 가져오기",
+        "데이터 관리",
+        "저장 개수 확인",
+        "앱 정보",
+        "뜨개 상태 설명",
+        "CO / WIP / UFO / FO",
+        "앱 정보",
+        "버전 / 저장 구조"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-PROFILE",
+    "device": "A",
+    "at": "2026-10-24T07:31:48.252623+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "프로필 / 설정",
+        "프로필",
+        "앱 안에서 보일 이름을 설정해요.",
+        "표시 이름",
+        "9/80",
+        "계정 저장",
+        "서버 계정과 프로필 저장 상태를 확인해요.",
+        "사용자 ID",
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "상태",
+        "현재 계정에 저장되어 있어요.",
+        "수정일",
+        "Oct 22, 2026"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-Metric",
+    "device": "A",
+    "at": "2026-10-24T07:34:02.186465+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "Metric"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-Imperial",
+    "device": "A",
+    "at": "2026-10-24T07:36:22.844387+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "Imperial"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-US",
+    "device": "A",
+    "at": "2026-10-24T07:38:44.411096+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "US"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-cm",
+    "device": "A",
+    "at": "2026-10-24T07:42:36.298990+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "cm"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-SIGNUP",
+    "device": "A",
+    "at": "2026-10-24T07:43:30.990913+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "계정",
+        "뜨개더",
+        "뜨개를 기록하는 가장 쉬운 방법",
+        "0/256",
+        "0/80"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-0",
+    "device": "A",
+    "at": "2026-10-24T07:43:41.405177+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "KnitGether",
+        "프로젝트와 작업 기록을 준비합니다.",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-1",
+    "device": "A",
+    "at": "2026-10-24T07:43:44.414749+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "계정",
+        "계정 저장 연결",
+        "회원가입하거나 로그인하면 프로젝트, 창고, 스킬 상태를 내 계정에 저장할 수 있어요.",
+        "계정 만들기 / 로그인",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-2",
+    "device": "A",
+    "at": "2026-10-24T07:43:47.272976+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "프로필",
+        "앱에서 사용할 이름",
+        "이름",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-3",
+    "device": "A",
+    "at": "2026-10-24T07:43:50.287106+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "스킬 테스트",
+        "모름, 헷갈림, 앎을 신호등으로 표시",
+        "각 스킬을 얼마나 알고 있는지 표시하면 행안내, 뜨개니게이션, 애니메이션 목록에서 빨강/주황/초록 상태로 확인할 수 있어요.",
+        "스킬 이해도 몰라요",
+        "스킬 이해도 헷갈려요",
+        "스킬 이해도 잘 알아요",
+        "스킬 테스트 시작",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-4",
+    "device": "A",
+    "at": "2026-10-24T07:44:00.406439+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "뜨개러님",
+        "준비가 끝났어요.",
+        "시작"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-SETTINGS",
+    "device": "B",
+    "at": "2026-10-24T07:47:57.612995+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "설정",
+        "설정",
+        "계정, 데이터, 작업 기록을 관리해요",
+        "SYNC11 QA",
+        "서버 계정 연결됨 · de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "학습 / 온보딩",
+        "스킬 테스트 다시 하기",
+        "신호등 상태 갱신",
+        "계정 / 프로필",
+        "계정 연동",
+        "로그인 / 회원가입",
+        "프로필 편집",
+        "표시 이름",
+        "통계",
+        "작업시간 통계",
+        "세션 / 프로젝트별",
+        "작업 세션 목록",
+        "메모 / 수정 / 삭제",
+        "데이터",
+        "데이터 백업",
+        "JSON 내보내기 / 가져오기",
+        "데이터 관리",
+        "저장 개수 확인",
+        "앱 정보",
+        "뜨개 상태 설명",
+        "CO / WIP / UFO / FO",
+        "앱 정보",
+        "버전 / 저장 구조"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-PROFILE",
+    "device": "B",
+    "at": "2026-10-24T07:48:23.726425+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "프로필 / 설정",
+        "프로필",
+        "앱 안에서 보일 이름을 설정해요.",
+        "표시 이름",
+        "9/80",
+        "계정 저장",
+        "서버 계정과 프로필 저장 상태를 확인해요.",
+        "사용자 ID",
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "상태",
+        "현재 계정에 저장되어 있어요.",
+        "수정일",
+        "Oct 22, 2026"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-Metric",
+    "device": "B",
+    "at": "2026-10-24T07:50:07.262090+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "Metric"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-Imperial",
+    "device": "B",
+    "at": "2026-10-24T07:51:45.926051+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "Imperial"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-US",
+    "device": "B",
+    "at": "2026-10-24T07:53:06.559103+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "US"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-CM-cm",
+    "device": "B",
+    "at": "2026-10-24T07:54:22.098603+00:00",
+    "status": "PASS",
+    "detail": {
+      "dbProfile": [
+        "de7cdb19-ec23-4682-8ce8-0b83b8b56138",
+        "cm"
+      ],
+      "actualInputValues": {
+        "sample_width": "8",
+        "sample_height": "10",
+        "sample_stitches": "20",
+        "sample_rows": "30",
+        "target_width": "40",
+        "target_height": "55"
+      },
+      "input": {
+        "sampleCm": [
+          8,
+          10
+        ],
+        "counts": [
+          20,
+          30
+        ],
+        "targetCm": [
+          40,
+          55
+        ]
+      },
+      "texts": [
+        "게이지 계산기",
+        "프로젝트 연결",
+        "게이지 기록을 특정 프로젝트와 연결해 나중에 작업공간에서 확인해요.",
+        "연결 안 함",
+        "도안 연결",
+        "도안 창고에서 가져오거나 도안명을 직접 입력할 수 있어요.",
+        "수동 도안명",
+        "도안을 연결하지 않고 게이지를 저장할 수 있어요.",
+        "게이지 샘플",
+        "실제로 뜬 스와치의 크기와 코/단 수를 입력해요.",
+        "가로 길이(cm)",
+        "세로 길이(cm)",
+        "코 수",
+        "단 수",
+        "목표 크기",
+        "완성하고 싶은 크기를 입력하면 필요한 코/단 수를 계산해요.",
+        "목표 가로(cm)",
+        "목표 세로(cm)",
+        "기록",
+        "사용 바늘과 메모를 저장 기록에 함께 남겨요.",
+        "사용 바늘",
+        "메모",
+        "메모",
+        "계산 결과",
+        "입력값이 충분하면 10cm 기준 게이지와 필요한 코/단 수를 보여줘요.",
+        "10cm 기준 게이지",
+        "10cm 기준 코 수",
+        "25코",
+        "10cm 기준 단 수",
+        "30단",
+        "예상 필요 코/단 수",
+        "목표 가로에 필요한 코 수",
+        "약 100코",
+        "목표 세로에 필요한 단 수",
+        "약 165단",
+        "기록 저장",
+        "세탁 전/후 기록을 분리해서 저장하고 비교해요.",
+        "세탁 전 게이지 저장",
+        "세탁 후 게이지 저장",
+        "상세 측정",
+        "스와치별 측정 흐름을 관리하고 세탁 전/후 목표 게이지를 저장해요.",
+        "스와치 측정 관리",
+        "세탁 전 스와치 측정 저장",
+        "세탁 후 스와치 측정 저장"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-SIGNUP",
+    "device": "B",
+    "at": "2026-10-24T07:55:05.094573+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "계정",
+        "뜨개더",
+        "뜨개를 기록하는 가장 쉬운 방법",
+        "0/256",
+        "0/80"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-0",
+    "device": "B",
+    "at": "2026-10-24T07:55:13.793441+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "KnitGether",
+        "프로젝트와 작업 기록을 준비합니다.",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-1",
+    "device": "B",
+    "at": "2026-10-24T07:55:16.615875+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "계정",
+        "계정 저장 연결",
+        "회원가입하거나 로그인하면 프로젝트, 창고, 스킬 상태를 내 계정에 저장할 수 있어요.",
+        "계정 만들기 / 로그인",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-2",
+    "device": "B",
+    "at": "2026-10-24T07:55:18.783471+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "프로필",
+        "앱에서 사용할 이름",
+        "이름",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-3",
+    "device": "B",
+    "at": "2026-10-24T07:55:21.563783+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "스킬 테스트",
+        "모름, 헷갈림, 앎을 신호등으로 표시",
+        "각 스킬을 얼마나 알고 있는지 표시하면 행안내, 뜨개니게이션, 애니메이션 목록에서 빨강/주황/초록 상태로 확인할 수 있어요.",
+        "스킬 이해도 몰라요",
+        "스킬 이해도 헷갈려요",
+        "스킬 이해도 잘 알아요",
+        "스킬 테스트 시작",
+        "다음"
+      ]
+    },
+    "suite": "UI03"
+  },
+  {
+    "case": "UI03-ONBOARDING-4",
+    "device": "B",
+    "at": "2026-10-24T07:55:24.784457+00:00",
+    "status": "PASS",
+    "detail": {
+      "unexpected": [],
+      "texts": [
+        "뜨개러님",
+        "준비가 끝났어요.",
+        "시작"
+      ]
+    },
+    "suite": "UI03"
+  }
+]

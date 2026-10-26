@@ -1,0 +1,1 @@
+UUID: DB58E37B-5C89-3E64-948A-CADE9D39949C (arm64) /tmp/knitgether-qa-app-20261026/Build/Products/Debug-iphonesimulator/KnitGether.app/KnitGether.debug.dylib

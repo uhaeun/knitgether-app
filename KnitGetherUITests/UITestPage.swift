@@ -30,6 +30,13 @@ extension UITestPage {
             line: line
         )
 
+        // Password AutoFill can present its save prompt after authentication has
+        // already finished. Handle it before the hittability assertion; otherwise
+        // that assertion prevents XCTest's interruption monitor from getting a tap.
+        if !element.isHittable {
+            dismissSystemPasswordPromptIfNeeded()
+        }
+
         if !element.isHittable, app.keyboards.element.exists {
             dismissKeyboard()
             _ = app.keyboards.element.waitForNonExistence(timeout: 2)
@@ -39,6 +46,11 @@ extension UITestPage {
             for _ in 0..<8 where !element.isHittable {
                 scrollToward(element)
             }
+        }
+
+        // A delayed system prompt can also arrive during keyboard/scroll work.
+        if !element.isHittable {
+            dismissSystemPasswordPromptIfNeeded()
         }
 
         XCTAssertTrue(
@@ -184,31 +196,28 @@ extension UITestPage {
 
         let deadline = Date().addingTimeInterval(timeout)
         while Date() < deadline {
-            if let button = candidates.first(where: { $0.exists }) {
-                button.tap()
-                _ = button.waitForNonExistence(timeout: 2)
+            if let button = candidates.first(where: { $0.exists && $0.isHittable }) {
+                XCTContext.runActivity(named: "Dismiss system password save prompt") { activity in
+                    let before = XCTAttachment(screenshot: app.screenshot())
+                    before.name = "Password prompt before dismissal"
+                    before.lifetime = .keepAlways
+                    activity.add(before)
+                    button.tap()
+                    XCTAssertTrue(button.waitForNonExistence(timeout: 5),
+                                  "System password prompt must disappear before continuing")
+                    let after = XCTAttachment(screenshot: app.screenshot())
+                    after.name = "Password prompt after dismissal"
+                    after.lifetime = .keepAlways
+                    activity.add(after)
+                }
                 return
             }
 
             RunLoop.current.run(until: Date().addingTimeInterval(0.2))
         }
 
-        // Only fall back to a blind coordinate tap when a springboard modal is
-        // actually on screen. Otherwise the tap lands on the app underneath — the
-        // signed-in account screen puts its destructive "로그아웃" button right around
-        // (0.31, 0.74), so a stray tap silently signs the freshly-registered user out
-        // and breaks onboarding. (DEF-006)
-        guard springboard.alerts.firstMatch.exists || springboard.sheets.firstMatch.exists else {
-            return
-        }
-
-        springboard.coordinate(withNormalizedOffset: CGVector(dx: 0.31, dy: 0.74)).tap()
-        RunLoop.current.run(until: Date().addingTimeInterval(0.5))
-
-        if let button = candidates.first(where: { $0.exists }) {
-            button.tap()
-            _ = button.waitForNonExistence(timeout: 2)
-        }
+        // An unrelated system modal is not permission to tap a guessed coordinate.
+        // Leave unknown interruptions visible so the caller fails with evidence.
     }
 
     func expectText(

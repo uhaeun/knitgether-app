@@ -1,0 +1,152 @@
+[Nest] 61068  - 10/26/2026, 7:44:03 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 61068  - 10/26/2026, 7:44:03 PM     LOG [InstanceLoader] AppModule dependencies initialized +128ms
+[Nest] 61068  - 10/26/2026, 7:44:03 PM     LOG [InstanceLoader] DatabaseModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] ConfigHostModule dependencies initialized +1633ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] HealthModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] ConfigModule dependencies initialized +2ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] StorageModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] DictionaryModule dependencies initialized +6ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] GaugeRecordsModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] GaugeTargetsModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] ProfileModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] SkillsModule dependencies initialized +1ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] AuthModule dependencies initialized +3ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] LibraryModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] PatternsModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [InstanceLoader] ProjectsModule dependencies initialized +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RoutesResolver] AuthController {/api/v1/auth}: +14ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/auth/register, POST} route +5ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/auth/login, POST} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/auth/me, GET} route +19ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RoutesResolver] DictionaryController {/api/v1/dictionary-terms}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/dictionary-terms, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/dictionary-terms/:id, GET} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/dictionary-terms, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/dictionary-terms/:id, PATCH} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/dictionary-terms/:id, DELETE} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RoutesResolver] GaugeRecordsController {/api/v1/gauge-records}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:04 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-records, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-records, POST} route +5ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-records/:id, PATCH} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-records/:id, DELETE} route +9ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] GaugeTargetsController {/api/v1/gauge-targets}: +11ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-targets, GET} route +5ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-targets/:id, GET} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-targets, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-targets/:id, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/gauge-targets/:id, DELETE} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] HealthController {/api/v1/health}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/health, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] LibraryController {/api/v1/library}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:id/usages, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns, POST} route +7ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:id, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:id, DELETE} route +6ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles/:id, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles/:id, DELETE} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools, POST} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools/:id, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools/:id, DELETE} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/tools, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/tools/:toolId, POST} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/tools/:toolId, DELETE} route +17ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:id/photo, POST} route +3ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:id/photo, GET} route +37ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:id/photo, DELETE} route +3ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles/:id/photo, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles/:id/photo, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles/:id/photo, DELETE} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools/:id/photo, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools/:id/photo, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools/:id/photo, DELETE} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/yarns/:yarnId/linked-project-count, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/needles/:needleId/linked-project-count, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/tools/:toolId/linked-project-count, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/yarn-links, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/yarns/:yarnId, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/yarns/:yarnId, DELETE} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/needle-links, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/needles/:needleId, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/library/projects/:projectId/needles/:needleId, DELETE} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] ProfileController {/api/v1/profile}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/profile, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/profile, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] ProjectsController {/api/v1/projects}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/row-counter, PATCH} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/row-instructions, POST} route +109ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/row-instructions/:instructionId, PATCH} route +64ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/row-instructions/:instructionId, DELETE} route +72ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/work-sessions, GET} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/work-sessions, POST} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/work-sessions/:sessionId, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/work-sessions/:sessionId, DELETE} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/yarn-usages, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/yarn-usages, POST} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/yarn-usages/:usageId, PATCH} route +13ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/yarn-usages/:usageId, DELETE} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/progress-photos, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/progress-photos, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/progress-photos/:photoId, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/progress-photos/:photoId/file, GET} route +288ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/progress-photos/:photoId, DELETE} route +57ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/pattern-copy/file, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/pattern-copy/file, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/pattern-copy/drawing, POST} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/pattern-copy/drawing, GET} route +12ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id/pattern-copy/drawing, DELETE} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id, PATCH} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/projects/:id, DELETE} route +124ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] PatternsController {/api/v1/patterns}: +3ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns, GET} route +18ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns, POST} route +6ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns/:id, GET} route +2ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns/:id, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns/:id/file, POST} route +37ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns/:id/file, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/patterns/:id, DELETE} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RoutesResolver] SkillsController {/api/v1/skills}: +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/skills, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/skills/:id, GET} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/skills, POST} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/skills/:id/level, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:05 PM     LOG [RouterExplorer] Mapped {/api/v1/skills/:id, PATCH} route +0ms
+[Nest] 61068  - 10/26/2026, 7:44:06 PM     LOG [RouterExplorer] Mapped {/api/v1/skills/:id, DELETE} route +71ms
+[Nest] 61068  - 10/26/2026, 7:44:06 PM     LOG [RoutesResolver] SkillAnimationsController {/api/v1/skill-animations}: +0ms
+[Nest] 61068  - 10/26/2026, 7:44:06 PM     LOG [RouterExplorer] Mapped {/api/v1/skill-animations, GET} route +1ms
+[Nest] 61068  - 10/26/2026, 7:44:06 PM     LOG [NestApplication] Nest application successfully started +19ms
+[Nest] 61068  - 10/26/2026, 7:44:39 PM   ERROR [ExceptionsHandler] PrismaClientKnownRequestError: 
+Invalid `transaction.rowInstruction.createMany()` invocation in
+/private/tmp/knitgether-qa-latest-20261026/server/dist/projects/projects.service.js:1303:42
+
+  1300         message: 'Row instruction text is required.',
+  1301     });
+  1302 }
+→ 1303 await transaction.rowInstruction.createMany(
+Unique constraint failed on the fields: (`id`)
+    at ei.handleRequestError (/private/tmp/knitgether-qa-latest-20261026/server/node_modules/@prisma/client/runtime/library.js:121:7268)
+    at ei.handleAndLogRequestError (/private/tmp/knitgether-qa-latest-20261026/server/node_modules/@prisma/client/runtime/library.js:121:6593)
+    at ei.request (/private/tmp/knitgether-qa-latest-20261026/server/node_modules/@prisma/client/runtime/library.js:121:6300)
+    at async a (/private/tmp/knitgether-qa-latest-20261026/server/node_modules/@prisma/client/runtime/library.js:130:9551)
+    at async ProjectsService.saveRowInstructions (/private/tmp/knitgether-qa-latest-20261026/server/dist/projects/projects.service.js:1303:9)
+    at async ProjectsService.saveProjectChildren (/private/tmp/knitgether-qa-latest-20261026/server/dist/projects/projects.service.js:1234:9)
+    at async prisma.$transaction.isolationLevel (/private/tmp/knitgether-qa-latest-20261026/server/dist/projects/projects.service.js:238:13)
+    at async Proxy._transactionWithCallback (/private/tmp/knitgether-qa-latest-20261026/server/node_modules/@prisma/client/runtime/library.js:130:8120)
+    at async ProjectsService.withPatternFileCleanup (/private/tmp/knitgether-qa-latest-20261026/server/dist/projects/projects.service.js:80:22)
+    at async /private/tmp/knitgether-qa-latest-20261026/server/node_modules/@nestjs/core/router/router-execution-context.js:47:62 {
+  code: 'P2002',
+  meta: {
+    modelName: 'RowInstruction',
+    target: [
+      'id'
+    ]
+  },
+  clientVersion: '6.19.3'
+}
+[Nest] 61068  - 10/26/2026, 7:44:54 PM   ERROR [ProjectsService] Skipped project 02094a04-aa5c-4965-a866-d3d3fb94821e in list response: Project is missing its row counter.

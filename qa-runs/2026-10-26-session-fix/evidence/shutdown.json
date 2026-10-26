@@ -1,0 +1,44 @@
+{
+  "840CB58F-9AD8-4403-A8C3-3E2D5F93B0C5 sessionQuit": 200,
+  "311D4B83-D09B-4237-824C-ABCDD09264D1 sessionQuit": 200,
+  "3300": [
+    {
+      "pid": "69298",
+      "command": "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python qa-runs/2026-10-26-session-fix/proxy.py",
+      "signal": "SIGTERM"
+    }
+  ],
+  "3301": [
+    {
+      "pid": "69207",
+      "command": "node dist/main.js",
+      "signal": "SIGTERM"
+    }
+  ],
+  "14723": [
+    {
+      "pid": "69313",
+      "command": "node /opt/homebrew/bin/appium --port 14723 --address 127.0.0.1",
+      "signal": "SIGTERM"
+    }
+  ],
+  "840CB58F-9AD8-4403-A8C3-3E2D5F93B0C5 shutdown": {
+    "exit": 0,
+    "output": ""
+  },
+  "311D4B83-D09B-4237-824C-ABCDD09264D1 shutdown": {
+    "exit": 0,
+    "output": ""
+  },
+  "postgresShutdown": {
+    "exit": 0,
+    "output": "waiting for server to shut down.... done\nserver stopped\n"
+  },
+  "remainingListener3300": [],
+  "remainingListener3301": [],
+  "remainingListener14723": [],
+  "remainingListener18101": [],
+  "remainingListener18102": [],
+  "remainingListener3999": [],
+  "remainingListener55438": []
+}

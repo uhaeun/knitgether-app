@@ -10,12 +10,15 @@ struct MainTabBarPage: UITestPage {
 
     func expectVisible() {
         XCTAssertTrue(app.tabBars.buttons["내 뜨개"].waitForExistence(timeout: 12))
+        // AutoFill may wait until onboarding leaves the account screen to prompt.
+        dismissSystemPasswordPromptIfNeeded()
     }
 
     func openMyKnitting() -> MyKnittingPage {
         let page = MyKnittingPage(app: app)
 
         for _ in 0..<3 {
+            dismissSystemPasswordPromptIfNeeded(timeout: 1)
             if app.navigationBars["나의 뜨개"].exists || app.buttons["project.add"].exists {
                 return page
             }

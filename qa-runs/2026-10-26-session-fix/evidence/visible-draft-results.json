@@ -1,0 +1,20 @@
+[
+  {
+    "case": "VISIBLE-PROCESS-RESTORE",
+    "status": "PASS",
+    "draft": "Visible process lifetime draft",
+    "serverUnchanged": true
+  },
+  {
+    "case": "VISIBLE-DISCARD-REMOVED",
+    "status": "PASS",
+    "memo": "Draft saved explicitly",
+    "draftFileRemoved": true
+  },
+  {
+    "case": "VISIBLE-SAVE-REMOVED",
+    "status": "PASS",
+    "memo": "Visible draft explicitly saved",
+    "draftFileRemoved": true
+  }
+]

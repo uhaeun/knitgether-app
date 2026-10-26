@@ -7,6 +7,103 @@ import UIKit
 
 @MainActor
 struct ProjectWorkspaceViewModelTests {
+    @Test(arguments: [true, false])
+    func drawingSaveOnlyPersistsWholeProjectForLocalChanges(requiresProjectSave: Bool) async throws {
+        let project = Self.makeProject().copy(patternCopy: Self.makePatternCopy())
+        let repository = ProjectRepositorySpy(project: project)
+        if !requiresProjectSave {
+            repository.saveError = APIError.requestFailed(statusCode: 409, code: "PROJECT_CONFLICT", message: "No duplicate whole save")
+        }
+        let model = ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+            patternRepository: PatternRepositoryFake(requiresProjectSave: requiresProjectSave),
+            skillRepository: SkillRepositoryFake(), libraryRepository: LibraryRepositorySpy())
+        model.memoText = "Keep unsaved memo"
+        await model.saveDrawingData(Data("drawing bytes".utf8))
+        #expect(repository.savedProjects.count == (requiresProjectSave ? 1 : 0))
+        #expect(model.errorMessage == nil)
+        #expect(model.drawingData == Data("drawing bytes".utf8))
+        #expect(model.memoText == "Keep unsaved memo")
+    }
+
+    @Test(arguments: [true, false])
+    func drawingDeleteOnlyPersistsWholeProjectForLocalChanges(requiresProjectSave: Bool) async throws {
+        let project = Self.makeProject().copy(patternCopy: Self.makePatternCopy())
+        let repository = ProjectRepositorySpy(project: project)
+        if !requiresProjectSave {
+            repository.saveError = APIError.requestFailed(statusCode: 409, code: "PROJECT_CONFLICT", message: "No duplicate whole save")
+            repository.projects = [project.copy(patternCopy: project.patternCopy!.updatingDrawingDataPath(nil))]
+        }
+        let model = ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+            patternRepository: PatternRepositoryFake(requiresProjectSave: requiresProjectSave),
+            skillRepository: SkillRepositoryFake(), libraryRepository: LibraryRepositorySpy())
+        model.memoText = "Keep unsaved memo"
+        await model.clearDrawingData()
+        #expect(repository.savedProjects.count == (requiresProjectSave ? 1 : 0))
+        #expect(model.errorMessage == nil)
+        #expect(model.drawingData == nil)
+        #expect(model.memoText == "Keep unsaved memo")
+    }
+
+    @Test func memoDraftSurvivesRecreationAndSaveClearsIt() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        var project = Self.makeProject().copy(memo: "saved")
+        project.ownerId = "draft-owner"
+        let repository = ProjectRepositorySpy(project: project)
+        func model(_ project: KnittingProject) -> ProjectWorkspaceViewModel {
+            ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+                patternRepository: PatternRepositoryFake(), skillRepository: SkillRepositoryFake(),
+                libraryRepository: LibraryRepositorySpy(), memoDraftStore: ProjectMemoDraftStore(directory: directory))
+        }
+        let first = model(project)
+        first.memoText = "draft survives process store recreation"
+        let restored = model(project)
+        #expect(restored.memoText == first.memoText)
+        #expect(restored.project.memo == "saved")
+        await restored.saveMemo()
+        #expect(ProjectMemoDraftStore(directory: directory).text(ownerId: project.ownerId, projectId: project.id) == nil)
+    }
+
+    @Test func memoDraftIsAccountScopedAndExplicitDiscardRemovesIt() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = ProjectMemoDraftStore(directory: directory)
+        var project = Self.makeProject().copy(memo: "saved")
+        project.ownerId = "owner A"
+        try store.update("A draft", savedText: "saved", ownerId: project.ownerId, projectId: project.id)
+        #expect(store.text(ownerId: "owner B", projectId: project.id) == nil)
+        #expect(store.text(ownerId: nil, projectId: project.id) == nil)
+        #expect(store.text(ownerId: project.ownerId, projectId: UUID()) == nil)
+        let model = ProjectWorkspaceViewModel(project: project, projectRepository: ProjectRepositorySpy(project: project),
+            patternRepository: PatternRepositoryFake(), skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(), memoDraftStore: store)
+        #expect(model.memoText == "A draft")
+        model.discardMemoDraft()
+        #expect(model.memoText == "saved")
+        #expect(store.text(ownerId: project.ownerId, projectId: project.id) == nil)
+    }
+
+    @Test func conflictAndRefreshRetainPersistentDraftAndDeleteRemovesIt() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = ProjectMemoDraftStore(directory: directory)
+        var project = Self.makeProject().copy(memo: "saved")
+        project.ownerId = "draft-owner"
+        let repository = ProjectRepositorySpy(project: project)
+        repository.projects = [project.copy(memo: "remote change")]
+        repository.saveError = APIError.requestFailed(statusCode: 409, code: "PROJECT_CONFLICT", message: "conflict")
+        let model = ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+            patternRepository: PatternRepositoryFake(), skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy(), memoDraftStore: store)
+        model.memoText = "keep draft"
+        await model.saveMemo()
+        #expect(store.text(ownerId: project.ownerId, projectId: project.id) == "keep draft")
+        await model.retrySync()
+        #expect(model.memoText == "keep draft")
+        #expect(await model.deleteProject())
+        #expect(store.text(ownerId: project.ownerId, projectId: project.id) == nil)
+    }
+
     /// DEF-24. 저장 충돌이 나면 사용자가 친 메모가 화면에서 사라지면서
     /// "다시 시도해 주세요"라고 안내했다. 다시 시도할 재료를 그 복구가 지운 것이다.
     ///
@@ -1809,6 +1906,15 @@ struct ProjectWorkspaceViewModelTests {
 
     struct PatternRepositoryFake: PatternRepository {
         var patternCopyFileURLs: [UUID: URL] = [:]
+        var requiresProjectSave = true
+
+        func saveDrawingChange(_ data: Data, for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+            ProjectDrawingChange(patternCopy: try await saveDrawingData(data, for: patternCopy), requiresProjectSave: requiresProjectSave)
+        }
+
+        func deleteDrawingChange(for patternCopy: ProjectPatternCopy) async throws -> ProjectDrawingChange {
+            ProjectDrawingChange(patternCopy: try await deleteDrawingData(for: patternCopy), requiresProjectSave: requiresProjectSave)
+        }
 
         func fetchPatterns() async throws -> [PatternDocument] {
             []

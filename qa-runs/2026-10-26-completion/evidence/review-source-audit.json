@@ -1,0 +1,112 @@
+{
+  "reviewBase": "6df5c4ef9473ac97437e3022a602eddd9ce92bbe",
+  "implementationCommit": "c4e928255676f9795b051bd72c68d2ce3676a093",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8b6a81b6e95f8554f9c75c5a40db8f0973563bcc0e639d404a475329a268925d",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Local/LocalSampleRepositories.swift",
+      "sha256": "aceea9f49a621f61f5d654421a6024f4853ef8e5a011f0d06c637d8614ddf67c",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/OfflineFirstPatternRepository.swift",
+      "sha256": "c4efd42e5b9ba261add9c072154a797ccc076bc119a5571af99df08dddac283b",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Protocols/PatternRepository.swift",
+      "sha256": "92969f57fb70a1ffaf188b4fa9533c84de2b41d4a2a7d120c6ddb4d2634f639d",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemotePatternRepository.swift",
+      "sha256": "9bea25f24514767bbe7562df8d0f01f475262e1154c81e52b12b5bffdcd1501a",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Repositories/Remote/RemoteProjectRepository.swift",
+      "sha256": "9ab9da631b9807e8c1c37467a9e69b247b86ea517041f8f6e6e2a3de4ea6c8b2",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/MyKnittingViewModel.swift",
+      "sha256": "e2a745b7b1c39ec65534a2b1c2cf9beded9a4f1d2b3690254f3887b1bc1e98c8",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/ProjectMemoDraftStore.swift",
+      "sha256": "4bf951b743940eedf69a4b4a30317d6fdcad85f319fee4d50f60cc6818dd03b7",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/ViewModels/ProjectWorkspaceViewModel.swift",
+      "sha256": "2744b86b379d227f3b229ee5c058581533a71adb10a25fb310d20a0c05720d0f",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/ProjectWorkspaceView.swift",
+      "sha256": "461839261cde399136672c2ae12a12c4adf45038fe5b6db08406baad95850f82",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGether/Views/MyKnitting/Workspace/ProjectMemoPanelView.swift",
+      "sha256": "f6c1e53ff54fbd36e52070643118adfe977cb268477570a61acf983c7a481a66",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGetherTests/MyKnittingViewModelTests.swift",
+      "sha256": "2d07ff2f928dfc517cc6329060d2f9e9b82dcb4dd13462f797a6590ea64014f7",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGetherTests/OfflineFirstPatternRepositoryTests.swift",
+      "sha256": "19a77be922259edc90b387b961d414f8118855966d99ebaf8ec2d32d465d5a14",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGetherTests/ProjectWorkspaceViewModelTests.swift",
+      "sha256": "5aaf56ba212b9995b27060ff0bd32b2f17db2cf39a1fe5ec337cf30547b889a5",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemotePatternRepositoryTests.swift",
+      "sha256": "5d734c52cc4152a5b2fec4b7eea9fa907db271ac27c5151ab66cc3c4025be6f8",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "KnitGetherTests/RemoteProjectRepositoryTests.swift",
+      "sha256": "e91bb4fc890396ce2fd961411e29a5641c980d13ae1f6b898c82688ce4dda0a0",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "server/src/projects/project-save.dto.ts",
+      "sha256": "52a41690d5e13440c42c0fe7a54b300c462f50bedbd4d88023458d06df3fac96",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "server/src/projects/projects.service.ts",
+      "sha256": "119290eb34e279a4dfec2c14829d9aee5720946f4a662cc20e13e957d1e6b457",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "server/src/storage/local-file-storage.service.ts",
+      "sha256": "81dc865dff2ee5c26efa65584ba848021a4576e3863f38374294a0092d2e15c6",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "server/test/projects-concurrency.real-db-spec.ts",
+      "sha256": "c55b65fab51dfc00bd3977c71e44c12ee9785e184f6882d13ad363d0a782c6ae",
+      "buildSourceMatches": true
+    },
+    {
+      "path": "server/test/projects.e2e-spec.ts",
+      "sha256": "0ad2238b7a1c84bfd0a5a17393dbf68a16f317eaf59fae06f44d325ae59757e4",
+      "buildSourceMatches": true
+    }
+  ],
+  "regressionCommit": "38b903ca50b855cf45ee7f5b7272b80dba98f40b"
+}

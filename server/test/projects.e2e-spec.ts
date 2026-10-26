@@ -20,6 +20,7 @@ type MockPrismaService = {
     count: jest.Mock;
     create: jest.Mock;
     update: jest.Mock;
+    updateMany: jest.Mock;
   };
   rowCounter: {
     findFirst: jest.Mock;
@@ -358,6 +359,7 @@ describe('Projects route', () => {
         count: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
+        updateMany: jest.fn(),
       },
       rowCounter: {
         findFirst: jest.fn(),
@@ -433,6 +435,7 @@ describe('Projects route', () => {
     prisma.project.count.mockReset();
     prisma.project.create.mockReset();
     prisma.project.update.mockReset();
+    prisma.project.updateMany.mockReset();
     prisma.rowCounter.findFirst.mockReset();
     prisma.rowCounter.update.mockReset();
     prisma.rowCounter.upsert.mockReset();
@@ -494,6 +497,7 @@ describe('Projects route', () => {
     prisma.project.count.mockResolvedValue(1);
     prisma.project.create.mockResolvedValue(userAProject);
     prisma.project.update.mockResolvedValue(userAProject);
+    prisma.project.updateMany.mockResolvedValue({ count: 1 });
     prisma.rowCounter.findFirst.mockResolvedValue(userAProject.rowCounter);
     prisma.rowCounter.update.mockResolvedValue({
       ...userAProject.rowCounter,
@@ -891,6 +895,7 @@ describe('Projects route', () => {
     expect(prisma.rowInstruction.upsert).toHaveBeenCalledWith({
       where: {
         id: '88888888-8888-4888-8888-888888888888',
+        ownerId: 'user-a', projectId: userAProject.id,
       },
       create: {
         id: '88888888-8888-4888-8888-888888888888',
@@ -1348,6 +1353,7 @@ describe('Projects route', () => {
       fileContentType: null,
       fileByteSize: null,
     };
+    prisma.project.findFirst.mockResolvedValueOnce(userAProject);
     prisma.project.findFirst.mockResolvedValueOnce({
       ...userAProject,
       patternCopy: directPatternCopyWithoutFile,
@@ -1417,6 +1423,7 @@ describe('Projects route', () => {
   });
 
   it('uploads drawing data for the active project pattern copy', async () => {
+    prisma.project.findFirst.mockResolvedValueOnce(userAProject);
     prisma.project.findFirst.mockResolvedValueOnce(userAProjectWithPatternCopy);
     prisma.projectPatternCopy.update.mockResolvedValueOnce(projectPatternCopyWithDrawing);
 
@@ -1435,7 +1442,7 @@ describe('Projects route', () => {
       },
       data: expect.objectContaining({
         drawingStorageKey:
-          'projects/user-a/11111111-1111-4111-8111-111111111111/pattern-copies/66666666-6666-4666-8666-666666666666/drawing.pkdrawing',
+          expect.stringMatching(/pattern-copies\/66666666-6666-4666-8666-666666666666\/[0-9a-f-]+\.pkdrawing$/),
         drawingContentType: 'application/octet-stream',
         drawingByteSize: 9,
         drawingUpdatedAt: expect.any(Date),
@@ -1444,12 +1451,8 @@ describe('Projects route', () => {
     });
     expect(response.body.drawingUpdatedAt).toBe('2026-07-05T13:00:00.000Z');
 
-    const storedDrawing = await fs.readFile(
-      join(
-        storageRoot,
-        'projects/user-a/11111111-1111-4111-8111-111111111111/pattern-copies/66666666-6666-4666-8666-666666666666/drawing.pkdrawing',
-      ),
-    );
+    const storedDrawing = await fs.readFile(join(storageRoot,
+      prisma.projectPatternCopy.update.mock.calls[0][0].data.drawingStorageKey));
     expect(storedDrawing).toEqual(Buffer.from('PKDRAWING'));
   });
 
@@ -1538,7 +1541,7 @@ describe('Projects route', () => {
     expect(prisma.workSession.createMany).not.toHaveBeenCalled();
     expect(prisma.workSession.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: saveProjectBody.workSessions[0].id },
+        where: { id: saveProjectBody.workSessions[0].id, ownerId: 'user-a', projectId: saveProjectBody.id },
         create: expect.objectContaining({
           id: saveProjectBody.workSessions[0].id,
           ownerId: 'user-a',
@@ -1660,9 +1663,9 @@ describe('Projects route', () => {
       },
       include: expect.any(Object),
     });
-    expect(prisma.project.update).toHaveBeenCalledWith(
+    expect(prisma.project.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: saveProjectBody.id },
+        where: { id: saveProjectBody.id, ownerId: 'user-a', deletedAt: null, updatedAt: userAProject.updatedAt },
         data: expect.objectContaining({
           ownerId: 'user-a',
           name: saveProjectBody.name,
@@ -1671,7 +1674,6 @@ describe('Projects route', () => {
           targetDate: new Date(saveProjectBody.targetDate),
           finishedAt: null,
         }),
-        include: expect.any(Object),
       }),
     );
     expect(response.body.name).toBe(saveProjectBody.name);
@@ -1695,9 +1697,9 @@ describe('Projects route', () => {
       })
       .expect(200);
 
-    expect(prisma.project.update).toHaveBeenCalledWith(
+    expect(prisma.project.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: saveProjectBody.id },
+        where: { id: saveProjectBody.id, ownerId: 'user-a', deletedAt: null, updatedAt: userAProject.updatedAt },
         data: expect.objectContaining({
           name: 'Favorite Cardigan Offline',
         }),
@@ -1981,7 +1983,7 @@ describe('Projects route', () => {
         expect(body.details.latest.updatedAt).toBe('2026-07-03T09:00:00.000Z');
       });
 
-    expect(prisma.project.update).not.toHaveBeenCalled();
+    expect(prisma.project.updateMany).not.toHaveBeenCalled();
     expect(prisma.project.create).not.toHaveBeenCalled();
   });
 
@@ -1997,7 +1999,7 @@ describe('Projects route', () => {
       })
       .expect(200);
 
-    expect(prisma.project.update).toHaveBeenCalled();
+    expect(prisma.project.updateMany).toHaveBeenCalled();
   });
 
   // 저장된 updatedAt은 밀리초를 가지는데(Prisma DateTime은 timestamp(3)),
@@ -2023,7 +2025,7 @@ describe('Projects route', () => {
         expect(body.details.latest.updatedAt).toBe('2026-07-03T09:00:00.123Z');
       });
 
-    expect(prisma.project.update).not.toHaveBeenCalled();
+    expect(prisma.project.updateMany).not.toHaveBeenCalled();
     expect(prisma.project.create).not.toHaveBeenCalled();
   });
 
@@ -2042,7 +2044,7 @@ describe('Projects route', () => {
       })
       .expect(200);
 
-    expect(prisma.project.update).toHaveBeenCalled();
+    expect(prisma.project.updateMany).toHaveBeenCalled();
   });
 
   it('rejects a stale patch when baseUpdatedAt is older than the stored project', async () => {
@@ -2059,7 +2061,7 @@ describe('Projects route', () => {
         expect(body.details.latest.id).toBe(userAProject.id);
       });
 
-    expect(prisma.project.update).not.toHaveBeenCalled();
+    expect(prisma.project.updateMany).not.toHaveBeenCalled();
   });
 
   function expectedProjectYarnUsageResponse() {

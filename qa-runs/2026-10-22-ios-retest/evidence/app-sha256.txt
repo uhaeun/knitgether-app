@@ -1,0 +1,1 @@
+cb56596f45441f03fe696088e87ca7243fe56ac25f1a79ae1fce68d55ef13c75  /tmp/knitgether-qa-20261022/KnitGether.app/KnitGether.debug.dylib

@@ -1,0 +1,2441 @@
+[
+  {
+    "isolation": [
+      {
+        "transaction_isolation": "read committed"
+      }
+    ]
+  },
+  {
+    "trial": 0,
+    "reads": [
+      "2026-10-24T08:42:32.713Z",
+      "2026-10-24T08:42:32.713Z"
+    ],
+    "requests": [
+      {
+        "id": "e52009f8-7281-495c-9c6f-385d16796524",
+        "name": "A",
+        "memo": "A",
+        "status": "WIP",
+        "isFavorite": true,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "name": "Main",
+          "currentRow": 11,
+          "rowInstructions": [
+            {
+              "id": "0d35efd6-81ed-4d88-bf93-153255ccac51",
+              "rowCounterId": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+              "rowNumber": 1,
+              "instructionText": "A",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "d5e42787-f3a0-45cd-b65f-fa034b9d53f1",
+            "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "A"
+          }
+        ],
+        "patternCopy": {
+          "id": "400a3211-3a71-46f4-b83a-207be8604baa",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "A",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:33.116Z"
+      },
+      {
+        "id": "e52009f8-7281-495c-9c6f-385d16796524",
+        "name": "B",
+        "memo": "B",
+        "status": "WIP",
+        "isFavorite": false,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "name": "Main",
+          "currentRow": 22,
+          "rowInstructions": [
+            {
+              "id": "7d716e6a-abea-458d-838b-6a0e3a0d7650",
+              "rowCounterId": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+              "rowNumber": 1,
+              "instructionText": "B",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "be2c3270-1437-406f-a15a-52fd2e927416",
+            "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "B"
+          }
+        ],
+        "patternCopy": {
+          "id": "654fd637-e89f-417f-8de6-05c5e4cc60fd",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "B",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:32.713Z"
+      }
+    ],
+    "responses": [
+      {
+        "status": 409,
+        "body": {
+          "code": "PROJECT_CONFLICT",
+          "message": "Project was modified after the provided base version.",
+          "details": {
+            "latest": {
+              "id": "e52009f8-7281-495c-9c6f-385d16796524",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "name": "B",
+              "status": "WIP",
+              "isFavorite": false,
+              "memo": "B",
+              "startDate": "2026-10-24T00:00:00.000Z",
+              "targetDate": null,
+              "finishedAt": null,
+              "lastWorkedAt": null,
+              "yarnId": null,
+              "yarnNameSnapshot": null,
+              "yarnBrandSnapshot": null,
+              "yarnColorwaySnapshot": null,
+              "yarnWeightSnapshot": null,
+              "needleId": null,
+              "needleNameSnapshot": null,
+              "needleTypeSnapshot": null,
+              "needleSizeSnapshot": null,
+              "needleLengthSnapshot": null,
+              "patternCopy": {
+                "id": "654fd637-e89f-417f-8de6-05c5e4cc60fd",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+                "sourcePatternDocumentId": null,
+                "titleSnapshot": "B",
+                "designerSnapshot": null,
+                "fileNameSnapshot": null,
+                "localCopyPath": null,
+                "pageCountSnapshot": null,
+                "drawingDataPath": null,
+                "drawingUpdatedAt": null,
+                "copiedAt": "2026-10-24T00:00:00.000Z",
+                "createdAt": "2026-10-24T08:42:33.178Z",
+                "updatedAt": "2026-10-24T08:42:33.178Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workspaceDisplayMode": null,
+              "workspaceSheetPosition": null,
+              "rowCounter": {
+                "id": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+                "name": "Main",
+                "mode": "simple",
+                "sectionName": null,
+                "memo": null,
+                "currentRow": 22,
+                "targetRow": null,
+                "rowInstructions": [
+                  {
+                    "id": "7d716e6a-abea-458d-838b-6a0e3a0d7650",
+                    "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                    "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+                    "rowCounterId": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+                    "rowNumber": 1,
+                    "instructionText": "B",
+                    "skillTags": "",
+                    "createdAt": "2026-10-24T08:42:33.152Z",
+                    "updatedAt": "2026-10-24T08:42:33.152Z",
+                    "deletedAt": null,
+                    "syncStatus": "Synced"
+                  }
+                ],
+                "createdAt": "2026-10-24T08:42:32.756Z",
+                "updatedAt": "2026-10-24T08:42:33.138Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workSessions": [
+                {
+                  "id": "be2c3270-1437-406f-a15a-52fd2e927416",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+                  "startedAt": "2026-10-24T00:00:00.000Z",
+                  "endedAt": "2026-10-24T00:01:00.000Z",
+                  "memo": "B",
+                  "createdAt": "2026-10-24T08:42:33.161Z",
+                  "updatedAt": "2026-10-24T08:42:33.161Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                },
+                {
+                  "id": "9d36f675-57cb-4cf0-9768-1e29ebeb7e23",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+                  "startedAt": "2026-10-24T00:02:00.000Z",
+                  "endedAt": null,
+                  "memo": "untouched",
+                  "createdAt": "2026-10-24T08:42:32.908Z",
+                  "updatedAt": "2026-10-24T08:42:32.908Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                }
+              ],
+              "relatedSkillIds": [],
+              "createdAt": "2026-10-24T08:42:32.713Z",
+              "updatedAt": "2026-10-24T08:42:33.116Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          }
+        }
+      },
+      {
+        "status": 200,
+        "body": {
+          "id": "e52009f8-7281-495c-9c6f-385d16796524",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "name": "B",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "B",
+          "startDate": "2026-10-24T00:00:00.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": {
+            "id": "654fd637-e89f-417f-8de6-05c5e4cc60fd",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+            "sourcePatternDocumentId": null,
+            "titleSnapshot": "B",
+            "designerSnapshot": null,
+            "fileNameSnapshot": null,
+            "localCopyPath": null,
+            "pageCountSnapshot": null,
+            "drawingDataPath": null,
+            "drawingUpdatedAt": null,
+            "copiedAt": "2026-10-24T00:00:00.000Z",
+            "createdAt": "2026-10-24T08:42:33.178Z",
+            "updatedAt": "2026-10-24T08:42:33.178Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+            "name": "Main",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 22,
+            "targetRow": null,
+            "rowInstructions": [
+              {
+                "id": "7d716e6a-abea-458d-838b-6a0e3a0d7650",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+                "rowCounterId": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+                "rowNumber": 1,
+                "instructionText": "B",
+                "skillTags": "",
+                "createdAt": "2026-10-24T08:42:33.152Z",
+                "updatedAt": "2026-10-24T08:42:33.152Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              }
+            ],
+            "createdAt": "2026-10-24T08:42:32.756Z",
+            "updatedAt": "2026-10-24T08:42:33.138Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [
+            {
+              "id": "be2c3270-1437-406f-a15a-52fd2e927416",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+              "startedAt": "2026-10-24T00:00:00.000Z",
+              "endedAt": "2026-10-24T00:01:00.000Z",
+              "memo": "B",
+              "createdAt": "2026-10-24T08:42:33.161Z",
+              "updatedAt": "2026-10-24T08:42:33.161Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            },
+            {
+              "id": "9d36f675-57cb-4cf0-9768-1e29ebeb7e23",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+              "startedAt": "2026-10-24T00:02:00.000Z",
+              "endedAt": null,
+              "memo": "untouched",
+              "createdAt": "2026-10-24T08:42:32.908Z",
+              "updatedAt": "2026-10-24T08:42:32.908Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          ],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:42:32.713Z",
+          "updatedAt": "2026-10-24T08:42:33.116Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    ],
+    "stored": {
+      "id": "e52009f8-7281-495c-9c6f-385d16796524",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "B",
+      "status": "WIP",
+      "isFavorite": false,
+      "memo": "B",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:32.713Z",
+      "updatedAt": "2026-10-24T08:42:33.116Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 22,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:32.756Z",
+        "updatedAt": "2026-10-24T08:42:33.138Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "7d716e6a-abea-458d-838b-6a0e3a0d7650",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "rowCounterId": "559ccbd1-0eb5-4d01-acf8-3c21d3818d86",
+          "rowNumber": 1,
+          "instructionText": "B",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:33.152Z",
+          "updatedAt": "2026-10-24T08:42:33.152Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [
+        {
+          "id": "9d36f675-57cb-4cf0-9768-1e29ebeb7e23",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "startedAt": "2026-10-24T00:02:00.000Z",
+          "endedAt": null,
+          "memo": "untouched",
+          "createdAt": "2026-10-24T08:42:32.908Z",
+          "updatedAt": "2026-10-24T08:42:32.908Z",
+          "deletedAt": null
+        },
+        {
+          "id": "be2c3270-1437-406f-a15a-52fd2e927416",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+          "startedAt": "2026-10-24T00:00:00.000Z",
+          "endedAt": "2026-10-24T00:01:00.000Z",
+          "memo": "B",
+          "createdAt": "2026-10-24T08:42:33.161Z",
+          "updatedAt": "2026-10-24T08:42:33.161Z",
+          "deletedAt": null
+        }
+      ],
+      "patternCopy": {
+        "id": "654fd637-e89f-417f-8de6-05c5e4cc60fd",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "e52009f8-7281-495c-9c6f-385d16796524",
+        "sourcePatternDocumentId": null,
+        "titleSnapshot": "B",
+        "designerSnapshot": null,
+        "fileNameSnapshot": null,
+        "pageCountSnapshot": null,
+        "fileStorageKey": null,
+        "fileContentType": null,
+        "fileByteSize": null,
+        "drawingUpdatedAt": null,
+        "drawingStorageKey": null,
+        "drawingContentType": null,
+        "drawingByteSize": null,
+        "copiedAt": "2026-10-24T00:00:00.000Z",
+        "createdAt": "2026-10-24T08:42:33.178Z",
+        "updatedAt": "2026-10-24T08:42:33.178Z",
+        "deletedAt": null
+      }
+    }
+  },
+  {
+    "trial": 1,
+    "reads": [
+      "2026-10-24T08:42:34.177Z",
+      "2026-10-24T08:42:34.177Z"
+    ],
+    "requests": [
+      {
+        "id": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+        "name": "A",
+        "memo": "A",
+        "status": "WIP",
+        "isFavorite": true,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "name": "Main",
+          "currentRow": 11,
+          "rowInstructions": [
+            {
+              "id": "a9acda06-e74e-44b6-b5f8-343701e4ef1a",
+              "rowCounterId": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+              "rowNumber": 1,
+              "instructionText": "A",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "44451d9d-366c-40ec-9faf-a358d8647180",
+            "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "A"
+          }
+        ],
+        "patternCopy": {
+          "id": "534a3d05-1b28-49fc-a5df-00adf3e5e30d",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "A",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:34.177Z"
+      },
+      {
+        "id": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+        "name": "B",
+        "memo": "B",
+        "status": "WIP",
+        "isFavorite": false,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "name": "Main",
+          "currentRow": 22,
+          "rowInstructions": [
+            {
+              "id": "a5be0e10-8384-454a-8bc5-9c807c57fe24",
+              "rowCounterId": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+              "rowNumber": 1,
+              "instructionText": "B",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "f079425f-c6c3-4e9d-8bcc-7f02d681a5f9",
+            "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "B"
+          }
+        ],
+        "patternCopy": {
+          "id": "d1ed0fb2-b60a-49ba-871f-4c208fbc312c",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "B",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:34.525Z"
+      }
+    ],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "id": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "name": "A",
+          "status": "WIP",
+          "isFavorite": true,
+          "memo": "A",
+          "startDate": "2026-10-24T00:00:00.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": {
+            "id": "534a3d05-1b28-49fc-a5df-00adf3e5e30d",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+            "sourcePatternDocumentId": null,
+            "titleSnapshot": "A",
+            "designerSnapshot": null,
+            "fileNameSnapshot": null,
+            "localCopyPath": null,
+            "pageCountSnapshot": null,
+            "drawingDataPath": null,
+            "drawingUpdatedAt": null,
+            "copiedAt": "2026-10-24T00:00:00.000Z",
+            "createdAt": "2026-10-24T08:42:34.638Z",
+            "updatedAt": "2026-10-24T08:42:34.638Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+            "name": "Main",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 11,
+            "targetRow": null,
+            "rowInstructions": [
+              {
+                "id": "a9acda06-e74e-44b6-b5f8-343701e4ef1a",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+                "rowCounterId": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+                "rowNumber": 1,
+                "instructionText": "A",
+                "skillTags": "",
+                "createdAt": "2026-10-24T08:42:34.599Z",
+                "updatedAt": "2026-10-24T08:42:34.599Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              }
+            ],
+            "createdAt": "2026-10-24T08:42:34.204Z",
+            "updatedAt": "2026-10-24T08:42:34.552Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [
+            {
+              "id": "44451d9d-366c-40ec-9faf-a358d8647180",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+              "startedAt": "2026-10-24T00:00:00.000Z",
+              "endedAt": "2026-10-24T00:01:00.000Z",
+              "memo": "A",
+              "createdAt": "2026-10-24T08:42:34.606Z",
+              "updatedAt": "2026-10-24T08:42:34.606Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            },
+            {
+              "id": "1f93e678-ad27-4a5d-90f9-b43b1a8f65e7",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+              "startedAt": "2026-10-24T00:02:00.000Z",
+              "endedAt": null,
+              "memo": "untouched",
+              "createdAt": "2026-10-24T08:42:34.263Z",
+              "updatedAt": "2026-10-24T08:42:34.263Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          ],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:42:34.177Z",
+          "updatedAt": "2026-10-24T08:42:34.525Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      },
+      {
+        "status": 409,
+        "body": {
+          "code": "PROJECT_CONFLICT",
+          "message": "Project was modified after the provided base version.",
+          "details": {
+            "latest": {
+              "id": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "name": "A",
+              "status": "WIP",
+              "isFavorite": true,
+              "memo": "A",
+              "startDate": "2026-10-24T00:00:00.000Z",
+              "targetDate": null,
+              "finishedAt": null,
+              "lastWorkedAt": null,
+              "yarnId": null,
+              "yarnNameSnapshot": null,
+              "yarnBrandSnapshot": null,
+              "yarnColorwaySnapshot": null,
+              "yarnWeightSnapshot": null,
+              "needleId": null,
+              "needleNameSnapshot": null,
+              "needleTypeSnapshot": null,
+              "needleSizeSnapshot": null,
+              "needleLengthSnapshot": null,
+              "patternCopy": {
+                "id": "534a3d05-1b28-49fc-a5df-00adf3e5e30d",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+                "sourcePatternDocumentId": null,
+                "titleSnapshot": "A",
+                "designerSnapshot": null,
+                "fileNameSnapshot": null,
+                "localCopyPath": null,
+                "pageCountSnapshot": null,
+                "drawingDataPath": null,
+                "drawingUpdatedAt": null,
+                "copiedAt": "2026-10-24T00:00:00.000Z",
+                "createdAt": "2026-10-24T08:42:34.638Z",
+                "updatedAt": "2026-10-24T08:42:34.638Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workspaceDisplayMode": null,
+              "workspaceSheetPosition": null,
+              "rowCounter": {
+                "id": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+                "name": "Main",
+                "mode": "simple",
+                "sectionName": null,
+                "memo": null,
+                "currentRow": 11,
+                "targetRow": null,
+                "rowInstructions": [
+                  {
+                    "id": "a9acda06-e74e-44b6-b5f8-343701e4ef1a",
+                    "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                    "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+                    "rowCounterId": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+                    "rowNumber": 1,
+                    "instructionText": "A",
+                    "skillTags": "",
+                    "createdAt": "2026-10-24T08:42:34.599Z",
+                    "updatedAt": "2026-10-24T08:42:34.599Z",
+                    "deletedAt": null,
+                    "syncStatus": "Synced"
+                  }
+                ],
+                "createdAt": "2026-10-24T08:42:34.204Z",
+                "updatedAt": "2026-10-24T08:42:34.552Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workSessions": [
+                {
+                  "id": "44451d9d-366c-40ec-9faf-a358d8647180",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+                  "startedAt": "2026-10-24T00:00:00.000Z",
+                  "endedAt": "2026-10-24T00:01:00.000Z",
+                  "memo": "A",
+                  "createdAt": "2026-10-24T08:42:34.606Z",
+                  "updatedAt": "2026-10-24T08:42:34.606Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                },
+                {
+                  "id": "1f93e678-ad27-4a5d-90f9-b43b1a8f65e7",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+                  "startedAt": "2026-10-24T00:02:00.000Z",
+                  "endedAt": null,
+                  "memo": "untouched",
+                  "createdAt": "2026-10-24T08:42:34.263Z",
+                  "updatedAt": "2026-10-24T08:42:34.263Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                }
+              ],
+              "relatedSkillIds": [],
+              "createdAt": "2026-10-24T08:42:34.177Z",
+              "updatedAt": "2026-10-24T08:42:34.525Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          }
+        }
+      }
+    ],
+    "stored": {
+      "id": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "A",
+      "status": "WIP",
+      "isFavorite": true,
+      "memo": "A",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:34.177Z",
+      "updatedAt": "2026-10-24T08:42:34.525Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 11,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:34.204Z",
+        "updatedAt": "2026-10-24T08:42:34.552Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "a9acda06-e74e-44b6-b5f8-343701e4ef1a",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "rowCounterId": "86199940-ac4c-495c-b6dc-2cc65e7093ad",
+          "rowNumber": 1,
+          "instructionText": "A",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:34.599Z",
+          "updatedAt": "2026-10-24T08:42:34.599Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [
+        {
+          "id": "1f93e678-ad27-4a5d-90f9-b43b1a8f65e7",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "startedAt": "2026-10-24T00:02:00.000Z",
+          "endedAt": null,
+          "memo": "untouched",
+          "createdAt": "2026-10-24T08:42:34.263Z",
+          "updatedAt": "2026-10-24T08:42:34.263Z",
+          "deletedAt": null
+        },
+        {
+          "id": "44451d9d-366c-40ec-9faf-a358d8647180",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+          "startedAt": "2026-10-24T00:00:00.000Z",
+          "endedAt": "2026-10-24T00:01:00.000Z",
+          "memo": "A",
+          "createdAt": "2026-10-24T08:42:34.606Z",
+          "updatedAt": "2026-10-24T08:42:34.606Z",
+          "deletedAt": null
+        }
+      ],
+      "patternCopy": {
+        "id": "534a3d05-1b28-49fc-a5df-00adf3e5e30d",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "222331a9-56a9-4cfc-a3ac-0e01f650be6c",
+        "sourcePatternDocumentId": null,
+        "titleSnapshot": "A",
+        "designerSnapshot": null,
+        "fileNameSnapshot": null,
+        "pageCountSnapshot": null,
+        "fileStorageKey": null,
+        "fileContentType": null,
+        "fileByteSize": null,
+        "drawingUpdatedAt": null,
+        "drawingStorageKey": null,
+        "drawingContentType": null,
+        "drawingByteSize": null,
+        "copiedAt": "2026-10-24T00:00:00.000Z",
+        "createdAt": "2026-10-24T08:42:34.638Z",
+        "updatedAt": "2026-10-24T08:42:34.638Z",
+        "deletedAt": null
+      }
+    }
+  },
+  {
+    "trial": 2,
+    "reads": [
+      "2026-10-24T08:42:35.122Z",
+      "2026-10-24T08:42:35.122Z"
+    ],
+    "requests": [
+      {
+        "id": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+        "name": "A",
+        "memo": "A",
+        "status": "WIP",
+        "isFavorite": true,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "name": "Main",
+          "currentRow": 11,
+          "rowInstructions": [
+            {
+              "id": "9a333e82-2fd0-43e1-9dfd-c832a1762b35",
+              "rowCounterId": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+              "rowNumber": 1,
+              "instructionText": "A",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "2fd435a5-7500-40e9-9c03-8ea606f3de59",
+            "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "A"
+          }
+        ],
+        "patternCopy": {
+          "id": "830ec28a-ad3a-483f-92cd-1157f14a2cbf",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "A",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:35.122Z"
+      },
+      {
+        "id": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+        "name": "B",
+        "memo": "B",
+        "status": "WIP",
+        "isFavorite": false,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "name": "Main",
+          "currentRow": 22,
+          "rowInstructions": [
+            {
+              "id": "e755d54b-7724-4bb1-a355-ba8da6ece389",
+              "rowCounterId": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+              "rowNumber": 1,
+              "instructionText": "B",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "29d58848-44cd-4c3c-96d8-ed63b87c0035",
+            "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "B"
+          }
+        ],
+        "patternCopy": {
+          "id": "f5647f73-4bd0-4155-ba11-3a8800387e94",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "B",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:35.241Z"
+      }
+    ],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "id": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "name": "A",
+          "status": "WIP",
+          "isFavorite": true,
+          "memo": "A",
+          "startDate": "2026-10-24T00:00:00.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": {
+            "id": "830ec28a-ad3a-483f-92cd-1157f14a2cbf",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+            "sourcePatternDocumentId": null,
+            "titleSnapshot": "A",
+            "designerSnapshot": null,
+            "fileNameSnapshot": null,
+            "localCopyPath": null,
+            "pageCountSnapshot": null,
+            "drawingDataPath": null,
+            "drawingUpdatedAt": null,
+            "copiedAt": "2026-10-24T00:00:00.000Z",
+            "createdAt": "2026-10-24T08:42:35.307Z",
+            "updatedAt": "2026-10-24T08:42:35.307Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+            "name": "Main",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 11,
+            "targetRow": null,
+            "rowInstructions": [
+              {
+                "id": "9a333e82-2fd0-43e1-9dfd-c832a1762b35",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+                "rowCounterId": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+                "rowNumber": 1,
+                "instructionText": "A",
+                "skillTags": "",
+                "createdAt": "2026-10-24T08:42:35.282Z",
+                "updatedAt": "2026-10-24T08:42:35.282Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              }
+            ],
+            "createdAt": "2026-10-24T08:42:35.143Z",
+            "updatedAt": "2026-10-24T08:42:35.264Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [
+            {
+              "id": "2fd435a5-7500-40e9-9c03-8ea606f3de59",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+              "startedAt": "2026-10-24T00:00:00.000Z",
+              "endedAt": "2026-10-24T00:01:00.000Z",
+              "memo": "A",
+              "createdAt": "2026-10-24T08:42:35.289Z",
+              "updatedAt": "2026-10-24T08:42:35.289Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            },
+            {
+              "id": "1d781e03-b8dc-42d7-a12a-c5a587eac3b8",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+              "startedAt": "2026-10-24T00:02:00.000Z",
+              "endedAt": null,
+              "memo": "untouched",
+              "createdAt": "2026-10-24T08:42:35.190Z",
+              "updatedAt": "2026-10-24T08:42:35.190Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          ],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:42:35.122Z",
+          "updatedAt": "2026-10-24T08:42:35.241Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      },
+      {
+        "status": 409,
+        "body": {
+          "code": "PROJECT_CONFLICT",
+          "message": "Project was modified after the provided base version.",
+          "details": {
+            "latest": {
+              "id": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "name": "A",
+              "status": "WIP",
+              "isFavorite": true,
+              "memo": "A",
+              "startDate": "2026-10-24T00:00:00.000Z",
+              "targetDate": null,
+              "finishedAt": null,
+              "lastWorkedAt": null,
+              "yarnId": null,
+              "yarnNameSnapshot": null,
+              "yarnBrandSnapshot": null,
+              "yarnColorwaySnapshot": null,
+              "yarnWeightSnapshot": null,
+              "needleId": null,
+              "needleNameSnapshot": null,
+              "needleTypeSnapshot": null,
+              "needleSizeSnapshot": null,
+              "needleLengthSnapshot": null,
+              "patternCopy": {
+                "id": "830ec28a-ad3a-483f-92cd-1157f14a2cbf",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+                "sourcePatternDocumentId": null,
+                "titleSnapshot": "A",
+                "designerSnapshot": null,
+                "fileNameSnapshot": null,
+                "localCopyPath": null,
+                "pageCountSnapshot": null,
+                "drawingDataPath": null,
+                "drawingUpdatedAt": null,
+                "copiedAt": "2026-10-24T00:00:00.000Z",
+                "createdAt": "2026-10-24T08:42:35.307Z",
+                "updatedAt": "2026-10-24T08:42:35.307Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workspaceDisplayMode": null,
+              "workspaceSheetPosition": null,
+              "rowCounter": {
+                "id": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+                "name": "Main",
+                "mode": "simple",
+                "sectionName": null,
+                "memo": null,
+                "currentRow": 11,
+                "targetRow": null,
+                "rowInstructions": [
+                  {
+                    "id": "9a333e82-2fd0-43e1-9dfd-c832a1762b35",
+                    "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                    "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+                    "rowCounterId": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+                    "rowNumber": 1,
+                    "instructionText": "A",
+                    "skillTags": "",
+                    "createdAt": "2026-10-24T08:42:35.282Z",
+                    "updatedAt": "2026-10-24T08:42:35.282Z",
+                    "deletedAt": null,
+                    "syncStatus": "Synced"
+                  }
+                ],
+                "createdAt": "2026-10-24T08:42:35.143Z",
+                "updatedAt": "2026-10-24T08:42:35.264Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workSessions": [
+                {
+                  "id": "2fd435a5-7500-40e9-9c03-8ea606f3de59",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+                  "startedAt": "2026-10-24T00:00:00.000Z",
+                  "endedAt": "2026-10-24T00:01:00.000Z",
+                  "memo": "A",
+                  "createdAt": "2026-10-24T08:42:35.289Z",
+                  "updatedAt": "2026-10-24T08:42:35.289Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                },
+                {
+                  "id": "1d781e03-b8dc-42d7-a12a-c5a587eac3b8",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+                  "startedAt": "2026-10-24T00:02:00.000Z",
+                  "endedAt": null,
+                  "memo": "untouched",
+                  "createdAt": "2026-10-24T08:42:35.190Z",
+                  "updatedAt": "2026-10-24T08:42:35.190Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                }
+              ],
+              "relatedSkillIds": [],
+              "createdAt": "2026-10-24T08:42:35.122Z",
+              "updatedAt": "2026-10-24T08:42:35.241Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          }
+        }
+      }
+    ],
+    "stored": {
+      "id": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "A",
+      "status": "WIP",
+      "isFavorite": true,
+      "memo": "A",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:35.122Z",
+      "updatedAt": "2026-10-24T08:42:35.241Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 11,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:35.143Z",
+        "updatedAt": "2026-10-24T08:42:35.264Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "9a333e82-2fd0-43e1-9dfd-c832a1762b35",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "rowCounterId": "46b6502a-d778-4e7f-8084-45ac0f49a4a7",
+          "rowNumber": 1,
+          "instructionText": "A",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:35.282Z",
+          "updatedAt": "2026-10-24T08:42:35.282Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [
+        {
+          "id": "1d781e03-b8dc-42d7-a12a-c5a587eac3b8",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "startedAt": "2026-10-24T00:02:00.000Z",
+          "endedAt": null,
+          "memo": "untouched",
+          "createdAt": "2026-10-24T08:42:35.190Z",
+          "updatedAt": "2026-10-24T08:42:35.190Z",
+          "deletedAt": null
+        },
+        {
+          "id": "2fd435a5-7500-40e9-9c03-8ea606f3de59",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+          "startedAt": "2026-10-24T00:00:00.000Z",
+          "endedAt": "2026-10-24T00:01:00.000Z",
+          "memo": "A",
+          "createdAt": "2026-10-24T08:42:35.289Z",
+          "updatedAt": "2026-10-24T08:42:35.289Z",
+          "deletedAt": null
+        }
+      ],
+      "patternCopy": {
+        "id": "830ec28a-ad3a-483f-92cd-1157f14a2cbf",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "8c8d0959-ed52-4fd1-b4c6-209f119088e4",
+        "sourcePatternDocumentId": null,
+        "titleSnapshot": "A",
+        "designerSnapshot": null,
+        "fileNameSnapshot": null,
+        "pageCountSnapshot": null,
+        "fileStorageKey": null,
+        "fileContentType": null,
+        "fileByteSize": null,
+        "drawingUpdatedAt": null,
+        "drawingStorageKey": null,
+        "drawingContentType": null,
+        "drawingByteSize": null,
+        "copiedAt": "2026-10-24T00:00:00.000Z",
+        "createdAt": "2026-10-24T08:42:35.307Z",
+        "updatedAt": "2026-10-24T08:42:35.307Z",
+        "deletedAt": null
+      }
+    }
+  },
+  {
+    "trial": 3,
+    "reads": [
+      "2026-10-24T08:42:35.572Z",
+      "2026-10-24T08:42:35.572Z"
+    ],
+    "requests": [
+      {
+        "id": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+        "name": "A",
+        "memo": "A",
+        "status": "WIP",
+        "isFavorite": true,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "0a3a1709-935b-4aac-b058-55edb016ef21",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "name": "Main",
+          "currentRow": 11,
+          "rowInstructions": [
+            {
+              "id": "97236628-bc80-423e-94e1-37a45f395aae",
+              "rowCounterId": "0a3a1709-935b-4aac-b058-55edb016ef21",
+              "rowNumber": 1,
+              "instructionText": "A",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "3dde9be2-54f3-4114-b88b-970f94876539",
+            "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "A"
+          }
+        ],
+        "patternCopy": {
+          "id": "1b8748ef-ba11-419c-8bca-7d9c4a105bb9",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "A",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:35.572Z"
+      },
+      {
+        "id": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+        "name": "B",
+        "memo": "B",
+        "status": "WIP",
+        "isFavorite": false,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "0a3a1709-935b-4aac-b058-55edb016ef21",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "name": "Main",
+          "currentRow": 22,
+          "rowInstructions": [
+            {
+              "id": "8a08abb0-7cc5-4f08-af10-216ff7afdbc7",
+              "rowCounterId": "0a3a1709-935b-4aac-b058-55edb016ef21",
+              "rowNumber": 1,
+              "instructionText": "B",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "9845f0eb-fbe7-4b31-9f2d-14ab2899ab41",
+            "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "B"
+          }
+        ],
+        "patternCopy": {
+          "id": "6630375b-4b6c-45a1-bd12-c68d0a9e9fdd",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "B",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:35.652Z"
+      }
+    ],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "id": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "name": "A",
+          "status": "WIP",
+          "isFavorite": true,
+          "memo": "A",
+          "startDate": "2026-10-24T00:00:00.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": {
+            "id": "1b8748ef-ba11-419c-8bca-7d9c4a105bb9",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+            "sourcePatternDocumentId": null,
+            "titleSnapshot": "A",
+            "designerSnapshot": null,
+            "fileNameSnapshot": null,
+            "localCopyPath": null,
+            "pageCountSnapshot": null,
+            "drawingDataPath": null,
+            "drawingUpdatedAt": null,
+            "copiedAt": "2026-10-24T00:00:00.000Z",
+            "createdAt": "2026-10-24T08:42:35.680Z",
+            "updatedAt": "2026-10-24T08:42:35.680Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "0a3a1709-935b-4aac-b058-55edb016ef21",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+            "name": "Main",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 11,
+            "targetRow": null,
+            "rowInstructions": [
+              {
+                "id": "97236628-bc80-423e-94e1-37a45f395aae",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+                "rowCounterId": "0a3a1709-935b-4aac-b058-55edb016ef21",
+                "rowNumber": 1,
+                "instructionText": "A",
+                "skillTags": "",
+                "createdAt": "2026-10-24T08:42:35.671Z",
+                "updatedAt": "2026-10-24T08:42:35.671Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              }
+            ],
+            "createdAt": "2026-10-24T08:42:35.576Z",
+            "updatedAt": "2026-10-24T08:42:35.661Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [
+            {
+              "id": "3dde9be2-54f3-4114-b88b-970f94876539",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+              "startedAt": "2026-10-24T00:00:00.000Z",
+              "endedAt": "2026-10-24T00:01:00.000Z",
+              "memo": "A",
+              "createdAt": "2026-10-24T08:42:35.673Z",
+              "updatedAt": "2026-10-24T08:42:35.673Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            },
+            {
+              "id": "348af4d9-0d0f-4c5c-be73-7dce57e68f72",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+              "startedAt": "2026-10-24T00:02:00.000Z",
+              "endedAt": null,
+              "memo": "untouched",
+              "createdAt": "2026-10-24T08:42:35.606Z",
+              "updatedAt": "2026-10-24T08:42:35.606Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          ],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:42:35.572Z",
+          "updatedAt": "2026-10-24T08:42:35.652Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      },
+      {
+        "status": 409,
+        "body": {
+          "code": "PROJECT_CONFLICT",
+          "message": "Project was modified after the provided base version.",
+          "details": {
+            "latest": {
+              "id": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "name": "A",
+              "status": "WIP",
+              "isFavorite": true,
+              "memo": "A",
+              "startDate": "2026-10-24T00:00:00.000Z",
+              "targetDate": null,
+              "finishedAt": null,
+              "lastWorkedAt": null,
+              "yarnId": null,
+              "yarnNameSnapshot": null,
+              "yarnBrandSnapshot": null,
+              "yarnColorwaySnapshot": null,
+              "yarnWeightSnapshot": null,
+              "needleId": null,
+              "needleNameSnapshot": null,
+              "needleTypeSnapshot": null,
+              "needleSizeSnapshot": null,
+              "needleLengthSnapshot": null,
+              "patternCopy": {
+                "id": "1b8748ef-ba11-419c-8bca-7d9c4a105bb9",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+                "sourcePatternDocumentId": null,
+                "titleSnapshot": "A",
+                "designerSnapshot": null,
+                "fileNameSnapshot": null,
+                "localCopyPath": null,
+                "pageCountSnapshot": null,
+                "drawingDataPath": null,
+                "drawingUpdatedAt": null,
+                "copiedAt": "2026-10-24T00:00:00.000Z",
+                "createdAt": "2026-10-24T08:42:35.680Z",
+                "updatedAt": "2026-10-24T08:42:35.680Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workspaceDisplayMode": null,
+              "workspaceSheetPosition": null,
+              "rowCounter": {
+                "id": "0a3a1709-935b-4aac-b058-55edb016ef21",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+                "name": "Main",
+                "mode": "simple",
+                "sectionName": null,
+                "memo": null,
+                "currentRow": 11,
+                "targetRow": null,
+                "rowInstructions": [
+                  {
+                    "id": "97236628-bc80-423e-94e1-37a45f395aae",
+                    "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                    "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+                    "rowCounterId": "0a3a1709-935b-4aac-b058-55edb016ef21",
+                    "rowNumber": 1,
+                    "instructionText": "A",
+                    "skillTags": "",
+                    "createdAt": "2026-10-24T08:42:35.671Z",
+                    "updatedAt": "2026-10-24T08:42:35.671Z",
+                    "deletedAt": null,
+                    "syncStatus": "Synced"
+                  }
+                ],
+                "createdAt": "2026-10-24T08:42:35.576Z",
+                "updatedAt": "2026-10-24T08:42:35.661Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workSessions": [
+                {
+                  "id": "3dde9be2-54f3-4114-b88b-970f94876539",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+                  "startedAt": "2026-10-24T00:00:00.000Z",
+                  "endedAt": "2026-10-24T00:01:00.000Z",
+                  "memo": "A",
+                  "createdAt": "2026-10-24T08:42:35.673Z",
+                  "updatedAt": "2026-10-24T08:42:35.673Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                },
+                {
+                  "id": "348af4d9-0d0f-4c5c-be73-7dce57e68f72",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+                  "startedAt": "2026-10-24T00:02:00.000Z",
+                  "endedAt": null,
+                  "memo": "untouched",
+                  "createdAt": "2026-10-24T08:42:35.606Z",
+                  "updatedAt": "2026-10-24T08:42:35.606Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                }
+              ],
+              "relatedSkillIds": [],
+              "createdAt": "2026-10-24T08:42:35.572Z",
+              "updatedAt": "2026-10-24T08:42:35.652Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          }
+        }
+      }
+    ],
+    "stored": {
+      "id": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "A",
+      "status": "WIP",
+      "isFavorite": true,
+      "memo": "A",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:35.572Z",
+      "updatedAt": "2026-10-24T08:42:35.652Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "0a3a1709-935b-4aac-b058-55edb016ef21",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 11,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:35.576Z",
+        "updatedAt": "2026-10-24T08:42:35.661Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "97236628-bc80-423e-94e1-37a45f395aae",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "rowCounterId": "0a3a1709-935b-4aac-b058-55edb016ef21",
+          "rowNumber": 1,
+          "instructionText": "A",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:35.671Z",
+          "updatedAt": "2026-10-24T08:42:35.671Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [
+        {
+          "id": "348af4d9-0d0f-4c5c-be73-7dce57e68f72",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "startedAt": "2026-10-24T00:02:00.000Z",
+          "endedAt": null,
+          "memo": "untouched",
+          "createdAt": "2026-10-24T08:42:35.606Z",
+          "updatedAt": "2026-10-24T08:42:35.606Z",
+          "deletedAt": null
+        },
+        {
+          "id": "3dde9be2-54f3-4114-b88b-970f94876539",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+          "startedAt": "2026-10-24T00:00:00.000Z",
+          "endedAt": "2026-10-24T00:01:00.000Z",
+          "memo": "A",
+          "createdAt": "2026-10-24T08:42:35.673Z",
+          "updatedAt": "2026-10-24T08:42:35.673Z",
+          "deletedAt": null
+        }
+      ],
+      "patternCopy": {
+        "id": "1b8748ef-ba11-419c-8bca-7d9c4a105bb9",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "2eb4f7e8-6409-4ea4-b4a6-6c1077ea6626",
+        "sourcePatternDocumentId": null,
+        "titleSnapshot": "A",
+        "designerSnapshot": null,
+        "fileNameSnapshot": null,
+        "pageCountSnapshot": null,
+        "fileStorageKey": null,
+        "fileContentType": null,
+        "fileByteSize": null,
+        "drawingUpdatedAt": null,
+        "drawingStorageKey": null,
+        "drawingContentType": null,
+        "drawingByteSize": null,
+        "copiedAt": "2026-10-24T00:00:00.000Z",
+        "createdAt": "2026-10-24T08:42:35.680Z",
+        "updatedAt": "2026-10-24T08:42:35.680Z",
+        "deletedAt": null
+      }
+    }
+  },
+  {
+    "trial": 4,
+    "reads": [
+      "2026-10-24T08:42:35.822Z",
+      "2026-10-24T08:42:35.822Z"
+    ],
+    "requests": [
+      {
+        "id": "f293b928-c589-43fe-be3b-8ef4119db553",
+        "name": "A",
+        "memo": "A",
+        "status": "WIP",
+        "isFavorite": true,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "name": "Main",
+          "currentRow": 11,
+          "rowInstructions": [
+            {
+              "id": "b7cc92ca-4750-4c7d-a003-fd2f364a4269",
+              "rowCounterId": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+              "rowNumber": 1,
+              "instructionText": "A",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "ad56c6a8-3477-4a71-879a-55a1e34b29d8",
+            "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "A"
+          }
+        ],
+        "patternCopy": {
+          "id": "eb7d1590-5e1e-4781-b1ac-f7cadb048b04",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "A",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:35.822Z"
+      },
+      {
+        "id": "f293b928-c589-43fe-be3b-8ef4119db553",
+        "name": "B",
+        "memo": "B",
+        "status": "WIP",
+        "isFavorite": false,
+        "startDate": "2026-10-24T00:00:00.000Z",
+        "relatedSkillIds": [],
+        "rowCounter": {
+          "id": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "name": "Main",
+          "currentRow": 22,
+          "rowInstructions": [
+            {
+              "id": "4b69e7c6-37a0-48c3-b651-d603dc307c32",
+              "rowCounterId": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+              "rowNumber": 1,
+              "instructionText": "B",
+              "skillTags": ""
+            }
+          ]
+        },
+        "workSessions": [
+          {
+            "id": "1a78f89c-d2fd-4cf3-ac2d-d751dab376ed",
+            "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+            "startedAt": "2026-10-24T00:00:00.000Z",
+            "endedAt": "2026-10-24T00:01:00.000Z",
+            "memo": "B"
+          }
+        ],
+        "patternCopy": {
+          "id": "9bf604d0-cc1e-4b9e-a84f-466da162468f",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "sourcePatternDocumentId": null,
+          "titleSnapshot": "B",
+          "designerSnapshot": null,
+          "fileNameSnapshot": null,
+          "pageCountSnapshot": null,
+          "copiedAt": "2026-10-24T00:00:00.000Z",
+          "drawingUpdatedAt": null
+        },
+        "baseUpdatedAt": "2026-10-24T08:42:35.879Z"
+      }
+    ],
+    "responses": [
+      {
+        "status": 200,
+        "body": {
+          "id": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "name": "A",
+          "status": "WIP",
+          "isFavorite": true,
+          "memo": "A",
+          "startDate": "2026-10-24T00:00:00.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": {
+            "id": "eb7d1590-5e1e-4781-b1ac-f7cadb048b04",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+            "sourcePatternDocumentId": null,
+            "titleSnapshot": "A",
+            "designerSnapshot": null,
+            "fileNameSnapshot": null,
+            "localCopyPath": null,
+            "pageCountSnapshot": null,
+            "drawingDataPath": null,
+            "drawingUpdatedAt": null,
+            "copiedAt": "2026-10-24T00:00:00.000Z",
+            "createdAt": "2026-10-24T08:42:35.922Z",
+            "updatedAt": "2026-10-24T08:42:35.922Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+            "name": "Main",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 11,
+            "targetRow": null,
+            "rowInstructions": [
+              {
+                "id": "b7cc92ca-4750-4c7d-a003-fd2f364a4269",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+                "rowCounterId": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+                "rowNumber": 1,
+                "instructionText": "A",
+                "skillTags": "",
+                "createdAt": "2026-10-24T08:42:35.892Z",
+                "updatedAt": "2026-10-24T08:42:35.892Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              }
+            ],
+            "createdAt": "2026-10-24T08:42:35.826Z",
+            "updatedAt": "2026-10-24T08:42:35.884Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [
+            {
+              "id": "ad56c6a8-3477-4a71-879a-55a1e34b29d8",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+              "startedAt": "2026-10-24T00:00:00.000Z",
+              "endedAt": "2026-10-24T00:01:00.000Z",
+              "memo": "A",
+              "createdAt": "2026-10-24T08:42:35.903Z",
+              "updatedAt": "2026-10-24T08:42:35.903Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            },
+            {
+              "id": "f74ec303-658f-47b4-816b-47aa566010e7",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+              "startedAt": "2026-10-24T00:02:00.000Z",
+              "endedAt": null,
+              "memo": "untouched",
+              "createdAt": "2026-10-24T08:42:35.845Z",
+              "updatedAt": "2026-10-24T08:42:35.845Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          ],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:42:35.822Z",
+          "updatedAt": "2026-10-24T08:42:35.879Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      },
+      {
+        "status": 409,
+        "body": {
+          "code": "PROJECT_CONFLICT",
+          "message": "Project was modified after the provided base version.",
+          "details": {
+            "latest": {
+              "id": "f293b928-c589-43fe-be3b-8ef4119db553",
+              "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+              "name": "A",
+              "status": "WIP",
+              "isFavorite": true,
+              "memo": "A",
+              "startDate": "2026-10-24T00:00:00.000Z",
+              "targetDate": null,
+              "finishedAt": null,
+              "lastWorkedAt": null,
+              "yarnId": null,
+              "yarnNameSnapshot": null,
+              "yarnBrandSnapshot": null,
+              "yarnColorwaySnapshot": null,
+              "yarnWeightSnapshot": null,
+              "needleId": null,
+              "needleNameSnapshot": null,
+              "needleTypeSnapshot": null,
+              "needleSizeSnapshot": null,
+              "needleLengthSnapshot": null,
+              "patternCopy": {
+                "id": "eb7d1590-5e1e-4781-b1ac-f7cadb048b04",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+                "sourcePatternDocumentId": null,
+                "titleSnapshot": "A",
+                "designerSnapshot": null,
+                "fileNameSnapshot": null,
+                "localCopyPath": null,
+                "pageCountSnapshot": null,
+                "drawingDataPath": null,
+                "drawingUpdatedAt": null,
+                "copiedAt": "2026-10-24T00:00:00.000Z",
+                "createdAt": "2026-10-24T08:42:35.922Z",
+                "updatedAt": "2026-10-24T08:42:35.922Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workspaceDisplayMode": null,
+              "workspaceSheetPosition": null,
+              "rowCounter": {
+                "id": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+                "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+                "name": "Main",
+                "mode": "simple",
+                "sectionName": null,
+                "memo": null,
+                "currentRow": 11,
+                "targetRow": null,
+                "rowInstructions": [
+                  {
+                    "id": "b7cc92ca-4750-4c7d-a003-fd2f364a4269",
+                    "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                    "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+                    "rowCounterId": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+                    "rowNumber": 1,
+                    "instructionText": "A",
+                    "skillTags": "",
+                    "createdAt": "2026-10-24T08:42:35.892Z",
+                    "updatedAt": "2026-10-24T08:42:35.892Z",
+                    "deletedAt": null,
+                    "syncStatus": "Synced"
+                  }
+                ],
+                "createdAt": "2026-10-24T08:42:35.826Z",
+                "updatedAt": "2026-10-24T08:42:35.884Z",
+                "deletedAt": null,
+                "syncStatus": "Synced"
+              },
+              "workSessions": [
+                {
+                  "id": "ad56c6a8-3477-4a71-879a-55a1e34b29d8",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+                  "startedAt": "2026-10-24T00:00:00.000Z",
+                  "endedAt": "2026-10-24T00:01:00.000Z",
+                  "memo": "A",
+                  "createdAt": "2026-10-24T08:42:35.903Z",
+                  "updatedAt": "2026-10-24T08:42:35.903Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                },
+                {
+                  "id": "f74ec303-658f-47b4-816b-47aa566010e7",
+                  "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+                  "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+                  "startedAt": "2026-10-24T00:02:00.000Z",
+                  "endedAt": null,
+                  "memo": "untouched",
+                  "createdAt": "2026-10-24T08:42:35.845Z",
+                  "updatedAt": "2026-10-24T08:42:35.845Z",
+                  "deletedAt": null,
+                  "syncStatus": "Synced"
+                }
+              ],
+              "relatedSkillIds": [],
+              "createdAt": "2026-10-24T08:42:35.822Z",
+              "updatedAt": "2026-10-24T08:42:35.879Z",
+              "deletedAt": null,
+              "syncStatus": "Synced"
+            }
+          }
+        }
+      }
+    ],
+    "stored": {
+      "id": "f293b928-c589-43fe-be3b-8ef4119db553",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "A",
+      "status": "WIP",
+      "isFavorite": true,
+      "memo": "A",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:35.822Z",
+      "updatedAt": "2026-10-24T08:42:35.879Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 11,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:35.826Z",
+        "updatedAt": "2026-10-24T08:42:35.884Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "b7cc92ca-4750-4c7d-a003-fd2f364a4269",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "rowCounterId": "18b99925-a8cf-4996-8d18-4703c7e026b3",
+          "rowNumber": 1,
+          "instructionText": "A",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:35.892Z",
+          "updatedAt": "2026-10-24T08:42:35.892Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [
+        {
+          "id": "ad56c6a8-3477-4a71-879a-55a1e34b29d8",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "startedAt": "2026-10-24T00:00:00.000Z",
+          "endedAt": "2026-10-24T00:01:00.000Z",
+          "memo": "A",
+          "createdAt": "2026-10-24T08:42:35.903Z",
+          "updatedAt": "2026-10-24T08:42:35.903Z",
+          "deletedAt": null
+        },
+        {
+          "id": "f74ec303-658f-47b4-816b-47aa566010e7",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+          "startedAt": "2026-10-24T00:02:00.000Z",
+          "endedAt": null,
+          "memo": "untouched",
+          "createdAt": "2026-10-24T08:42:35.845Z",
+          "updatedAt": "2026-10-24T08:42:35.845Z",
+          "deletedAt": null
+        }
+      ],
+      "patternCopy": {
+        "id": "eb7d1590-5e1e-4781-b1ac-f7cadb048b04",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "f293b928-c589-43fe-be3b-8ef4119db553",
+        "sourcePatternDocumentId": null,
+        "titleSnapshot": "A",
+        "designerSnapshot": null,
+        "fileNameSnapshot": null,
+        "pageCountSnapshot": null,
+        "fileStorageKey": null,
+        "fileContentType": null,
+        "fileByteSize": null,
+        "drawingUpdatedAt": null,
+        "drawingStorageKey": null,
+        "drawingContentType": null,
+        "drawingByteSize": null,
+        "copiedAt": "2026-10-24T00:00:00.000Z",
+        "createdAt": "2026-10-24T08:42:35.922Z",
+        "updatedAt": "2026-10-24T08:42:35.922Z",
+        "deletedAt": null
+      }
+    }
+  },
+  {
+    "case": "early-child-rollback",
+    "request": {
+      "id": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+      "name": "A",
+      "memo": "A",
+      "status": "WIP",
+      "isFavorite": true,
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "relatedSkillIds": [],
+      "rowCounter": {
+        "id": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+        "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+        "name": "Main",
+        "currentRow": 11,
+        "rowInstructions": [
+          {
+            "id": "c6a26e13-ed6b-4d18-b542-9fe097b0ab7b",
+            "rowCounterId": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+            "rowNumber": 1,
+            "instructionText": "A",
+            "skillTags": ""
+          },
+          {
+            "id": "e51a6724-e5e1-440f-8d5d-a1fd0b8c3de5",
+            "rowCounterId": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+            "rowNumber": 1,
+            "instructionText": "A",
+            "skillTags": ""
+          }
+        ]
+      },
+      "workSessions": [
+        {
+          "id": "e7276ed7-0bcc-414c-b7be-63d43834c6cb",
+          "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+          "startedAt": "2026-10-24T00:00:00.000Z",
+          "endedAt": "2026-10-24T00:01:00.000Z",
+          "memo": "A"
+        }
+      ],
+      "patternCopy": {
+        "id": "1d66bb2c-c276-4553-949b-5f5f2e78e3aa",
+        "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+        "sourcePatternDocumentId": null,
+        "titleSnapshot": "A",
+        "designerSnapshot": null,
+        "fileNameSnapshot": null,
+        "pageCountSnapshot": null,
+        "copiedAt": "2026-10-24T00:00:00.000Z",
+        "drawingUpdatedAt": null
+      },
+      "baseUpdatedAt": "2026-10-24T08:42:36.073Z"
+    },
+    "status": 400,
+    "before": {
+      "id": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "CAS baseline",
+      "status": "WIP",
+      "isFavorite": false,
+      "memo": "",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:36.073Z",
+      "updatedAt": "2026-10-24T08:42:36.073Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 0,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:36.081Z",
+        "updatedAt": "2026-10-24T08:42:36.081Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "5a1d3b00-d0e3-4f2a-a5fd-55306b98959d",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+          "rowCounterId": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+          "rowNumber": 1,
+          "instructionText": "original instruction",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:36.138Z",
+          "updatedAt": "2026-10-24T08:42:36.138Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [],
+      "patternCopy": null
+    },
+    "after": {
+      "id": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "CAS baseline",
+      "status": "WIP",
+      "isFavorite": false,
+      "memo": "",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:36.073Z",
+      "updatedAt": "2026-10-24T08:42:36.073Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 0,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:36.081Z",
+        "updatedAt": "2026-10-24T08:42:36.081Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [
+        {
+          "id": "5a1d3b00-d0e3-4f2a-a5fd-55306b98959d",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "projectId": "0d00c028-cbcb-4172-aba7-06dd5159b0ea",
+          "rowCounterId": "8d147f42-e276-46ab-bcf5-57809e9c0c0a",
+          "rowNumber": 1,
+          "instructionText": "original instruction",
+          "skillTags": "",
+          "createdAt": "2026-10-24T08:42:36.138Z",
+          "updatedAt": "2026-10-24T08:42:36.138Z",
+          "deletedAt": null
+        }
+      ],
+      "workSessions": [],
+      "patternCopy": null
+    }
+  },
+  {
+    "stage": "late-failure-after-real-pattern-upsert",
+    "id": "3fc09dc7-52dc-4260-a6b9-d5e547bb3b94"
+  },
+  {
+    "case": "late-child-rollback",
+    "status": 500,
+    "before": {
+      "id": "3fc09dc7-52dc-4260-a6b9-d5e547bb3b94",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "CAS baseline",
+      "status": "WIP",
+      "isFavorite": false,
+      "memo": "",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:36.322Z",
+      "updatedAt": "2026-10-24T08:42:36.322Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "7f6c574c-b15f-4ec5-84fd-70ffccd29834",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "3fc09dc7-52dc-4260-a6b9-d5e547bb3b94",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 0,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:36.327Z",
+        "updatedAt": "2026-10-24T08:42:36.327Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [],
+      "workSessions": [],
+      "patternCopy": null
+    },
+    "after": {
+      "id": "3fc09dc7-52dc-4260-a6b9-d5e547bb3b94",
+      "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+      "name": "CAS baseline",
+      "status": "WIP",
+      "isFavorite": false,
+      "memo": "",
+      "startDate": "2026-10-24T00:00:00.000Z",
+      "targetDate": null,
+      "finishedAt": null,
+      "lastWorkedAt": null,
+      "yarnId": null,
+      "yarnNameSnapshot": null,
+      "yarnBrandSnapshot": null,
+      "yarnColorwaySnapshot": null,
+      "yarnWeightSnapshot": null,
+      "needleId": null,
+      "needleNameSnapshot": null,
+      "needleTypeSnapshot": null,
+      "needleSizeSnapshot": null,
+      "needleLengthSnapshot": null,
+      "workspaceDisplayMode": null,
+      "workspaceSheetPosition": null,
+      "relatedSkillIds": [],
+      "createdAt": "2026-10-24T08:42:36.322Z",
+      "updatedAt": "2026-10-24T08:42:36.322Z",
+      "deletedAt": null,
+      "rowCounter": {
+        "id": "7f6c574c-b15f-4ec5-84fd-70ffccd29834",
+        "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+        "projectId": "3fc09dc7-52dc-4260-a6b9-d5e547bb3b94",
+        "name": "Main",
+        "mode": "simple",
+        "sectionName": null,
+        "memo": null,
+        "currentRow": 0,
+        "targetRow": null,
+        "createdAt": "2026-10-24T08:42:36.327Z",
+        "updatedAt": "2026-10-24T08:42:36.327Z",
+        "deletedAt": null
+      },
+      "rowInstructions": [],
+      "workSessions": [],
+      "patternCopy": null
+    }
+  },
+  {
+    "case": "monotonic-clock",
+    "base": "2026-10-24T09:42:36.451Z",
+    "first": "2026-10-24T09:42:36.452Z",
+    "second": "2026-10-24T09:42:36.453Z"
+  },
+  {
+    "case": "cas-zero-latest",
+    "response": {
+      "code": "PROJECT_CONFLICT",
+      "message": "Project was modified after the provided base version.",
+      "details": {
+        "latest": {
+          "id": "97f1d0ad-d58b-4193-976f-5a420bb10ef0",
+          "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+          "name": "CAS baseline",
+          "status": "WIP",
+          "isFavorite": false,
+          "memo": "intervening",
+          "startDate": "2026-10-24T00:00:00.000Z",
+          "targetDate": null,
+          "finishedAt": null,
+          "lastWorkedAt": null,
+          "yarnId": null,
+          "yarnNameSnapshot": null,
+          "yarnBrandSnapshot": null,
+          "yarnColorwaySnapshot": null,
+          "yarnWeightSnapshot": null,
+          "needleId": null,
+          "needleNameSnapshot": null,
+          "needleTypeSnapshot": null,
+          "needleSizeSnapshot": null,
+          "needleLengthSnapshot": null,
+          "patternCopy": null,
+          "workspaceDisplayMode": null,
+          "workspaceSheetPosition": null,
+          "rowCounter": {
+            "id": "dcd1c129-332c-455a-a386-723e30827bf0",
+            "ownerId": "497ed02a-ba82-4979-8b03-593043f2a957",
+            "projectId": "97f1d0ad-d58b-4193-976f-5a420bb10ef0",
+            "name": "Main",
+            "mode": "simple",
+            "sectionName": null,
+            "memo": null,
+            "currentRow": 0,
+            "targetRow": null,
+            "rowInstructions": [],
+            "createdAt": "2026-10-24T08:42:36.745Z",
+            "updatedAt": "2026-10-24T08:42:36.745Z",
+            "deletedAt": null,
+            "syncStatus": "Synced"
+          },
+          "workSessions": [],
+          "relatedSkillIds": [],
+          "createdAt": "2026-10-24T08:42:36.741Z",
+          "updatedAt": "2026-10-24T08:42:36.742Z",
+          "deletedAt": null,
+          "syncStatus": "Synced"
+        }
+      }
+    }
+  }
+]

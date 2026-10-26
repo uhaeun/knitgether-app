@@ -1,0 +1,189 @@
+;
+; Archive created at 2026-10-24 16:56:25 KST
+;     dbname: knitgether_qa_ios_20261022
+;     TOC Entries: 178
+;     Compression: -1
+;     Dump Version: 1.14-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 14.18 (Homebrew)
+;     Dumped by pg_dump version: 14.18 (Homebrew)
+;
+;
+; Selected TOC Entries:
+;
+231; 1259 17342 TABLE public DictionaryTerm knitgether
+227; 1259 17224 TABLE public GaugeMeasurement knitgether
+218; 1259 17073 TABLE public GaugeRecord knitgether
+226; 1259 17215 TABLE public GaugeSwatch knitgether
+225; 1259 17203 TABLE public GaugeTarget knitgether
+222; 1259 17139 TABLE public Needle knitgether
+215; 1259 16992 TABLE public PatternDocument knitgether
+211; 1259 16927 TABLE public Project knitgether
+234; 1259 17392 TABLE public ProjectNeedleLink knitgether
+216; 1259 17020 TABLE public ProjectPatternCopy knitgether
+230; 1259 17321 TABLE public ProjectProgressPhoto knitgether
+229; 1259 17287 TABLE public ProjectToolLink knitgether
+233; 1259 17383 TABLE public ProjectYarnLink knitgether
+224; 1259 17177 TABLE public ProjectYarnUsage knitgether
+212; 1259 16938 TABLE public RowCounter knitgether
+217; 1259 17047 TABLE public RowInstruction knitgether
+219; 1259 17093 TABLE public Skill knitgether
+220; 1259 17103 TABLE public SkillAnimation knitgether
+214; 1259 16984 TABLE public StoredFile knitgether
+228; 1259 17278 TABLE public ToolItem knitgether
+223; 1259 17160 TABLE public UserAccount knitgether
+210; 1259 16918 TABLE public UserProfile knitgether
+232; 1259 17359 TABLE public UserSkillLevel knitgether
+213; 1259 16947 TABLE public WorkSession knitgether
+221; 1259 17130 TABLE public Yarn knitgether
+209; 1259 16909 TABLE public _prisma_migrations knitgether
+4103; 0 17342 TABLE DATA public DictionaryTerm knitgether
+4099; 0 17224 TABLE DATA public GaugeMeasurement knitgether
+4090; 0 17073 TABLE DATA public GaugeRecord knitgether
+4098; 0 17215 TABLE DATA public GaugeSwatch knitgether
+4097; 0 17203 TABLE DATA public GaugeTarget knitgether
+4094; 0 17139 TABLE DATA public Needle knitgether
+4087; 0 16992 TABLE DATA public PatternDocument knitgether
+4083; 0 16927 TABLE DATA public Project knitgether
+4106; 0 17392 TABLE DATA public ProjectNeedleLink knitgether
+4088; 0 17020 TABLE DATA public ProjectPatternCopy knitgether
+4102; 0 17321 TABLE DATA public ProjectProgressPhoto knitgether
+4101; 0 17287 TABLE DATA public ProjectToolLink knitgether
+4105; 0 17383 TABLE DATA public ProjectYarnLink knitgether
+4096; 0 17177 TABLE DATA public ProjectYarnUsage knitgether
+4084; 0 16938 TABLE DATA public RowCounter knitgether
+4089; 0 17047 TABLE DATA public RowInstruction knitgether
+4091; 0 17093 TABLE DATA public Skill knitgether
+4092; 0 17103 TABLE DATA public SkillAnimation knitgether
+4086; 0 16984 TABLE DATA public StoredFile knitgether
+4100; 0 17278 TABLE DATA public ToolItem knitgether
+4095; 0 17160 TABLE DATA public UserAccount knitgether
+4082; 0 16918 TABLE DATA public UserProfile knitgether
+4104; 0 17359 TABLE DATA public UserSkillLevel knitgether
+4085; 0 16947 TABLE DATA public WorkSession knitgether
+4093; 0 17130 TABLE DATA public Yarn knitgether
+4081; 0 16909 TABLE DATA public _prisma_migrations knitgether
+3882; 2606 17350 CONSTRAINT public DictionaryTerm DictionaryTerm_pkey knitgether
+3864; 2606 17237 CONSTRAINT public GaugeMeasurement GaugeMeasurement_pkey knitgether
+3830; 2606 17080 CONSTRAINT public GaugeRecord GaugeRecord_pkey knitgether
+3860; 2606 17223 CONSTRAINT public GaugeSwatch GaugeSwatch_pkey knitgether
+3856; 2606 17214 CONSTRAINT public GaugeTarget GaugeTarget_pkey knitgether
+3845; 2606 17147 CONSTRAINT public Needle Needle_pkey knitgether
+3816; 2606 17000 CONSTRAINT public PatternDocument PatternDocument_pkey knitgether
+3895; 2606 17400 CONSTRAINT public ProjectNeedleLink ProjectNeedleLink_pkey knitgether
+3820; 2606 17027 CONSTRAINT public ProjectPatternCopy ProjectPatternCopy_pkey knitgether
+3876; 2606 17329 CONSTRAINT public ProjectProgressPhoto ProjectProgressPhoto_pkey knitgether
+3872; 2606 17295 CONSTRAINT public ProjectToolLink ProjectToolLink_pkey knitgether
+3891; 2606 17391 CONSTRAINT public ProjectYarnLink ProjectYarnLink_pkey knitgether
+3853; 2606 17185 CONSTRAINT public ProjectYarnUsage ProjectYarnUsage_pkey knitgether
+3802; 2606 16937 CONSTRAINT public Project Project_pkey knitgether
+3805; 2606 16946 CONSTRAINT public RowCounter RowCounter_pkey knitgether
+3825; 2606 17055 CONSTRAINT public RowInstruction RowInstruction_pkey knitgether
+3838; 2606 17110 CONSTRAINT public SkillAnimation SkillAnimation_pkey knitgether
+3835; 2606 17102 CONSTRAINT public Skill Skill_pkey knitgether
+3812; 2606 16991 CONSTRAINT public StoredFile StoredFile_pkey knitgether
+3868; 2606 17286 CONSTRAINT public ToolItem ToolItem_pkey knitgether
+3849; 2606 17167 CONSTRAINT public UserAccount UserAccount_pkey knitgether
+3797; 2606 16926 CONSTRAINT public UserProfile UserProfile_pkey knitgether
+3886; 2606 17366 CONSTRAINT public UserSkillLevel UserSkillLevel_pkey knitgether
+3809; 2606 16954 CONSTRAINT public WorkSession WorkSession_pkey knitgether
+3842; 2606 17138 CONSTRAINT public Yarn Yarn_pkey knitgether
+3795; 2606 16917 CONSTRAINT public _prisma_migrations _prisma_migrations_pkey knitgether
+3878; 1259 17382 INDEX public DictionaryTerm_isSystem_deletedAt_idx knitgether
+3879; 1259 17351 INDEX public DictionaryTerm_ownerId_deletedAt_idx knitgether
+3880; 1259 17352 INDEX public DictionaryTerm_ownerId_term_deletedAt_idx knitgether
+3861; 1259 17242 INDEX public GaugeMeasurement_ownerId_gaugeSwatchId_washState_deletedAt_idx knitgether
+3862; 1259 17241 INDEX public GaugeMeasurement_ownerId_gaugeTargetId_deletedAt_idx knitgether
+3827; 1259 17081 INDEX public GaugeRecord_ownerId_deletedAt_idx knitgether
+3828; 1259 17082 INDEX public GaugeRecord_ownerId_projectId_measurementStage_deletedAt_idx knitgether
+3858; 1259 17240 INDEX public GaugeSwatch_ownerId_gaugeTargetId_deletedAt_idx knitgether
+3854; 1259 17238 INDEX public GaugeTarget_ownerId_deletedAt_idx knitgether
+3857; 1259 17239 INDEX public GaugeTarget_sourcePatternId_idx knitgether
+3843; 1259 17149 INDEX public Needle_ownerId_deletedAt_idx knitgether
+3814; 1259 17003 INDEX public PatternDocument_ownerId_deletedAt_idx knitgether
+3817; 1259 17004 INDEX public PatternDocument_storedFileId_idx knitgether
+3892; 1259 17404 INDEX public ProjectNeedleLink_ownerId_needleId_deletedAt_idx knitgether
+3893; 1259 17403 INDEX public ProjectNeedleLink_ownerId_projectId_deletedAt_idx knitgether
+3818; 1259 17029 INDEX public ProjectPatternCopy_ownerId_deletedAt_idx knitgether
+3821; 1259 17028 INDEX public ProjectPatternCopy_projectId_key knitgether
+3822; 1259 17030 INDEX public ProjectPatternCopy_sourcePatternDocumentId_idx knitgether
+3874; 1259 17331 INDEX public ProjectProgressPhoto_ownerId_projectId_deletedAt_idx knitgether
+3877; 1259 17330 INDEX public ProjectProgressPhoto_storageKey_key knitgether
+3869; 1259 17299 INDEX public ProjectToolLink_ownerId_projectId_deletedAt_idx knitgether
+3870; 1259 17300 INDEX public ProjectToolLink_ownerId_toolId_deletedAt_idx knitgether
+3873; 1259 17298 INDEX public ProjectToolLink_projectId_toolId_key knitgether
+3888; 1259 17401 INDEX public ProjectYarnLink_ownerId_projectId_deletedAt_idx knitgether
+3889; 1259 17402 INDEX public ProjectYarnLink_ownerId_yarnId_deletedAt_idx knitgether
+3850; 1259 17186 INDEX public ProjectYarnUsage_ownerId_projectId_deletedAt_idx knitgether
+3851; 1259 17187 INDEX public ProjectYarnUsage_ownerId_yarnId_deletedAt_idx knitgether
+3798; 1259 16955 INDEX public Project_ownerId_deletedAt_idx knitgether
+3799; 1259 17176 INDEX public Project_ownerId_needleId_deletedAt_idx knitgether
+3800; 1259 17175 INDEX public Project_ownerId_yarnId_deletedAt_idx knitgether
+3803; 1259 16957 INDEX public RowCounter_ownerId_deletedAt_idx knitgether
+3806; 1259 16956 INDEX public RowCounter_projectId_key knitgether
+3823; 1259 17057 INDEX public RowInstruction_ownerId_projectId_deletedAt_idx knitgether
+3826; 1259 17056 INDEX public RowInstruction_rowCounterId_rowNumber_key knitgether
+3836; 1259 17113 INDEX public SkillAnimation_ownerId_deletedAt_idx knitgether
+3839; 1259 17114 INDEX public SkillAnimation_skillId_idx knitgether
+3831; 1259 17370 INDEX public Skill_isSystem_deletedAt_idx knitgether
+3832; 1259 17112 INDEX public Skill_ownerId_category_deletedAt_idx knitgether
+3833; 1259 17111 INDEX public Skill_ownerId_deletedAt_idx knitgether
+3810; 1259 17002 INDEX public StoredFile_ownerId_kind_deletedAt_idx knitgether
+3813; 1259 17001 INDEX public StoredFile_storageKey_key knitgether
+3865; 1259 17297 INDEX public ToolItem_ownerId_deletedAt_idx knitgether
+3866; 1259 17296 INDEX public ToolItem_ownerId_type_deletedAt_idx knitgether
+3846; 1259 17169 INDEX public UserAccount_email_deletedAt_idx knitgether
+3847; 1259 17168 INDEX public UserAccount_email_key knitgether
+3883; 1259 17368 INDEX public UserSkillLevel_ownerId_deletedAt_idx knitgether
+3884; 1259 17367 INDEX public UserSkillLevel_ownerId_skillId_key knitgether
+3887; 1259 17369 INDEX public UserSkillLevel_skillId_idx knitgether
+3807; 1259 16958 INDEX public WorkSession_ownerId_projectId_deletedAt_idx knitgether
+3840; 1259 17148 INDEX public Yarn_ownerId_deletedAt_idx knitgether
+3934; 2606 17353 FK CONSTRAINT public DictionaryTerm DictionaryTerm_ownerId_fkey knitgether
+3927; 2606 17273 FK CONSTRAINT public GaugeMeasurement GaugeMeasurement_gaugeSwatchId_fkey knitgether
+3926; 2606 17268 FK CONSTRAINT public GaugeMeasurement GaugeMeasurement_gaugeTargetId_fkey knitgether
+3925; 2606 17263 FK CONSTRAINT public GaugeMeasurement GaugeMeasurement_ownerId_fkey knitgether
+3910; 2606 17083 FK CONSTRAINT public GaugeRecord GaugeRecord_ownerId_fkey knitgether
+3911; 2606 17088 FK CONSTRAINT public GaugeRecord GaugeRecord_projectId_fkey knitgether
+3924; 2606 17258 FK CONSTRAINT public GaugeSwatch GaugeSwatch_gaugeTargetId_fkey knitgether
+3923; 2606 17253 FK CONSTRAINT public GaugeSwatch GaugeSwatch_ownerId_fkey knitgether
+3921; 2606 17243 FK CONSTRAINT public GaugeTarget GaugeTarget_ownerId_fkey knitgether
+3922; 2606 17248 FK CONSTRAINT public GaugeTarget GaugeTarget_sourcePatternId_fkey knitgether
+3916; 2606 17155 FK CONSTRAINT public Needle Needle_ownerId_fkey knitgether
+3902; 2606 17010 FK CONSTRAINT public PatternDocument PatternDocument_ownerId_fkey knitgether
+3903; 2606 17015 FK CONSTRAINT public PatternDocument PatternDocument_storedFileId_fkey knitgether
+3940; 2606 17420 FK CONSTRAINT public ProjectNeedleLink ProjectNeedleLink_ownerId_fkey knitgether
+3941; 2606 17425 FK CONSTRAINT public ProjectNeedleLink ProjectNeedleLink_projectId_fkey knitgether
+3904; 2606 17031 FK CONSTRAINT public ProjectPatternCopy ProjectPatternCopy_ownerId_fkey knitgether
+3905; 2606 17036 FK CONSTRAINT public ProjectPatternCopy ProjectPatternCopy_projectId_fkey knitgether
+3906; 2606 17041 FK CONSTRAINT public ProjectPatternCopy ProjectPatternCopy_sourcePatternDocumentId_fkey knitgether
+3932; 2606 17332 FK CONSTRAINT public ProjectProgressPhoto ProjectProgressPhoto_ownerId_fkey knitgether
+3933; 2606 17337 FK CONSTRAINT public ProjectProgressPhoto ProjectProgressPhoto_projectId_fkey knitgether
+3929; 2606 17306 FK CONSTRAINT public ProjectToolLink ProjectToolLink_ownerId_fkey knitgether
+3930; 2606 17311 FK CONSTRAINT public ProjectToolLink ProjectToolLink_projectId_fkey knitgether
+3931; 2606 17316 FK CONSTRAINT public ProjectToolLink ProjectToolLink_toolId_fkey knitgether
+3937; 2606 17405 FK CONSTRAINT public ProjectYarnLink ProjectYarnLink_ownerId_fkey knitgether
+3938; 2606 17410 FK CONSTRAINT public ProjectYarnLink ProjectYarnLink_projectId_fkey knitgether
+3939; 2606 17415 FK CONSTRAINT public ProjectYarnLink ProjectYarnLink_yarnId_fkey knitgether
+3918; 2606 17188 FK CONSTRAINT public ProjectYarnUsage ProjectYarnUsage_ownerId_fkey knitgether
+3919; 2606 17193 FK CONSTRAINT public ProjectYarnUsage ProjectYarnUsage_projectId_fkey knitgether
+3920; 2606 17198 FK CONSTRAINT public ProjectYarnUsage ProjectYarnUsage_yarnId_fkey knitgether
+3896; 2606 16959 FK CONSTRAINT public Project Project_ownerId_fkey knitgether
+3897; 2606 16964 FK CONSTRAINT public RowCounter RowCounter_ownerId_fkey knitgether
+3898; 2606 16969 FK CONSTRAINT public RowCounter RowCounter_projectId_fkey knitgether
+3907; 2606 17058 FK CONSTRAINT public RowInstruction RowInstruction_ownerId_fkey knitgether
+3908; 2606 17063 FK CONSTRAINT public RowInstruction RowInstruction_projectId_fkey knitgether
+3909; 2606 17068 FK CONSTRAINT public RowInstruction RowInstruction_rowCounterId_fkey knitgether
+3913; 2606 17120 FK CONSTRAINT public SkillAnimation SkillAnimation_ownerId_fkey knitgether
+3914; 2606 17125 FK CONSTRAINT public SkillAnimation SkillAnimation_skillId_fkey knitgether
+3912; 2606 17115 FK CONSTRAINT public Skill Skill_ownerId_fkey knitgether
+3901; 2606 17005 FK CONSTRAINT public StoredFile StoredFile_ownerId_fkey knitgether
+3928; 2606 17301 FK CONSTRAINT public ToolItem ToolItem_ownerId_fkey knitgether
+3917; 2606 17170 FK CONSTRAINT public UserAccount UserAccount_id_fkey knitgether
+3935; 2606 17371 FK CONSTRAINT public UserSkillLevel UserSkillLevel_ownerId_fkey knitgether
+3936; 2606 17376 FK CONSTRAINT public UserSkillLevel UserSkillLevel_skillId_fkey knitgether
+3899; 2606 16974 FK CONSTRAINT public WorkSession WorkSession_ownerId_fkey knitgether
+3900; 2606 16979 FK CONSTRAINT public WorkSession WorkSession_projectId_fkey knitgether
+3915; 2606 17150 FK CONSTRAINT public Yarn Yarn_ownerId_fkey knitgether

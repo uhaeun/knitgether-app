@@ -1,0 +1,9 @@
+
+> knitgether-api@0.1.0 test:db:projects
+> jest --config ./test/jest-real-db.json --runInBand
+
+Test Suites: 1 passed, 1 total
+Tests:       8 passed, 8 total
+Snapshots:   0 total
+Time:        29.308 s
+Ran all test suites.

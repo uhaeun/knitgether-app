@@ -1,0 +1,12 @@
+ M docs/qa/portfolio/02_functional_spec.md
+ M docs/qa/portfolio/09_test_case_master.md
+ M docs/qa/submission/portfolio.md
+ M "docs/spec/\352\270\260\353\212\245\354\240\225\354\235\230\354\204\234_MVP.md"
+ M "docs/spec/\352\270\260\353\212\245\354\240\225\354\235\230\354\204\234_\353\217\204\352\265\254_\354\204\244\354\240\225_\355\231\210.md"
+ M server/package.json
+ M server/src/projects/project-save.dto.ts
+ M server/src/projects/projects.service.ts
+ M server/test/projects.e2e-spec.ts
+?? qa-runs/
+?? server/test/jest-real-db.json
+?? server/test/projects-concurrency.real-db-spec.ts

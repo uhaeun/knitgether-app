@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22-ios-retest/run_sync.py", line 88, in <module>
+    d.terminate_app('com.uhaeun.KnitGether');d.install_app(o.app);d.activate_app('com.uhaeun.KnitGether');time.sleep(1)
+                                                                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/appium/webdriver/extensions/applications.py", line 147, in activate_app
+    self.execute_script(
+    ~~~~~~~~~~~~~~~~~~~^
+        ext_name,
+        ^^^^^^^^^
+    ...<3 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 617, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 506, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/appium/webdriver/errorhandler.py", line 125, in check_response
+    raise exception_class(msg=message, stacktrace=format_stacktrace(stacktrace))
+selenium.common.exceptions.InvalidArgumentException: Message: Error Domain=FBSOpenApplicationServiceErrorDomain Code=1 "The request to open "com.uhaeun.KnitGether" failed." UserInfo={BSErrorCodeDescription=RequestDenied, NSUnderlyingError=0x1156e6160 {Error Domain=FBSOpenApplicationErrorDomain Code=6 "Application "com.uhaeun.KnitGether" is installing or uninstalling, and cannot be launched." UserInfo={BSErrorCodeDescription=Busy, NSLocalizedFailureReason=Application "com.uhaeun.KnitGether" is installing or uninstalling, and cannot be launched.}}, NSLocalizedDescription=The request to open "com.uhaeun.KnitGether" failed., FBSOpenApplicationRequestID=0xbeda, NSLocalizedFailureReason=The request was denied by service delegate (SBMainWorkspace) for reason: Busy ("Application "com.uhaeun.KnitGether" is installing or uninstalling, and cannot be launched").}
+Stacktrace:
+ProxyRequestError: Request failed with status code 400
+    at JWProxy.proxy (/Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:284:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at JWProxy.proxyCommand (/Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:308:14)
+    at JWProxy.command (/Users/yuha/.appium/node_modules/appium-xcuitest-driver/node_modules/@appium/base-driver/lib/jsonwp-proxy/proxy.ts:322:32)
+    at XCUITestDriver.proxyCommand (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/proxy-helper.ts:96:13)
+    at XCUITestDriver.mobileActivateApp (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/app-management.ts:148:3)
+    at XCUITestDriver.executeMethod (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/basedriver/commands/execute.ts:61:12)
+    at XCUITestDriver.execute (file:///Users/yuha/.appium/node_modules/appium-xcuitest-driver/lib/commands/execute.ts:23:12)

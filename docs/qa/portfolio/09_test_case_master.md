@@ -234,3 +234,105 @@ API-25는 8/29에 구현하고 실행해 4건 전부 통과했다(`test_07_last_
 | 2 | 시트 상태 열이 8/25~26 Appium 스위트를 반영하지 않는 문제 | 8/29 해소. 자동 실행 판정 열을 따로 두고 시트 열은 발견 시점 구분을 위해 남겼다 |
 | 3 | UI-04, 05, 06을 함수 하나로 합친 것이 추적성에 문제가 되는가. 실패 시 어느 케이스인지 구분되는가 | 미정 |
 | 4 | 번호 미배정 3건(7절)의 카탈로그 번호 부여와, 그 전에 짧은 백그라운드 케이스의 검출력 확인 절차를 밟을지 | 미정 (원본 9/15) |
+
+#### 2026-10-24 후속 RTM — SYNC-11 / UI-03
+
+아래는 새 후속 실행이며 본문의 과거 건수·1차 RTM을 소급 변경하지 않는다. 실제 실행 수와 반복 횟수는 [수정 검증 보고서](../../../qa-runs/2026-10-24-sync11-fix/report.md)에서 구분한다.
+
+| SPEC | 후속 TC / 실행 코드 | 상태와 근거 |
+|---|---|---|
+| SYNC-11 원자성 | RACE-01~04 / projects-concurrency.real-db-spec.ts의 같은 기준 경합 검사 | 실제 DB+HTTP PASS. 5쌍의 읽기 barrier와 승자 부모/자식·기존 세션·패자 수동 재요청 확인. 기준 코드 red [200,200]와 수정 green 분리 |
+| SYNC-11 버전 경계 | RACE-05/06, CONTRACT-01 / monotonic-clock 및 validation 검사 | 실제 DB PASS. 연속+1ms, 시계 역전 대응, 과거/미래 불일치409·유효 동일 시각200 |
+| SYNC-11 rollback | RACE-07 / early-child 및 late-child rollback | 실제 SQL PASS. 삭제된 기존 행안내 복구, 실제 도안사본 upsert 후 강제 실패 시 DB 전체 복구 |
+| SYNC-11 CAS 실패·권한 | RACE-08 / 최신본·삭제·자식 결손 및 contract 검사 | 실제 DB PASS.409/latest·404·latest=null, 기존 권한/카운터 호환 유지 |
+| SYNC-11 기존 계약 | CONTRACT-02/03 / test_02·03·11·17·19 | 외부 API18 PASS. 기존 서버 suite147 PASS는 mock 기반을 포함하며 DB 원자성 증거로 대체하지 않음 |
+| SYNC-11 메모 복구 | IOS-01/02, TC-SYNC11-01~04 / run_sync.py·run_pure_ui.py | 수정 서버의 A/B 실제 UI에서12+7 확인 항목 PASS.30초 자동 재저장 관찰과 직접 복구, 다른 필드·재충돌·SQL 확인 |
+| SYNC-11 운영 경로 대조 | TC-SYNC11-05 / probe_concurrency.py | 서버 직접20쌍·프록시20쌍 모두 [200,409] 및 패자 자식 무변경. 내부 겹침 증명은 별도 barrier 검사 |
+| UI-03 단위 정책 | TC-UNIT-01~06 / 앞선 run_ui03.py | [앞선 양 기기 결과](../../../qa-runs/2026-10-22-ios-retest/report.md) PASS. 이번 서버 수정 후 UI-03 전체 재실행으로 합산하지 않음 |
+| 별도 후속 | FILES-01, 자식 전용 API의 통합 버전 | 이번 미실행·범위 밖. DB rollback과 물리 파일 회수 혼동 금지 |
+
+신규 실제 DB8개는 명시적 QA_REAL_DATABASE_URL을 요구하는 별도 npm test:db:projects로 실행한다. 기존 projects.e2e-spec.ts의 route mock 통과와 구분한다. 자동화 ID UI-03(중복 이메일 가입)과 SPEC-UI-03/TC-UNIT(단위 정책)은 다른 번호 체계다.
+
+### 2026-10-24 후속 경계 검사
+
+[후속 보고서](../../../qa-runs/2026-10-24-sync11-followup/report.md). 기존 전체 PATCH 회귀 8 PASS와 별개로 다음을 기록한다.
+
+| ID | 요구/범위 | 실제 결과 | 결함 연결 |
+|---|---|---|---|
+| CHILD-01 | 자식 카운터 저장 뒤 오래된 전체 저장 거절 | FAIL · 77→0, 두200 | QA-SYNC11-CHILD |
+| CHILD-02 | 전체 읽기/CAS 사이 자식 카운터 저장 보호 | FAIL · 88→0, 두200 | QA-SYNC11-CHILD |
+| FILES-01 | SQL rollback의 물리 파일 보상 | FAIL · PDF 1개 잔존 | RC-08 기존 범위 |
+| FILES-02 | 도안 교체 후 참조 해제 파일 정리 | FAIL · 이전 PDF 잔존 | RC-08 기존 범위 |
+
+CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수용 검사는 명시 opt-in이며 기본 실행의4 SKIPPED는 PASS로 계산하지 않는다. 자식 API 전수 검증·파일 정리 SLA·물리 iPhone은 여전히 미검증이다.
+
+
+## 2026-10-26 자식 카운터·도안 파일 후속 수정
+
+[수정·재검증 보고서](../../../qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
+
+- 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모·자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
+- 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체·연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.
+- durable marker로 삭제 실패/중단 후보를 보존한다. 서비스 시작 및60초 주기로1시간 이상 지난 미참조 후보를 재시도한다. 장애 중 완료 시간은 보장하지 않는다. 과거 누적 파일 일괄 정리·모든 업로드 경로·카운터 이외 자식 API는 별도다.
+- 기존 known-gap opt-in을 제거해 수용 검사4개를 기본 실제DB CI 게이트에 포함했다. 원격 CI와 iOS는 이번 변경에서 미실행이며 로컬 검증과 구분한다.
+
+이 절은 위 과거 FAIL/미실행 판정의 후속 이력이다. 과거 증거를 삭제하거나 RC-08 전체 및 제품 릴리즈를 일괄 완료 처리하지 않는다.
+
+## 2026-10-26 최신 main 통합 후보 재검증
+
+[수정 후보 보고서](../../../qa-runs/2026-10-26-main-revalidation/report.md). 기존 실행의 FAIL·SKIP 수는 당시 이력으로 유지한다.
+
+| 추적 | 이번 판정 | 근거 |
+|---|---|---|
+| SYNC-11 전체 저장·카운터·rollback·파일 | 실제DB18 PASS/0 SKIP | projects-concurrency.real-db-spec.ts 기본 게이트 |
+| SYNC-11 실제 외부 경합 | 20쌍 모두200/409 및 승자 일관성 | probe_concurrency.py; main의20쌍200/200과 별도 대조 |
+| SYNC-11 두 기기 메모 복구 | 기본12+화면 전용7 PASS | run_sync.py·run_pure_ui.py, 자동 재저장 관찰300초 |
+| SYNC-11 기존 회귀 | 서버147 / API75 PASS | mock·HTTP·DB 층을 구분하며 E2E 수에 합산하지 않음 |
+| UI-78 오프라인 생성·복구 | 2확인 항목 PASS | 로컬 전용/서버0개→복구 후 중복 없이 서버1개 |
+| UI-03 cm 정책 | 앞선 main12 PASS, 이번 전체 미재실행 | ui03-main-baseline.json, iOS 제품 소스 동일 |
+| 초안 종료 수명 | CHARACTERIZED, 수용 기준 공백 유지 | 종료 전후 화면·서버 버전 대조 |
+| 작업 세션 삭제와 전체 저장 | CHARACTERIZED, 잔여 데이터 복원 위험 | 삭제204→이전 전체200→세션 복원; 카운터 보호와 분리 |
+
+물리 iPhone·모든 자식 API 조합·장기 SLA는 미실행이다. 기존 원격0ae2c64의4개 job success는 해당 커밋 결과이며 새 문서 통합 커밋의 CI와 별도 추적한다.
+
+
+## 2026-10-26 작업 세션 경합·종료 후 초안 보존 후속
+
+[제품 수정·검증 보고서](../../../qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](../../../qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
+
+| 추적 | 이번 판정 | 실행 층/근거 |
+|---|---|---|
+| QA-SYNC11-SESSION 생성·수정·삭제 | 수정 전3 FAIL → 수정 후3 PASS | 오래된 전체 PATCH200 →409 및 SQL 상태 보존 |
+| 세션 경합 순서·실패 rollback | 신규3 PASS | 전체 조회/CAS 사이 삭제, 부모 lock 대기,404 rollback |
+| SYNC-11 회귀 | 실제DB24 / 서버147 / API75 / 외부20쌍 PASS | 서로 다른 층이며 세션6은24에 포함 |
+| 두 기기 메모 충돌·복구 | 12+7 PASS | 입력/안내·직접 재저장·재충돌·타 필드 보존,300초 관찰 |
+| 종료 후 초안 정책 | 3 화면 확인 PASS | 종료/재시작 복구, 버리기 후 제거, 저장 후 저장값 유지 |
+| 초안 계정·프로젝트 격리/수명 | Swift354 중 신규3 PASS | 재생성·성공 저장·버리기·충돌/재조회·프로젝트 삭제 |
+| UI78 오프라인 | 2 PASS | 로컬0서버→복구 후 중복 없이1 |
+| UI03 | 이전 main12 PASS 보존, 이번 전체 미재실행 | 새 Swift 전체 회귀와 UI 전체 실행을 구분 |
+
+사용자 확정: 계정·프로젝트별 기기 보존, 저장 성공·명시적 삭제 시 제거. Codex 수행: 구현·조작·SQL/HTTP 대조·판정. 물리 기기·모든 자식 조합·장기 SLA는 미실행이다.
+
+
+## 2026-10-26 목록 프로젝트 삭제의 초안 정리 보완
+
+[추가 발견·수정·검증](../../../qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
+
+사용자가 보존·제거 정책을 선택했고 Codex가 누락 발견·구현·시험·판정을 수행했다. 앞선 세션·두 기기·초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24·API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA·완료 상태로 확인한다. Draft 유지, 병합·배포 없음.
+
+
+## 2026-10-26 최종 자식 API·UI-03·병합 검증
+
+[최종 실행 보고서](../../../qa-runs/2026-10-26-completion/report.md) · [TC별 결과](../../../qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](../../../qa-runs/2026-10-26-completion/code-review.md). | 추적 | 실제 실행/보강 |
+|---|---|
+| SYNC11-CHILD-ROW-C/U/D | 오래된 전체 PATCH200 재현3 FAIL →409 및 SQL 보존3 PASS |
+| SYNC11-CHILD-PDF/DRAW/DELETE | 오래된 전체 저장200 재현3 FAIL →409 및 SQL 보존3 PASS |
+| SYNC11-DRAW-ROLLBACK | 드로잉 업로드/삭제 SQL 실패500 후 기존 메타데이터·바이트 보존2 PASS |
+| SYNC11-ROW-DUPLICATE | 동시 생성201/400, 실패404 시 부모 버전 롤백1 PASS |
+| SYNC11-INDEPENDENT-CHILD | 사용량·사진·실/바늘/도구 연결 생성 후 전체 저장·SQL/파일 동일1 PASS |
+| SYNC11-CHILD-ID-SCOPE | 다른 프로젝트 ID 재사용3 FAIL → 같은/다른 계정6 PASS,404 및 양쪽 불변 |
+| SYNC11 실제DB 회귀 | 기존24+신규16=40 PASS/0 SKIP |
+| iOS 드로잉 저장 순서 | 온라인 중복 PATCH 생략 / 로컬·오프라인 유지 / 캐시 파일 미재업로드 / pending삭제 DELETE를 Swift359에 포함 |
+| UI-03 최종 앱 | 두 기기별 설정·프로필·회원가입·온보딩5·legacy4. 개별 최종 결과는 링크 보고서 |
+
+서버147·API75·Swift359는 독립 층이며40이나 UI TC에 합산하지 않는다. 이전626 앱 E2E의19·초안3·목록삭제1·오프라인2 및300초 관찰은 당시 근거로 유지한다. 이번 최종 앱에서 전체를 다시 실행했다고 표시하지 않는다.

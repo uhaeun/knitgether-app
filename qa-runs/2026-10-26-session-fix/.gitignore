@@ -1,0 +1,6 @@
+evidence/*private*
+evidence/*sessions*.json
+evidence/*.dump
+evidence/session-restore*.log
+__pycache__/
+evidence/ios-tests.xcresult/

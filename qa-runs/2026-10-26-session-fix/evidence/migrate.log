@@ -1,0 +1,80 @@
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "knitgether_qa_sync11_session_20261026", schema "public" at "127.0.0.1:55438"
+
+23 migrations found in prisma/migrations
+
+Applying migration `20260705114500_init_project_list`
+Applying migration `20260706000000_add_pattern_files`
+Applying migration `20260706010000_add_project_pattern_copies`
+Applying migration `20260706020000_add_project_pattern_copy_drawing_storage`
+Applying migration `20260706030000_add_row_instructions`
+Applying migration `20260709010000_add_gauge_records`
+Applying migration `20260709020000_add_project_schedule_fields`
+Applying migration `20260709030000_add_skills`
+Applying migration `20260709040000_add_library_items`
+Applying migration `20260709050000_add_user_accounts`
+Applying migration `20260709060000_add_project_material_snapshots`
+Applying migration `20260709070000_add_project_yarn_usages`
+Applying migration `20260709080000_add_project_pattern_copy_file_storage`
+Applying migration `20260709090000_add_gauge_measurement_targets`
+Applying migration `20260709220000_add_tool_items`
+Applying migration `20260709230000_add_project_progress_photos`
+Applying migration `20260710000000_add_dictionary_terms`
+Applying migration `20260711060000_add_system_skill_levels`
+Applying migration `20260711070000_extend_system_skills_from_blog`
+Applying migration `20260729120000_add_dictionary_is_system`
+Applying migration `20260809122156_add_project_yarn_needle_links`
+Applying migration `20260810160530_add_library_item_photos`
+Applying migration `20260915124935_add_login_attempt_limit`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20260705114500_init_project_list/
+    └─ migration.sql
+  └─ 20260706000000_add_pattern_files/
+    └─ migration.sql
+  └─ 20260706010000_add_project_pattern_copies/
+    └─ migration.sql
+  └─ 20260706020000_add_project_pattern_copy_drawing_storage/
+    └─ migration.sql
+  └─ 20260706030000_add_row_instructions/
+    └─ migration.sql
+  └─ 20260709010000_add_gauge_records/
+    └─ migration.sql
+  └─ 20260709020000_add_project_schedule_fields/
+    └─ migration.sql
+  └─ 20260709030000_add_skills/
+    └─ migration.sql
+  └─ 20260709040000_add_library_items/
+    └─ migration.sql
+  └─ 20260709050000_add_user_accounts/
+    └─ migration.sql
+  └─ 20260709060000_add_project_material_snapshots/
+    └─ migration.sql
+  └─ 20260709070000_add_project_yarn_usages/
+    └─ migration.sql
+  └─ 20260709080000_add_project_pattern_copy_file_storage/
+    └─ migration.sql
+  └─ 20260709090000_add_gauge_measurement_targets/
+    └─ migration.sql
+  └─ 20260709220000_add_tool_items/
+    └─ migration.sql
+  └─ 20260709230000_add_project_progress_photos/
+    └─ migration.sql
+  └─ 20260710000000_add_dictionary_terms/
+    └─ migration.sql
+  └─ 20260711060000_add_system_skill_levels/
+    └─ migration.sql
+  └─ 20260711070000_extend_system_skills_from_blog/
+    └─ migration.sql
+  └─ 20260729120000_add_dictionary_is_system/
+    └─ migration.sql
+  └─ 20260809122156_add_project_yarn_needle_links/
+    └─ migration.sql
+  └─ 20260810160530_add_library_item_photos/
+    └─ migration.sql
+  └─ 20260915124935_add_login_attempt_limit/
+    └─ migration.sql
+      
+All migrations have been successfully applied.

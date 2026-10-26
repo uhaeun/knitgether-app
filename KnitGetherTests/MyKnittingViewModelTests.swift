@@ -66,13 +66,18 @@ struct MyKnittingViewModelTests {
 
     @Test func deleteProjectReturnsFalseAndKeepsExistingListWhenDeleteFails() async throws {
         let project = Self.makeProject(name: "Existing", ownerId: "user-a")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = ProjectMemoDraftStore(directory: directory)
+        try store.update("draft", savedText: project.memo, ownerId: project.ownerId, projectId: project.id)
         let repository = ProjectRepositoryStub(fetchResults: [.success([project])])
         repository.shouldFailDelete = true
-        let viewModel = MyKnittingViewModel(projectRepository: repository)
+        let viewModel = MyKnittingViewModel(projectRepository: repository, memoDraftStore: store)
         await viewModel.loadProjects()
 
         let didDelete = await viewModel.deleteProject(project)
 
+        #expect(store.text(ownerId: project.ownerId, projectId: project.id) == "draft")
         #expect(!didDelete)
         #expect(viewModel.projects.map(\.name) == ["Existing"])
         #expect(viewModel.errorMessage == "프로젝트를 삭제하지 못했어요.")
@@ -100,15 +105,20 @@ struct MyKnittingViewModelTests {
 
     @Test func deleteProjectSetsSuccessStatusMessage() async throws {
         let project = Self.makeProject(name: "Existing", ownerId: "user-a")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = ProjectMemoDraftStore(directory: directory)
+        try store.update("draft", savedText: project.memo, ownerId: project.ownerId, projectId: project.id)
         let repository = ProjectRepositoryStub(fetchResults: [
             .success([project]),
             .success([]),
         ])
-        let viewModel = MyKnittingViewModel(projectRepository: repository)
+        let viewModel = MyKnittingViewModel(projectRepository: repository, memoDraftStore: store)
         await viewModel.loadProjects()
 
         let didDelete = await viewModel.deleteProject(project)
 
+        #expect(store.text(ownerId: project.ownerId, projectId: project.id) == nil)
         #expect(didDelete)
         #expect(viewModel.projects.isEmpty)
         #expect(viewModel.errorMessage == nil)
