@@ -1,8 +1,8 @@
 # QA 상세 기록
 
-[최신 GitHub 제출 안내](../submission/github-guide.md)에서 대표 사례와 2026-10-27 완료 상태를 먼저 확인할 수 있습니다.
+[QA 포트폴리오](../submission/github-guide.md)에서 대표 사례와 2026-10-27 완료 상태를 먼저 확인할 수 있습니다.
 
-프로젝트와 담당 역할은 [제출용 본문](../submission/portfolio.md)에 있습니다. 여기서는 사례의 원래 조건과 결과를 확인할 수 있습니다.
+프로젝트와 담당 역할은 [기존 포트폴리오 본문](../submission/portfolio.md)에 있습니다. 여기서는 사례의 원래 조건과 결과를 확인할 수 있습니다.
 
 - [검증 기준](02_functional_spec.md)과 [테스트 설계](05_test_cases.md)
 - [수동 수행](06_manual_execution.md)과 [API·DB·네트워크 확인](07_api_and_network.md)

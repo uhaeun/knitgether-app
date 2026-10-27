@@ -1,4 +1,4 @@
-# GitHub 제출 안내
+# 뜨개더 QA 포트폴리오
 
 이 저장소는 뜨개더의 앱 코드와 QA 판단·실행 근거를 함께 제공합니다. 처음에는 이 문서의 세 사례를 읽고, 필요한 부분만 연결된 TC·HTTP·SQL·화면으로 확인할 수 있습니다.
 
@@ -12,7 +12,7 @@
 | 기존 직접 수행 이력 | 수동·Postman·Charles·SQL 및 Appium 관련 수행은 [기존 본문](portfolio.md)과 [수동 실행 기록](../portfolio/06_manual_execution.md)의 당시 조건에 따름 |
 | Codex의 후속 수행 | 2026-10-24~26 코드·기존 TC 분석, 격리 환경 구성, 재현·구현, 실제 시험·판정, 화면·HTTP·SQL 증거화, 문서 보완, 코드 리뷰와 PR 병합 실행 |
 
-AI가 실행한 후속 시험을 지원자의 직접 수동 수행으로, Codex 자체 리뷰를 독립된 사람의 승인으로 표현하지 않습니다. 구현 참여와 QA 요구사항 결정을 구분합니다.
+AI가 실행한 후속 시험을 유하은의 직접 수동 수행으로, Codex 자체 리뷰를 독립된 사람의 승인으로 표현하지 않습니다. 구현 참여와 QA 요구사항 결정을 구분합니다.
 
 ## 사례 1 · SYNC-11 동시 수정에서 기록 보존
 
@@ -71,7 +71,7 @@ AI가 실행한 후속 시험을 지원자의 직접 수동 수행으로, Codex 
 - [PR 최종 CI](https://github.com/uhaeun/knitgether-app/actions/runs/40344731655)와 [병합 후 main CI](https://github.com/uhaeun/knitgether-app/actions/runs/40348286022) 각각 4개 job 성공. [상태 스냅샷](evidence/2026-10-27-handoff/main-CI-status.json)을 보존했습니다.
 - 병합 main의 로컬 서버 빌드와 실제 HTTP/SQL 충돌·수동 재저장·자식 변경 보호를 재확인했습니다. [HTTP·SQL](evidence/2026-10-27-handoff/main-smoke.json) · [빌드](evidence/2026-10-27-handoff/main-build-status.json)
 - 병합 main과 제품 소스가 같은 앱으로 두 QA 시뮬레이터에서 실행을 확인했습니다. 이 로컬 확인은 전체 E2E 재실행이 아닙니다. [소스 대조](evidence/2026-10-27-handoff/main-source-audit.json) · [앱 실행](evidence/2026-10-27-handoff/main-native.json)
-- QA DB·백업은 로컬에 보존했고 서비스는 종료했습니다. 토큰·비밀번호·Appium 세션·원본 로그·DB dump는 이 제출 안내에 추가하지 않습니다.
+- QA DB·백업은 로컬에 보존했고 서비스는 종료했습니다. 토큰·비밀번호·Appium 세션·원본 로그·DB dump는 공개 자료에 포함하지 않습니다.
 - 운영/TestFlight 배포, 이번 변경의 실물 iPhone 전체 검증, 장기 부하/SLA, 모든 파일·계정 전환 조합과 과거 고아 파일 일괄 정리는 미실행입니다. 기존 결함의 상태는 결함 대장의 해당 시점 기록을 따릅니다.
 
 ## 실행 방법과 이전 자료
