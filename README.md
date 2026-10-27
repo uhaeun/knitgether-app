@@ -1,36 +1,69 @@
-# 뜨개더 KnitGether
+# 뜨개더 KnitGether · iOS QA 포트폴리오
 
-도안을 보며 단수를 세고, 작업 기록과 뜨개 재료를 관리하는 SwiftUI iOS 앱입니다. 앱 화면에 보이는 값이 API 응답, DB 저장값과 맞는지 확인한 QA 기록을 담았습니다.
+도안을 보며 단수를 세고, 작업 기록과 뜨개 재료를 관리하는 SwiftUI iOS 앱입니다. **작업 기록이 화면·API·DB에서 일치하고, 충돌과 앱 종료 후에도 보존되는지**를 중심으로 검증했습니다.
 
-[포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf) · [본문과 화면](docs/qa/submission/portfolio.md)
+[제출용 읽기 안내](docs/qa/submission/github-guide.md) · [기존 포트폴리오 본문](docs/qa/submission/portfolio.md) · [TC별 최종 결과](qa-runs/2026-10-26-completion/case-results.md)
 
-앱 기획과 테스트 설계·수행은 유하은이 맡았습니다. 기능별 기대 결과를 정하고, 수동 테스트와 Postman·Charles·SQL을 이용한 확인을 진행했습니다. Appium 자동화 대상과 조건을 정하고 테스트 코드를 보완해 실행했습니다. 앱과 API 서버 구현에는 AI를 사용했습니다.
+## 먼저 볼 내용
 
-## 테스트에서 발견한 것
+| 확인할 내용 | 문서 |
+|---|---|
+| 프로젝트 목적, 역할, 대표 사례와 결과 | [GitHub 제출 안내](docs/qa/submission/github-guide.md) |
+| 최신 실행 환경·발견·검증 범위 | [2026-10-26 최종 QA 보고서](qa-runs/2026-10-26-completion/report.md) |
+| 요구사항 → 테스트 → 결함 추적 | [기능 기준](docs/qa/portfolio/02_functional_spec.md) · [RTM](docs/qa/portfolio/09_test_case_master.md) · [결함 대장](docs/qa/portfolio/10_defect_catalog.md) |
+| 수정과 코드 검토 | [PR #48](https://github.com/uhaeun/knitgether-app/pull/48) · [Codex 리뷰](qa-runs/2026-10-26-completion/code-review.md) |
 
-도안을 바꿀 때 안내 없이 드로잉이 지워졌습니다. 삭제 확인창을 추가한 뒤, 취소하면 기존 그림이 남고 승인하면 지워지는지 다시 확인했습니다.
+## 담당 역할
 
-단수 정보가 없는 프로젝트 한 건 때문에 목록 전체가 HTTP 500으로 실패하기도 했습니다. 앱에는 예전 목록이 남아 있어 화면만 보면 알아채기 어려웠습니다. API 응답과 DB를 대조해 원인을 확인했고, 수정 후에는 오류 항목을 제외한 정상 목록이 반환됐습니다. 오류 항목의 개별 조회는 후속 과제로 남았습니다.
+유하은은 앱을 기획하고, 기능별 기대 결과와 QA 우선순위, 동시 수정 시 데이터 보존·직접 재저장 기준, cm 고정 및 계정·프로젝트별 메모 초안 정책을 결정했습니다. 기존 수동 테스트·Postman·Charles·SQL 수행 이력은 [포트폴리오 본문](docs/qa/submission/portfolio.md)에 기록했습니다.
 
-이 밖에 탭을 오간 뒤 도안 페이지가 초기화되는 문제, 계정 변경 후 이전 기록이 보이는 문제, 앱 종료 후 단수가 정상 복구되는지도 확인했습니다. [사례별 과정과 결과](docs/qa/submission/portfolio.md)에 재현 조건과 수정 후 확인 내용을 적었습니다.
+앱·서버 구현에는 AI 도구를 활용했습니다. **2026-10-24~26 후속 검증의 환경 구성·코드 보완·자동화 실행·판정·증거 수집·코드 리뷰·병합은 Codex가 수행했습니다.** 이를 유하은의 직접 실행이나 독립된 사람의 코드 리뷰·배포 승인으로 기록하지 않습니다.
 
-사용 흐름과 예외 상황별로 묶은 시나리오 22건을 설계하고, 21건의 수동 실행 결과를 남겼습니다. 이후 추가한 UI·API 자동화는 별도 기록이며, 자동화 코드가 있다는 것과 실제 실행을 마친 것은 구분했습니다.
+## 대표 검증 사례
 
-- [테스트 설계와 수행 기록](docs/qa/portfolio/README.md)
-- [결함과 수정 이력](docs/qa/portfolio/10_defect_catalog.md)
-- [회차별 실행 결과](docs/qa/portfolio/11_execution_results.md)
+| 사례 | QA 판단과 확인 | 증거 |
+|---|---|---|
+| SYNC-11 · 동일 계정 동시 메모 수정 | 먼저 저장한 값과 다른 기기의 미저장 입력을 보존하고, 409 안내 뒤 직접 재저장해야 함 | [두 기기 실행](qa-runs/2026-10-26-session-fix/report.md) |
+| 자식 API · 오래된 전체 저장 | 행 안내·작업 세션·도안 변경도 오래된 전체 저장으로 사라지면 안 됨. 추가 경로 6 FAIL 및 ID 범위 3 FAIL 재현 후 수정 | [최종 발견·조치](qa-runs/2026-10-26-completion/code-review.md) |
+| UI-03 · cm 고정 | 단위 선택 제거와 함께 과거 preferredUnits 값이 실제 cm 계산을 바꾸지 않는지 확인 | [두 기기 UI-03 24개 결과](qa-runs/2026-10-26-completion/case-results.md) |
 
-2026-10-04에는 Codex가 Appium을 실행해 추가 촬영과 재검증을 했습니다. 당시 시뮬레이터에 설치돼 있던 앱을 사용했습니다. 유하은의 기존 수행 이력과는 별도입니다. 설치 앱의 소스 커밋이 저장소 HEAD와 같은지는 확인되지 않았습니다. [촬영 환경과 원본 화면](docs/qa/submission/evidence/2026-10-04/README.md)
+## 최신 완료 상태
 
-## 코드 보기
+제품 병합 기준: **`0d0ba22`**, [PR #48](https://github.com/uhaeun/knitgether-app/pull/48). 아래는 2026-10-26 최종 검증 및 10-27 완료 기록입니다. 이후 문서 변경을 새 제품 실행으로 세지 않습니다.
 
-앱은 `KnitGether/`, API 서버와 PostgreSQL 모델은 `server/`에 있습니다.
+| 검증 층 | 실행 결과 |
+|---|---|
+| 실제 HTTP + PostgreSQL 회귀 | 40 PASS / 0 SKIP |
+| 서버 경로·파일 회귀 | 147 PASS |
+| API·네트워크·DB 회귀 | 75 PASS |
+| Swift 내부 기능 | 359 PASS / 41 suites |
+| 최종 앱 UI-03 | 독립 시뮬레이터 A12 + B12 = 24 PASS |
+| 병합 후 main CI | [4개 job 모두 성공](https://github.com/uhaeun/knitgether-app/actions/runs/40348286022) |
 
-- [기획·기능 정의](docs/spec/README.md)
-- [Appium 코드와 실행 방법](qa/appium/README.md)
-- [API 테스트 코드와 실행 방법](qa/api-tests/README.md)
-- [앱 구조와 개발 환경](docs/dev/)
+검증 층은 서로 합산하거나 대체하지 않습니다. 기존 SYNC-11 두 기기 19개 확인, 종료 후 초안 3개, 목록 삭제 1개, 오프라인 2개 및 자동 재저장 없음 300초는 **각 당시 빌드의 증거**이며 최종 앱에서 전부 재실행한 결과가 아닙니다. [완료 범위와 병합 후 증거](docs/qa/submission/github-guide.md#완료-범위와-한계)
 
-내부 기능 테스트는 `KnitGetherTests/`, QA 회귀용 XCUITest는 `KnitGetherQAUITests/`, 개발 단계 XCUITest는 `KnitGetherUITests/`에 있습니다. 결함 주입 실험은 `qa/mutation/`에 별도로 두었습니다.
+운영·TestFlight 배포, 실물 iPhone에서의 이번 전체 재검증, 장기 부하/SLA는 미실행입니다. 과거 FAIL과 알려진 한계는 [회차별 기록](qa-runs/README.md)에 보존했습니다.
 
-[저장소 검토 기록](docs/qa/repository-review/README.md) · [2026-10-04 재검증 결과](docs/qa/validation/2026-10-04/README.md)
+## 코드와 재현 방법
+
+| 위치 | 내용 |
+|---|---|
+| [KnitGether/](KnitGether/) | SwiftUI 앱·로컬 저장·동기화 |
+| [server/](server/) | NestJS·Prisma·PostgreSQL API |
+| [KnitGetherTests/](KnitGetherTests/) | Swift 내부 기능 테스트 |
+| [qa/appium/](qa/appium/README.md) | Appium UI 자동화 |
+| [qa/api-tests/](qa/api-tests/README.md) | pytest API·네트워크·SQL 검사 |
+| [최종 RUNBOOK](qa-runs/2026-10-26-completion/RUNBOOK.md) | 격리 DB·두 시뮬레이터 실행 조건 |
+| [개발 모드](docs/dev/modes.md) · [로컬 실행](docs/dev/09_local_device_development.md) | 앱·서버 실행 설정 |
+
+CI 구성은 [.github/workflows/ci.yml](.github/workflows/ci.yml)에서 확인할 수 있습니다. 실제 DB 회귀는 QA 전용 DB를 사용하며, 기존 DB 초기화 명령을 제출 안내의 실행 절차로 사용하지 않습니다.
+
+<details>
+<summary>이전 포트폴리오·추가 자료</summary>
+
+- [기존 PDF](output/pdf/knitgether_qa_portfolio.pdf): 10월 초 사례 중심의 기존 판본입니다. 최신 동시성·UI-03·병합 결과는 위 GitHub 안내와 보고서를 함께 확인합니다.
+- [QA 설계·수동 수행 상세](docs/qa/portfolio/README.md)
+- [2026-10-04 화면 촬영과 빌드 출처의 한계](docs/qa/submission/evidence/2026-10-04/README.md)
+- [기획·기능 정의](docs/spec/README.md) · [저장소 검토 기록](docs/qa/repository-review/README.md)
+
+</details>
