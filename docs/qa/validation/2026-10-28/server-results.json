@@ -1,0 +1,944 @@
+{
+  "date": "2026-10-28",
+  "source": "242b8833544806267b65d4735dddda004eb60260",
+  "environment": {
+    "os": "Windows",
+    "node": "24.14.0",
+    "npm": "11.9.0",
+    "prisma": "6.19.3"
+  },
+  "execution_layer": "Nest route tests with Prisma mocks; no real PostgreSQL or iOS",
+  "runs": [
+    {
+      "run": "initial",
+      "passed": 132,
+      "failed": 15,
+      "total": 147,
+      "suites_passed": 9,
+      "suites_failed": 3
+    },
+    {
+      "run": "structured-evidence",
+      "passed": 132,
+      "failed": 15,
+      "total": 147
+    }
+  ],
+  "prisma_generation": "PASS",
+  "server_build": "PASS",
+  "command": "npx jest --config ./test/jest-e2e.json --runInBand --json --outputFile=<local-result>",
+  "cases": [
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects unauthenticated requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects requests with the wrong token",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route authenticates API tokens as their configured user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns only active projects owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns one active project owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route updates only a project row counter through the partial API",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route upserts one row instruction through the partial API",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route updates one work session through the partial API",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route lists yarn usage records for an owned project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route records yarn usage and decrements the owned yarn quantity",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route updates yarn usage and adjusts only the quantity delta",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route soft deletes yarn usage and restores the consumed yarn quantity",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route soft deletes yarn usage without restoring quantity when the linked yarn is already deleted",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route lists progress photos for an owned project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route uploads a progress photo for an owned project",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1158:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects non-image progress photo uploads",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route updates progress photo metadata",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route downloads progress photo bytes",
+      "status": "failed",
+      "failure": [
+        "Error: expected 200 \"OK\", got 404 \"Not Found\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1236:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route deletes a progress photo and removes its stored file",
+      "status": "failed",
+      "failure": [
+        "Error: expected 204 \"No Content\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1251:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns project pattern copy metadata with projects",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route downloads the active project pattern copy PDF",
+      "status": "failed",
+      "failure": [
+        "Error: expected 200 \"OK\", got 404 \"Not Found\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1342:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route uploads a directly attached project pattern copy PDF",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1374:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route downloads a directly attached project pattern copy PDF",
+      "status": "failed",
+      "failure": [
+        "Error: expected 200 \"OK\", got 404 \"Not Found\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1416:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route uploads drawing data for the active project pattern copy",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1437:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route downloads drawing data for the active project pattern copy",
+      "status": "failed",
+      "failure": [
+        "Error: expected 200 \"OK\", got 404 \"Not Found\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1474:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns 404 when a project is missing or not owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route creates a project with row counter and work sessions",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a project when the row counter belongs to a different project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a project when a work session belongs to a different project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route saves a project pattern copy with the project",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\projects.e2e-spec.ts:1612:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route updates an active project owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route reconciles project children from the full patch payload",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route soft-deletes an active project owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns 404 when deleting a missing project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a project memo longer than 500 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a row counter name longer than 30 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a work session memo longer than 500 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a work session whose end time is not after its start time",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a work session longer than 24 hours",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route accepts a work session exactly 24 hours long",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a project save whose work session reverses time",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a new project when the owner already has 200 active projects",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects an existing project on create without consulting the project limit",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns 409 when creating a project whose ID belongs to another owner",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns 409 with the server copy when baseUpdatedAt is older than the stored project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route saves a project when baseUpdatedAt matches the stored updatedAt",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route returns 409 when baseUpdatedAt is truncated to seconds while the stored updatedAt has milliseconds",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route saves a project when baseUpdatedAt echoes the stored updatedAt down to the millisecond",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "projects.e2e-spec.ts",
+      "name": "Projects route rejects a stale patch when baseUpdatedAt is older than the stored project",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route rejects unauthenticated yarn requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route lists active yarns owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route lists active needles owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route lists project usages for an owned yarn",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route creates a yarn for the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route updates an owned yarn",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route soft deletes an owned yarn",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route creates a needle for the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route updates an owned needle",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route soft deletes an owned needle",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route links a yarn to a project with a link-time snapshot",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route refreshes the snapshot when relinking an existing yarn link",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route counts only live projects linked to a yarn",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route counts only live projects linked to a needle",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route counts only live projects linked to a tool",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route returns 404 when counting links for a yarn that does not exist",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route lists project yarn links regardless of yarn liveness",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route unlinks a yarn from a project with a tombstone",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route links a needle to a project with a link-time snapshot",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route uploads a representative photo for an owned yarn",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\library.e2e-spec.ts:739:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route rejects a non-image yarn photo upload",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route deletes a yarn photo and clears photo fields",
+      "status": "failed",
+      "failure": [
+        "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\library.e2e-spec.ts:779:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route rejects a yarn name longer than 30 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route rejects yarn notes longer than 500 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route rejects a needle name longer than 30 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "library.e2e-spec.ts",
+      "name": "Library route rejects a tool name longer than 30 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route rejects unauthenticated requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route uploads a PDF pattern and returns metadata",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\patterns.e2e-spec.ts:150:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route rejects non-PDF uploads",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route creates a title-only pattern without a file",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route rejects a pattern title longer than 30 characters on creation",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route rejects a pattern title longer than 30 characters on update",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route rejects a fileless creation without title",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route attaches a PDF to a pattern that has no file yet",
+      "status": "failed",
+      "failure": [
+        "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\patterns.e2e-spec.ts:307:8)\n    at Promise.finally.completed (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1834:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1774:10)\n    at _callCircusTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1167:40)\n    at _runTestInContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1103:3)\n    at runTestWithContext (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:996:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1008:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at _runTestsForDescribeBlockOnce (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:1003:11)\n    at _runTestsForDescribeBlock (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:824:5)\n    at run (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:789:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\jestAdapterInit.js:2300:21)\n    at jestAdapter (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-circus\\build\\runner.js:111:19)\n    at runTestInternal (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:247:16)\n    at runTest (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\jest-runner\\build\\index.js:315:7)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route rejects attaching a file when the pattern already has one",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route returns only active patterns owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route returns one active pattern owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route updates owner-scoped pattern metadata",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route downloads the owner-scoped PDF",
+      "status": "failed",
+      "failure": [
+        "Error: expected 200 \"OK\", got 404 \"Not Found\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\patterns.e2e-spec.ts:423:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "patterns.e2e-spec.ts",
+      "name": "Patterns route soft-deletes metadata and removes the disk file",
+      "status": "failed",
+      "failure": [
+        "Error: expected 204 \"No Content\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\test\\patterns.e2e-spec.ts:440:8)\n----\n    at Test._assertStatus (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:309:14)\n    at C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:365:13\n    at Test._assertFunction (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:342:13)\n    at Test.assert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:195:23)\n    at localAssert (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:138:14)\n    at Server.<anonymous> (C:\\Users\\haeun\\OneDrive - 티맥스티베로\\문서\\ChatGPT\\뜨개더\\knitgether-app\\server\\node_modules\\supertest\\lib\\test.js:152:11)\n    at Object.onceWrapper (node:events:622:28)\n    at Server.emit (node:events:508:28)\n    at emitCloseNT (node:net:2427:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+      ]
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes registers an account and returns an access token with profile data",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes rejects duplicate account registration by email",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes logs in and uses the issued token for authenticated routes",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes locks the account after five consecutive failed logins",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes rejects the correct password while the account is locked",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes clears the failure count after a successful login",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes does not reveal account existence through the lock response",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth.e2e-spec.ts",
+      "name": "Auth routes rejects login with an invalid password",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route rejects unauthenticated requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route lists active system and user skills with current user levels",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route returns one active skill owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route creates a skill for the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route updates an owned skill",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route rejects direct updates to system skills",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route updates the current user level for a system skill",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route lists active skill animations owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "skills.e2e-spec.ts",
+      "name": "Skills route soft deletes an owned skill",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-targets.e2e-spec.ts",
+      "name": "Gauge targets route rejects unauthenticated requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-targets.e2e-spec.ts",
+      "name": "Gauge targets route lists active gauge targets with swatches and measurements",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-targets.e2e-spec.ts",
+      "name": "Gauge targets route creates a gauge target with nested swatches and measurements",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-targets.e2e-spec.ts",
+      "name": "Gauge targets route rejects invalid target dimensions",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-targets.e2e-spec.ts",
+      "name": "Gauge targets route updates existing swatches and measurements within the owner scope without duplicate creates",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-targets.e2e-spec.ts",
+      "name": "Gauge targets route soft deletes an owned gauge target and its nested data",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route rejects unauthenticated requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route lists active gauge records owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route creates a before-wash gauge record with calculated results",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route rejects invalid measurement values",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route updates an owned gauge record with recalculated results",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route does not update a missing gauge record",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "gauge-records.e2e-spec.ts",
+      "name": "Gauge records route soft deletes an owned gauge record",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route rejects unauthenticated requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route lists active dictionary terms owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route returns one active dictionary term owned by the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route creates a dictionary term for the current user",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route updates an owned dictionary term",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route soft deletes an owned dictionary term",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "dictionary.e2e-spec.ts",
+      "name": "Dictionary terms route returns 400 when required text is missing",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "profile.e2e-spec.ts",
+      "name": "Profile route rejects unauthenticated profile requests",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "profile.e2e-spec.ts",
+      "name": "Profile route returns the current user profile and creates a default when missing",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "profile.e2e-spec.ts",
+      "name": "Profile route updates the current user profile",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "profile.e2e-spec.ts",
+      "name": "Profile route rejects a display name longer than 80 characters",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "health.e2e-spec.ts",
+      "name": "Health route returns API health status",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security rejects the implicit dev token in production when DEV_AUTH_TOKEN is unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security rejects the implicit dev token when NODE_ENV is unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security rejects the implicit dev token when NODE_ENV is blank",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security rejects the implicit dev token in staging when DEV_AUTH_TOKEN is unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security fails clearly in production when AUTH_JWT_SECRET is unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security fails clearly when NODE_ENV and AUTH_JWT_SECRET are unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security fails clearly when NODE_ENV is blank and AUTH_JWT_SECRET is unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security fails clearly in staging when AUTH_JWT_SECRET is unset",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security signs and verifies JWTs in production when AUTH_JWT_SECRET is set",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security keeps the implicit dev token available in development",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security keeps the implicit dev token available in test",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security keeps the local JWT secret fallback available in development",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security keeps the local JWT secret fallback available in test",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "auth-configuration.e2e-spec.ts",
+      "name": "Auth configuration security keeps configured API token mapping available in production",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "listen-options.e2e-spec.ts",
+      "name": "Server listen options listens on all interfaces by default for local device testing",
+      "status": "passed",
+      "failure": []
+    },
+    {
+      "suite": "listen-options.e2e-spec.ts",
+      "name": "Server listen options allows the listen host to be overridden",
+      "status": "passed",
+      "failure": []
+    }
+  ]
+}

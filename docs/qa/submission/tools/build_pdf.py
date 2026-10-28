@@ -3,6 +3,7 @@
 Requires reportlab. Uses embedded Pretendard fonts and selectable PDF text.
 """
 from pathlib import Path
+import os
 import re
 from html import escape
 from reportlab.pdfbase import pdfmetrics
@@ -29,7 +30,7 @@ INK, TEAL, MUTED = '#243431', '#346D67', '#596963'
 W, H = A4
 M = 20 * mm
 CW = W - M * 2
-BASE = 'https://github.com/uhaeun/knitgether-app/blob/main/'
+BASE = 'https://github.com/uhaeun/knitgether-app/blob/' + os.environ.get('KNITGETHER_PDF_REF', 'main') + '/'
 
 styles = {
     'body': ParagraphStyle('body', fontName='Korean', fontSize=11, leading=17.05,
@@ -194,7 +195,7 @@ class NumberedCanvas(Canvas):
         super().save()
 
 def build():
-    lines = SOURCE.read_text().splitlines()
+    lines = SOURCE.read_text(encoding='utf-8').splitlines()
     story = []
     i = 0
     photo_width = 165

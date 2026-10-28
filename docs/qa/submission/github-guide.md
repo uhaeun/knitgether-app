@@ -9,7 +9,7 @@
 | 구분 | 담당 내용 |
 |---|---|
 | 유하은의 판단·결정 | 앱 기획, 테스트 우선순위·기대 결과, SYNC-11의 서버 값·입력 보존 및 직접 재저장 기준, cm 고정, 계정·프로젝트별 기기 초안 보존과 저장 성공·명시적 삭제 시 제거 정책, main 병합·로컬 검증 범위 |
-| 기존 직접 수행 이력 | 수동·Postman·Charles·SQL 및 Appium 관련 수행은 [기존 본문](portfolio.md)과 [수동 실행 기록](../portfolio/06_manual_execution.md)의 당시 조건에 따름 |
+| 기존 직접 수행 이력 | 수동·Postman·Charles·SQL 및 Appium 관련 수행은 [제출 본문](portfolio.md)과 [수동 실행 기록](../portfolio/06_manual_execution.md)의 당시 조건에 따름 |
 | Codex의 후속 수행 | 2026-10-24~26 코드·기존 TC 분석, 격리 환경 구성, 재현·구현, 실제 시험·판정, 화면·HTTP·SQL 증거화, 문서 보완, 코드 리뷰와 PR 병합 실행 |
 
 AI가 실행한 후속 시험을 유하은의 직접 수동 수행으로, Codex 자체 리뷰를 독립된 사람의 승인으로 표현하지 않습니다. 구현 참여와 QA 요구사항 결정을 구분합니다.
@@ -78,4 +78,4 @@ AI가 실행한 후속 시험을 유하은의 직접 수동 수행으로, Codex 
 
 소스 실행은 [개발 모드](../../dev/modes.md)와 [로컬 개발](../../dev/09_local_device_development.md), 최종 검증 재현은 [RUNBOOK](../../../qa-runs/2026-10-26-completion/RUNBOOK.md)을 따릅니다. 실행 경로·시뮬레이터 ID·전용 DB는 자신의 환경에 맞게 준비해야 합니다. 기록된 포트가 현재 실행 중이라는 의미는 아닙니다.
 
-[기존 포트폴리오 본문](portfolio.md)과 [PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)는 초기 사례 중심의 이전 판본입니다. PDF에는 최신 후속 결과가 모두 반영되지 않았으므로 이 안내와 최종 보고서를 함께 확인합니다. [QA 상세](../portfolio/README.md) · [회차별 실행](../../../qa-runs/README.md)
+[제출 본문](portfolio.md)과 [제출 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)는 2026-10-28에 초기 대표 사례와 최신 후속 정책·결과·한계를 통합했습니다. PDF는 14쪽이며 기존 11쪽에 후속 검증 3쪽을 추가했습니다. [이번 검수·Windows 회귀 실패·미실행](../validation/2026-10-28/README.md)을 함께 확인합니다. 기존 Mac 통과 결과를 이번 Windows 새 실행 결과로 읽지 않습니다. [QA 상세](../portfolio/README.md) · [회차별 실행](../../../qa-runs/README.md)
