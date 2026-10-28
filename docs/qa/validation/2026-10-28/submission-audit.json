@@ -382,5 +382,167 @@
       "expected_rows": 12
     }
   },
-  "pdf_sha256": "570881efd403e6fbbcfb2fab61775201967cbd9705f037626bb53f7288b1fbba"
+  "pdf_sha256": "6ea789453a8477986cfe2083c1740bd2cde22051a17bcf5774acc75701fde850",
+  "pdf_repository_links": [
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/01_workspace.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/page-verified/12_library_hub.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/03_quality_risk_map.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/05_test_cases.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/09_test_case_master.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/10_defect_catalog.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/tests/test_tc10a_workspace_pattern.py#L180-L199",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/pages/pattern_panel_page.py#L296-L298",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/README.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/02_drawing_before.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/03_replace_warning.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/04_cancel_preserved.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/05_confirm_replaced.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/10_defect_catalog.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/api-tests/test_13_row_counter_isolation.py#L21-L61",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/page-verified/08_home_between.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/page-verified/09_page_after_home.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/06_manual_execution.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/tests/test_tc10a_workspace_pattern.py#L292-L341",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/validation/2026-10-04/evidence/appium-page-final.xml",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-04/README.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/06_manual_execution.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/qa/appium/tests/test_tc15_logout.py#L23-L49",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/KnitGetherTests/AppRepositoryContainerTests.swift#L612-L648",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/05_test_cases.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/06_manual_execution.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/11_execution_results.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/13_automation_showcase.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/90bb07aa3a1a507888c5de24d6b660e53145914c/docs/qa/portfolio/14_observations.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-session-fix/evidence/sync-results.json",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-session-fix/evidence/pure-ui-results.json",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-session-fix/report.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-completion/evidence/A-ui03-gauge-Imperial.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-completion/evidence/B-ui03-gauge-cm.png",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-completion/evidence/ui03-results-A.json",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-completion/evidence/ui03-results-B.json",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/validation/2026-10-04/README.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/qa-runs/2026-10-26-completion/report.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/submission/evidence/2026-10-27-handoff/README.md",
+      "git_target_exists": true
+    },
+    {
+      "url": "https://github.com/uhaeun/knitgether-app/blob/c3a106a5ecd6b9f6ef9d7c0295426b9af8673e0c/docs/qa/validation/2026-10-28/README.md",
+      "git_target_exists": true
+    }
+  ]
 }
