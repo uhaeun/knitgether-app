@@ -1,0 +1,386 @@
+{
+  "local_links_and_images": [
+    {
+      "target": "evidence/2026-10-04/01_workspace.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/01_workspace.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/page-verified/12_library_hub.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/page-verified/12_library_hub.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/README.md",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/02_drawing_before.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/02_drawing_before.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/03_replace_warning.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/03_replace_warning.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/04_cancel_preserved.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/04_cancel_preserved.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/05_confirm_replaced.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/05_confirm_replaced.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/page-verified/08_home_between.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/page-verified/08_home_between.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/page-verified/09_page_after_home.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/page-verified/09_page_after_home.png",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-04/README.md",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/sync-results.json",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/pure-ui-results.json",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-session-fix/report.md",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/A-ui03-gauge-Imperial.png",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/B-ui03-gauge-cm.png",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-A.json",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-B.json",
+      "exists": true
+    },
+    {
+      "target": "../validation/2026-10-04/README.md",
+      "exists": true
+    },
+    {
+      "target": "../../../qa-runs/2026-10-26-completion/report.md",
+      "exists": true
+    },
+    {
+      "target": "evidence/2026-10-27-handoff/README.md",
+      "exists": true
+    },
+    {
+      "target": "../validation/2026-10-28/README.md",
+      "exists": true
+    }
+  ],
+  "pdf_page_count": 14,
+  "korean_text_roundtrip": true,
+  "replacement_glyphs": 0,
+  "pdf_link_count": 41,
+  "embedded_font_check": [
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Bold",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAB+Pretendard-Regular",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+Pretendard-SemiBold",
+      "embedded": true
+    }
+  ],
+  "spec_ids": {
+    "rows": 48,
+    "unique": 48,
+    "duplicates": []
+  },
+  "historical_evidence": {
+    "qa-runs/2026-10-26-session-fix/evidence/sync-results.json": {
+      "rows": 12,
+      "statuses": {
+        "PASS": 12
+      },
+      "expected_rows": 12
+    },
+    "qa-runs/2026-10-26-session-fix/evidence/pure-ui-results.json": {
+      "rows": 7,
+      "statuses": {
+        "PASS": 7
+      },
+      "expected_rows": 7
+    },
+    "qa-runs/2026-10-26-completion/evidence/ui03-results-A.json": {
+      "rows": 12,
+      "statuses": {
+        "PASS": 12
+      },
+      "expected_rows": 12
+    },
+    "qa-runs/2026-10-26-completion/evidence/ui03-results-B.json": {
+      "rows": 12,
+      "statuses": {
+        "PASS": 12
+      },
+      "expected_rows": 12
+    }
+  },
+  "pdf_sha256": "570881efd403e6fbbcfb2fab61775201967cbd9705f037626bb53f7288b1fbba"
+}
