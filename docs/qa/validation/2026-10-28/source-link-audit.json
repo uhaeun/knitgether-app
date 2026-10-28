@@ -1,0 +1,126 @@
+{
+  "pinned_links": [
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/03_quality_risk_map.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/05_test_cases.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/09_test_case_master.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/10_defect_catalog.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "qa/appium/tests/test_tc10a_workspace_pattern.py",
+      "exists": true,
+      "fragment": "L180-L199",
+      "line_in_range": true
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "qa/appium/pages/pattern_panel_page.py",
+      "exists": true,
+      "fragment": "L296-L298",
+      "line_in_range": true
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/10_defect_catalog.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "qa/api-tests/test_13_row_counter_isolation.py",
+      "exists": true,
+      "fragment": "L21-L61",
+      "line_in_range": true
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/06_manual_execution.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "qa/appium/tests/test_tc10a_workspace_pattern.py",
+      "exists": true,
+      "fragment": "L292-L341",
+      "line_in_range": true
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/validation/2026-10-04/evidence/appium-page-final.xml",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/06_manual_execution.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "qa/appium/tests/test_tc15_logout.py",
+      "exists": true,
+      "fragment": "L23-L49",
+      "line_in_range": true
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "KnitGetherTests/AppRepositoryContainerTests.swift",
+      "exists": true,
+      "fragment": "L612-L648",
+      "line_in_range": true
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/05_test_cases.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/06_manual_execution.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/11_execution_results.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/13_automation_showcase.md",
+      "exists": true,
+      "fragment": ""
+    },
+    {
+      "commit": "90bb07aa3a1a507888c5de24d6b660e53145914c",
+      "path": "docs/qa/portfolio/14_observations.md",
+      "exists": true,
+      "fragment": ""
+    }
+  ],
+  "original_pdf_pages": 11,
+  "all_pinned_targets_valid": true
+}
