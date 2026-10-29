@@ -78,4 +78,6 @@ AI가 실행한 후속 시험을 유하은의 직접 수동 수행으로, AI 자
 
 소스 실행은 [개발 모드](../../dev/modes.md)와 [로컬 개발](../../dev/09_local_device_development.md), 최종 검증 재현은 [RUNBOOK](../../../qa-runs/2026-10-26-completion/RUNBOOK.md)을 따릅니다. 실행 경로, 시뮬레이터 ID, 전용 DB는 자신의 환경에 맞게 준비해야 합니다. 기록된 포트가 현재 실행 중이라는 의미는 아닙니다.
 
-[이전 상세 본문](portfolio.md)과 [2026-10-28 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)는 2026-10-28에 초기 대표 사례와 최신 후속 정책, 결과, 한계를 통합했습니다. PDF는 14쪽이며 기존 11쪽에 후속 검증 3쪽을 추가했습니다. [이번 검수, Windows 회귀 실패, 미실행](../validation/2026-10-28/README.md)을 함께 확인합니다. 기존 Mac 통과 결과를 이번 Windows 새 실행 결과로 읽지 않습니다. [QA 상세](../portfolio/README.md) ,  [회차별 실행](../../../qa-runs/README.md)
+현재 제출 자료는 [8쪽 포트폴리오](github-guide.md)와 [같은 본문의 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)입니다. 이 문서의 10월 26일 결과는 당시 실행 이력입니다. [10월 29일 추가 실행](../validation/2026-10-29/README.md)은 별도로 확인합니다.
+
+[이전 14쪽 PDF](https://github.com/uhaeun/knitgether-app/blob/34b3a37408ec4c3d251a5f79ba87fa849d11bbac/output/pdf/knitgether_qa_portfolio.pdf)와 [Windows 최초 실패](../validation/2026-10-28/README.md)는 과거 기록으로 보존합니다. [QA 상세](../portfolio/README.md) / [회차별 실행](../../../qa-runs/README.md)

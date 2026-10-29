@@ -1,26 +1,19 @@
-# 문서 안내
+# 제출 자료 안내
 
-포트폴리오 본문은 [뜨개더 QA 포트폴리오](github-guide.md)입니다. 이 폴더에는 이전 상세 본문과 증거, PDF 생성 도구를 함께 보관합니다.
+- [QA 포트폴리오 본문](github-guide.md): 대표 사례, 판단, 결과와 한계
+- [제출 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf): 같은 본문을 8쪽으로 편집
+- [이번 추가 검증](../validation/2026-10-29/README.md): 서버·DB·API 결과와 재현 방법
+- [이전 기술 상세](technical-summary.md): 후속 충돌 보호와 단위 정책의 당시 실행
 
-| 자료 | 용도와 기준 |
-|---|---|
-| [QA 포트폴리오](github-guide.md) | 2026-10-29 확정 본문. 기획 배경, 진행 방식, 핵심 3사례와 보완 1사례, 회고 |
-| [이전 상세 본문](portfolio.md) | 대표 DEF-10/08과 후속 정책, 결과, 한계. 사용자 판단과 AI 수행 구분 |
-| [2026-10-28 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf) | 2026-10-28 재생성, 14쪽. 기존 11쪽에 후속 검증, 결과 해석 3쪽 추가 |
-| [최종 QA 보고서](../../../qa-runs/2026-10-26-completion/report.md) | 환경, 커밋, 발견, 계층별 결과, 한계 |
-| [기존 화면 촬영](evidence/2026-10-04/README.md) | 10월 4일 설치 앱 촬영. 당시 소스 커밋 일치 미확인 |
-| [QA 상세 기록](../portfolio/README.md) | 요구사항, 설계, 수동 수행, 결함, RTM 원본 |
+## PDF 생성
 
-## 이전 PDF 다시 만들기
-
-Python과 ReportLab이 필요합니다. 저장소 루트에서 실행합니다.
+Python 3.10 이상과 ReportLab, Pillow가 필요합니다. 글꼴은 포함된 Pretendard를 사용합니다. 이용 조건은 [라이선스](fonts/LICENSE.txt)를 참고합니다.
 
 ```sh
+python3 -m pip install reportlab pillow
 python3 docs/qa/submission/tools/build_pdf.py
 ```
 
-현재 PDF는 새 `github-guide.md` 본문과 구성 및 문구가 다릅니다. 다음 PDF 개편 단계에서 갱신합니다. 스크립트는 `portfolio.md`를 읽으며 본문을 덮어쓰지 않습니다. 이전 상세 본문과 PDF를 함께 갱신합니다. 생성 후 전 페이지를 이미지로 점검해야 합니다. 이번 검수는 [10/28 결과](../validation/2026-10-28/README.md)와 [기계 대조](../validation/2026-10-28/submission-audit.json)에 기록했습니다. 포함된 Pretendard 글꼴의 출처와 이용 조건은 [라이선스](fonts/LICENSE.txt)에 있습니다.
+스크립트는 `github-guide.md`를 읽습니다. 본문을 바꾸지 않고 페이지·글꼴·표·화면을 PDF에 배치합니다. 생성 후 전체 페이지를 이미지로 확인합니다.
 
-PDF의 상대 증거 링크를 생성 시점에 고정하려면 생성 전에 `KNITGETHER_PDF_REF` 환경변수를 해당 문서, 증거가 존재하는 커밋 SHA로 설정합니다. 기본값은 main입니다. 이번 2026-10-28 PDF는 문서 커밋에 고정해 PR 병합 전에도 근거를 열 수 있게 했습니다.
-
-[이전 편집, 레이아웃, 대조 기록](https://github.com/uhaeun/knitgether-app/blob/96f5b84e2feda41f22edf9400536d48a36c9c5dc/docs/qa/submission/README.md)
+증거 링크의 기준 커밋은 `KNITGETHER_PDF_REF`로 지정합니다. 기본값은 이번 제품 수정 커밋입니다. 새 본문과 실행 보고서는 제출 브랜치로 연결하며, 이전 증거는 고정 커밋으로 연결합니다. 새로운 실행 보고서의 제품 기준은 보고서 안에 별도로 명시합니다.
