@@ -7,6 +7,7 @@ import {
 } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
+import { resolveStoragePath } from './storage-path';
 
 export type StoredPatternPdf = {
   storageKey: string;
@@ -236,13 +237,6 @@ export class LocalFileStorageService {
   }
 
   private absolutePath(storageKey: string): string {
-    const absolutePath = resolve(this.rootDirectory, storageKey);
-    const rootPrefix = `${this.rootDirectory}/`;
-
-    if (!absolutePath.startsWith(rootPrefix)) {
-      throw new Error('Invalid storage key.');
-    }
-
-    return absolutePath;
+    return resolveStoragePath(this.rootDirectory, storageKey);
   }
 }
