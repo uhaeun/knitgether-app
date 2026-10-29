@@ -1,0 +1,567 @@
+{
+  "date_kst": "2026-10-29",
+  "source_main": "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a",
+  "product_tests_run_today": false,
+  "pdf": {
+    "pages": 14,
+    "bytes": 4062921,
+    "sha256": "276db4b8cf034b45c039e96ade682425132817b11b795e82323a7318678b0995",
+    "replacement_characters": 0,
+    "links": 41,
+    "text_changed_pages": [
+      1
+    ],
+    "render_changed_pages": [
+      1
+    ],
+    "visual_review": "Original 14 pages reviewed; final page 1 reviewed; pages 2-14 render-identical to reviewed originals."
+  },
+  "historical_evidence_counts": {
+    "child-case-results.json": {
+      "total": 40,
+      "passed": 40
+    },
+    "ui03-results-A.json": {
+      "total": 12,
+      "passed": 12
+    },
+    "ui03-results-B.json": {
+      "total": 12,
+      "passed": 12
+    }
+  },
+  "checked_local_links": [
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/github-guide.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "output/pdf/knitgether_qa_portfolio.pdf",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/portfolio.md#03-1-도안-교체-시-드로잉-유실-def-10",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/github-guide.md#사례-1--sync-11-동시-수정에서-기록-보존",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/github-guide.md#사례-3--ui-03-cm-고정과-과거-단위값",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa-runs/2026-10-26-completion/case-results.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa-runs/2026-10-26-completion/report.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/portfolio/02_functional_spec.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/portfolio/09_test_case_master.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/portfolio/10_defect_catalog.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "KnitGether/",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "server/",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "KnitGetherTests/",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa/appium/README.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa/api-tests/README.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa-runs/2026-10-26-completion/RUNBOOK.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/dev/modes.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/dev/09_local_device_development.md",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": ".github/workflows/ci.yml",
+      "valid": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/github-guide.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "portfolio.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/06_manual_execution.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/report.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/case-results.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-draft-delete-fix/report.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/child-red.log",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/scope-red.log",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/child-verified.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/case-results.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/code-review.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-A.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-B.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/completion-audit.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/child-case-results.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/server-final.log",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/api-verified.log",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/swift-results.log",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/case-results.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/02_functional_spec.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/09_test_case_master.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/10_defect_catalog.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/report.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-27-handoff/main-CI-status.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-27-handoff/main-smoke.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-27-handoff/main-build-status.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-27-handoff/main-source-audit.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-27-handoff/main-native.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../dev/modes.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../dev/09_local_device_development.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/RUNBOOK.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "portfolio.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../output/pdf/knitgether_qa_portfolio.pdf",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-29/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-28/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/A-ui03-gauge-Imperial.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/B-ui03-gauge-cm.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/01_workspace.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/page-verified/12_library_hub.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/02_drawing_before.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/03_replace_warning.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/04_cancel_preserved.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/05_confirm_replaced.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/page-verified/08_home_between.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/page-verified/09_page_after_home.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/sync-results.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/pure-ui-results.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/report.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-A.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-B.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../validation/2026-10-04/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-completion/report.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-27-handoff/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../validation/2026-10-28/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/01_workspace.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/page-verified/12_library_hub.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/02_drawing_before.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/03_replace_warning.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/04_cancel_preserved.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/05_confirm_replaced.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/page-verified/08_home_between.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "evidence/2026-10-04/page-verified/09_page_after_home.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/A-ui03-gauge-Imperial.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/B-ui03-gauge-cm.png",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "github-guide.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "github-guide.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "portfolio.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../../../output/pdf/knitgether_qa_portfolio.pdf",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../../../qa-runs/2026-10-26-completion/report.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "evidence/2026-10-04/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../portfolio/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../validation/2026-10-29/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../validation/2026-10-28/README.md",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../validation/2026-10-28/submission-audit.json",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "fonts/LICENSE.txt",
+      "valid": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "submission-audit.json",
+      "valid": true
+    }
+  ],
+  "pdf_pinned_files": {
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/01_workspace.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/page-verified/12_library_hub.png": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/03_quality_risk_map.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/05_test_cases.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/09_test_case_master.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/10_defect_catalog.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:qa/appium/tests/test_tc10a_workspace_pattern.py": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:qa/appium/pages/pattern_panel_page.py": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/README.md": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/02_drawing_before.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/03_replace_warning.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/04_cancel_preserved.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/05_confirm_replaced.png": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:qa/api-tests/test_13_row_counter_isolation.py": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/page-verified/08_home_between.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-04/page-verified/09_page_after_home.png": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/06_manual_execution.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/validation/2026-10-04/evidence/appium-page-final.xml": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:qa/appium/tests/test_tc15_logout.py": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:KnitGetherTests/AppRepositoryContainerTests.swift": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/11_execution_results.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/13_automation_showcase.md": true,
+    "90bb07aa3a1a507888c5de24d6b660e53145914c:docs/qa/portfolio/14_observations.md": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-session-fix/evidence/sync-results.json": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-session-fix/evidence/pure-ui-results.json": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-session-fix/report.md": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-completion/evidence/A-ui03-gauge-Imperial.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-completion/evidence/B-ui03-gauge-cm.png": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-completion/evidence/ui03-results-A.json": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-completion/evidence/ui03-results-B.json": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/validation/2026-10-04/README.md": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:qa-runs/2026-10-26-completion/report.md": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/submission/evidence/2026-10-27-handoff/README.md": true,
+    "00e7de2829e3d4cb8bb5a59e0b1d43bf876ab46a:docs/qa/validation/2026-10-28/README.md": true
+  },
+  "errors": []
+}
