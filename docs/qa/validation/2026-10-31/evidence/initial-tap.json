@@ -1,0 +1,25 @@
+{
+  "sourceRun": "https://github.com/uhaeun/knitgether-app/actions/runs/40893614591/attempts/1",
+  "sourceCommit": "60c0a708d9f310d1095f99ca1683c83531c0171f",
+  "buttonFrame": {
+    "x": 40.0,
+    "y": 260.7,
+    "width": 322.0,
+    "height": 51.0
+  },
+  "synthesizedEvents": [
+    {
+      "eventType": 1,
+      "offset": 0.0,
+      "coordinate.y": 286.16666666666663,
+      "coordinate.x": 201.0
+    },
+    {
+      "eventType": 3,
+      "offset": 0.05,
+      "coordinate.y": 286.16666666666663,
+      "coordinate.x": 201.0
+    }
+  ],
+  "observation": "Tap coordinates were inside the observed button frame; the account form was not reached. The underlying cause is not proved by these attachments."
+}

@@ -1,0 +1,1701 @@
+{
+  "date": "2026-10-29",
+  "timezone": "Asia/Seoul",
+  "productCommit": "60c0a708d9f310d1095f99ca1683c83531c0171f",
+  "environment": {
+    "os": "macOS 26.5.1",
+    "node": "25.4.0",
+    "postgres": "14.18",
+    "python": "3.12.14",
+    "database": "new dedicated local knitgether_qa_sync11_portfolio_20261029"
+  },
+  "build": "passed",
+  "server": {
+    "total": 180,
+    "passed": 180,
+    "failed": 0,
+    "skipped": 0,
+    "cases": [
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary accepts a file within the configured root: projects/owner/project/pattern.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary accepts a file within the configured root: projects/owner/도안.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary accepts a file within the configured root: ..inside/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: .",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ..",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ../storage-other/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ../../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary accepts a file within the configured root: projects/owner/project/pattern.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary accepts a file within the configured root: projects/owner/도안.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary accepts a file within the configured root: ..inside/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: .",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ..",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ../storage-other/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ../../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary accepts a file within the configured root: projects/owner/project/pattern.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary accepts a file within the configured root: projects/owner/도안.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary accepts a file within the configured root: ..inside/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: .",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ..",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ../storage-other/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ../../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: ..\\outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: D:\\outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: \\\\other\\share\\outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: C:\\qa\\storage-other\\file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Local file storage on the host filesystem round-trips PDF bytes, checks presence, and removes only the stored file",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Local file storage on the host filesystem does not read or delete a file beside the storage root",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects unauthenticated requests",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects requests with the wrong token",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route authenticates API tokens as their configured user",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns only active projects owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns one active project owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route updates only a project row counter through the partial API",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route upserts one row instruction through the partial API",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route updates one work session through the partial API",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route lists yarn usage records for an owned project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route records yarn usage and decrements the owned yarn quantity",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route updates yarn usage and adjusts only the quantity delta",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route soft deletes yarn usage and restores the consumed yarn quantity",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route soft deletes yarn usage without restoring quantity when the linked yarn is already deleted",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route lists progress photos for an owned project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route uploads a progress photo for an owned project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects non-image progress photo uploads",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route updates progress photo metadata",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route downloads progress photo bytes",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route deletes a progress photo and removes its stored file",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns project pattern copy metadata with projects",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route downloads the active project pattern copy PDF",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route uploads a directly attached project pattern copy PDF",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route downloads a directly attached project pattern copy PDF",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route uploads drawing data for the active project pattern copy",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route downloads drawing data for the active project pattern copy",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns 404 when a project is missing or not owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route creates a project with row counter and work sessions",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a project when the row counter belongs to a different project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a project when a work session belongs to a different project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route saves a project pattern copy with the project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route updates an active project owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route reconciles project children from the full patch payload",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route soft-deletes an active project owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns 404 when deleting a missing project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a project memo longer than 500 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a row counter name longer than 30 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a work session memo longer than 500 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a work session whose end time is not after its start time",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a work session longer than 24 hours",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route accepts a work session exactly 24 hours long",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a project save whose work session reverses time",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a new project when the owner already has 200 active projects",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects an existing project on create without consulting the project limit",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns 409 when creating a project whose ID belongs to another owner",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns 409 with the server copy when baseUpdatedAt is older than the stored project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route saves a project when baseUpdatedAt matches the stored updatedAt",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route returns 409 when baseUpdatedAt is truncated to seconds while the stored updatedAt has milliseconds",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route saves a project when baseUpdatedAt echoes the stored updatedAt down to the millisecond",
+        "status": "passed"
+      },
+      {
+        "suite": "projects.e2e-spec.ts",
+        "name": "Projects route rejects a stale patch when baseUpdatedAt is older than the stored project",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route rejects unauthenticated yarn requests",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route lists active yarns owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route lists active needles owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route lists project usages for an owned yarn",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route creates a yarn for the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route updates an owned yarn",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route soft deletes an owned yarn",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route creates a needle for the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route updates an owned needle",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route soft deletes an owned needle",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route links a yarn to a project with a link-time snapshot",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route refreshes the snapshot when relinking an existing yarn link",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route counts only live projects linked to a yarn",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route counts only live projects linked to a needle",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route counts only live projects linked to a tool",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route returns 404 when counting links for a yarn that does not exist",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route lists project yarn links regardless of yarn liveness",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route unlinks a yarn from a project with a tombstone",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route links a needle to a project with a link-time snapshot",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route uploads a representative photo for an owned yarn",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route rejects a non-image yarn photo upload",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route deletes a yarn photo and clears photo fields",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route rejects a yarn name longer than 30 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route rejects yarn notes longer than 500 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route rejects a needle name longer than 30 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "library.e2e-spec.ts",
+        "name": "Library route rejects a tool name longer than 30 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-targets.e2e-spec.ts",
+        "name": "Gauge targets route rejects unauthenticated requests",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-targets.e2e-spec.ts",
+        "name": "Gauge targets route lists active gauge targets with swatches and measurements",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-targets.e2e-spec.ts",
+        "name": "Gauge targets route creates a gauge target with nested swatches and measurements",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-targets.e2e-spec.ts",
+        "name": "Gauge targets route rejects invalid target dimensions",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-targets.e2e-spec.ts",
+        "name": "Gauge targets route updates existing swatches and measurements within the owner scope without duplicate creates",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-targets.e2e-spec.ts",
+        "name": "Gauge targets route soft deletes an owned gauge target and its nested data",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route rejects unauthenticated requests",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route uploads a PDF pattern and returns metadata",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route rejects non-PDF uploads",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route creates a title-only pattern without a file",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route rejects a pattern title longer than 30 characters on creation",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route rejects a pattern title longer than 30 characters on update",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route rejects a fileless creation without title",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route attaches a PDF to a pattern that has no file yet",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route rejects attaching a file when the pattern already has one",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route returns only active patterns owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route returns one active pattern owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route updates owner-scoped pattern metadata",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route downloads the owner-scoped PDF",
+        "status": "passed"
+      },
+      {
+        "suite": "patterns.e2e-spec.ts",
+        "name": "Patterns route soft-deletes metadata and removes the disk file",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route rejects unauthenticated requests",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route lists active system and user skills with current user levels",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route returns one active skill owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route creates a skill for the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route updates an owned skill",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route rejects direct updates to system skills",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route updates the current user level for a system skill",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route lists active skill animations owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "skills.e2e-spec.ts",
+        "name": "Skills route soft deletes an owned skill",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes registers an account and returns an access token with profile data",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes rejects duplicate account registration by email",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes logs in and uses the issued token for authenticated routes",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes locks the account after five consecutive failed logins",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes rejects the correct password while the account is locked",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes clears the failure count after a successful login",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes does not reveal account existence through the lock response",
+        "status": "passed"
+      },
+      {
+        "suite": "auth.e2e-spec.ts",
+        "name": "Auth routes rejects login with an invalid password",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route rejects unauthenticated requests",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route lists active gauge records owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route creates a before-wash gauge record with calculated results",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route rejects invalid measurement values",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route updates an owned gauge record with recalculated results",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route does not update a missing gauge record",
+        "status": "passed"
+      },
+      {
+        "suite": "gauge-records.e2e-spec.ts",
+        "name": "Gauge records route soft deletes an owned gauge record",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route rejects unauthenticated requests",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route lists active dictionary terms owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route returns one active dictionary term owned by the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route creates a dictionary term for the current user",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route updates an owned dictionary term",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route soft deletes an owned dictionary term",
+        "status": "passed"
+      },
+      {
+        "suite": "dictionary.e2e-spec.ts",
+        "name": "Dictionary terms route returns 400 when required text is missing",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security rejects the implicit dev token in production when DEV_AUTH_TOKEN is unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security rejects the implicit dev token when NODE_ENV is unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security rejects the implicit dev token when NODE_ENV is blank",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security rejects the implicit dev token in staging when DEV_AUTH_TOKEN is unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security fails clearly in production when AUTH_JWT_SECRET is unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security fails clearly when NODE_ENV and AUTH_JWT_SECRET are unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security fails clearly when NODE_ENV is blank and AUTH_JWT_SECRET is unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security fails clearly in staging when AUTH_JWT_SECRET is unset",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security signs and verifies JWTs in production when AUTH_JWT_SECRET is set",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security keeps the implicit dev token available in development",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security keeps the implicit dev token available in test",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security keeps the local JWT secret fallback available in development",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security keeps the local JWT secret fallback available in test",
+        "status": "passed"
+      },
+      {
+        "suite": "auth-configuration.e2e-spec.ts",
+        "name": "Auth configuration security keeps configured API token mapping available in production",
+        "status": "passed"
+      },
+      {
+        "suite": "profile.e2e-spec.ts",
+        "name": "Profile route rejects unauthenticated profile requests",
+        "status": "passed"
+      },
+      {
+        "suite": "profile.e2e-spec.ts",
+        "name": "Profile route returns the current user profile and creates a default when missing",
+        "status": "passed"
+      },
+      {
+        "suite": "profile.e2e-spec.ts",
+        "name": "Profile route updates the current user profile",
+        "status": "passed"
+      },
+      {
+        "suite": "profile.e2e-spec.ts",
+        "name": "Profile route rejects a display name longer than 80 characters",
+        "status": "passed"
+      },
+      {
+        "suite": "health.e2e-spec.ts",
+        "name": "Health route returns API health status",
+        "status": "passed"
+      },
+      {
+        "suite": "listen-options.e2e-spec.ts",
+        "name": "Server listen options listens on all interfaces by default for local device testing",
+        "status": "passed"
+      },
+      {
+        "suite": "listen-options.e2e-spec.ts",
+        "name": "Server listen options allows the listen host to be overridden",
+        "status": "passed"
+      }
+    ]
+  },
+  "realPostgreSQL": {
+    "total": 40,
+    "passed": 40,
+    "failed": 0,
+    "skipped": 0,
+    "cases": [
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL has exactly one winner with no loser children after both read the same baseline",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rolls back parent/version and early children when row instruction replacement fails",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rolls back all SQL children when an error follows actual pattern upsert",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL advances every version even when the stored clock is ahead and rejects future client tokens",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL returns fresh 409/latest when another write commits between read and CAS",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL returns 404 when the project is deleted between read and CAS",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL preserves 409 even if the latest project has no convertible row counter",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL preserves validation, ownership and row-counter compatibility contracts",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL Regression: rejects a stale whole save after a child-only counter save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL Regression: detects a child API write between the whole save read and CAS",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL session create invalidates a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL session update invalidates a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL session delete invalidates a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL session deletion between whole read and CAS rejects the stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rolls back the parent version if the session mutation fails",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL serializes session deletion behind an uncommitted whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL Regression: removes materialized files when the SQL transaction rolls back",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL Regression: cleans an unreferenced PDF after pattern copy replacement",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL serializes a child write after a whole-save CAS without losing the child",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rolls back the parent version if the child update fails",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL keeps the old PDF and drawing on rollback, then removes both on detach",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL retries durable failed removals and preserves referenced files after restart",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL blocks the counter on the parent lock while a whole save is uncommitted",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL compensates files when project creation rolls back",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL protects row instruction create from a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL protects row instruction update from a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL protects row instruction delete from a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL protects pattern pdf from a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL protects pattern drawing from a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL protects pattern delete-drawing from a stale whole save",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL preserves committed drawing bytes if dedicated upload SQL rolls back",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL preserves committed drawing bytes if dedicated delete SQL rolls back",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL serializes duplicate instruction creates and rolls back the rejected parent version",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL preserves independent usage, photo and material links across whole saves",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rejects instruction ID reuse from another project (foreign owner: false) without changing either project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rejects session ID reuse from another project (foreign owner: false) without changing either project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rejects whole-session ID reuse from another project (foreign owner: false) without changing either project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rejects instruction ID reuse from another project (foreign owner: true) without changing either project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rejects session ID reuse from another project (foreign owner: true) without changing either project",
+        "status": "passed"
+      },
+      {
+        "suite": "projects-concurrency.real-db-spec.ts",
+        "name": "Project concurrency on real PostgreSQL rejects whole-session ID reuse from another project (foreign owner: true) without changing either project",
+        "status": "passed"
+      }
+    ]
+  },
+  "api": {
+    "total": 77,
+    "passed": 76,
+    "knownFailures": 1,
+    "cases": [
+      {
+        "suite": "qa.api-tests.test_01_ownership_isolation",
+        "name": "test_cross_owner_access_is_blocked_and_db_unchanged",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_02_last_write_wins",
+        "name": "test_update_without_base_updated_at_is_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_02_last_write_wins",
+        "name": "test_second_update_from_same_baseline_is_rejected_and_first_survives",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_02_last_write_wins",
+        "name": "test_update_with_refreshed_baseline_succeeds",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_03_create_idempotency",
+        "name": "test_duplicate_create_is_rejected_and_row_stays_single",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_03_create_idempotency",
+        "name": "test_resend_reaches_server_through_update_path",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_04_delete_cascade",
+        "name": "test_delete_soft_cascades_to_children",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_05_transaction_atomicity",
+        "name": "test_child_failure_rolls_back_parent_update",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_05_transaction_atomicity",
+        "name": "test_injection_actually_injects",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_05_transaction_atomicity",
+        "name": "test_unknown_row_counter_id_is_rejected_without_mutation",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_06_auth_and_boundaries",
+        "name": "test_missing_token_is_401",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_06_auth_and_boundaries",
+        "name": "test_tampered_token_is_401",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_06_auth_and_boundaries",
+        "name": "test_garbage_bearer_is_401",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_06_auth_and_boundaries",
+        "name": "test_current_row_zero_is_accepted",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_06_auth_and_boundaries",
+        "name": "test_negative_current_row_is_rejected_400",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_06_auth_and_boundaries",
+        "name": "test_time_reversed_work_session_behavior",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_07_last_worked_at",
+        "name": "test_api_25_last_worked_at_round_trip",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_07_last_worked_at",
+        "name": "test_api_25_update_moves_last_worked_at",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_07_last_worked_at",
+        "name": "test_api_25_list_sorted_by_last_worked_at",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_07_last_worked_at",
+        "name": "test_api_25_server_does_not_derive_from_sessions",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_08_network_degradation",
+        "name": "test_gate_is_transparent_when_healthy",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_08_network_degradation",
+        "name": "test_latency_actually_applies",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_08_network_degradation",
+        "name": "test_complete_outage_then_recovery",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_08_network_degradation",
+        "name": "test_frozen_response_still_commits_on_server",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_08_network_degradation",
+        "name": "test_connection_reset_after_commit_leaves_no_orphan",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_08_network_degradation",
+        "name": "test_retry_after_recovery_is_idempotent",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_09_transferred_from_06",
+        "name": "test_sync_03_post_upserts_and_patch_requires_existing",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_09_transferred_from_06",
+        "name": "test_auth_01_token_expiry_follows_setting",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_09_transferred_from_06",
+        "name": "test_rc_08_deleted_project_leaves_pattern_file_on_disk",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_09_transferred_from_06",
+        "name": "test_rc_08_orphan_census",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_10_auth_contract",
+        "name": "test_api_02_password_length_boundaries",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_10_auth_contract",
+        "name": "test_api_03_duplicate_email_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_10_auth_contract",
+        "name": "test_api_04_login_success_and_credential_rejection",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_10_auth_contract",
+        "name": "test_api_08_unknown_field_is_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_10_auth_contract",
+        "name": "test_api_08_type_error_is_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_11_sync_loss_regression",
+        "name": "test_api_18_partial_payload_does_not_delete_existing_sessions",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_11_sync_loss_regression",
+        "name": "test_api_18_resend_does_not_duplicate_or_drop",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_11_sync_loss_regression",
+        "name": "test_api_19_rejected_request_preserves_server_state",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_11_sync_loss_regression",
+        "name": "test_api_20_rejected_update_does_not_discard_previous_value",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_11_sync_loss_regression",
+        "name": "test_api_20_rejected_update_keeps_children_intact",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_12_library_crud",
+        "name": "test_api_17_library_crud_cycle[yarns]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_12_library_crud",
+        "name": "test_api_17_library_crud_cycle[needles]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_12_library_crud",
+        "name": "test_api_17_library_crud_cycle[tools]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_13_row_counter_isolation",
+        "name": "test_api_21_row_counter_missing_project_is_skipped_not_fatal[removed]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_13_row_counter_isolation",
+        "name": "test_api_21_row_counter_missing_project_is_skipped_not_fatal[soft-deleted]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_13_row_counter_isolation",
+        "name": "test_def08_detail_query_handles_missing_counter_without_server_error",
+        "status": "known-failure"
+      },
+      {
+        "suite": "qa.api-tests.test_14_skill_soft_delete",
+        "name": "test_api_22_deleted_skill_is_excluded_from_list_and_single_get",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_15_pattern_copy_file_integrity",
+        "name": "test_api_23_library_linked_pattern_gets_server_file_key",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_15_pattern_copy_file_integrity",
+        "name": "test_api_24_pattern_replace_severs_db_reference_and_removes_old_files",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_16_coverage_promotions",
+        "name": "test_api_01_register_creates_user_account_row",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_16_coverage_promotions",
+        "name": "test_api_07_missing_scalar_field_is_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_16_coverage_promotions",
+        "name": "test_api_07_missing_row_counter_is_rejected_without_insert",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_16_coverage_promotions",
+        "name": "test_api_12_work_session_missing_started_at_is_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_16_coverage_promotions",
+        "name": "test_api_12_work_session_malformed_started_at_is_rejected",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_16_coverage_promotions",
+        "name": "test_api_15_single_get_matches_db_row",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_17_conflict_timestamp_precision",
+        "name": "test_api_26_exact_millisecond_timestamp_allows_save",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_17_conflict_timestamp_precision",
+        "name": "test_api_26_truncated_timestamp_is_rejected_without_mutation",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_18_library_input_limits",
+        "name": "test_api_27_library_field_accepts_n_and_rejects_n_plus_one[yarn-name]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_18_library_input_limits",
+        "name": "test_api_27_library_field_accepts_n_and_rejects_n_plus_one[needle-name]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_18_library_input_limits",
+        "name": "test_api_27_library_field_accepts_n_and_rejects_n_plus_one[tool-name]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_18_library_input_limits",
+        "name": "test_api_27_library_field_accepts_n_and_rejects_n_plus_one[tool-link]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_19_patch_replace_contract",
+        "name": "test_api_28_dictionary_patch_rejects_partial_body",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_19_patch_replace_contract",
+        "name": "test_api_28_project_patch_rejects_partial_body",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_19_patch_replace_contract",
+        "name": "test_api_28_project_patch_accepts_full_body",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_19_patch_replace_contract",
+        "name": "test_api_28_library_patch_rejects_partial_body[yarn]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_19_patch_replace_contract",
+        "name": "test_api_28_library_patch_rejects_partial_body[needle]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_19_patch_replace_contract",
+        "name": "test_api_28_library_patch_rejects_partial_body[tool]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_20_login_attempt_limit",
+        "name": "test_api_29_account_locks_after_five_failures",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_20_login_attempt_limit",
+        "name": "test_api_29_locked_account_rejects_the_correct_password",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_20_login_attempt_limit",
+        "name": "test_api_29_success_clears_the_failure_count",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_20_login_attempt_limit",
+        "name": "test_api_29_lock_does_not_reveal_account_existence",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_21_library_photos",
+        "name": "test_library_photo_roundtrip_replacement_deletion_and_owner_isolation[yarns]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_21_library_photos",
+        "name": "test_library_photo_roundtrip_replacement_deletion_and_owner_isolation[needles]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_21_library_photos",
+        "name": "test_library_photo_roundtrip_replacement_deletion_and_owner_isolation[tools]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_21_library_photos",
+        "name": "test_invalid_or_missing_photo_preserves_existing_photo[yarns]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_21_library_photos",
+        "name": "test_invalid_or_missing_photo_preserves_existing_photo[needles]",
+        "status": "passed"
+      },
+      {
+        "suite": "qa.api-tests.test_21_library_photos",
+        "name": "test_invalid_or_missing_photo_preserves_existing_photo[tools]",
+        "status": "passed"
+      }
+    ]
+  },
+  "pathBeforeFix": {
+    "total": 33,
+    "passed": 27,
+    "failed": 6,
+    "skipped": 0,
+    "cases": [
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary accepts a file within the configured root: projects/owner/project/pattern.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary accepts a file within the configured root: projects/owner/도안.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary accepts a file within the configured root: ..inside/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: .",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ..",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ../storage-other/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "POSIX storage boundary rejects a directory or escape outside the root: ../../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary accepts a file within the configured root: projects/owner/project/pattern.pdf",
+        "status": "failed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary accepts a file within the configured root: projects/owner/도안.pdf",
+        "status": "failed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary accepts a file within the configured root: ..inside/file.pdf",
+        "status": "failed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: .",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ..",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ../storage-other/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows drive storage boundary rejects a directory or escape outside the root: ../../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary accepts a file within the configured root: projects/owner/project/pattern.pdf",
+        "status": "failed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary accepts a file within the configured root: projects/owner/도안.pdf",
+        "status": "failed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary accepts a file within the configured root: ..inside/file.pdf",
+        "status": "failed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: .",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ..",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ../storage-other/file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows UNC storage boundary rejects a directory or escape outside the root: ../../outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: ..\\outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: D:\\outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: \\\\other\\share\\outside.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Windows-specific storage paths rejects an escape or another volume: C:\\qa\\storage-other\\file.pdf",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Local file storage on the host filesystem round-trips PDF bytes, checks presence, and removes only the stored file",
+        "status": "passed"
+      },
+      {
+        "suite": "storage-path.e2e-spec.ts",
+        "name": "Local file storage on the host filesystem does not read or delete a file beside the storage root",
+        "status": "passed"
+      }
+    ]
+  },
+  "notes": [
+    "The 33 path cases are included in server total 180.",
+    "POSIX and Windows path parsers run locally; actual Windows runner is recorded separately.",
+    "Real SQL is used, with scheduling and rollback-failure injection hooks.",
+    "First API run used a mismatched storage-root setting: 6 environment failures, 70 passed and 1 expected failure. Corrected FILE_STORAGE_ROOT for both processes and reran all 77.",
+    "No iOS or physical-device test was rerun in this session."
+  ]
+}

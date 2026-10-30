@@ -1,0 +1,54 @@
+{
+  "sourceCommit": "72bfa8d1e3530d7a9ec8241b14e5b70fa042de1d",
+  "runURL": "https://github.com/uhaeun/knitgether-app/actions/runs/41076192341",
+  "jobId": 124135254674,
+  "unitTests": {
+    "passed": 359,
+    "failed": 0,
+    "suites": 41
+  },
+  "uiSmoke": {
+    "passed": 3,
+    "failed": 0
+  },
+  "logExcerpt": [
+    "2026-10-30T15:12:21.5106520Z ✔ Test run with 359 tests in 41 suites passed after 64.688 seconds.",
+    "2026-10-30T15:12:21.7492340Z ** TEST SUCCEEDED **",
+    "2026-10-30T15:14:11.2266600Z [2026-10-30 15:14:10 +0000] Status=4294967295, isTerminal=YES, Elapsed=01:38.",
+    "2026-10-30T15:17:01.7404970Z Test Case '-[KnitGetherUITests.KnitGetherUITests testCoreUserFlowRegistersAndSavesCommonRecords]' started.",
+    "2026-10-30T15:23:23.2344440Z Test Case '-[KnitGetherUITests.KnitGetherUITests testCoreUserFlowRegistersAndSavesCommonRecords]' passed (383.640 seconds).",
+    "2026-10-30T15:23:23.2443860Z Test Case '-[KnitGetherUITests.KnitGetherUITests testServerOffPendingProjectSyncsAfterServerRecovers]' started.",
+    "2026-10-30T15:26:29.4649910Z Test Case '-[KnitGetherUITests.KnitGetherUITests testServerOffPendingProjectSyncsAfterServerRecovers]' passed (186.231 seconds).",
+    "2026-10-30T15:26:29.5997860Z Test Case '-[KnitGetherUITests.KnitGetherUITests testServerOffWithCachedProjectShowsCachedProject]' started.",
+    "2026-10-30T15:28:39.4789930Z Test Case '-[KnitGetherUITests.KnitGetherUITests testServerOffWithCachedProjectShowsCachedProject]' passed (129.995 seconds).",
+    "2026-10-30T15:28:39.4794790Z \t Executed 3 tests, with 0 failures (0 unexpected) in 699.865 (699.875) seconds",
+    "2026-10-30T15:28:39.4796400Z \t Executed 3 tests, with 0 failures (0 unexpected) in 699.865 (699.882) seconds",
+    "2026-10-30T15:28:39.4798780Z \t Executed 3 tests, with 0 failures (0 unexpected) in 699.865 (699.885) seconds",
+    "2026-10-30T15:29:41.5937940Z ** TEST SUCCEEDED **"
+  ],
+  "serverLogSummaries": [
+    {
+      "name": "Project Concurrency (Real PostgreSQL)",
+      "jobId": 124134588176,
+      "summary": [
+        "2026-10-30T15:01:19.5186000Z Test Suites: 1 passed, 1 total",
+        "2026-10-30T15:01:19.5186319Z Tests:       40 passed, 40 total"
+      ]
+    },
+    {
+      "name": "Server Build And Test",
+      "jobId": 124134588927,
+      "summary": [
+        "2026-10-30T15:01:27.3657291Z Test Suites: 13 passed, 13 total",
+        "2026-10-30T15:01:27.3657894Z Tests:       180 passed, 180 total"
+      ]
+    },
+    {
+      "name": "API Contract, Network Degradation, DB Integrity",
+      "jobId": 124135254641,
+      "summary": [
+        "2026-10-30T15:02:52.7293561Z ======================== 76 passed, 1 xfailed in 19.63s ========================"
+      ]
+    }
+  ]
+}

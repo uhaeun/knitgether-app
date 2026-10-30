@@ -11,7 +11,10 @@ struct OnboardingPage: UITestPage {
     func goToAuth() -> AuthPage {
         tap(app.buttons["다음"].firstMatch)
         tap(app.buttons["onboarding.login"].firstMatch)
-        return AuthPage(app: app)
+        let account = AuthPage(app: app)
+        // A completed tap does not prove that the destination screen opened.
+        account.expectVisible()
+        return account
     }
 
     func advanceToSkillTestStep() -> OnboardingPage {
