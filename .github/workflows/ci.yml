@@ -386,6 +386,9 @@ jobs:
         run: |
           xcrun simctl shutdown "$SIMULATOR_UDID" || true
           xcrun simctl erase "$SIMULATOR_UDID"
+          # A reset also resets first-boot migrations. Finish them before XCTest
+          # launches the app and starts sending the first navigation gestures.
+          xcrun simctl bootstatus "$SIMULATOR_UDID" -b | tee simulator-boot-status.log
 
       - name: Run iOS UI smoke tests
         run: |
@@ -408,6 +411,7 @@ jobs:
           path: |
             TestResults/*.xcresult
             server-ci.log
+            simulator-boot-status.log
           if-no-files-found: ignore
 
       - name: Stop API server
