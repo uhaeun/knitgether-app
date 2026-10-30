@@ -1,0 +1,630 @@
+{
+  "date": "2026-10-31",
+  "pages": 8,
+  "pageImagesReviewed": 8,
+  "pdfLinks": 32,
+  "replacementCharacters": 0,
+  "allTrueTypeFontsEmbedded": true,
+  "localLinksChecked": 116,
+  "missingLinks": [],
+  "marginChecks": [
+    {
+      "page": 1,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 2,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 3,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 4,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 5,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 6,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 7,
+      "charactersOutsideHorizontalMargin": 0
+    },
+    {
+      "page": 8,
+      "charactersOutsideHorizontalMargin": 0
+    }
+  ],
+  "testSource": "72bfa8d1e3530d7a9ec8241b14e5b70fa042de1d",
+  "ciJobsSuccessful": 6,
+  "knownFailureRetained": "DEF-08 detail lookup 500, pytest xfail",
+  "rootCauseQualification": "The internal cause of the initial navigation failure remains unproved. Preparation and destination checks were strengthened, with subsequent local and CI passes.",
+  "links": [
+    {
+      "source": "README.md",
+      "target": "output/pdf/knitgether_qa_portfolio.pdf",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/submission/github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/validation/2026-10-31/README.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/portfolio/02_functional_spec.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/portfolio/09_test_case_master.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/qa/portfolio/10_defect_catalog.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "KnitGether/",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "server/",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa/appium/README.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa/api-tests/README.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "KnitGetherTests/",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/dev/modes.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/dev/09_local_device_development.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "qa-runs/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/02_functional_spec.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/09_test_case_master.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/06_manual_execution.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/07_api_and_network.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "technical-summary.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-04/04_cancel_preserved.png",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-04/05_confirm_replaced.png",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/06_manual_execution.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-04/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/06_manual_execution.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa/api-tests/test_13_row_counter_isolation.py",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/sync-04-b-conflict.png",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/report.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/sync-04-after-conflict-db.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/evidence/sync-05-final-db.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../server/test/projects-concurrency.real-db-spec.ts",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa-runs/2026-10-26-completion/report.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "evidence/2026-10-04/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-31/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "technical-summary.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/02_functional_spec.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/09_test_case_master.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../portfolio/10_defect_catalog.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../KnitGether/",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../server/",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa/appium/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../../../qa/api-tests/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/github-guide.md",
+      "target": "../validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../../../output/pdf/knitgether_qa_portfolio.pdf",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../validation/2026-10-31/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "../validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "technical-summary.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/README.md",
+      "target": "fonts/LICENSE.txt",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/portfolio.md",
+      "target": "../../../output/pdf/knitgether_qa_portfolio.pdf",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "portfolio.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../portfolio/06_manual_execution.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/report.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-session-fix/case-results.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-draft-delete-fix/report.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/child-red.log",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/scope-red.log",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/child-verified.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/case-results.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/code-review.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/A-ui03-gauge-Imperial.png",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/B-ui03-gauge-cm.png",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-A.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/ui03-results-B.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/completion-audit.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/child-case-results.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/server-final.log",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/api-verified.log",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/evidence/swift-results.log",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/case-results.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../portfolio/02_functional_spec.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../portfolio/09_test_case_master.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../portfolio/10_defect_catalog.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/report.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "evidence/2026-10-27-handoff/main-CI-status.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "evidence/2026-10-27-handoff/main-smoke.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "evidence/2026-10-27-handoff/main-build-status.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "evidence/2026-10-27-handoff/main-source-audit.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "evidence/2026-10-27-handoff/main-native.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../dev/modes.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../dev/09_local_device_development.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/2026-10-26-completion/RUNBOOK.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../output/pdf/knitgether_qa_portfolio.pdf",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../validation/2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../validation/2026-10-31/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../validation/2026-10-28/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../portfolio/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/submission/technical-summary.md",
+      "target": "../../../qa-runs/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "../../submission/github-guide.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "results.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "http-sql-evidence.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "ci-status.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "../2026-10-31/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "../../../../qa/api-tests/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-29/README.md",
+      "target": "submission-audit.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/initial-ui-summary.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/initial-unit-summary.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/initial-onboarding-failure.png",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/initial-ui-hierarchy.txt",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/initial-tap.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/local-ui-summary.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/local-reset-core-summary.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/local-boot-status.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/ci-status.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "evidence/ci-log-summary.json",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "../../../../.github/workflows/ci.yml",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "../2026-10-29/README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/qa/validation/2026-10-31/README.md",
+      "target": "submission-audit.json",
+      "exists": true
+    }
+  ]
+}

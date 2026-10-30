@@ -20,7 +20,7 @@ SOURCE = ROOT / 'docs/qa/submission/github-guide.md'
 OUT = ROOT / 'output/pdf/knitgether_qa_portfolio.pdf'
 FONT_DIR = SOURCE.parent / 'fonts'
 EVIDENCE_REF = os.environ.get('KNITGETHER_PDF_REF', '60c0a708d9f310d1095f99ca1683c83531c0171f')
-SUBMISSION_REF = os.environ.get('KNITGETHER_SUBMISSION_REF', 'portfolio/knitgether-20261029')
+SUBMISSION_REF = os.environ.get('KNITGETHER_SUBMISSION_REF', 'main')
 REPO = 'https://github.com/uhaeun/knitgether-app'
 W, H = A4
 M = 19 * mm
@@ -58,7 +58,7 @@ def url(href):
     rel = target.relative_to(ROOT).as_posix()
     new_document = rel in {'README.md', 'docs/qa/submission/github-guide.md',
         'docs/qa/submission/portfolio.md', 'docs/qa/submission/README.md',
-        'docs/qa/submission/technical-summary.md', 'qa/api-tests/README.md'} or rel.startswith('docs/qa/validation/2026-10-29/')
+        'docs/qa/submission/technical-summary.md', 'qa/api-tests/README.md'} or rel.startswith(('docs/qa/validation/2026-10-29/', 'docs/qa/validation/2026-10-31/'))
     ref = SUBMISSION_REF if new_document else EVIDENCE_REF
     kind = 'tree' if target.is_dir() else 'blob'
     return f'{REPO}/{kind}/{ref}/{quote(rel)}'

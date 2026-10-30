@@ -16,6 +16,9 @@
 
 2026-10-29 서버 회귀 **180 PASS**, 실제 HTTP·PostgreSQL 동시성 **40 PASS**, API·네트워크·DB **76 PASS / 알려진 실패 1개**를 확인했습니다. 오류 프로젝트의 개별 조회 500은 열린 과제입니다. 계층별 수치는 중복될 수 있으며 전체 E2E 건수로 합산하지 않습니다. iOS 화면은 본문의 과거 실행 증거를 사용합니다.
 
+2026-10-31 후속 CI에서는 **Swift 359개·iOS UI smoke 3개가 모두 통과**했습니다. 최초 화면 전환 실패의 관측값과 부팅 준비·도착 확인 보완, 로컬 및 원격 결과를 연결했습니다.
+
+- [최신 iOS 실패 분석·재검증](docs/qa/validation/2026-10-31/README.md)
 - [이번 결과·항목별 근거·재현 방법](docs/qa/validation/2026-10-29/README.md)
 - [기능 기준](docs/qa/portfolio/02_functional_spec.md) · [테스트·RTM](docs/qa/portfolio/09_test_case_master.md) · [결함 대장](docs/qa/portfolio/10_defect_catalog.md)
 

@@ -1,0 +1,31 @@
+Application, 0x10445a5f0, pid: 13122, label: 'KnitGether' <App element pid: 13122>
+  Window (Main), 0x1045506a0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4319215456.3>
+    Other, 0x10454d690, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4319149216.4>
+      Other, 0x10454dd60, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4317021216.5>
+        Other, 0x104552c50, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4319240528.6>
+          Other, 0x10454e480, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4317346576.7>
+            Other, 0x10454fc40, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4345337760.8>
+              Other, 0x10454da10, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4345815600.9>
+                Other, 0x10454ffc0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4319320640.11>
+                  Other, 0x104552fc0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4317089488.13>
+                    Other, 0x1045536a0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4346006400.14>
+                      Other, 0x10454eeb0, {{157.0, 80.0}, {88.0, 8.0}} <AX element pid: 13122, elementOrHash.elementID: 4319426736.15>
+                      ScrollView, 0x104551b50, {{0.0, 96.0}, {402.0, 654.0}} <AX element pid: 13122, elementOrHash.elementID: 4320516096.16>
+                        Other, 0x104551440, {{0.0, 96.0}, {402.0, 255.7}} <AX element pid: 13122, elementOrHash.elementID: 4317272464.20>
+                          Image, 0x1045517c0, {{37.3, 136.3}, {24.0, 24.0}}, identifier: 'person.badge.key', label: 'person.badge.key' <AX element pid: 13122, elementOrHash.elementID: 4346000240.28>
+                          StaticText, 0x104551ea0, {{82.0, 124.0}, {38.3, 26.3}}, label: '계정' <AX element pid: 13122, elementOrHash.elementID: 4346087552.29>
+                          StaticText, 0x1045525a0, {{82.0, 154.3}, {86.0, 18.0}}, label: '계정 저장 연결' <AX element pid: 13122, elementOrHash.elementID: 4346087984.30>
+                          StaticText, 0x104552230, {{40.0, 208.3}, {322.0, 42.3}}, label: '회원가입하거나 로그인하면 프로젝트, 창고, 스킬 상태를 내 계정에 저장할 수 있어요.' <AX element pid: 13122, elementOrHash.elementID: 4346088416.31>
+                          Button, 0x104550330, {{40.0, 260.7}, {322.0, 51.0}}, identifier: 'onboarding.login', label: '계정 만들기 / 로그인' <AX element pid: 13122, elementOrHash.elementID: 4346090384.32>
+                            Image, 0x104552910, {{116.7, 277.3}, {21.3, 18.3}}, identifier: 'person.crop.circle.badge.plus', label: 'Add People/Follow' <AX element pid: 13122, elementOrHash.elementID: 4346088848.34>
+                            StaticText, 0x104553d50, {{40.0, 260.7}, {322.0, 51.0}}, label: '계정 만들기 / 로그인' <AX element pid: 13122, elementOrHash.elementID: 4346089952.33>
+                        Other, 0x104553330, {{369.0, 96.0}, {30.0, 654.0}}, label: 'Vertical scroll bar, 1 page', value: 0% <AX element pid: 13122, elementOrHash.elementID: 4319432384.21>
+                          Other, 0x1045540b0, {{396.0, 497.3}, {3.0, 249.7}} <AX element pid: 13122, elementOrHash.elementID: 4345615360.26>
+                        Other, 0x104553a00, {{369.0, 96.0}, {30.0, 654.0}}, label: 'Vertical scroll bar, 1 page', value: 0% <AX element pid: 13122, elementOrHash.elementID: 4319432384.21>
+                          Other, 0x104554410, {{396.0, 497.3}, {3.0, 249.7}} <AX element pid: 13122, elementOrHash.elementID: 4345615360.26>
+                      Button, 0x1045547a0, {{16.0, 766.0}, {68.0, 58.0}}, identifier: 'chevron.left', label: '이전' <AX element pid: 13122, elementOrHash.elementID: 4346001168.27>
+                      Button, 0x104554af0, {{96.0, 770.0}, {290.0, 50.3}}, identifier: 'onboarding.start', label: '다음' <AX element pid: 13122, elementOrHash.elementID: 4346003936.17>
+                        Image, 0x104554e70, {{219.3, 788.0}, {8.3, 14.7}}, identifier: 'chevron.right', label: 'Forward' <AX element pid: 13122, elementOrHash.elementID: 4319508256.22>
+                        StaticText, 0x1045551f0, {{96.0, 770.0}, {290.0, 50.3}}, label: '다음' <AX element pid: 13122, elementOrHash.elementID: 4319509712.19>
+              Other, 0x104555550, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4345372640.10>
+                Other, 0x1045558a0, {{0.0, 0.0}, {402.0, 874.0}} <AX element pid: 13122, elementOrHash.elementID: 4319114528.12>

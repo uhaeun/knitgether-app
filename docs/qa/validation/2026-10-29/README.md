@@ -33,6 +33,8 @@ macOS 26.5.1, Node 25.4.0, PostgreSQL 14.18, Python 3.12 환경입니다. 기존
 
 [제품 CI](https://github.com/uhaeun/knitgether-app/actions/runs/40893614591)의 서버·실제 PostgreSQL job도 성공했습니다. API와 iOS job의 최종 상태는 [CI 스냅샷](ci-status.json)의 확인 시점에 따릅니다. 완료되지 않은 실행을 통과로 집계하지 않습니다.
 
+최초 iOS CI의 최종 실패와 이후 보완·재검증은 [10월 31일 후속 기록](../2026-10-31/README.md)에 연결합니다. 위 스냅샷은 당시 확인 시점의 이력으로 유지합니다.
+
 ## 다시 실행하기
 
 기본 서버 회귀는 실제 DB 없이 실행할 수 있습니다.

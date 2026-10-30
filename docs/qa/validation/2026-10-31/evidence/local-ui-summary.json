@@ -1,0 +1,42 @@
+{
+  "devicesAndConfigurations" : [
+    {
+      "device" : {
+        "architecture" : "arm64",
+        "deviceId" : "E95C0FD5-0225-4BDF-9A29-897A411EC56C",
+        "deviceName" : "KnitGether Submission Regression 20261030",
+        "modelName" : "iPhone 17 Pro",
+        "osBuildNumber" : "23C54",
+        "osVersion" : "26.2",
+        "platform" : "iOS Simulator"
+      },
+      "expectedFailures" : 0,
+      "failedTests" : 0,
+      "passedTests" : 3,
+      "skippedTests" : 0,
+      "testPlanConfiguration" : {
+        "configurationId" : "1",
+        "configurationName" : "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription" : "KnitGether Local Simulator · Built with macOS 26.5.1",
+  "expectedFailures" : 0,
+  "failedTests" : 0,
+  "finishTime" : 1793372789.148,
+  "passedTests" : 3,
+  "result" : "Passed",
+  "skippedTests" : 0,
+  "startTime" : 1793372353.349,
+  "statistics" : [
+
+  ],
+  "testFailures" : [
+
+  ],
+  "title" : "Test - KnitGether Local Simulator",
+  "topInsights" : [
+
+  ],
+  "totalTestCount" : 3
+}
