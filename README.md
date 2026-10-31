@@ -1,6 +1,8 @@
 # 뜨개더 · KnitGether
 
-도안을 보며 단수를 세고, 작업 메모와 재료를 관리하는 SwiftUI iOS 앱입니다. Tibero DB QA 5년차인 유하은이 서비스 QA 경험을 넓히기 위해 기획하고 검증한 개인 프로젝트입니다.
+도안을 보며 단수를 세고, 작업 메모와 재료를 관리하는 SwiftUI iOS 앱입니다.
+
+Tibero DB QA 5년차입니다. DB 기능과 버그 수정을 주로 검증해 왔고, 앱의 화면부터 API·저장 데이터까지 연결해 테스트해 보고 싶어 뜨개더를 만들었습니다.
 
 **[제출용 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf) · [GitHub에서 본문 읽기](docs/qa/submission/github-guide.md)**
 
@@ -10,7 +12,7 @@
 | 한 항목의 오류로 목록 전체 실패 | 화면·API·DB를 연결한 원인 분석 |
 | 두 기기의 동시 수정 | 선행 저장과 미저장 입력 보존, 복구 경로 검증 |
 
-본인은 기획, 검증 우선순위와 기대 결과를 정하고 수동·Postman·Charles·SQL 검증을 수행했습니다. AI는 구현과 후속 자동화에 활용했습니다. 역할과 각 실행의 조건은 [본문](docs/qa/submission/github-guide.md)에 설명합니다.
+앱 기획과 테스트 우선순위, 기대 결과를 정하고 수동·Postman·Charles·SQL로 확인했습니다. 구현과 후속 자동화에는 AI를 활용했습니다. 직접 맡은 일과 실행 조건은 [본문](docs/qa/submission/github-guide.md)에 정리했습니다.
 
 ## 테스트와 결과
 
