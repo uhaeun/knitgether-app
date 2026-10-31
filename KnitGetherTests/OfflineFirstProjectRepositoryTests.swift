@@ -4,6 +4,50 @@ import Testing
 
 @MainActor
 struct OfflineFirstProjectRepositoryTests {
+    @Test func partialListKeepsUnavailableCacheButPrunesActuallyDeletedProject() async throws {
+        let healthy = Self.makeProject(syncStatus: .synced)
+        let unavailable = Self.makeProject(id: UUID(), syncStatus: .synced)
+        let deleted = Self.makeProject(id: UUID(), syncStatus: .synced)
+        let fileURL = Self.tempProjectFileURL()
+        defer { try? FileManager.default.removeItem(at: fileURL.deletingLastPathComponent()) }
+        let local = LocalProjectRepository(projects: [healthy, unavailable, deleted], fileURL: fileURL)
+        let remote = ProjectRepositoryFake()
+        remote.remoteProjects = [healthy.copy(rowCounter: healthy.rowCounter.copy(currentRow: 99))]
+        remote.unavailableProjectIDs = [unavailable.id]
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+
+        let projects = try await repository.fetchProjects()
+
+        #expect(Set(projects.map(\.id)) == [healthy.id, unavailable.id])
+        #expect(projects.first { $0.id == healthy.id }?.rowCounter.currentRow == 99)
+        #expect(projects.first { $0.id == unavailable.id }?.rowCounter.currentRow == unavailable.rowCounter.currentRow)
+        #expect(repository.unavailableProjectIDs == [unavailable.id])
+        #expect(!repository.isLastListFetchServedFromCache)
+        let restoredLocal = LocalProjectRepository(seedSamples: false, fileURL: fileURL)
+        #expect(Set(try await restoredLocal.fetchProjects().map(\.id)) == [healthy.id, unavailable.id])
+
+        remote.unavailableProjectIDs = []
+        remote.remoteProjects.append(unavailable)
+        #expect(try await repository.fetchProjects().count == 2)
+        #expect(repository.unavailableProjectIDs.isEmpty)
+    }
+
+    @Test func incompleteDetailThrowsWhileKeepingCachedRecord() async throws {
+        let project = Self.makeProject(syncStatus: .synced)
+        let local = LocalProjectRepository(projects: [project])
+        let remote = ProjectRepositoryFake()
+        remote.fetchProjectsError = APIError.requestFailed(statusCode: 409, code: "PROJECT_ROW_COUNTER_MISSING", message: nil)
+        let repository = OfflineFirstProjectRepository(local: local, remote: remote)
+        do {
+            _ = try await repository.fetchProject(id: project.id)
+            Issue.record("Expected the incomplete server record to be reported.")
+        } catch let error as APIError {
+            #expect(error.isProjectDataIncomplete)
+            #expect(!error.isProjectConflict)
+        }
+        #expect(try await local.fetchProject(id: project.id)?.rowCounter.currentRow == project.rowCounter.currentRow)
+    }
+
     @Test func fetchProjectsFallsBackToLocalCacheWhenRemoteIsOffline() async throws {
         let localProject = Self.makeProject(syncStatus: .synced)
         let local = LocalProjectRepository(projects: [localProject])
@@ -660,6 +704,12 @@ struct OfflineFirstProjectRepositoryTests {
 
 @MainActor
 private final class ProjectRepositoryFake: ProjectRepository {
+    var unavailableProjectIDs: Set<UUID> = []
+
+    func fetchProjectListSnapshot() async throws -> ProjectListSnapshot {
+        ProjectListSnapshot(projects: try await fetchProjects(), unavailableProjectIDs: unavailableProjectIDs)
+    }
+
     var remoteProjects: [KnittingProject] = []
     var savedProjects: [KnittingProject] = []
     var savedRowCounters: [RowCounter] = []

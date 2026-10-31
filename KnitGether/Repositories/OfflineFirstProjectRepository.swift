@@ -5,6 +5,7 @@ final class OfflineFirstProjectRepository: ProjectRepository {
     private let local: LocalProjectRepository
     private let remote: any ProjectRepository
     private(set) var isLastListFetchServedFromCache = false
+    private(set) var unavailableProjectIDs: Set<UUID> = []
 
     init(
         local: LocalProjectRepository,
@@ -19,8 +20,13 @@ final class OfflineFirstProjectRepository: ProjectRepository {
         var deferredRemoteError: Error?
 
         do {
-            let remoteProjects = try await remote.fetchProjects()
-            try await local.cacheSyncedProjects(remoteProjects, pruningStaleEntries: true)
+            let snapshot = try await remote.fetchProjectListSnapshot()
+            try await local.cacheSyncedProjects(
+                snapshot.projects,
+                pruningStaleEntries: true,
+                preservingProjectIDs: snapshot.unavailableProjectIDs
+            )
+            unavailableProjectIDs = snapshot.unavailableProjectIDs
         } catch {
             guard shouldDefer(error) else {
                 throw error

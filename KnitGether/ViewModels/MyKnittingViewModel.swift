@@ -20,6 +20,7 @@ final class MyKnittingViewModel: ObservableObject {
     @Published private(set) var statusMessage: String?
     /// 서버 응답 대신 캐시로 폴백해 표시 중임을 알린다(CNT-03 잔여 무통보).
     @Published private(set) var isShowingCacheFallbackNotice = false
+    @Published private(set) var unavailableProjectIDs: Set<UUID> = []
 
     private let memoDraftStore: ProjectMemoDraftStore
     private let projectRepository: any ProjectRepository
@@ -57,6 +58,7 @@ final class MyKnittingViewModel: ObservableObject {
         do {
             projects = try await projectRepository.fetchProjects()
             isShowingCacheFallbackNotice = await projectRepository.isLastListFetchServedFromCache
+            unavailableProjectIDs = await projectRepository.unavailableProjectIDs
             clearErrorMessage(matching: Self.projectLoadErrorMessage)
         } catch {
             errorMessage = Self.projectLoadErrorMessage
@@ -66,6 +68,7 @@ final class MyKnittingViewModel: ObservableObject {
 
     func reloadAfterAccountChange() async {
         projects = []
+        unavailableProjectIDs = []
         availablePatterns = []
         availableYarns = []
         availableNeedles = []

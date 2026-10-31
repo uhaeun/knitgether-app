@@ -11,6 +11,17 @@ class KnitGetherUITestCase: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
+        addUIInterruptionMonitor(withDescription: "Local network access for isolated test server") { alert in
+            let text = alert.label + " " + alert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+            guard text.localizedCaseInsensitiveContains("local network") || text.contains("로컬 네트워크") else {
+                return false
+            }
+            for title in ["허용", "Allow", "OK", "확인"] {
+                let button = alert.buttons[title].firstMatch
+                if button.exists { button.tap(); return true }
+            }
+            return false
+        }
         addUIInterruptionMonitor(withDescription: "System password prompt") { alert in
             let dismissButtonTitles = [
                 "Not Now",

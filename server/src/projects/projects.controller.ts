@@ -37,10 +37,18 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Get()
-  listProjects(
+  async listProjects(
     @CurrentUser() currentUser: CurrentUserPayload,
+    @Res({ passthrough: true }) response: Response,
   ): Promise<ProjectResponseDto[]> {
-    return this.projectsService.listProjects(currentUser.id);
+    const result = await this.projectsService.listProjects(currentUser.id);
+    if (result.unavailableProjectIds.length > 0) {
+      response.setHeader(
+        'X-KnitGether-Unavailable-Projects',
+        result.unavailableProjectIds.join(','),
+      );
+    }
+    return result.projects;
   }
 
   @Post()

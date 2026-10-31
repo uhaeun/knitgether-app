@@ -661,6 +661,8 @@ describe('Projects route', () => {
       .set('Authorization', 'Bearer dev-token')
       .expect(200);
 
+    expect(response.headers['x-knitgether-unavailable-projects']).toBeUndefined();
+
     expect(prisma.project.findMany).toHaveBeenCalledWith({
       where: {
         ownerId: 'user-a',
