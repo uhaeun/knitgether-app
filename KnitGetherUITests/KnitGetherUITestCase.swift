@@ -111,6 +111,20 @@ class KnitGetherUITestCase: XCTestCase {
         return directory
     }
 
+    @MainActor
+    func dismissCameraDenialGuidance() {
+        let alert = app.alerts["오류"]
+        XCTAssertTrue(alert.waitForExistence(timeout: 12))
+        let text = alert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+        XCTAssertTrue(text.contains("카메라") && text.contains("설정"))
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Camera denial guidance before returning"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        alert.buttons["확인"].tap()
+        XCTAssertTrue(alert.waitForNonExistence(timeout: 8))
+    }
+
     private func launchEnvironment(
         apiBaseURL: String,
         resetOnboarding: Bool,

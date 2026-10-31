@@ -148,8 +148,12 @@ final class KnitGetherUITests: KnitGetherUITestCase {
         let name = registerAndCreateProject(prefix: "Device Camera Denied")
         let workspace = MainTabBarPage(app: app).openMyKnitting().openProject(named: name)
         workspace.advanceRow().expectCurrentRow(1)
+        let counterToggle = app.buttons["workspace.counter.sheet_toggle"]
+        if counterToggle.label.contains("접기") { counterToggle.tap() }
         app.buttons["workspace.pattern.focus.menu"].tap()
-        app.buttons["workspace.pattern.scan"].tap()
+        let scan = app.buttons["workspace.pattern.scan"]
+        XCTAssertTrue(scan.waitForExistence(timeout: 8))
+        scan.tap()
 
         let alert = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 15), "The real camera authorization prompt must be observed.")
@@ -157,15 +161,7 @@ final class KnitGetherUITests: KnitGetherUITestCase {
         XCTAssertTrue(deny.exists)
         deny.tap()
 
-        if app.alerts.firstMatch.waitForExistence(timeout: 3) {
-            let close = app.alerts.firstMatch.buttons.matching(NSPredicate(format: "label IN %@", ["확인", "OK", "취소", "Cancel"])).firstMatch
-            if close.exists { close.tap() }
-        }
-        if !app.buttons["workspace.counter.next"].isHittable {
-            let cancel = app.buttons.matching(NSPredicate(format: "label IN %@", ["취소", "Cancel", "닫기", "Close"])).firstMatch
-            XCTAssertTrue(cancel.waitForExistence(timeout: 8), "A denied scanner must offer a way back.")
-            cancel.tap()
-        }
+        dismissCameraDenialGuidance()
         workspace.expectCurrentRow(1)
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Workspace after camera denial"
