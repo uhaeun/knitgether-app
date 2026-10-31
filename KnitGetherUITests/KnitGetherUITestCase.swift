@@ -113,7 +113,17 @@ class KnitGetherUITestCase: XCTestCase {
 
     @MainActor
     func dismissCameraDenialGuidance() {
-        let alert = app.alerts["오류"]
+        let scannerAlert = app.alerts.firstMatch
+        if scannerAlert.waitForExistence(timeout: 8), scannerAlert.buttons["Settings"].exists {
+            let text = scannerAlert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+            XCTAssertTrue(text.localizedCaseInsensitiveContains("camera"))
+            scannerAlert.buttons["OK"].tap()
+            let cancel = app.buttons.matching(NSPredicate(format: "label IN %@", ["Cancel", "취소", "Close", "닫기"])).firstMatch
+            XCTAssertTrue(cancel.waitForExistence(timeout: 5))
+            cancel.tap()
+        }
+        let message = "카메라 접근이 꺼져 있어요. iPhone 설정에서 이 앱의 카메라를 허용해 주세요."
+        let alert = app.alerts.containing(.staticText, identifier: message).firstMatch
         XCTAssertTrue(alert.waitForExistence(timeout: 12))
         let text = alert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
         XCTAssertTrue(text.contains("카메라") && text.contains("설정"))
