@@ -11,6 +11,7 @@
 | [10월 4일 화면 검증](https://github.com/uhaeun/knitgether-app/tree/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/submission/evidence/2026-10-04) | 도안 교체·페이지 복귀의 원본 PNG·XML·촬영 로그와 초기 시도 |
 | [10월 4일 전체 재검증](https://github.com/uhaeun/knitgether-app/tree/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04) | 당시 자동화·의존성·CI 결과 |
 | [초기 분석·수행 문서](https://github.com/uhaeun/knitgether-app/tree/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio) | 배경, 도구 비교, 회차별 집계와 당시 릴리즈 검토 |
+| [과거 API 진단 스크립트](https://github.com/uhaeun/knitgether-app/tree/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa/api-probes) · [초기 smoke 안내](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/appium-charles-smoke.md) | 이전 API 계약과 개발 환경의 기록. 현재 실행은 `qa/api-tests/`와 `qa/appium/`의 안내를 사용 |
 | [이전 기술 상세](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/submission/technical-summary.md) | 충돌 보호·단위 정책의 당시 조건과 역할 |
 
 현재 본문에 필요한 대표 화면·DB 관측과 최신 검증 자료는 기본 브랜치에 남겼습니다. 선별한 원본의 바이트는 변경하지 않았습니다. 과거 자료를 가리키는 링크는 고정 커밋을 사용합니다.

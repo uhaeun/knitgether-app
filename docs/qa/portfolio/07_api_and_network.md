@@ -2,7 +2,7 @@
 
 > **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/07_api_and_network.md)
 
-> 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표(`docs/qa/appium-charles-smoke.md`)와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다.
+> 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표([당시 원본](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/appium-charles-smoke.md))와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다.
 
 #### 1. 화면만 보면 무엇을 놓치는가
 
