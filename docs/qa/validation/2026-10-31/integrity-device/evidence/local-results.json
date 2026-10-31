@@ -1,0 +1,50 @@
+{
+  "source": "82acccc8a2ce64fd2b97af2fb2a2463e5e549705",
+  "date": "2026-10-31",
+  "timezone": "Asia/Seoul",
+  "retained_log_summary": {
+    "server": [
+      "Test Suites: 13 passed, 13 total",
+      "Tests:       180 passed, 180 total"
+    ],
+    "swift": [
+      "✔ Test run with 365 tests in 41 suites passed after 12.550 seconds.",
+      "** TEST SUCCEEDED **"
+    ],
+    "postgresql": [
+      "Test Suites: 1 passed, 1 total",
+      "Tests:       40 passed, 40 total"
+    ]
+  },
+  "pytest_junit_summary": {
+    "all": [
+      {
+        "name": "pytest",
+        "tests": "79",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "18.918"
+      }
+    ],
+    "targeted": [
+      {
+        "name": "pytest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "19.492"
+      }
+    ]
+  },
+  "counting_note": "Targeted 5 API conditions are included in 79. Test layers overlap; do not sum as end-to-end cases.",
+  "preparation_failure": {
+    "api_first_full_run": {
+      "passed": 74,
+      "failed": 5,
+      "cause": "NetGate upstream defaulted to existing port 3000 while isolated API used 3318.",
+      "correction": "Set KG_NETGATE_FORWARD_PORT=3318; full rerun 79 passed."
+    }
+  }
+}

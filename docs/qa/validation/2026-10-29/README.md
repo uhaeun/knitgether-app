@@ -1,5 +1,7 @@
 # 2026-10-29 제출 준비와 추가 검증
 
+> 후속 결과: 10월 31일 개별 조회 계약과 목록 캐시 보존을 보완했습니다. 이 문서의 500·xfail은 당시 관측 이력입니다. [현재 계약·재검증](../2026-10-31/integrity-device/README.md)
+
 기준 제품: [`60c0a708d9f310d1095f99ca1683c83531c0171f`](https://github.com/uhaeun/knitgether-app/commit/60c0a708d9f310d1095f99ca1683c83531c0171f). 시작 main은 `34b3a37408ec4c3d251a5f79ba87fa849d11bbac`입니다. 이 문서의 새 실행은 AI가 구현·실행·판정한 결과입니다. 과거 수동 수행과 iOS 화면은 [포트폴리오](../../submission/github-guide.md)의 해당 시점 기록을 따릅니다.
 
 ## 무엇을 보완했는가

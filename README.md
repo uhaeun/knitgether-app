@@ -14,12 +14,15 @@
 
 ## 테스트와 결과
 
-2026-10-29 서버 회귀 **180 PASS**, 실제 HTTP·PostgreSQL 동시성 **40 PASS**, API·네트워크·DB **76 PASS / 알려진 실패 1개**를 확인했습니다. 오류 프로젝트의 개별 조회 500은 열린 과제입니다. 계층별 수치는 중복될 수 있으며 전체 E2E 건수로 합산하지 않습니다. iOS 화면은 본문의 과거 실행 증거를 사용합니다.
+2026-10-31 전용 환경과 원격 CI에서 서버 회귀 **180 PASS**, 실제 HTTP·PostgreSQL 동시성 **40 PASS**, API·네트워크·DB **79 PASS / 0 xfail**, **Swift 365 PASS·시뮬레이터 UI smoke 3 PASS**를 확인했습니다. 개별 조회의 알려진 500은 구분 가능한 409 응답으로 보완했고, 목록에서 제외된 오류 항목의 기기 캐시도 보존하도록 했습니다.
 
-2026-10-31 후속 CI에서는 **Swift 359개·iOS UI smoke 3개가 모두 통과**했습니다. 최초 화면 전환 실패의 관측값과 부팅 준비·도착 확인 보완, 로컬 및 원격 결과를 연결했습니다.
+iPhone 16 Pro에서는 비로그인 상태의 종료·복귀 기록 보존과 카메라 권한 거부 후 안내·복귀, 고유 흐름 **2개를 최종 PASS**로 확인했습니다. 계정·서버 동기화는 로컬 네트워크 차단으로 미완료이며 원인은 미확정입니다.
 
-- [최신 iOS 실패 분석·재검증](docs/qa/validation/2026-10-31/README.md)
-- [이번 결과·항목별 근거·재현 방법](docs/qa/validation/2026-10-29/README.md)
+계층별 수치는 겹칠 수 있어 전체 E2E 건수로 합산하지 않습니다. 과거 실패와 후속 통과, 실기기 조건과 미검증 범위는 실행 기록에 구분했습니다.
+
+- [최신 조회 정책·캐시 보존·기기 검증](docs/qa/validation/2026-10-31/integrity-device/README.md)
+- [앞선 iOS 화면 실패 분석·재검증](docs/qa/validation/2026-10-31/README.md)
+- [10월 29일 서버·DB 실행 이력](docs/qa/validation/2026-10-29/README.md)
 - [기능 기준](docs/qa/portfolio/02_functional_spec.md) · [테스트·RTM](docs/qa/portfolio/09_test_case_master.md) · [결함 대장](docs/qa/portfolio/10_defect_catalog.md)
 
 ## 코드와 실행

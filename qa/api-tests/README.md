@@ -4,9 +4,11 @@
 
 2026-10-04 별도 테스트 DB에서 **21개 테스트 파일의 75개 실행 항목을 실행해 모두 통과**했습니다. 파라미터별 항목을 포함합니다. 과거 수행 결과는 [실행 기록](../../docs/qa/portfolio/11_execution_results.md)에 있습니다.
 
-## 2026-10-29 보완 결과
+## 2026-10-31 보완 결과
 
-새 전용 DB에서 **76 PASS / 알려진 실패 1개**를 확인했습니다. 파일 13은 행 삭제와 삭제 상태 변경을 각각 검증하며 SQL로 바꾼 최신 단수도 대조합니다. 오류 항목의 개별 조회 500은 정상 동작으로 고정하지 않고 `xfail(strict=True)`로 따로 추적합니다. xfail은 통과나 미실행이 아니라, 실제 실행한 알려진 실패입니다. [원인·항목별 결과·조건](../../docs/qa/validation/2026-10-29/README.md)
+새 전용 DB와 원격 CI에서 **79 PASS / 0 xfail**을 확인했습니다. 파일 13은 목록의 행 삭제·삭제 표시 2조건, 개별 조회의 행 삭제·삭제 표시·소유자 불일치 3조건을 확인합니다. 개별 조회는 409와 `PROJECT_ROW_COUNTER_MISSING`, 다른 계정은 기존 404를 기대합니다. 조회 전후 DB 무변경, 정상 단수 99, 제외 ID 헤더, 정확한 시험 사본 복원 후 200도 대조합니다. [조회 계약·HTTP·SQL 근거](../../docs/qa/validation/2026-10-31/integrity-device/README.md)
+
+10월 29일의 76 PASS·알려진 실패 1개는 [당시 이력](../../docs/qa/validation/2026-10-29/README.md)으로 보존합니다. 해당 xfail은 조건별 기대 동작과 회귀 시험으로 전환했습니다.
 
 ## 파일별 확인 대상
 
@@ -51,6 +53,7 @@ python3 -m venv .venv
 | 환경 변수 | 기본값 |
 |---|---|
 | API_BASE_URL | http://127.0.0.1:3000/api/v1 |
+| KG_NETGATE_FORWARD_PORT | 3000 — 별도 서버 포트를 쓰면 같은 포트로 지정 |
 | DB_HOST / DB_PORT | localhost / 5433 |
 | DB_USER / DB_PASSWORD / DB_NAME | knitgether / knitgether / knitgether_dev |
 
