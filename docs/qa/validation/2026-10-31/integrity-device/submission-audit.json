@@ -1,0 +1,19 @@
+{
+  "pdf_path": "output/pdf/knitgether_qa_portfolio.pdf",
+  "sha256": "bc840f14e14d9607b93c9c319b9fcc7661562afc9c78cb67a3dffa607f1c63fb",
+  "document_ref": "1e15e927a29a3186f8f928faa17f7ae83943de31",
+  "code_ref": "f0663a621f4c939f80d172922a40be5a71e40871",
+  "pages": 8,
+  "link_annotations": 32,
+  "unique_links": 24,
+  "all_github_targets_exist_at_pinned_commits": true,
+  "korean_fonts_embedded": {
+    "/AAAAAA+Pretendard-SemiBold": true,
+    "/AAAAAA+Pretendard-Regular": true,
+    "/AAAAAB+Pretendard-Regular": true,
+    "/AAAAAA+Pretendard-Bold": true
+  },
+  "replacement_characters": 0,
+  "local_filesystem_paths_in_text": false,
+  "visual_review": "All 8 final rendered pages inspected."
+}
