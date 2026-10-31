@@ -21,6 +21,7 @@ OUT = ROOT / 'output/pdf/knitgether_qa_portfolio.pdf'
 FONT_DIR = SOURCE.parent / 'fonts'
 SUBMISSION_REF = os.environ.get('KNITGETHER_SUBMISSION_REF', 'main')
 REPO = 'https://github.com/uhaeun/knitgether-app'
+PAGE_COUNT = 3
 W, H = A4
 M = 19 * mm
 CW = W - 2 * M
@@ -176,25 +177,23 @@ def footer(canvas, doc):
     canvas.line(M, 41, W-M, 41)
     canvas.setFont('KR', 8)
     canvas.drawString(M, 26, '유하은 | 뜨개더 QA')
-    canvas.drawRightString(W-M, 26, f'{doc.page:02d} / 08')
+    canvas.drawRightString(W-M, 26, f'{doc.page:02d} / {PAGE_COUNT:02d}')
     canvas.restoreState()
 
 
 def build():
     source = SOURCE.read_text(encoding='utf-8')
     sections = re.split(r'^## ', source, flags=re.M)[1:]
-    if len(sections) != 8:
-        raise ValueError('The portfolio must have eight sections.')
+    if len(sections) != PAGE_COUNT:
+        raise ValueError(f'The portfolio must have {PAGE_COUNT} sections.')
     story = []
     for number, section in enumerate(sections, 1):
         lines = section.splitlines()
         title = lines.pop(0).strip()
         if number > 1:
             story.append(PageBreak())
-        if number == 1:
-            story += [p('뜨개더', 'title'), p('QA PORTFOLIO', 'label')]
         story.append(p(title, 'chapter'))
-        if number == 5:
+        if number == 3:
             # Float the narrow phone screenshot beside its explanation.
             image_start = next(i for i,line in enumerate(lines) if line.startswith('| 충돌 안내'))
             left_lines = [line for line in lines[:image_start] if not line.startswith('<!--')]

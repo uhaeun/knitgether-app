@@ -1,11 +1,11 @@
 # 포트폴리오 본문과 PDF
 
 - [QA 포트폴리오 본문](github-guide.md): 대표 사례, 판단, 결과와 한계
-- [QA 포트폴리오 (PDF)](../../../output/pdf/knitgether_qa_portfolio.pdf): 같은 본문을 8쪽으로 편집
+- [QA 포트폴리오 (PDF)](../../../output/pdf/knitgether_qa_portfolio.pdf): 통합 포트폴리오에 넣을 뜨개더 3쪽
 - [최신 조회·기기 검증](../validation/2026-10-31/integrity-device/README.md): 조회 계약·캐시 보존·실행 조건과 결과
 - [앞선 iOS 재검증](../validation/2026-10-31/README.md): 최초 실패·시험 준비 보완·후속 결과
 - [서버·DB·API 검증](../validation/2026-10-29/README.md): 계층별 결과와 재현 방법
-- [테스트 설계·수행 문서](../README.md): 기능, 리스크, 테스트·RTM과 결함 대장
+- [테스트 코드와 실행 결과](../../../README.md): 본문 사례별 코드·결과 링크
 - [과거 실행 원본](../history.md): 최초 실패와 반복 실행, 이전 상세 문서
 
 ## PDF 생성
