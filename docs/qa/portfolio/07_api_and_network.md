@@ -1,8 +1,6 @@
-# 07_API와 네트워크 검증
+# API·네트워크·DB 테스트 기록
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/07_api_and_network.md)
-
-> 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표([당시 원본](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/appium-charles-smoke.md))와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다.
+본문에 적힌 날짜·빌드의 기록입니다. [현재 결과](../README.md)는 후속 실행 기록에서 확인할 수 있습니다.
 
 #### 1. 화면만 보면 무엇을 놓치는가
 
@@ -358,3 +356,12 @@ CI에서는 `ci.yml`의 `api` 잡이 같은 API 스위트를 실행합니다. �
 - 기존 known-gap opt-in을 제거해 수용 검사4개를 기본 실제DB CI 게이트에 포함했다. 원격 CI와 iOS는 이번 변경에서 미실행이며 로컬 검증과 구분한다.
 
 이 절은 위 과거 FAIL/미실행 판정의 후속 이력이다. 과거 증거를 삭제하거나 RC-08 전체 및 제품 릴리즈를 일괄 완료 처리하지 않는다.
+
+<details>
+<summary>원본과 문서 수정 이력</summary>
+
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/07_api_and_network.md)
+
+> 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표([당시 원본](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/appium-charles-smoke.md))와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다.
+
+</details>

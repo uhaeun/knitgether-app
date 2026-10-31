@@ -1,8 +1,6 @@
-# 10_결함 카탈로그
+# 결함 대장
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/10_defect_catalog.md)
-
-> 2026-09-18 재작성. 결함 ID, 제목, 결함 클래스, 심각도 판정, 발견 경위는 원본(`docs/qa/portfolio/10`, 2026-09-06 갱신분까지)에서 옮겼다. 상태는 2026-09-18 GitHub Issue 기준으로 적었고, 원본 대장의 상태 열도 2026-09-19에 같은 기준으로 고쳤다. 2026-09-19에 원본 9/15 갱신분(#14 잔존 2건, DEF-23 재현 불가 확정, 남은 판단 7번과 8번)을 반영했다. 근거는 `docs/qa/fix_cycle_worklog_2026-09-03.md`와 각 이슈의 수정 확인 코멘트다. 8/24 시점의 상태는 6절 이력에 남겼다. 재현 절차 전문, psql 원문, 발견 시각은 06과 그 부록이 정본이다.
+본문에 적힌 날짜·빌드의 기록입니다. [현재 결과](../README.md)는 후속 실행 기록에서 확인할 수 있습니다.
 
 ISTQB가 결함 리포트에 요구하는 항목과 이 문서의 대응이다.
 
@@ -461,3 +459,12 @@ QA-SYNC11-SESSION: 부모 버전을 올리지 않는 세션 변경 때문에 오
 [최종 실행 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) · [TC별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/code-review.md). QA-CMP-01: 행 안내3경로의 부모 버전 누락. QA-CMP-02: PDF/드로잉3경로의 버전 누락 및 고정 드로잉 파일 선행 변경. QA-CMP-03: 행 안내/세션 ID의 owner/project 범위 누락. QA-CMP-04: 클라이언트의 중복 전체 저장과 동기화된 캐시 파일 재업로드. 전역 DEF 번호를 임의로 재사용하지 않고 이번 실행 ID로 추적한다.
 
 수정 전 실제DB 재현은6+3 FAIL이며 최초6은 기존24 PASS와 함께 실행했다. 수정 후 실제DB40 PASS(소유자 차이6개와 롤백·보존 포함), 서버147/API75/Swift359 PASS다. QA-CMP-04는 정적 호출 순서 분석에서 발견한 보완이며 수정 전 실제 시뮬레이터 FAIL로 포장하지 않는다. 상세 전후 상태·요청/응답·파일 검증은 실행 증거를 따른다. 자동화 팝업·컨테이너 지연·목 테스트 조정은 제품 결함과 별도로 기록한다.
+
+<details>
+<summary>원본과 문서 수정 이력</summary>
+
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/10_defect_catalog.md)
+
+> 2026-09-18 재작성. 결함 ID, 제목, 결함 클래스, 심각도 판정, 발견 경위는 원본(`docs/qa/portfolio/10`, 2026-09-06 갱신분까지)에서 옮겼다. 상태는 2026-09-18 GitHub Issue 기준으로 적었고, 원본 대장의 상태 열도 2026-09-19에 같은 기준으로 고쳤다. 2026-09-19에 원본 9/15 갱신분(#14 잔존 2건, DEF-23 재현 불가 확정, 남은 판단 7번과 8번)을 반영했다. 근거는 `docs/qa/fix_cycle_worklog_2026-09-03.md`와 각 이슈의 수정 확인 코멘트다. 8/24 시점의 상태는 6절 이력에 남겼다. 재현 절차 전문, psql 원문, 발견 시각은 06과 그 부록이 정본이다.
+
+</details>

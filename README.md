@@ -1,43 +1,37 @@
 # 뜨개더 · KnitGether
 
-도안을 보며 단수를 세고, 작업 메모와 재료를 관리하는 SwiftUI iOS 앱입니다.
+뜨개 도안을 보면서 단수를 세고, 메모와 재료를 관리하는 iOS 앱입니다. 도안과 용어 검색, 작업 기록을 한곳에서 이어 쓸 수 있도록 만들었습니다.
 
-DB 기능과 버그 수정을 주로 검증해 왔습니다. 앱의 화면 흐름과 API·저장 데이터까지 연결해 테스트해 보고 싶어 뜨개더를 만들었습니다.
+DB QA에서는 기능과 버그 수정 결과를 주로 테스트했습니다. 모바일 앱에서는 화면을 조작한 뒤 API와 저장 데이터까지 어떻게 바뀌는지 확인해 보고 싶었습니다.
 
-**[QA 포트폴리오 (PDF)](output/pdf/knitgether_qa_portfolio.pdf) · [주요 QA 사례와 검증 결과](docs/qa/submission/github-guide.md)**
+[QA 포트폴리오 (PDF)](output/pdf/knitgether_qa_portfolio.pdf) · [테스트 과정과 결과](docs/qa/submission/github-guide.md)
 
-| 사례 | 검증 초점 |
-|---|---|
-| 도안 교체 시 드로잉 유실 | 사용자 기록을 기준으로 정상·취소 조건 정의 |
-| 한 항목의 오류로 목록 전체 실패 | 화면·API·DB를 연결한 원인 분석 |
-| 두 기기의 동시 수정 | 선행 저장과 미저장 입력 보존, 복구 경로 검증 |
+## 테스트하면서 발견한 문제
 
-앱 기획과 테스트 우선순위, 기대 결과를 정하고 수동·Postman·Charles·SQL로 확인했습니다. 구현과 후속 자동화에는 AI를 활용했습니다. 직접 맡은 일과 실행 조건은 [본문](docs/qa/submission/github-guide.md)에 정리했습니다.
+- **도안을 바꾸면 그려 둔 선이 사라졌습니다.** 교체를 취소하면 기존 도안과 선이 남고, 삭제 안내에 동의했을 때만 바뀌어야 한다고 정했습니다.
+- **목록은 보이는데 새 값이 반영되지 않았습니다.** DB의 단수는 99인데 화면은 계속 22였습니다. 프로젝트 하나의 단수 정보가 빠져 목록 API 전체가 500으로 실패하고, 앱에는 이전 목록만 남아 있었습니다.
+- **두 기기에서 같은 메모를 수정하면 충돌했습니다.** 먼저 저장한 값이 DB에 남는지, 나중 기기의 미저장 메모도 남는지, 사용자가 다시 저장할 수 있는지를 나눠 확인했습니다.
 
-## 테스트와 결과
+각 문제의 재현 조건, 화면과 SQL, 수정 후 결과는 [본문](docs/qa/submission/github-guide.md)에 정리했습니다.
 
-2026-10-31 전용 환경과 원격 CI에서 서버 회귀 **180 PASS**, 실제 HTTP·PostgreSQL 동시성 **40 PASS**, API·네트워크·DB **79 PASS / 0 xfail**, **Swift 365 PASS·시뮬레이터 UI smoke 3 PASS**를 확인했습니다. 개별 조회의 알려진 500은 구분 가능한 409 응답으로 보완했고, 목록에서 제외된 오류 항목의 기기 캐시도 보존하도록 했습니다.
+앱 기획과 테스트 우선순위·기대 결과를 정하고, 초기 수동 검증에 Postman·Charles·SQL을 사용했습니다. 앱·서버 구현과 후속 자동화의 코드 작성·실행·증거 수집에는 AI를 활용했습니다.
 
-iPhone 16 Pro에서는 비로그인 상태의 종료·복귀 기록 보존과 카메라 권한 거부 후 안내·복귀, 고유 흐름 **2개를 최종 PASS**로 확인했습니다. 계정·서버 동기화는 로컬 네트워크 차단으로 미완료이며 원인은 미확정입니다.
+## 현재 확인한 범위
 
-계층별 수치는 겹칠 수 있어 전체 E2E 건수로 합산하지 않습니다. 과거 실패와 후속 통과, 실기기 조건과 미검증 범위는 실행 기록에 구분했습니다.
+[10월 31일 실행 기록](docs/qa/validation/2026-10-31/integrity-device/README.md)에 서버·DB·API·Swift·화면 테스트 결과가 있습니다. 목록에서 제외된 오류 항목의 캐시가 지워지는 문제와, 개별 조회의 500 응답도 후속 수정·재검증에 포함했습니다.
 
-- [최신 조회 정책·캐시 보존·기기 검증](docs/qa/validation/2026-10-31/integrity-device/README.md)
-- [앞선 iOS 화면 실패 분석·재검증](docs/qa/validation/2026-10-31/README.md)
-- [QA 문서 목차](docs/qa/README.md): 기능 기준, 리스크·전략, 테스트·RTM, 결함 대장
+iPhone 16 Pro에서는 비로그인 상태의 단수 기록이 앱 종료·복귀 뒤 유지되는지, 카메라 권한을 거부했을 때 안내를 보고 작업 화면으로 돌아올 수 있는지 확인했습니다. 두 흐름은 각각 최종 재실행에서 통과했습니다. 가입·서버 동기화는 로컬 네트워크 차단으로 끝내지 못했고, 원인은 아직 확인하지 못했습니다.
 
-## 코드와 실행
+[테스트 설계·케이스·결함 대장](docs/qa/README.md) · [앞선 iOS 실패와 재검증](docs/qa/validation/2026-10-31/README.md)
+
+## 소스와 실행
 
 | 위치 | 내용 |
 |---|---|
-| [KnitGether/](KnitGether/) | SwiftUI 앱과 로컬 저장·동기화 |
-| [server/](server/) | NestJS·Prisma·PostgreSQL API |
-| [qa/appium/](qa/appium/README.md) | 화면 자동화 |
-| [qa/api-tests/](qa/api-tests/README.md) | API·네트워크·SQL 검증 |
-| [KnitGetherTests/](KnitGetherTests/) | 앱 내부 기능과 저장 상태 검증 |
-| [KnitGetherUITests/](KnitGetherUITests/) | XCUITest 화면·실기기 검증 |
-| [KnitGetherQAUITests/](KnitGetherQAUITests/) | 별도 QA 타깃의 결함 회귀 |
-| [docs/qa/](docs/qa/README.md) | 포트폴리오, 테스트 설계와 실행 근거 |
-| [output/pdf/](output/pdf/) | 본문과 같은 내용의 PDF |
+| [KnitGether/](KnitGether/) · [server/](server/) | SwiftUI 앱, NestJS·Prisma·PostgreSQL API |
+| [KnitGetherTests/](KnitGetherTests/) | 앱 내부 기능과 저장 상태 테스트 |
+| [KnitGetherUITests/](KnitGetherUITests/) · [KnitGetherQAUITests/](KnitGetherQAUITests/) | XCUITest 화면·실기기·결함 회귀 테스트 |
+| [qa/appium/](qa/appium/README.md) · [qa/api-tests/](qa/api-tests/README.md) | Appium 화면 테스트, API·네트워크·SQL 테스트 |
+| [docs/qa/](docs/qa/README.md) · [output/pdf/](output/pdf/) | QA 문서와 포트폴리오 PDF |
 
-[개발 환경](docs/dev/modes.md) · [기기 연결과 로컬 개발](docs/dev/09_local_device_development.md) · [과거 실행 원본](docs/qa/history.md)
+[개발 환경](docs/dev/modes.md) · [기기 연결](docs/dev/09_local_device_development.md) · [과거 실행 원본](docs/qa/history.md)

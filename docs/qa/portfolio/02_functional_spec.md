@@ -1,8 +1,6 @@
-# 02_기능 동작 정의서
+# 기능별 기대 동작
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/02_functional_spec.md)
-
-> 2026-09-18 재작성, 2026-09-19 원본 v2.5(9/15) 반영. SPEC 48건의 동작 정의와 코드 일치 판정은 원본(`docs/qa/portfolio/02`, 문서 이력 v2.5)을 그대로 옮겼다. 바뀐 것은 배치다. 판정 체계와 추적 구조를 SPEC 목록 앞으로 빼고, 근거 열은 대표 파일:라인만 남겼다. 근거 전체와 판정 경위 원문은 원본에 있다.
+본문에 적힌 날짜·빌드의 기록입니다. [현재 결과](../README.md)는 후속 실행 기록에서 확인할 수 있습니다.
 
 원본은 이 문서를 검증 기준선(test basis)이라고 불렀다. ISTQB 용어로 엄밀히 나누면 베이시스는 인수인계 문서, 코드, 기획서이고(01의 1절) 이 문서는 거기서 뽑은 테스트 조건이다. 05 이후의 모든 판정이 이 문서를 인용하므로 실행 단계에서는 이 문서가 판정 기준 역할을 한다. 우선순위 등급은 03, 테스트 케이스는 05가 맡는다.
 
@@ -252,3 +250,12 @@ SYNC-11의 전체 저장과 겹치는 행 안내 생성·수정·삭제, PDF 및
 ## 2026-10-28 제출 시점 정책 해석
 
 10/22 확정 정책과 10/24~26 후속 기준을 유지합니다. [이번 제출 검수](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-28/README.md)는 기존 48개 SPEC ID와 과거 FAIL을 보존하며, Mac의 기존 실행과 Windows의 새 서버 회귀 132 PASS·15 FAIL 및 iOS/실제DB 미실행을 구분합니다. 편집 폼 전체 보존과 최종 앱의 전체 E2E 재실행을 PASS로 추가하지 않습니다.
+
+<details>
+<summary>원본과 문서 수정 이력</summary>
+
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/02_functional_spec.md)
+
+> 2026-09-18 재작성, 2026-09-19 원본 v2.5(9/15) 반영. SPEC 48건의 동작 정의와 코드 일치 판정은 원본(`docs/qa/portfolio/02`, 문서 이력 v2.5)을 그대로 옮겼다. 바뀐 것은 배치다. 판정 체계와 추적 구조를 SPEC 목록 앞으로 빼고, 근거 열은 대표 파일:라인만 남겼다. 근거 전체와 판정 경위 원문은 원본에 있다.
+
+</details>

@@ -1,8 +1,6 @@
-# 09_테스트 케이스 마스터
+# 테스트 목록과 RTM
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/09_test_case_master.md)
-
-> **2026-10-04 코드 대조:** 최초 수집은 Appium 20개 파일에서 83개, API 20개 파일에서 69개 항목이었습니다. 이후 사진 저장 검증 6개를 추가한 API 75개 항목의 결과는 [전체 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/README.md)에 있습니다. 케이스 ID 개수와 파라미터별 실행 항목 수는 다릅니다. 아래 과거 PASS 집계는 당시 기록입니다.
+본문에 적힌 날짜·빌드의 기록입니다. [현재 결과](../README.md)는 후속 실행 기록에서 확인할 수 있습니다.
 
 > 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(API 대조표, 번호 미배정 케이스) 반영. TC 그룹, UI와 API 케이스, 판정, 커버리지 집계는 원본(`docs/qa/portfolio/09`, 구글 시트 8/24 기준에 8/29~8/30 실측과 9/15 API 대조를 더한 판)에서 옮겼다. 1차 RTM은 원본 05에서, 8/30 이후 회귀 결과는 원본 11과 12에서 가져왔다. 바뀐 것은 배치다. 추적 사슬을 앞에 두고 케이스 78건 전문 대신 상태별 묶음으로 보인다.
 
@@ -340,3 +338,12 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 ## 2026-10-28 제출 시점 결과 연결
 
 10/22 확정 정책과 10/24~26 후속 기준을 유지합니다. [이번 제출 검수](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-28/README.md)는 기존 48개 SPEC ID와 과거 FAIL을 보존하며, Mac의 기존 실행과 Windows의 새 서버 회귀 132 PASS·15 FAIL 및 iOS/실제DB 미실행을 구분합니다. 편집 폼 전체 보존과 최종 앱의 전체 E2E 재실행을 PASS로 추가하지 않습니다.
+
+<details>
+<summary>원본과 문서 수정 이력</summary>
+
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/09_test_case_master.md)
+
+> **2026-10-04 코드 대조:** 최초 수집은 Appium 20개 파일에서 83개, API 20개 파일에서 69개 항목이었습니다. 이후 사진 저장 검증 6개를 추가한 API 75개 항목의 결과는 [전체 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/README.md)에 있습니다. 케이스 ID 개수와 파라미터별 실행 항목 수는 다릅니다. 아래 과거 PASS 집계는 당시 기록입니다.
+
+</details>

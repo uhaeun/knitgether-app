@@ -100,6 +100,8 @@ def make_table(lines, width, photo_width=144):
     n = len(rows[0])
     if is_photo:
         widths = [width / n] * n
+    elif n == 3 and rows[0][0] == '순서':
+        widths = [width * .09, width * .43, width * .48]
     elif n == 3:
         widths = [width * .27, width * .33, width * .40]
     else:
@@ -173,7 +175,7 @@ def footer(canvas, doc):
     canvas.setStrokeColor(LINE)
     canvas.line(M, 41, W-M, 41)
     canvas.setFont('KR', 8)
-    canvas.drawString(M, 26, '유하은 | 작업 기록의 보존을 중심으로')
+    canvas.drawString(M, 26, '유하은 | 뜨개더 QA')
     canvas.drawRightString(W-M, 26, f'{doc.page:02d} / 08')
     canvas.restoreState()
 
