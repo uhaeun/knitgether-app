@@ -1,7 +1,7 @@
 {
   "pdf_path": "output/pdf/knitgether_qa_portfolio.pdf",
-  "sha256": "9e61b39deba0fc413d32d503a4bb083ea2264f1aca98216b919e62ddb415de29",
-  "document_ref": "b5fdfa82d2687e18fe0a1c19bba1d6158b01d854",
+  "sha256": "f41d0bd7303fd4caeee874f6242dd11fe5f798a9388d002a44b211aea19c00d2",
+  "document_ref": "9f2e53172bae58fecff9330a7176e038b7577542",
   "code_ref": "f0663a621f4c939f80d172922a40be5a71e40871",
   "pages": 8,
   "link_annotations": 32,
@@ -15,5 +15,5 @@
   },
   "replacement_characters": 0,
   "local_filesystem_paths_in_text": false,
-  "visual_review": "Page 1 visually inspected; rendered pages 2-8 are pixel-identical to the previously inspected version."
+  "visual_review": "All 8 final rendered pages inspected."
 }
