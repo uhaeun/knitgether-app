@@ -50,11 +50,23 @@ final class RemoteProjectRepository: ProjectRepository {
     }
 
     func fetchProjects() async throws -> [KnittingProject] {
-        let projects: [KnittingProject] = try await apiClient.get("projects")
+        try await fetchProjectListSnapshot().projects
+    }
+
+    func fetchProjectListSnapshot() async throws -> ProjectListSnapshot {
+        let (projects, response): ([KnittingProject], HTTPURLResponse) = try await apiClient.getWithResponse("projects")
+        let rawIDs = response.value(forHTTPHeaderField: "X-KnitGether-Unavailable-Projects") ?? ""
+        let values = rawIDs.isEmpty ? [] : rawIDs.split(separator: ",", omittingEmptySubsequences: false).map { $0.trimmingCharacters(in: .whitespaces) }
+        let unavailableIDs = values.compactMap(UUID.init(uuidString:))
+        guard unavailableIDs.count == values.count,
+              Set(projects.map(\.id)).isDisjoint(with: unavailableIDs) else {
+            throw APIError.decodingFailed(message: "Invalid unavailable-project metadata.")
+        }
         projects.forEach(recordServerUpdatedAt)
-        return try await projects.asyncMap { project in
+        let cachedProjects = try await projects.asyncMap { project in
             try await cachePatternCopyFileIfNeeded(for: project)
         }
+        return ProjectListSnapshot(projects: cachedProjects, unavailableProjectIDs: Set(unavailableIDs))
     }
 
     func fetchProject(id: UUID) async throws -> KnittingProject? {

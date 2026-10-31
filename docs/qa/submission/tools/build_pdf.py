@@ -58,7 +58,8 @@ def url(href):
     rel = target.relative_to(ROOT).as_posix()
     new_document = rel in {'README.md', 'docs/qa/submission/github-guide.md',
         'docs/qa/submission/portfolio.md', 'docs/qa/submission/README.md',
-        'docs/qa/submission/technical-summary.md', 'qa/api-tests/README.md'} or rel.startswith(('docs/qa/validation/2026-10-29/', 'docs/qa/validation/2026-10-31/'))
+        'docs/qa/submission/technical-summary.md', 'qa/api-tests/README.md',
+        'qa/api-tests/test_13_row_counter_isolation.py', 'KnitGether', 'server'} or rel.startswith(('docs/qa/validation/2026-10-29/', 'docs/qa/validation/2026-10-31/'))
     ref = SUBMISSION_REF if new_document else EVIDENCE_REF
     kind = 'tree' if target.is_dir() else 'blob'
     return f'{REPO}/{kind}/{ref}/{quote(rel)}'

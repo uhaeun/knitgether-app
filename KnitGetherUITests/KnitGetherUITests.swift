@@ -102,6 +102,75 @@ final class KnitGetherUITests: KnitGetherUITestCase {
     }
 
     @MainActor
+    func testCounterSurvivesBackgroundAndRelaunchInAppContainer() throws {
+        let projectName = registerAndCreateProject(prefix: "Device Background")
+        let workspace = MainTabBarPage(app: app).openMyKnitting().openProject(named: projectName)
+        workspace.advanceRow().expectCurrentRow(1)
+
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 10))
+        app.activate()
+        workspace.expectCurrentRow(1)
+
+        relaunchForExistingSession().openMyKnitting().openProject(named: projectName).expectCurrentRow(1)
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Counter after background and relaunch"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    @MainActor
+    func testOfflineProjectSyncsFromAppContainerAfterConnectionRecovers() throws {
+        let suffix = UUID().uuidString.prefix(8).lowercased()
+        let email = "ui-device-offline-\(suffix)@example.com"
+        let name = "Device Offline \(suffix)"
+        _ = registerAndFinishOnboarding(email: email)
+
+        relaunchForExistingSession(apiBaseURL: "http://127.0.0.1:1/api/v1")
+            .openMyKnitting().openAddProject().saveProject(named: name).expectProjectSaved(named: name)
+
+        let api = KnitGetherAPIClient()
+        let token = try api.login(email: email, password: "password-1234")
+        XCTAssertFalse(try api.projectNames(token: token).contains(name), "Offline project must not already exist on the server.")
+
+        relaunchForExistingSession().openMyKnitting().expectProjectVisible(named: name)
+        XCTAssertTrue(try api.projectNames(token: token).contains(name), "The recovered view must correspond to a saved server project.")
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Offline project after server recovery"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    #if !targetEnvironment(simulator)
+    @MainActor
+    func testCameraDenialCanReturnToWorkspaceWithoutLosingCounter() throws {
+        app.resetAuthorizationStatus(for: .camera)
+        let name = registerAndCreateProject(prefix: "Device Camera Denied")
+        let workspace = MainTabBarPage(app: app).openMyKnitting().openProject(named: name)
+        workspace.advanceRow().expectCurrentRow(1)
+        let counterToggle = app.buttons["workspace.counter.sheet_toggle"]
+        if counterToggle.label.contains("접기") { counterToggle.tap() }
+        app.buttons["workspace.pattern.focus.menu"].tap()
+        let scan = app.buttons["workspace.pattern.scan"]
+        XCTAssertTrue(scan.waitForExistence(timeout: 8))
+        scan.tap()
+
+        let alert = XCUIApplication(bundleIdentifier: "com.apple.springboard").alerts.firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 15), "The real camera authorization prompt must be observed.")
+        let deny = alert.buttons.matching(NSPredicate(format: "label IN %@", ["허용 안 함", "허용안함", "Don't Allow", "Don’t Allow"])).firstMatch
+        XCTAssertTrue(deny.exists)
+        deny.tap()
+
+        dismissCameraDenialGuidance()
+        workspace.expectCurrentRow(1)
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Workspace after camera denial"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+    #endif
+
+    @MainActor
     func testWorkspaceWorkSessionCanBeRecorded() throws {
         let projectName = registerAndCreateProject(prefix: "Work Session")
 

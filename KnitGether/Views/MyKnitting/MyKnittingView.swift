@@ -181,6 +181,12 @@ struct MyKnittingView: View {
                 cacheFallbackNoticeRow
             }
 
+            if !viewModel.unavailableProjectIDs.isEmpty {
+                integrityNotice
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+            }
+
             ForEach(filteredProjects) { project in
                 NavigationLink {
                     workspaceView(for: project, initialTab: .working)
@@ -350,6 +356,17 @@ struct MyKnittingView: View {
         .listRowBackground(Color.clear)
     }
 
+    private var integrityNotice: some View {
+        SyncRetryBanner(
+            message: viewModel.projects.isEmpty
+                ? "일부 프로젝트 정보를 불러오지 못했어요."
+                : "일부 프로젝트는 최신 정보를 확인하지 못해 이 기기에 저장된 내용을 보여드려요.",
+            isRetrying: viewModel.isRetryingSync,
+            retryAction: { Task { await viewModel.retrySync() } }
+        )
+        .accessibilityIdentifier("myKnitting.integrityNotice")
+    }
+
     private var cacheFallbackNoticeRow: some View {
         SyncRetryBanner(
             message: "서버와 연결하지 못해 이 기기에 저장된 내용을 보여주고 있어요.",
@@ -401,7 +418,10 @@ struct MyKnittingView: View {
                     .padding(.horizontal, 24)
             }
 
-            if let errorMessage = viewModel.errorMessage {
+            if !viewModel.unavailableProjectIDs.isEmpty {
+                integrityNotice
+                    .padding(.horizontal, 24)
+            } else if let errorMessage = viewModel.errorMessage {
                 OfflineFirstNoticeView(
                     title: "서버에 연결하지 못했어요.",
                     message: "계정 데이터를 불러오려면 서버 연결이 필요해요. 연결을 확인한 뒤 다시 시도해 주세요.",

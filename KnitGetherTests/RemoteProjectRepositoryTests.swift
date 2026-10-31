@@ -3,6 +3,32 @@ import Testing
 @testable import KnitGether
 
 struct RemoteProjectRepositoryTests {
+    @Test func partialListDecodesUnavailableIDsWithoutTreatingThemAsDeleted() async throws {
+        let unavailableID = UUID()
+        let session = MockURLProtocol.makeSession { request in
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil,
+                headerFields: ["X-KnitGether-Unavailable-Projects": unavailableID.uuidString.lowercased()])!
+            return (response, Data(Self.projectsResponseJSON.utf8))
+        }
+        let snapshot = try await Self.makeRepository(session: session).fetchProjectListSnapshot()
+        #expect(snapshot.projects.count == 1)
+        #expect(snapshot.unavailableProjectIDs == [unavailableID])
+    }
+
+    @Test func malformedPartialListMetadataFailsBeforeCachePruning() async throws {
+        let session = MockURLProtocol.makeSession { request in
+            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil,
+                headerFields: ["X-KnitGether-Unavailable-Projects": "invalid-project-id"])!
+            return (response, Data(Self.projectsResponseJSON.utf8))
+        }
+        do {
+            _ = try await Self.makeRepository(session: session).fetchProjectListSnapshot()
+            Issue.record("Malformed metadata must not be accepted as a complete list.")
+        } catch let error as APIError {
+            guard case .decodingFailed = error else { Issue.record("Expected metadata decoding failure"); return }
+        }
+    }
+
     @Test func fetchProjectsRequestsProjectsEndpointAndDecodesResponse() async throws {
         let session = MockURLProtocol.makeSession { request in
             #expect(request.url?.absoluteString == "http://127.0.0.1:3000/api/v1/projects")

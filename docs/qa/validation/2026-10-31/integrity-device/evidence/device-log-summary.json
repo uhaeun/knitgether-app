@@ -1,0 +1,45 @@
+{
+  "extraction": "Whitelisted xcresulttool summary fields and exact xcodebuild test-case lines; raw bundles kept locally.",
+  "runs": [
+    {
+      "label": "counter_pass_and_earlier_camera_failure",
+      "xcresult_summary": {
+        "result": "Failed",
+        "totalTestCount": 2,
+        "passedTests": 1,
+        "failedTests": 1,
+        "skippedTests": 0,
+        "startTime": 1793444516.451,
+        "finishTime": 1793444810.172
+      },
+      "exact_test_case_lines": [
+        "Test Case '-[KnitGetherUITests.DeviceLocalFlowTests testGuestCameraDenialReturnsToWorkspace]' started.",
+        "Test Case '-[KnitGetherUITests.DeviceLocalFlowTests testGuestCameraDenialReturnsToWorkspace]' failed (70.574 seconds).",
+        "Test Case '-[KnitGetherUITests.DeviceLocalFlowTests testGuestCounterSurvivesBackgroundAndRelaunch]' started.",
+        "Test Case '-[KnitGetherUITests.DeviceLocalFlowTests testGuestCounterSurvivesBackgroundAndRelaunch]' passed (71.784 seconds)."
+      ],
+      "terminal_result": [
+        "** TEST EXECUTE FAILED **"
+      ]
+    },
+    {
+      "label": "camera_final_pass",
+      "xcresult_summary": {
+        "result": "Passed",
+        "totalTestCount": 1,
+        "passedTests": 1,
+        "failedTests": 0,
+        "skippedTests": 0,
+        "startTime": 1793445006.81,
+        "finishTime": 1793445081.182
+      },
+      "exact_test_case_lines": [
+        "Test Case '-[KnitGetherUITests.DeviceLocalFlowTests testGuestCameraDenialReturnsToWorkspace]' started.",
+        "Test Case '-[KnitGetherUITests.DeviceLocalFlowTests testGuestCameraDenialReturnsToWorkspace]' passed (69.301 seconds)."
+      ],
+      "terminal_result": [
+        "** TEST EXECUTE SUCCEEDED **"
+      ]
+    }
+  ]
+}

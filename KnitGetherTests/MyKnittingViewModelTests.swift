@@ -4,6 +4,25 @@ import Testing
 
 @MainActor
 struct MyKnittingViewModelTests {
+    @Test func incompleteListNoticeClearsAfterRecoveryAndAccountReload() async throws {
+        let project = Self.makeProject(name: "Cached", ownerId: "user-a")
+        let repository = ProjectRepositoryStub(fetchResults: [.success([project]), .success([project]), .success([])])
+        repository.unavailableProjectIDs = [project.id]
+        let viewModel = MyKnittingViewModel(projectRepository: repository)
+
+        await viewModel.loadProjects()
+        #expect(viewModel.unavailableProjectIDs == [project.id])
+        #expect(viewModel.projects.first?.id == project.id)
+        #expect(!viewModel.isShowingCacheFallbackNotice)
+
+        repository.unavailableProjectIDs = []
+        await viewModel.loadProjects()
+        #expect(viewModel.unavailableProjectIDs.isEmpty)
+        await viewModel.reloadAfterAccountChange()
+        #expect(viewModel.projects.isEmpty)
+        #expect(viewModel.unavailableProjectIDs.isEmpty)
+    }
+
     @Test func addProjectSavesSelectedYarnAndNeedleSnapshots() async throws {
         let repository = ProjectRepositoryStub(fetchResults: [
             .success([]),
@@ -350,6 +369,7 @@ struct MyKnittingViewModelTests {
 
 @MainActor
 private final class ProjectRepositoryStub: ProjectRepository {
+    var unavailableProjectIDs: Set<UUID> = []
     private var fetchResults: [Result<[KnittingProject], Error>]
     private(set) var fetchCallCount = 0
     private(set) var savedProjects: [KnittingProject] = []

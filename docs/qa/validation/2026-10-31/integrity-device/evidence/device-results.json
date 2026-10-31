@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-31",
+  "timezone": "Asia/Seoul",
+  "device": {
+    "model": "iPhone 16 Pro",
+    "os": "iOS 27.0.1",
+    "xcode": "26.6"
+  },
+  "app_source": "5bcbaaef9907f8c458f5218c6fd0b22decb64f25",
+  "final_test_source": "f0663a621f4c939f80d172922a40be5a71e40871",
+  "source_difference": "Final source changes only the camera test dialog handling. App Swift sources are identical.",
+  "conditions": {
+    "account": "Guest; account creation skipped through supported onboarding",
+    "api": "Unreachable loopback port 1 on the phone",
+    "cache": "Default sandbox of isolated QA app; no shared simulator temporary directory",
+    "radio_switching_tested": false
+  },
+  "latest_unique_cases": [
+    {
+      "name": "DeviceLocalFlowTests/testGuestCounterSurvivesBackgroundAndRelaunch",
+      "result": "PASS",
+      "seconds": 71.784,
+      "checks": [
+        "Create guest project",
+        "Advance to row 1",
+        "Home and reactivate: row 1",
+        "Terminate and relaunch: row 1"
+      ],
+      "source": "5bcbaaef9907f8c458f5218c6fd0b22decb64f25"
+    },
+    {
+      "name": "DeviceLocalFlowTests/testGuestCameraDenialReturnsToWorkspace",
+      "result": "PASS",
+      "seconds": 69.301,
+      "checks": [
+        "Create guest project and record row 1",
+        "Collapse counter and observe scanner menu",
+        "Observe and deny camera system prompt",
+        "Dismiss Camera Unavailable and leave scanner",
+        "Verify app guidance mentions camera and Settings",
+        "Dismiss guidance and verify row 1"
+      ],
+      "source": "f0663a621f4c939f80d172922a40be5a71e40871"
+    }
+  ],
+  "execution_history": [
+    {
+      "label": "guest_first",
+      "passed": 1,
+      "failed": 1,
+      "camera_failure": "Counter sheet covered pattern menu; scanner was not reached."
+    },
+    {
+      "label": "guest_menu_corrected",
+      "passed": 1,
+      "failed": 1,
+      "camera_failure": "App error dialog remained open after scanner cancellation."
+    },
+    {
+      "label": "camera_guidance_app_updated",
+      "passed": 1,
+      "failed": 1,
+      "camera_failure": "Native Camera Unavailable appeared before the app dialog; query expected the app dialog too early."
+    },
+    {
+      "label": "camera_dialog_sequence_retest",
+      "passed": 1,
+      "failed": 0,
+      "selected": "Camera case only; counter was not rerun because its source and app behavior were unchanged."
+    }
+  ],
+  "not_completed": [
+    "Physical account registration and server save",
+    "Physical offline authenticated project sync",
+    "Physical server-connected background and camera variants"
+  ],
+  "counting": "Two distinct guest/local cases have final PASS outcomes across two result bundles. This is not a single all-pass four-case account/server run. Earlier failures remain recorded.",
+  "screenshots": [
+    {
+      "path": "camera-denied-after.png",
+      "sha256": "6ac8008d9e4ce25098dde7c06b9e48cdf25cc634bacf08304979d97dfd0a8892"
+    },
+    {
+      "path": "camera-denied-before.png",
+      "sha256": "018559308d730b9d9af20fee9d57434f420261fcdebbbc0f45a7f40aa64424ea"
+    },
+    {
+      "path": "camera-denied-return.png",
+      "sha256": "948ce0993ca384c369a5e97e8f3005a1f9473a97125c869f506c4428d05d44b5"
+    },
+    {
+      "path": "counter-after-relaunch.png",
+      "sha256": "35d67d68c56741df246f33ccdafb0b560ad176ffacbf11bc9514d34fc116a6f6"
+    }
+  ],
+  "source_copy_matches_repository": true,
+  "cleanup": "Isolated QA app and UI runner removed after evidence export; original app remains installed."
+}

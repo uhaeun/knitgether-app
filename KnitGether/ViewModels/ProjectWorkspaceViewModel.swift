@@ -790,7 +790,9 @@ final class ProjectWorkspaceViewModel: ObservableObject {
             await loadDrawingData()
             await loadYarnUsage()
         } catch {
-            errorMessage = "프로젝트 저장 상태를 다시 확인하지 못했어요."
+            errorMessage = (error as? APIError)?.isProjectDataIncomplete == true
+                ? "서버의 단수 정보를 확인하지 못했어요. 이 기기에 저장된 기록과 입력 중인 내용은 유지했어요."
+                : "프로젝트 저장 상태를 다시 확인하지 못했어요."
         }
     }
 

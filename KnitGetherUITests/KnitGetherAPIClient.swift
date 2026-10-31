@@ -72,8 +72,21 @@ struct KnitGetherAPIClient {
     }
 
     private func post(_ path: String, body: Data, token: String?) throws -> Data {
+        try perform(path, method: "POST", body: body, token: token)
+    }
+
+    func projectNames(token: String) throws -> [String] {
+        let data = try perform("projects", method: "GET", body: nil, token: token)
+        guard let projects = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+            throw APITestError.message("project list response was not an array")
+        }
+        return projects.compactMap { $0["name"] as? String }
+    }
+
+    private func perform(_ path: String, method: String, body: Data?, token: String?) throws -> Data {
         var request = URLRequest(url: baseURL.appendingPathComponent(path))
-        request.httpMethod = "POST"
+        request.httpMethod = method
+        request.timeoutInterval = 30
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         if let token {
@@ -89,7 +102,7 @@ struct KnitGetherAPIClient {
             } else if let http = response as? HTTPURLResponse,
                       !(200 ..< 300).contains(http.statusCode) {
                 let text = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
-                outcome = .failure(APITestError.message("POST \(path) -> \(http.statusCode): \(text)"))
+                outcome = .failure(APITestError.message("\(method) \(path) -> \(http.statusCode): \(text)"))
             } else {
                 outcome = .success(data ?? Data())
             }

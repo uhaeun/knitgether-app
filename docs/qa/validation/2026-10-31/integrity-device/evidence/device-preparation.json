@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-31",
+  "timezone": "Asia/Seoul",
+  "device": {
+    "model": "iPhone 16 Pro",
+    "os": "iOS 27.0.1"
+  },
+  "xcode": "26.6",
+  "isolation": "Separate QA app bundle identifier, synthetic accounts, dedicated API port, database and file storage.",
+  "earlier_ui_run": {
+    "passed": 0,
+    "failed": 4,
+    "skipped": 0,
+    "failure_stage": "Registration success assertion; product scenarios could not proceed.",
+    "app_network_error": -1009,
+    "network_path_reason": "Local network prohibited",
+    "http_response_received": false
+  },
+  "subsequent_attempts": [
+    "Allowing the reported Settings switch, reinstalling the QA app, and restarting the device did not establish app connectivity in the following attempts.",
+    "The UI test runner had its own local-network prompt. Activating the runner, granting that prompt, and retrying the unauthenticated projects request returned HTTP 401.",
+    "Resetting local-network authorization for the isolated QA app through XCTest produced its app-specific prompt. The prompt was allowed. The registration request issued before that permission completed still failed; it was retained as a failed run.",
+    "An explicit app permission reset, observed Allow action and a single registration retry still returned -1009 / Local network prohibited. These test-helper changes were not retained as a product fix.",
+    "A direct app launch outside UI testing also failed the authenticated profile request with the same network-path reason.",
+    "A fresh QA bundle identifier and distinct app name produced the same registration block. The app-specific LAN denial remains unresolved; it is not classified as a proven server failure."
+  ],
+  "counting": "Certificate, install, authentication and network preparation checks are separate from product-flow results. Later pass results do not erase earlier failures.",
+  "privacy": "Raw device diagnostics and result bundles remain local. Device name, serial number, UDID, personal settings screens and authentication tokens are excluded."
+}

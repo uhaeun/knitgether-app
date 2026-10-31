@@ -1231,6 +1231,24 @@ struct ProjectWorkspaceViewModelTests {
         #expect(viewModel.errorMessage == nil)
     }
 
+    @Test func incompleteServerRecordKeepsCounterAndMemoDraftOnRetry() async throws {
+        let project = Self.makeProject(currentRow: 37, syncStatus: .synced)
+        let repository = ProjectRepositorySpy(project: project)
+        repository.fetchError = APIError.requestFailed(statusCode: 409, code: "PROJECT_ROW_COUNTER_MISSING", message: nil)
+        let viewModel = ProjectWorkspaceViewModel(project: project, projectRepository: repository,
+            patternRepository: PatternRepositoryFake(), skillRepository: SkillRepositoryFake(), libraryRepository: LibraryRepositorySpy())
+        viewModel.memoText = "Keep this unsaved draft"
+
+        await viewModel.retrySync()
+
+        #expect(viewModel.currentRow == 37)
+        #expect(viewModel.memoText == "Keep this unsaved draft")
+        #expect(viewModel.project.memo == project.memo)
+        #expect(viewModel.errorMessage == "서버의 단수 정보를 확인하지 못했어요. 이 기기에 저장된 기록과 입력 중인 내용은 유지했어요.")
+        #expect(!viewModel.isRetryingSync)
+        #expect(repository.savedProjects.isEmpty)
+    }
+
     @Test func incrementRowAppliesFetchedProjectAfterSave() async throws {
         let project = Self.makeProject(currentRow: 4, syncStatus: .localOnly)
         let serverProject = project.copy(
@@ -1652,6 +1670,7 @@ struct ProjectWorkspaceViewModelTests {
         var projects: [KnittingProject]
         var projectAfterSave: KnittingProject?
         var saveError: Error?
+        var fetchError: Error?
         var savedProjects: [KnittingProject] = []
         var fetchProjectCallCount = 0
 
@@ -1665,6 +1684,7 @@ struct ProjectWorkspaceViewModelTests {
 
         func fetchProject(id: UUID) async throws -> KnittingProject? {
             fetchProjectCallCount += 1
+            if let fetchError { throw fetchError }
             return projects.first { $0.id == id }
         }
 

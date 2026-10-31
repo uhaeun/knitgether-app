@@ -1,0 +1,85 @@
+{
+  "source": "82acccc8a2ce64fd2b97af2fb2a2463e5e549705",
+  "runs": [
+    {
+      "id": 41189182454,
+      "url": "https://github.com/uhaeun/knitgether-app/actions/runs/41189182454",
+      "jobs": [
+        {
+          "id": 124502227357,
+          "name": "Project Concurrency (Real PostgreSQL)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 124502227518,
+          "name": "Server Build And Test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 124502455808,
+          "name": "API Contract, Network Degradation, DB Integrity",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 124502455820,
+          "name": "iOS Build, Unit, And UI Smoke",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 41189182515,
+      "url": "https://github.com/uhaeun/knitgether-app/actions/runs/41189182515",
+      "jobs": [
+        {
+          "id": 124502227537,
+          "name": "storage (ubuntu-latest)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 124502227744,
+          "name": "storage (windows-latest)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "log_summary": {
+    "124502227357": [
+      "2026-10-31T09:34:28.3310140Z Test Suites: 1 passed, 1 total",
+      "2026-10-31T09:34:28.3310457Z Tests:       40 passed, 40 total"
+    ],
+    "124502227518": [
+      "2026-10-31T09:34:35.3592793Z Test Suites: 13 passed, 13 total",
+      "2026-10-31T09:34:35.3593391Z Tests:       180 passed, 180 total"
+    ],
+    "124502455808": [
+      "2026-10-31T09:35:51.4889992Z ============================= 79 passed in 19.83s =============================="
+    ],
+    "124502227537": [
+      "2026-10-31T09:34:03.9576211Z Test Suites: 1 passed, 1 total",
+      "2026-10-31T09:34:03.9576545Z Tests:       33 passed, 33 total"
+    ],
+    "124502227744": [
+      "2026-10-31T09:34:34.6512429Z Test Suites: 1 passed, 1 total\r",
+      "2026-10-31T09:34:34.6512730Z Tests:       33 passed, 33 total\r"
+    ],
+    "124502455820": [
+      "2026-10-31T09:41:57.0952700Z ✔ Test run with 365 tests in 41 suites passed after 113.646 seconds.",
+      "2026-10-31T09:42:05.3553080Z ** TEST SUCCEEDED **",
+      "2026-10-31T09:51:18.7015320Z Test Case '-[KnitGetherUITests.KnitGetherUITests testCoreUserFlowRegistersAndSavesCommonRecords]' passed (301.350 seconds).",
+      "2026-10-31T09:53:53.6474880Z Test Case '-[KnitGetherUITests.KnitGetherUITests testServerOffPendingProjectSyncsAfterServerRecovers]' passed (154.944 seconds).",
+      "2026-10-31T09:56:02.2727180Z Test Case '-[KnitGetherUITests.KnitGetherUITests testServerOffWithCachedProjectShowsCachedProject]' passed (128.617 seconds).",
+      "2026-10-31T09:56:02.2879170Z \t Executed 3 tests, with 0 failures (0 unexpected) in 584.910 (584.919) seconds",
+      "2026-10-31T09:56:02.2882000Z \t Executed 3 tests, with 0 failures (0 unexpected) in 584.910 (584.921) seconds",
+      "2026-10-31T09:56:02.2887530Z \t Executed 3 tests, with 0 failures (0 unexpected) in 584.910 (584.924) seconds",
+      "2026-10-31T09:56:36.1115340Z ** TEST SUCCEEDED **"
+    ]
+  }
+}

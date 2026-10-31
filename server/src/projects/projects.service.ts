@@ -150,7 +150,10 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     return result;
   }
 
-  async listProjects(ownerId: string): Promise<ProjectResponseDto[]> {
+  async listProjects(ownerId: string): Promise<{
+    projects: ProjectResponseDto[];
+    unavailableProjectIds: string[];
+  }> {
     const projects = await this.prisma.project.findMany({
       where: {
         ownerId,
@@ -166,11 +169,13 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     // 한 프로젝트의 자식 레코드가 결손이어도 목록 전체를 실패시키지 않는다.
     // 변환에 실패한 항목만 제외하고 나머지는 정상 반환한다.
     const responses: ProjectResponseDto[] = [];
+    const unavailableProjectIds: string[] = [];
 
     for (const project of sorted) {
       try {
         responses.push(this.toResponse(project, ownerId));
       } catch (error) {
+        unavailableProjectIds.push(project.id);
         this.logger.error(
           `Skipped project ${project.id} in list response: ${
             error instanceof Error ? error.message : String(error)
@@ -179,7 +184,7 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
       }
     }
 
-    return responses;
+    return { projects: responses, unavailableProjectIds };
   }
 
   async getProject(ownerId: string, id: string): Promise<ProjectResponseDto> {
@@ -196,6 +201,14 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
       throw new NotFoundException({
         code: 'PROJECT_NOT_FOUND',
         message: 'Project not found.',
+      });
+    }
+
+    if (!this.hasActiveRowCounter(project.rowCounter, ownerId)) {
+      throw new ConflictException({
+        code: 'PROJECT_ROW_COUNTER_MISSING',
+        message: 'Project cannot be read because its row counter is unavailable.',
+        details: { projectId: project.id },
       });
     }
 
@@ -2037,15 +2050,18 @@ export class ProjectsService implements OnModuleInit, OnModuleDestroy {
     return secondActivity.getTime() - firstActivity.getTime();
   }
 
+  private hasActiveRowCounter(
+    counter: ProjectWithChildren['rowCounter'],
+    ownerId: string,
+  ): counter is RowCounterWithInstructions {
+    return !!counter && counter.ownerId === ownerId && counter.deletedAt === null;
+  }
+
   private toResponse(
     project: ProjectWithChildren,
     ownerId: string,
   ): ProjectResponseDto {
-    if (
-      !project.rowCounter ||
-      project.rowCounter.ownerId !== ownerId ||
-      project.rowCounter.deletedAt !== null
-    ) {
+    if (!this.hasActiveRowCounter(project.rowCounter, ownerId)) {
       throw new InternalServerErrorException({
         code: 'PROJECT_ROW_COUNTER_MISSING',
         message: 'Project is missing its row counter.',

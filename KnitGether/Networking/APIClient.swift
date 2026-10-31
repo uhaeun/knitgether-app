@@ -56,6 +56,11 @@ nonisolated final class APIClient {
         try await request(path, method: "GET", body: Optional<Data>.none)
     }
 
+    func getWithResponse<Response: Decodable>(_ path: String) async throws -> (Response, HTTPURLResponse) {
+        let (data, response) = try await requestHTTP(path, method: "GET", body: nil, contentType: nil)
+        return (try decodeResponse(data), response)
+    }
+
     func send<RequestBody: Encodable, Response: Decodable>(
         _ path: String,
         method: String,
@@ -106,6 +111,10 @@ nonisolated final class APIClient {
             contentType: contentType
         )
 
+        return try decodeResponse(data)
+    }
+
+    private func decodeResponse<Response: Decodable>(_ data: Data) throws -> Response {
         do {
             return try decoder.decode(Response.self, from: data)
         } catch {
@@ -132,6 +141,15 @@ nonisolated final class APIClient {
         body: Data?,
         contentType: String?
     ) async throws -> Data {
+        try await requestHTTP(path, method: method, body: body, contentType: contentType).0
+    }
+
+    private func requestHTTP(
+        _ path: String,
+        method: String,
+        body: Data?,
+        contentType: String?
+    ) async throws -> (Data, HTTPURLResponse) {
         let url = configuration.baseURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
         request.httpMethod = method
@@ -186,7 +204,7 @@ nonisolated final class APIClient {
         }
 
         Self.debugLog("RESPONSE \(method) \(url.absoluteString) status=\(httpResponse.statusCode)")
-        return data
+        return (data, httpResponse)
     }
 
     private static func debugLog(_ message: String) {

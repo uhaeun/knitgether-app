@@ -84,7 +84,8 @@ final class LocalProjectRepository: ProjectRepository {
 
     func cacheSyncedProjects(
         _ remoteProjects: [KnittingProject],
-        pruningStaleEntries: Bool = false
+        pruningStaleEntries: Bool = false,
+        preservingProjectIDs: Set<UUID> = []
     ) async throws {
         for remoteProject in remoteProjects {
             let syncedProject = remoteProject.copy(syncStatus: .synced)
@@ -109,6 +110,7 @@ final class LocalProjectRepository: ProjectRepository {
             let remoteIds = Set(remoteProjects.map(\.id))
             projects.removeAll { project in
                 !remoteIds.contains(project.id)
+                    && !preservingProjectIDs.contains(project.id)
                     && !project.syncStatus.needsUpload
                     && !project.syncStatus.needsUserAttention
             }

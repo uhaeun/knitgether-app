@@ -11,6 +11,17 @@ class KnitGetherUITestCase: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
+        addUIInterruptionMonitor(withDescription: "Local network access for isolated test server") { alert in
+            let text = alert.label + " " + alert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+            guard text.localizedCaseInsensitiveContains("local network") || text.contains("로컬 네트워크") else {
+                return false
+            }
+            for title in ["허용", "Allow", "OK", "확인"] {
+                let button = alert.buttons[title].firstMatch
+                if button.exists { button.tap(); return true }
+            }
+            return false
+        }
         addUIInterruptionMonitor(withDescription: "System password prompt") { alert in
             let dismissButtonTitles = [
                 "Not Now",
@@ -98,6 +109,30 @@ class KnitGetherUITestCase: XCTestCase {
             .appendingPathComponent("KnitGetherUITests-\(prefix)-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         return directory
+    }
+
+    @MainActor
+    func dismissCameraDenialGuidance() {
+        let scannerAlert = app.alerts.firstMatch
+        if scannerAlert.waitForExistence(timeout: 8), scannerAlert.buttons["Settings"].exists {
+            let text = scannerAlert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+            XCTAssertTrue(text.localizedCaseInsensitiveContains("camera"))
+            scannerAlert.buttons["OK"].tap()
+            let cancel = app.buttons.matching(NSPredicate(format: "label IN %@", ["Cancel", "취소", "Close", "닫기"])).firstMatch
+            XCTAssertTrue(cancel.waitForExistence(timeout: 5))
+            cancel.tap()
+        }
+        let message = "카메라 접근이 꺼져 있어요. iPhone 설정에서 이 앱의 카메라를 허용해 주세요."
+        let alert = app.alerts.containing(.staticText, identifier: message).firstMatch
+        XCTAssertTrue(alert.waitForExistence(timeout: 12))
+        let text = alert.staticTexts.allElementsBoundByIndex.map(\.label).joined(separator: " ")
+        XCTAssertTrue(text.contains("카메라") && text.contains("설정"))
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = "Camera denial guidance before returning"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        alert.buttons["확인"].tap()
+        XCTAssertTrue(alert.waitForNonExistence(timeout: 8))
     }
 
     private func launchEnvironment(

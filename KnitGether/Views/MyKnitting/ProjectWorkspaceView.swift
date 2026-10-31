@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 import UniformTypeIdentifiers
 
 struct ProjectWorkspaceView: View {
@@ -1020,8 +1021,14 @@ struct ProjectWorkspaceView: View {
         case .success(let fileURL):
             pendingPatternFileImport = PendingPatternFileImport(fileURL: fileURL, source: .scan)
         case .failure:
-            // 스캔 실패를 무통보로 삼키지 않는다. 공통 오류 얼럿으로 안내한다.
-            viewModel.presentError("문서 스캔에 실패했어요. 다시 시도해 주세요.")
+            switch AVCaptureDevice.authorizationStatus(for: .video) {
+            case .denied:
+                viewModel.presentError("카메라 접근이 꺼져 있어요. iPhone 설정에서 이 앱의 카메라를 허용해 주세요.")
+            case .restricted:
+                viewModel.presentError("이 기기에서 카메라 사용이 제한돼 있어요. 기기 제한 설정을 확인해 주세요.")
+            default:
+                viewModel.presentError("문서 스캔에 실패했어요. 다시 시도해 주세요.")
+            }
         }
     }
 

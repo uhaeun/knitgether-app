@@ -7,7 +7,13 @@
 
 import Foundation
 
+struct ProjectListSnapshot {
+    let projects: [KnittingProject]
+    let unavailableProjectIDs: Set<UUID>
+}
+
 protocol ProjectRepository {
+    func fetchProjectListSnapshot() async throws -> ProjectListSnapshot
     func fetchProjects() async throws -> [KnittingProject]
     func fetchProject(id: UUID) async throws -> KnittingProject?
     func saveProject(_ project: KnittingProject) async throws
@@ -20,9 +26,18 @@ protocol ProjectRepository {
     /// 직전 목록 조회가 서버 응답 대신 로컬 캐시로 폴백했는지.
     /// 무통보 폴백을 화면에서 안내하기 위한 신호다(CNT-03 잔여 무통보).
     var isLastListFetchServedFromCache: Bool { get async }
+    var unavailableProjectIDs: Set<UUID> { get async }
 }
 
 extension ProjectRepository {
+    func fetchProjectListSnapshot() async throws -> ProjectListSnapshot {
+        ProjectListSnapshot(projects: try await fetchProjects(), unavailableProjectIDs: [])
+    }
+
+    var unavailableProjectIDs: Set<UUID> {
+        get async { [] }
+    }
+
     var isLastListFetchServedFromCache: Bool {
         get async { false }
     }
