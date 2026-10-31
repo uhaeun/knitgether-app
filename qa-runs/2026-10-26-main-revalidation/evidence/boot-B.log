@@ -1,7 +1,0 @@
-Monitoring boot status for KnitGether QA B 20261022 (311D4B83-D09B-4237-824C-ABCDD09264D1).
-[2026-10-26 10:45:23 +0000] Status=1, isTerminal=NO, Elapsed=00:05.
-	Waiting on BackBoard
-
-[2026-10-26 10:46:41 +0000] Status=4294967295, isTerminal=YES, Elapsed=01:23.
-	Finished
-

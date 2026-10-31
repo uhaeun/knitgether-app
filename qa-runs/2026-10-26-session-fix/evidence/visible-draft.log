@@ -1,1 +1,0 @@
-[{'case': 'VISIBLE-PROCESS-RESTORE', 'status': 'PASS', 'draft': 'Visible process lifetime draft', 'serverUnchanged': True}, {'case': 'VISIBLE-DISCARD-REMOVED', 'status': 'PASS', 'memo': 'Draft saved explicitly', 'draftFileRemoved': True}, {'case': 'VISIBLE-SAVE-REMOVED', 'status': 'PASS', 'memo': 'Visible draft explicitly saved', 'draftFileRemoved': True}]

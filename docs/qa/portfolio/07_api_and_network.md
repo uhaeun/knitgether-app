@@ -1,6 +1,6 @@
 # 07_API와 네트워크 검증
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/07_api_and_network.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/07_api_and_network.md)
 
 > 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(스위트 구성, 고아 파일 수치) 반영. 실행 기록과 판정은 원본(`docs/qa/portfolio/07`, 2026-08-30 작성, 9/15 갱신)을 그대로 옮겼다. 실행 코드는 [`qa/api-tests/`](../../../qa/api-tests/)에 있고 1차 구성은 11개 파일 37건, 2026-09-15 기준은 69건이다. 스모크 점검표(`docs/qa/appium-charles-smoke.md`)와 Postman 컬렉션(`docs/qa/postman/`)을 환경 절에 합쳤다.
 
@@ -350,7 +350,7 @@ CI에서는 `ci.yml`의 `api` 잡이 같은 API 스위트를 실행합니다. �
 
 ## 2026-10-26 자식 카운터·도안 파일 후속 수정
 
-[수정·재검증 보고서](../../../qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
+[수정·재검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
 
 - 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모·자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
 - 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체·연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.

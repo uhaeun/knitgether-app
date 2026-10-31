@@ -1,4 +1,0 @@
-{"at": "2026-10-22T14:20:07.394255+00:00", "stage": "GIVEN_ACCOUNT_AND_PROJECT", "actor": "API_SETUP"}
-{"at": "2026-10-22T14:20:08.186489+00:00", "stage": "NATIVE_LOGIN", "actor": "A"}
-{"at": "2026-10-22T14:22:16.006616+00:00", "stage": "NATIVE_LOGIN", "actor": "B"}
-{"at": "2026-10-22T14:25:05.601643+00:00", "stage": "OPEN_PROJECT", "actor": "A"}

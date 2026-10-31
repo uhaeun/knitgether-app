@@ -2,7 +2,7 @@
 
 실행 중인 API 서버에 `requests`로 요청을 보내고 `pytest`로 결과를 판정합니다. 저장 데이터 확인이 필요한 케이스는 `psycopg2`로 PostgreSQL을 직접 조회합니다. 모든 케이스가 SQL을 실행하는 것은 아닙니다.
 
-2026-10-04 별도 테스트 DB에서 **21개 테스트 파일의 75개 실행 항목을 실행해 모두 통과**했습니다. 파라미터별 항목을 포함합니다. 과거 수행 결과는 [실행 기록](../../docs/qa/portfolio/11_execution_results.md)에 있습니다.
+2026-10-04 별도 테스트 DB에서 **21개 테스트 파일의 75개 실행 항목을 실행해 모두 통과**했습니다. 파라미터별 항목을 포함합니다. 과거 수행 결과는 [실행 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/11_execution_results.md)에 있습니다.
 
 ## 2026-10-31 보완 결과
 

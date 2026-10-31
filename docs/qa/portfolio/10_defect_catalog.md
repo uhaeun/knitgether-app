@@ -1,6 +1,6 @@
 # 10_결함 카탈로그
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/10_defect_catalog.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/10_defect_catalog.md)
 
 > 2026-09-18 재작성. 결함 ID, 제목, 결함 클래스, 심각도 판정, 발견 경위는 원본(`docs/qa/portfolio/10`, 2026-09-06 갱신분까지)에서 옮겼다. 상태는 2026-09-18 GitHub Issue 기준으로 적었고, 원본 대장의 상태 열도 2026-09-19에 같은 기준으로 고쳤다. 2026-09-19에 원본 9/15 갱신분(#14 잔존 2건, DEF-23 재현 불가 확정, 남은 판단 7번과 8번)을 반영했다. 근거는 `docs/qa/fix_cycle_worklog_2026-09-03.md`와 각 이슈의 수정 확인 코멘트다. 8/24 시점의 상태는 6절 이력에 남겼다. 재현 절차 전문, psql 원문, 발견 시각은 06과 그 부록이 정본이다.
 
@@ -74,7 +74,7 @@ DEF-01은 핸드오프 known issue #16의 동작을 실측으로 확정한 것�
 | DEF-28 | 스킬 테스트 저장 실패 문구가 개발자용 (Xcode 콘솔, 서버 Terminal) | RC-03 표시 정합성 | Minor (9/1 확정) | 9/1 (정적 점검) | 기능정의서 도구 작성 중 대조 |
 | DEF-29 | 설정 단위 설명문이 미적용 사실과 어긋남 ("게이지와 길이 입력에서 사용") | RC-03 표시 정합성 | Minor (9/1 확정, UI-03 기준) | 9/1 (정적 점검) | UI-03 신설과 함께 확정 |
 
-> **UI-51 후속 확인:** 2026-10-04 검토에서 빈 결과로 통과할 수 있는 판정을 보완하고, 실제 페이지 이동과 복귀 후 고유 표시를 확인하도록 변경했습니다. 보완한 두 경로의 [재실행 결과는 PASS](../validation/2026-10-04/evidence/appium-page-final.xml)입니다. 아래 8월 PASS는 당시 기록과 구분합니다.
+> **UI-51 후속 확인:** 2026-10-04 검토에서 빈 결과로 통과할 수 있는 판정을 보완하고, 실제 페이지 이동과 복귀 후 고유 표시를 확인하도록 변경했습니다. 보완한 두 경로의 [재실행 결과는 PASS](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/evidence/appium-page-final.xml)입니다. 아래 8월 PASS는 당시 기록과 구분합니다.
 
 ##### 2-2. 수정 확인과 상태
 
@@ -424,7 +424,7 @@ DEF-006과 DEF-009는 7월 개발 단계의 세 자리 번호로, 이 대장의 
 
 ## 2026-10-26 자식 카운터·도안 파일 후속 수정
 
-[수정·재검증 보고서](../../../qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
+[수정·재검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
 
 - 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모·자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
 - 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체·연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.
@@ -435,14 +435,14 @@ DEF-006과 DEF-009는 7월 개발 단계의 세 자리 번호로, 이 대장의 
 
 ## 2026-10-26 최신 main 통합 후보 재검증
 
-[최신 main 대조·수정 후보 검증](../../../qa-runs/2026-10-26-main-revalidation/report.md). QA-SYNC11-RACE는 main6df5c4e에서 재현되지만 수정 후보의 실제DB·외부20쌍·두 시뮬레이터 범위에서는 수정 검증 PASS다. 카운터의 CHILD-01/02와 FILES-01/02를 포함한18개는 기본 게이트에서0 SKIP으로 통과했다. main 병합·운영 배포 완료를 의미하지 않는다.
+[최신 main 대조·수정 후보 검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-main-revalidation/report.md). QA-SYNC11-RACE는 main6df5c4e에서 재현되지만 수정 후보의 실제DB·외부20쌍·두 시뮬레이터 범위에서는 수정 검증 PASS다. 카운터의 CHILD-01/02와 FILES-01/02를 포함한18개는 기본 게이트에서0 SKIP으로 통과했다. main 병합·운영 배포 완료를 의미하지 않는다.
 
 추가 위험: 작업 세션 삭제는 부모 버전을 바꾸지 않아 오래된 전체 저장이 삭제를 복원했다. 기존에 범위 밖으로 둔 통합 버전 공백의 새 재현으로 기록하며, 카운터 유실 수정 PASS를 모든 자식 경로의 해결로 확대하지 않는다. 앱 종료 후 미저장 초안은 수명 요구가 정해지지 않아 제품 결함 PASS/FAIL로 임의 확정하지 않는다.
 
 
 ## 2026-10-26 작업 세션 경합·종료 후 초안 보존 후속
 
-[제품 수정·검증 보고서](../../../qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](../../../qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
+[제품 수정·검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
 
 QA-SYNC11-SESSION: 부모 버전을 올리지 않는 세션 변경 때문에 오래된 전체 저장이 최신 세션을 덮거나 삭제 세션을 복원했다.71fc254에서 생성·수정·삭제3건 모두200으로 재현했고7579663의 실제DB에서409와SQL 상태 보존으로 확인했다. 부모 버전 증가와 자식 변경을 같은 트랜잭션으로 옮겨 수정했다. 추가3개는 경합 순서·rollback 확인이다. Fixed/Verified는 이 경로에 한정하며 모든 자식 API 완료를 뜻하지 않는다.
 
@@ -451,13 +451,13 @@ QA-SYNC11-SESSION: 부모 버전을 올리지 않는 세션 변경 때문에 오
 
 ## 2026-10-26 목록 프로젝트 삭제의 초안 정리 보완
 
-[추가 발견·수정·검증](../../../qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
+[추가 발견·수정·검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
 
 사용자가 보존·제거 정책을 선택했고 Codex가 누락 발견·구현·시험·판정을 수행했다. 앞선 세션·두 기기·초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24·API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA·완료 상태로 확인한다. Draft 유지, 병합·배포 없음.
 
 
 ## 2026-10-26 최종 자식 API·UI-03·병합 검증
 
-[최종 실행 보고서](../../../qa-runs/2026-10-26-completion/report.md) · [TC별 결과](../../../qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](../../../qa-runs/2026-10-26-completion/code-review.md). QA-CMP-01: 행 안내3경로의 부모 버전 누락. QA-CMP-02: PDF/드로잉3경로의 버전 누락 및 고정 드로잉 파일 선행 변경. QA-CMP-03: 행 안내/세션 ID의 owner/project 범위 누락. QA-CMP-04: 클라이언트의 중복 전체 저장과 동기화된 캐시 파일 재업로드. 전역 DEF 번호를 임의로 재사용하지 않고 이번 실행 ID로 추적한다.
+[최종 실행 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) · [TC별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/code-review.md). QA-CMP-01: 행 안내3경로의 부모 버전 누락. QA-CMP-02: PDF/드로잉3경로의 버전 누락 및 고정 드로잉 파일 선행 변경. QA-CMP-03: 행 안내/세션 ID의 owner/project 범위 누락. QA-CMP-04: 클라이언트의 중복 전체 저장과 동기화된 캐시 파일 재업로드. 전역 DEF 번호를 임의로 재사용하지 않고 이번 실행 ID로 추적한다.
 
 수정 전 실제DB 재현은6+3 FAIL이며 최초6은 기존24 PASS와 함께 실행했다. 수정 후 실제DB40 PASS(소유자 차이6개와 롤백·보존 포함), 서버147/API75/Swift359 PASS다. QA-CMP-04는 정적 호출 순서 분석에서 발견한 보완이며 수정 전 실제 시뮬레이터 FAIL로 포장하지 않는다. 상세 전후 상태·요청/응답·파일 검증은 실행 증거를 따른다. 자동화 팝업·컨테이너 지연·목 테스트 조정은 제품 결함과 별도로 기록한다.

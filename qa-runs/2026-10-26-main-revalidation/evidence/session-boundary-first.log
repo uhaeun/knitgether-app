@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "/private/tmp/knitgether-qa-latest-20261026/qa-runs/2026-10-26-main-revalidation/probe_session_boundary.py", line 15, in <module>
-    r=requests.post(base+'/projects',headers=h,json=body,timeout=15);r.raise_for_status()
-                                                                     ~~~~~~~~~~~~~~~~~~^^
-  File "/Users/yuha/Documents/ChatGPT/뜨개더/knitgether-app/qa-runs/2026-10-22/venv/lib/python3.14/site-packages/requests/models.py", line 1028, in raise_for_status
-    raise HTTPError(http_error_msg, response=self)
-requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: http://127.0.0.1:3301/api/v1/projects

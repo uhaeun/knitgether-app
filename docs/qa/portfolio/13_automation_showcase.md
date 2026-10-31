@@ -1,6 +1,6 @@
 # 13_자동화 구성과 검증 범위
 
-테스트 시나리오 설계와 테스트 코드 작성은 구분합니다. 시나리오와 조건을 정한 뒤 자동화 코드 구현에 AI 도구를 활용했습니다. 코드가 존재한다는 사실만으로 해당 코드를 혼자 작성했거나 모든 실행을 직접 수행했다고 해석하지 않습니다. 담당 역할은 [포트폴리오](../submission/portfolio.md)에 정리했습니다.
+테스트 시나리오 설계와 테스트 코드 작성은 구분합니다. 시나리오와 조건을 정한 뒤 자동화 코드 구현에 AI 도구를 활용했습니다. 코드가 존재한다는 사실만으로 해당 코드를 혼자 작성했거나 모든 실행을 직접 수행했다고 해석하지 않습니다. 담당 역할은 [포트폴리오](../submission/github-guide.md)에 정리했습니다.
 
 ## 1. 도구별 용도
 
@@ -20,7 +20,7 @@
 3. `support/`: 테스트 데이터와 서버, 네트워크 조건을 확인합니다.
 4. `conftest.py`: 드라이버 시작과 데이터 초기화, 실패 화면 저장을 확인합니다.
 
-2026-10-04 최초 수집 기준 Appium은 20개 파일에서 83개, API는 20개 파일에서 69개 항목이었습니다. 이후 사진 저장 검증 6개를 추가해 API 실행 항목은 75개가 됐습니다. 파라미터별 실행 항목이 포함되므로 설계 ID 개수와 같지 않습니다. 실제 결과와 각 항목의 성격은 [전체 재검증 기록](../validation/2026-10-04/README.md)에서 확인합니다.
+2026-10-04 최초 수집 기준 Appium은 20개 파일에서 83개, API는 20개 파일에서 69개 항목이었습니다. 이후 사진 저장 검증 6개를 추가해 API 실행 항목은 75개가 됐습니다. 파라미터별 실행 항목이 포함되므로 설계 ID 개수와 같지 않습니다. 실제 결과와 각 항목의 성격은 [전체 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/README.md)에서 확인합니다.
 
 ## 3. 통과 결과를 해석하는 기준
 
@@ -29,7 +29,7 @@
 - 자동화가 보는 범위를 명시합니다. 예를 들어 드로잉 유지와 삭제 확인만으로 모든 도안 내용의 표시를 검증한 것은 아닙니다.
 - 일부 케이스는 현재 동작을 관찰합니다. 전체 PASS를 출시 준비 완료로 확대하지 않습니다.
 
-UI-51은 빈 결과를 허용하지 않고, 실제 페이지 이동과 복귀 후 같은 페이지의 고유 표시를 확인하도록 보완했습니다. 보완한 두 경로는 시뮬레이터 재실행에서 통과했습니다([원본 결과](../validation/2026-10-04/evidence/appium-page-final.xml)). [추가 촬영 기록](../submission/evidence/2026-10-04/README.md)은 별도 Appium 촬영 절차의 결과입니다.
+UI-51은 빈 결과를 허용하지 않고, 실제 페이지 이동과 복귀 후 같은 페이지의 고유 표시를 확인하도록 보완했습니다. 보완한 두 경로는 시뮬레이터 재실행에서 통과했습니다([원본 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/evidence/appium-page-final.xml)). [추가 촬영 기록](../submission/evidence/2026-10-04/README.md)은 별도 Appium 촬영 절차의 결과입니다.
 
 ## 4. CI와 로컬 실행
 
@@ -37,4 +37,4 @@ UI-51은 빈 결과를 허용하지 않고, 실제 페이지 이동과 복귀 �
 
 ## 5. 과거 실험과 결과
 
-도구 비교, 초기 78개 함수 구성과 결함 주입 6종의 당시 설명은 [개편 전 기록](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/13_automation_showcase.md)에 보존합니다. 회차별 결과는 [11 실행 기록](11_execution_results.md), 이번 검토 범위는 [저장소 검토 결과](../repository-review/README.md)에서 확인할 수 있습니다.
+도구 비교, 초기 78개 함수 구성과 결함 주입 6종의 당시 설명은 [개편 전 기록](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/13_automation_showcase.md)에 보존합니다. 회차별 결과는 [11 실행 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/11_execution_results.md), 이번 검토 범위는 [저장소 검토 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/repository-review/README.md)에서 확인할 수 있습니다.

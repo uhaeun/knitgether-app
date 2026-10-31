@@ -1,4 +1,0 @@
-311D4B83-D09B-4237-824C-ABCDD09264D1
-UUID: 5EA4EE56-E4CA-3F2A-BC1A-60929B621CE5 (arm64) /Users/yuha/Library/Developer/CoreSimulator/Devices/311D4B83-D09B-4237-824C-ABCDD09264D1/data/Containers/Bundle/Application/FBCEBC26-8B4D-45ED-B7A2-D5EA523D7AE7/KnitGether.app/KnitGether.debug.dylib
-
-A read from preserved container path after shutdown; B queried live.

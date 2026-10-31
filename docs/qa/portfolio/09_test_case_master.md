@@ -1,8 +1,8 @@
 # 09_테스트 케이스 마스터
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/09_test_case_master.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/09_test_case_master.md)
 
-> **2026-10-04 코드 대조:** 최초 수집은 Appium 20개 파일에서 83개, API 20개 파일에서 69개 항목이었습니다. 이후 사진 저장 검증 6개를 추가한 API 75개 항목의 결과는 [전체 재검증 기록](../validation/2026-10-04/README.md)에 있습니다. 케이스 ID 개수와 파라미터별 실행 항목 수는 다릅니다. 아래 과거 PASS 집계는 당시 기록입니다.
+> **2026-10-04 코드 대조:** 최초 수집은 Appium 20개 파일에서 83개, API 20개 파일에서 69개 항목이었습니다. 이후 사진 저장 검증 6개를 추가한 API 75개 항목의 결과는 [전체 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/README.md)에 있습니다. 케이스 ID 개수와 파라미터별 실행 항목 수는 다릅니다. 아래 과거 PASS 집계는 당시 기록입니다.
 
 > 2026-09-18 재작성, 2026-09-19 원본 9/15 갱신분(API 대조표, 번호 미배정 케이스) 반영. TC 그룹, UI와 API 케이스, 판정, 커버리지 집계는 원본(`docs/qa/portfolio/09`, 구글 시트 8/24 기준에 8/29~8/30 실측과 9/15 API 대조를 더한 판)에서 옮겼다. 1차 RTM은 원본 05에서, 8/30 이후 회귀 결과는 원본 11과 12에서 가져왔다. 바뀐 것은 배치다. 추적 사슬을 앞에 두고 케이스 78건 전문 대신 상태별 묶음으로 보인다.
 
@@ -237,7 +237,7 @@ API-25는 8/29에 구현하고 실행해 4건 전부 통과했다(`test_07_last_
 
 #### 2026-10-24 후속 RTM — SYNC-11 / UI-03
 
-아래는 새 후속 실행이며 본문의 과거 건수·1차 RTM을 소급 변경하지 않는다. 실제 실행 수와 반복 횟수는 [수정 검증 보고서](../../../qa-runs/2026-10-24-sync11-fix/report.md)에서 구분한다.
+아래는 새 후속 실행이며 본문의 과거 건수·1차 RTM을 소급 변경하지 않는다. 실제 실행 수와 반복 횟수는 [수정 검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-24-sync11-fix/report.md)에서 구분한다.
 
 | SPEC | 후속 TC / 실행 코드 | 상태와 근거 |
 |---|---|---|
@@ -248,14 +248,14 @@ API-25는 8/29에 구현하고 실행해 4건 전부 통과했다(`test_07_last_
 | SYNC-11 기존 계약 | CONTRACT-02/03 / test_02·03·11·17·19 | 외부 API18 PASS. 기존 서버 suite147 PASS는 mock 기반을 포함하며 DB 원자성 증거로 대체하지 않음 |
 | SYNC-11 메모 복구 | IOS-01/02, TC-SYNC11-01~04 / run_sync.py·run_pure_ui.py | 수정 서버의 A/B 실제 UI에서12+7 확인 항목 PASS.30초 자동 재저장 관찰과 직접 복구, 다른 필드·재충돌·SQL 확인 |
 | SYNC-11 운영 경로 대조 | TC-SYNC11-05 / probe_concurrency.py | 서버 직접20쌍·프록시20쌍 모두 [200,409] 및 패자 자식 무변경. 내부 겹침 증명은 별도 barrier 검사 |
-| UI-03 단위 정책 | TC-UNIT-01~06 / 앞선 run_ui03.py | [앞선 양 기기 결과](../../../qa-runs/2026-10-22-ios-retest/report.md) PASS. 이번 서버 수정 후 UI-03 전체 재실행으로 합산하지 않음 |
+| UI-03 단위 정책 | TC-UNIT-01~06 / 앞선 run_ui03.py | [앞선 양 기기 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-22-ios-retest/report.md) PASS. 이번 서버 수정 후 UI-03 전체 재실행으로 합산하지 않음 |
 | 별도 후속 | FILES-01, 자식 전용 API의 통합 버전 | 이번 미실행·범위 밖. DB rollback과 물리 파일 회수 혼동 금지 |
 
 신규 실제 DB8개는 명시적 QA_REAL_DATABASE_URL을 요구하는 별도 npm test:db:projects로 실행한다. 기존 projects.e2e-spec.ts의 route mock 통과와 구분한다. 자동화 ID UI-03(중복 이메일 가입)과 SPEC-UI-03/TC-UNIT(단위 정책)은 다른 번호 체계다.
 
 ### 2026-10-24 후속 경계 검사
 
-[후속 보고서](../../../qa-runs/2026-10-24-sync11-followup/report.md). 기존 전체 PATCH 회귀 8 PASS와 별개로 다음을 기록한다.
+[후속 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-24-sync11-followup/report.md). 기존 전체 PATCH 회귀 8 PASS와 별개로 다음을 기록한다.
 
 | ID | 요구/범위 | 실제 결과 | 결함 연결 |
 |---|---|---|---|
@@ -269,7 +269,7 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 
 ## 2026-10-26 자식 카운터·도안 파일 후속 수정
 
-[수정·재검증 보고서](../../../qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
+[수정·재검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
 
 - 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모·자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
 - 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체·연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.
@@ -280,7 +280,7 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 
 ## 2026-10-26 최신 main 통합 후보 재검증
 
-[수정 후보 보고서](../../../qa-runs/2026-10-26-main-revalidation/report.md). 기존 실행의 FAIL·SKIP 수는 당시 이력으로 유지한다.
+[수정 후보 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-main-revalidation/report.md). 기존 실행의 FAIL·SKIP 수는 당시 이력으로 유지한다.
 
 | 추적 | 이번 판정 | 근거 |
 |---|---|---|
@@ -298,7 +298,7 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 
 ## 2026-10-26 작업 세션 경합·종료 후 초안 보존 후속
 
-[제품 수정·검증 보고서](../../../qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](../../../qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
+[제품 수정·검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
 
 | 추적 | 이번 판정 | 실행 층/근거 |
 |---|---|---|
@@ -316,14 +316,14 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 
 ## 2026-10-26 목록 프로젝트 삭제의 초안 정리 보완
 
-[추가 발견·수정·검증](../../../qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
+[추가 발견·수정·검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
 
 사용자가 보존·제거 정책을 선택했고 Codex가 누락 발견·구현·시험·판정을 수행했다. 앞선 세션·두 기기·초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24·API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA·완료 상태로 확인한다. Draft 유지, 병합·배포 없음.
 
 
 ## 2026-10-26 최종 자식 API·UI-03·병합 검증
 
-[최종 실행 보고서](../../../qa-runs/2026-10-26-completion/report.md) · [TC별 결과](../../../qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](../../../qa-runs/2026-10-26-completion/code-review.md). | 추적 | 실제 실행/보강 |
+[최종 실행 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) · [TC별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/code-review.md). | 추적 | 실제 실행/보강 |
 |---|---|
 | SYNC11-CHILD-ROW-C/U/D | 오래된 전체 PATCH200 재현3 FAIL →409 및 SQL 보존3 PASS |
 | SYNC11-CHILD-PDF/DRAW/DELETE | 오래된 전체 저장200 재현3 FAIL →409 및 SQL 보존3 PASS |
@@ -339,4 +339,4 @@ CI의 실제 DB 게이트는8개 통과 검사다. 위4개 알려진 결함 수�
 
 ## 2026-10-28 제출 시점 결과 연결
 
-10/22 확정 정책과 10/24~26 후속 기준을 유지합니다. [이번 제출 검수](../validation/2026-10-28/README.md)는 기존 48개 SPEC ID와 과거 FAIL을 보존하며, Mac의 기존 실행과 Windows의 새 서버 회귀 132 PASS·15 FAIL 및 iOS/실제DB 미실행을 구분합니다. 편집 폼 전체 보존과 최종 앱의 전체 E2E 재실행을 PASS로 추가하지 않습니다.
+10/22 확정 정책과 10/24~26 후속 기준을 유지합니다. [이번 제출 검수](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-28/README.md)는 기존 48개 SPEC ID와 과거 FAIL을 보존하며, Mac의 기존 실행과 Windows의 새 서버 회귀 132 PASS·15 FAIL 및 iOS/실제DB 미실행을 구분합니다. 편집 폼 전체 보존과 최종 앱의 전체 E2E 재실행을 PASS로 추가하지 않습니다.

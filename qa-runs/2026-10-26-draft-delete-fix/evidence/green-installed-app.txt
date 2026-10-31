@@ -1,1 +1,0 @@
-UUID: 14E01825-521D-3BCA-B297-E522AC5F71E2 (arm64) /Users/yuha/Library/Developer/CoreSimulator/Devices/311D4B83-D09B-4237-824C-ABCDD09264D1/data/Containers/Bundle/Application/714310A5-FB1C-47B3-88D9-9B56E8BD64DC/KnitGether.app/KnitGether.debug.dylib

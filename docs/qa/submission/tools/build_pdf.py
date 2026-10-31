@@ -19,7 +19,6 @@ ROOT = Path(__file__).resolve().parents[4]
 SOURCE = ROOT / 'docs/qa/submission/github-guide.md'
 OUT = ROOT / 'output/pdf/knitgether_qa_portfolio.pdf'
 FONT_DIR = SOURCE.parent / 'fonts'
-EVIDENCE_REF = os.environ.get('KNITGETHER_PDF_REF', '60c0a708d9f310d1095f99ca1683c83531c0171f')
 SUBMISSION_REF = os.environ.get('KNITGETHER_SUBMISSION_REF', 'main')
 REPO = 'https://github.com/uhaeun/knitgether-app'
 W, H = A4
@@ -56,13 +55,10 @@ def url(href):
         return href
     target = (SOURCE.parent / href).resolve()
     rel = target.relative_to(ROOT).as_posix()
-    new_document = rel in {'README.md', 'docs/qa/submission/github-guide.md',
-        'docs/qa/submission/portfolio.md', 'docs/qa/submission/README.md',
-        'docs/qa/submission/technical-summary.md', 'qa/api-tests/README.md',
-        'qa/api-tests/test_13_row_counter_isolation.py', 'KnitGether', 'server'} or rel.startswith(('docs/qa/validation/2026-10-29/', 'docs/qa/validation/2026-10-31/'))
-    ref = SUBMISSION_REF if new_document else EVIDENCE_REF
+    if not target.exists():
+        raise FileNotFoundError(f'Portfolio link target does not exist: {rel}')
     kind = 'tree' if target.is_dir() else 'blob'
-    return f'{REPO}/{kind}/{ref}/{quote(rel)}'
+    return f'{REPO}/{kind}/{SUBMISSION_REF}/{quote(rel)}'
 
 
 def inline(text):

@@ -27,7 +27,7 @@ pytest tests/test_tc08_sort_filter.py -v       # 파일 하나
 pytest tests/ -v --empty-given                 # 음성 대조: Given 주입을 끄고 돈다. FAIL이 정상
 ```
 
-`--empty-given`은 이 스위트에 추가한 유일한 pytest 옵션이다. 실패한 케이스의 스크린샷은 `failures/<테스트이름>.png`에 남는다. 과거 장시간 실행에서 세션 오류가 관찰돼 이후 세션 수명 제한과 앱 전면 상태 확인을 추가했다. 경과와 실행 결과는 [08 6절](../../docs/qa/portfolio/08_automation_comparison.md)에 있다.
+`--empty-given`은 이 스위트에 추가한 유일한 pytest 옵션이다. 실패한 케이스의 스크린샷은 `failures/<테스트이름>.png`에 남는다. 과거 장시간 실행에서 세션 오류가 관찰돼 이후 세션 수명 제한과 앱 전면 상태 확인을 추가했다. 경과와 실행 결과는 [08 6절](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/08_automation_comparison.md)에 있다.
 
 ## 구조
 
@@ -39,18 +39,18 @@ pytest tests/ -v --empty-given                 # 음성 대조: Given 주입을 
 ## 알려진 제약
 
 - 온보딩 케이스는 `full_reset` 옵션을 사용한다. 재시도는 `full_reset=False`로 수행하므로 같은 초기화 조건의 반복 실행으로 해석하지 않는다.
-- 오버레이 메뉴의 좌표 탭 유실은 당시 15회 중 3회 관찰됐다. 이후 드라이버 바인딩과 좌표 계산을 수정한 경과는 [도구 비교 6절](../../docs/qa/portfolio/08_automation_comparison.md)에 있다. 식별자 추가만으로 해결된 문제로 기록하지 않는다.
+- 오버레이 메뉴의 좌표 탭 유실은 당시 15회 중 3회 관찰됐다. 이후 드라이버 바인딩과 좌표 계산을 수정한 경과는 [도구 비교 6절](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/08_automation_comparison.md)에 있다. 식별자 추가만으로 해결된 문제로 기록하지 않는다.
 - **음성 대조의 사각**: `--empty-given`은 파일 시딩만 끄므로 서버 시딩에 기대는 서버 케이스에는 신호를 주지 못한다. 서버 시딩까지 끄는 스위치가 필요하다.
 - 시뮬레이터에 카메라 피드가 없어 실기기 전용 케이스 1건은 skip이다.
 
-초기화와 세션 관리 문제의 배경은 [08 6절](../../docs/qa/portfolio/08_automation_comparison.md), 자동화 구성은 [13 자동화 스위트](../../docs/qa/portfolio/13_automation_showcase.md)에 있다.
+초기화와 세션 관리 문제의 배경은 [08 6절](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/08_automation_comparison.md), 자동화 구성은 [13 자동화 스위트](../../docs/qa/portfolio/13_automation_showcase.md)에 있다.
 
 ## 문서
 
 - [09_test_case_master](../../docs/qa/portfolio/09_test_case_master.md) 케이스 카탈로그
-- [11_execution_results](../../docs/qa/portfolio/11_execution_results.md) 실행 결과
+- [11_execution_results](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/11_execution_results.md) 실행 결과
 - [13_automation_showcase](../../docs/qa/portfolio/13_automation_showcase.md) 자동화 쇼케이스: 구조 설명, 음성 대조, 결함 주입
 
 ## 2026-10-04 판정 보완
 
-UI-51은 도안 본문을 읽지 못한 빈 결과를 PASS로 비교하지 않도록 바꿨다. 화면 이탈 전에 실제로 도안 위치가 바뀌었는지도 확인한다. 사전 화면 복귀는 해당 화면의 완료 버튼을 사용한다. 보완한 도우미의 독립 검증과 UI-51 두 경로의 시뮬레이터 재실행을 통과했다. 페이지 내부의 스크롤 위치가 아닌 페이지 번호를 보존하는 SPEC-PAT-05를 기준으로 판정했다. [2026-10-04 재검증 기록](../../docs/qa/validation/2026-10-04/README.md)에 최초 실패와 수정 후 결과를 구분했다.
+UI-51은 도안 본문을 읽지 못한 빈 결과를 PASS로 비교하지 않도록 바꿨다. 화면 이탈 전에 실제로 도안 위치가 바뀌었는지도 확인한다. 사전 화면 복귀는 해당 화면의 완료 버튼을 사용한다. 보완한 도우미의 독립 검증과 UI-51 두 경로의 시뮬레이터 재실행을 통과했다. 페이지 내부의 스크롤 위치가 아닌 페이지 번호를 보존하는 SPEC-PAT-05를 기준으로 판정했다. [2026-10-04 재검증 기록](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-04/README.md)에 최초 실패와 수정 후 결과를 구분했다.

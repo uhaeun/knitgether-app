@@ -1,4 +1,0 @@
-**/*.dump
-**/*sessions*.json
-evidence/appium*.log
-__pycache__/

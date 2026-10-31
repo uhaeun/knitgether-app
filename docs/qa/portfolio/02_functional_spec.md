@@ -1,6 +1,6 @@
 # 02_기능 동작 정의서
 
-> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/portfolio.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/02_functional_spec.md)
+> **과거 QA 상세 기록**: 본문의 날짜와 빌드를 기준으로 읽습니다. 프로젝트 요약은 [포트폴리오](../submission/github-guide.md), 기록별 안내는 [목차](README.md)를 참고해 주세요. | [개편 전 원문](https://github.com/uhaeun/knitgether-app/blob/2030ebb57668cad70988c4c419688c97f7422ef8/docs/qa/portfolio/02_functional_spec.md)
 
 > 2026-09-18 재작성, 2026-09-19 원본 v2.5(9/15) 반영. SPEC 48건의 동작 정의와 코드 일치 판정은 원본(`docs/qa/portfolio/02`, 문서 이력 v2.5)을 그대로 옮겼다. 바뀐 것은 배치다. 판정 체계와 추적 구조를 SPEC 목록 앞으로 빼고, 근거 열은 대표 파일:라인만 남겼다. 근거 전체와 판정 경위 원문은 원본에 있다.
 
@@ -216,18 +216,18 @@ QA 인수인계 문서에서 SPEC 판정에 쓴 항목이다.
 
 ### 2026-10-24 후속 기준선 v2.6
 
-사용자 지시에 따라 SYNC-11의 원자적 저장과 메모 복구, UI-03의 cm 고정 정책을 반영했다. SPEC ID 개수는 추가하지 않았다. [서버 수정·실제 DB·두 기기 결과](../../../qa-runs/2026-10-24-sync11-fix/report.md)를 현재 근거로 연결한다. 과거 실행 집계는 당시 기준이며 소급 변경하지 않는다. 미래 기준값도409라는 정확한 버전 일치 규칙과 논리 updatedAt 증가는 Codex 수정 설계를 구현한 계약 보강이다. 정수 revision·모든 자식 API 통합·파일 회수는 별도 범위다.
+사용자 지시에 따라 SYNC-11의 원자적 저장과 메모 복구, UI-03의 cm 고정 정책을 반영했다. SPEC ID 개수는 추가하지 않았다. [서버 수정·실제 DB·두 기기 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-24-sync11-fix/report.md)를 현재 근거로 연결한다. 과거 실행 집계는 당시 기준이며 소급 변경하지 않는다. 미래 기준값도409라는 정확한 버전 일치 규칙과 논리 updatedAt 증가는 Codex 수정 설계를 구현한 계약 보강이다. 정수 revision·모든 자식 API 통합·파일 회수는 별도 범위다.
 
 ## 2026-10-26 최신 main 통합 후보 재검증
 
-[실행 근거](../../../qa-runs/2026-10-26-main-revalidation/report.md). 최신 main6df5c4e의 경합20쌍은 두200으로 FAIL이었고, 수정0ae2c64에 최신 main 문서를 합친 후보는 실제DB18 PASS/0 SKIP 및 외부20쌍 모두200/409다. 두 기기 메모 복구12+7항목과300초 자동 재저장 없음, 오프라인 생성·복구를 확인했다. UI-03은 앞선 최신 main12 PASS의 원본을 별도 기준선으로 보존했으며 이번 전체 재실행으로 합산하지 않는다.
+[실행 근거](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-main-revalidation/report.md). 최신 main6df5c4e의 경합20쌍은 두200으로 FAIL이었고, 수정0ae2c64에 최신 main 문서를 합친 후보는 실제DB18 PASS/0 SKIP 및 외부20쌍 모두200/409다. 두 기기 메모 복구12+7항목과300초 자동 재저장 없음, 오프라인 생성·복구를 확인했다. UI-03은 앞선 최신 main12 PASS의 원본을 별도 기준선으로 보존했으며 이번 전체 재실행으로 합산하지 않는다.
 
 SYNC-11의 현재 구현 범위는 전체 PATCH와 카운터 전용 저장이다. 카운터도 같은 부모 버전·잠금에 참여하지만, 나머지 자식 API의 통합 버전은 아직 별도다. 작업 세션 삭제204 뒤 이전 전체 저장200이 세션을 되살리는 경계를 실제 재현했다. 모든 자식 쓰기에 같은 보호를 요구할지와 삭제 tombstone 우선순위는 별도 요구 결정·구현 항목이다. 앱 종료 후 미저장 초안 수명은 관찰 결과를 남기되 새 수용 조건으로 확정하지 않았다. 기존 SPEC ID 수와 과거 판정은 변경하지 않았다.
 
 
 ## 2026-10-26 작업 세션 경합·종료 후 초안 보존 후속
 
-[제품 수정·검증 보고서](../../../qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](../../../qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
+[제품 수정·검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
 
 작업 세션 생성·수정·삭제는 카운터와 같은 부모 버전 잠금에 참여하도록 구현·검증했다. 오래된 전체 저장은409이고, 삭제 세션을 복원하지 않는다. 세션 부분 API 자체의 동시 편집 정책까지 보장하는 뜻은 아니다. 실제DB24개 중 세션6개로 양 경합 순서와rollback을 확인했다.
 
@@ -236,14 +236,14 @@ SYNC-11의 현재 구현 범위는 전체 PATCH와 카운터 전용 저장이다
 
 ## 2026-10-26 목록 프로젝트 삭제의 초안 정리 보완
 
-[추가 발견·수정·검증](../../../qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
+[추가 발견·수정·검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
 
 사용자가 보존·제거 정책을 선택했고 Codex가 누락 발견·구현·시험·판정을 수행했다. 앞선 세션·두 기기·초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24·API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA·완료 상태로 확인한다. Draft 유지, 병합·배포 없음.
 
 
 ## 2026-10-26 최종 자식 API·UI-03·병합 검증
 
-[최종 실행 보고서](../../../qa-runs/2026-10-26-completion/report.md) · [TC별 결과](../../../qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](../../../qa-runs/2026-10-26-completion/code-review.md). 사용자는 UI-03 최종 재검증·남은 자식 API 수정·리뷰/병합을 진행하고 배포 범위를 main 병합과 로컬 검증으로 확정했다. Codex는 이를 실행한다. 기존 SPEC ID와 과거 FAIL/범위 기록은 유지한다.
+[최종 실행 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) · [TC별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/code-review.md). 사용자는 UI-03 최종 재검증·남은 자식 API 수정·리뷰/병합을 진행하고 배포 범위를 main 병합과 로컬 검증으로 확정했다. Codex는 이를 실행한다. 기존 SPEC ID와 과거 FAIL/범위 기록은 유지한다.
 
 SYNC-11의 전체 저장과 겹치는 행 안내 생성·수정·삭제, PDF 및 드로잉 업로드/삭제도 부모 버전을 진전시키며 같은 부모 잠금에서 변경한다. 실패하면 부모 버전과 자식을 함께 롤백한다. 다른 owner/project의 자식 ID를 POST·전체 저장에 재사용할 수 없다. 파일의 SQL 실패 시 기존 바이트를 유지하고 커밋 뒤 참조 없는 파일만 정리한다. 온라인 드로잉 저장은 중복 전체 저장을 보내지 않고, 메모 전체 저장이 동기화된 캐시 PDF/드로잉을 재업로드하지 않도록 보완했다.
 
@@ -251,4 +251,4 @@ SYNC-11의 전체 저장과 겹치는 행 안내 생성·수정·삭제, PDF 및
 
 ## 2026-10-28 제출 시점 정책 해석
 
-10/22 확정 정책과 10/24~26 후속 기준을 유지합니다. [이번 제출 검수](../validation/2026-10-28/README.md)는 기존 48개 SPEC ID와 과거 FAIL을 보존하며, Mac의 기존 실행과 Windows의 새 서버 회귀 132 PASS·15 FAIL 및 iOS/실제DB 미실행을 구분합니다. 편집 폼 전체 보존과 최종 앱의 전체 E2E 재실행을 PASS로 추가하지 않습니다.
+10/22 확정 정책과 10/24~26 후속 기준을 유지합니다. [이번 제출 검수](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/validation/2026-10-28/README.md)는 기존 48개 SPEC ID와 과거 FAIL을 보존하며, Mac의 기존 실행과 Windows의 새 서버 회귀 132 PASS·15 FAIL 및 iOS/실제DB 미실행을 구분합니다. 편집 폼 전체 보존과 최종 앱의 전체 E2E 재실행을 PASS로 추가하지 않습니다.

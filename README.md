@@ -4,9 +4,9 @@
 
 DB 기능과 버그 수정을 주로 검증해 왔습니다. 앱의 화면 흐름과 API·저장 데이터까지 연결해 테스트해 보고 싶어 뜨개더를 만들었습니다.
 
-**[제출용 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf) · [GitHub에서 본문 읽기](docs/qa/submission/github-guide.md)**
+**[QA 포트폴리오 (PDF)](output/pdf/knitgether_qa_portfolio.pdf) · [주요 QA 사례와 검증 결과](docs/qa/submission/github-guide.md)**
 
-| 사례 | 확인할 수 있는 QA 역량 |
+| 사례 | 검증 초점 |
 |---|---|
 | 도안 교체 시 드로잉 유실 | 사용자 기록을 기준으로 정상·취소 조건 정의 |
 | 한 항목의 오류로 목록 전체 실패 | 화면·API·DB를 연결한 원인 분석 |
@@ -24,8 +24,7 @@ iPhone 16 Pro에서는 비로그인 상태의 종료·복귀 기록 보존과 �
 
 - [최신 조회 정책·캐시 보존·기기 검증](docs/qa/validation/2026-10-31/integrity-device/README.md)
 - [앞선 iOS 화면 실패 분석·재검증](docs/qa/validation/2026-10-31/README.md)
-- [10월 29일 서버·DB 실행 이력](docs/qa/validation/2026-10-29/README.md)
-- [기능 기준](docs/qa/portfolio/02_functional_spec.md) · [테스트·RTM](docs/qa/portfolio/09_test_case_master.md) · [결함 대장](docs/qa/portfolio/10_defect_catalog.md)
+- [QA 문서 목차](docs/qa/README.md): 기능 기준, 리스크·전략, 테스트·RTM, 결함 대장
 
 ## 코드와 실행
 
@@ -36,5 +35,9 @@ iPhone 16 Pro에서는 비로그인 상태의 종료·복귀 기록 보존과 �
 | [qa/appium/](qa/appium/README.md) | 화면 자동화 |
 | [qa/api-tests/](qa/api-tests/README.md) | API·네트워크·SQL 검증 |
 | [KnitGetherTests/](KnitGetherTests/) | 앱 내부 기능과 저장 상태 검증 |
+| [KnitGetherUITests/](KnitGetherUITests/) | XCUITest 화면·실기기 검증 |
+| [KnitGetherQAUITests/](KnitGetherQAUITests/) | 별도 QA 타깃의 결함 회귀 |
+| [docs/qa/](docs/qa/README.md) | 포트폴리오, 테스트 설계와 실행 근거 |
+| [output/pdf/](output/pdf/) | 본문과 같은 내용의 PDF |
 
-[개발 환경](docs/dev/modes.md) · [기기 연결과 로컬 개발](docs/dev/09_local_device_development.md) · [실행 기록 목차](qa-runs/README.md)
+[개발 환경](docs/dev/modes.md) · [기기 연결과 로컬 개발](docs/dev/09_local_device_development.md) · [과거 실행 원본](docs/qa/history.md)

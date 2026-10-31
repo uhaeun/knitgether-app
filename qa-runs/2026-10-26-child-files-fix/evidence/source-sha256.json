@@ -1,7 +1,0 @@
-{
-  "server/src/projects/projects.service.ts": "4a4f0c1237e525aae0266cb67e799e19f52299ef6dac374f19822e0a59d85a89",
-  "server/src/storage/local-file-storage.service.ts": "496a005362ba131b86d1dd51c6e03729b644735b9eabb9573c1a5550be26182d",
-  "server/test/projects-concurrency.real-db-spec.ts": "db78f0576a903e48e2394affdaef91ff5354d8a450b941e7d989d5917383c2af",
-  "qa/api-tests/test_15_pattern_copy_file_integrity.py": "8612d2739f77176cdb3b8997ce82827125b8e9480e20e50367d9c11d7e0639a7",
-  "qa/api-tests/test_09_transferred_from_06.py": "055cf8c16cfe3df370780da56d59278af9e056c9686ffb0c32a62236a56bcfe7"
-}

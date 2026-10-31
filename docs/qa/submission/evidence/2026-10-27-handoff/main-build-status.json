@@ -1,6 +1,0 @@
-{
-  "exitCode": 0,
-  "mainSha": "0d0ba222078f4e58cd7acc24ff1133e0590285d8",
-  "command": "npm --prefix server run build",
-  "sourceAudit": "main-source-audit.json"
-}

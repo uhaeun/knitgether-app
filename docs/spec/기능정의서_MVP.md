@@ -224,12 +224,12 @@
 
 ## 2026-10-24 SYNC-11 후속 반영
 
-기존2026-09-01의 수정본 폐기·충돌 안내 불일치는 메모 입력 범위에서 후속 개정했다. 현재 안내·입력 유지·수동 복구 및 서버 원자적 갱신의 [실행 증거](../../qa-runs/2026-10-24-sync11-fix/report.md)를 연결한다. 과거 경합 FAIL과 수정 후 로컬 검증 PASS를 구분하며 운영 배포 여부는 이 결과로 승인하지 않는다. 나머지 명세 공백·불일치의 과거 판정은 이번 변경으로 해소했다고 기록하지 않는다.
+기존2026-09-01의 수정본 폐기·충돌 안내 불일치는 메모 입력 범위에서 후속 개정했다. 현재 안내·입력 유지·수동 복구 및 서버 원자적 갱신의 [실행 증거](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-24-sync11-fix/report.md)를 연결한다. 과거 경합 FAIL과 수정 후 로컬 검증 PASS를 구분하며 운영 배포 여부는 이 결과로 승인하지 않는다. 나머지 명세 공백·불일치의 과거 판정은 이번 변경으로 해소했다고 기록하지 않는다.
 
 
 ## 2026-10-26 자식 카운터·도안 파일 후속 수정
 
-[수정·재검증 보고서](../../qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
+[수정·재검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
 
 - 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모·자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
 - 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체·연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.

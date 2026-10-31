@@ -1,2 +1,0 @@
-2026-10-24T08:56:53.997995+00:00
-Both QA Appium sessions quit 200; owned A/B simulators shut down. Owned API3301/proxy3300/Appium14723/PostgreSQL55434 stopped after DB dump. Old QA55432 cluster also stopped; original5432/5433 untouched. All DB files/dumps and evidence preserved.

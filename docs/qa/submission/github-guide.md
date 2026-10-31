@@ -51,7 +51,7 @@ SwiftUI 앱은 로컬 저장을 지원하며, 서버 모드에서는 NestJS API�
 
 앱 기획과 테스트 우선순위, 기대 결과를 정했습니다. 충돌이 나면 입력을 남기고 사용자가 다시 저장하게 하는 기준도 정했습니다. 수동·Postman·Charles·SQL로 확인한 내용은 당시 실행 기록에 남겼습니다. 앱·서버 구현과 후속 자동화의 코드 작성·실행·증거 수집에는 AI를 활용했습니다.
 
-[수동 실행 원본](../portfolio/06_manual_execution.md) / [API·네트워크 검증](../portfolio/07_api_and_network.md) / [역할과 회차별 조건](technical-summary.md)
+[수동 실행 원본](../portfolio/06_manual_execution.md) / [API·네트워크 검증](../portfolio/07_api_and_network.md) / [역할과 회차별 조건](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/submission/technical-summary.md)
 
 ## 03 도안 교체 시 드로잉 유실
 
@@ -114,11 +114,11 @@ Appium에서는 ‘그리기 삭제’ 메뉴가 표시되는지 확인했습니
 
 | 충돌 안내와 남아 있는 미저장 메모 |
 |:---:|
-| <img src="../../../qa-runs/2026-10-26-session-fix/evidence/sync-04-b-conflict.png" alt="충돌 안내와 B의 미저장 메모" width="260" /> |
+| <img src="evidence/2026-10-26/sync-04-b-conflict.png" alt="충돌 안내와 B의 미저장 메모" width="260" /> |
 
 촬영: 2026-10-26 두 시뮬레이터 후속 자동화. 기본 12개는 UI/API 혼합, 보완 7개는 양쪽 변경을 화면에서 수행했습니다. 자동 재저장 없음은 300초 관찰이며, 메모·단수 외 모든 입력의 보존을 보장하지 않습니다.
 
-[순서별 화면·HTTP·SQL](../../../qa-runs/2026-10-26-session-fix/report.md) / [충돌 후 DB](../../../qa-runs/2026-10-26-session-fix/evidence/sync-04-after-conflict-db.json) / [재저장 후 DB](../../../qa-runs/2026-10-26-session-fix/evidence/sync-05-final-db.json)
+[순서별 화면·HTTP·SQL](evidence/2026-10-26/README.md) / [충돌 후 DB](evidence/2026-10-26/sync-04-after-conflict-db.json) / [재저장 후 DB](evidence/2026-10-26/sync-05-final-db.json)
 
 ## 06 연관 데이터 변경 뒤의 저장 충돌
 
@@ -141,7 +141,7 @@ Appium에서는 ‘그리기 삭제’ 메뉴가 표시되는지 확인했습니
 
 사전에서 돌아오면 보던 페이지가 유지됐지만 홈 탭을 거치면 1페이지로 초기화됐습니다. 두 경로 모두 작업을 이어가는 흐름으로 보고, 탭 복귀까지 페이지 유지 범위를 넓혔습니다. 실제 3페이지 이동과 고유 표시를 기준으로 두 경로를 확인했습니다. 확대율·페이지 안의 스크롤 위치·앱 재실행 후 복원은 당시 범위에서 제외했습니다.
 
-[동시성 시험 코드](../../../server/test/projects-concurrency.real-db-spec.ts) / [수정 전후 결과](../../../qa-runs/2026-10-26-completion/report.md) / [페이지 복귀 증거](evidence/2026-10-04/README.md)
+[동시성 시험 코드](../../../server/test/projects-concurrency.real-db-spec.ts) / [수정 전후 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) / [페이지 복귀 증거](evidence/2026-10-04/README.md)
 
 ## 07 실행 조건과 결과
 
