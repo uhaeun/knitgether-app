@@ -22,8 +22,6 @@ DB QA에서는 기능과 버그 수정 결과를 주로 테스트했습니다. �
 
 SwiftUI 앱에서 로컬 저장을 지원합니다. 서버 모드에서는 NestJS API와 Prisma·PostgreSQL을 사용합니다. 초기에는 수동으로 화면을 조작하고 Postman·Charles·SQL로 확인했습니다. 이후 Appium·pytest·Swift 테스트와 GitHub Actions로 반복 실행할 항목을 추가했습니다.
 
-[소스와 실행 방법](../../../README.md) / [기능 정의](../portfolio/02_functional_spec.md) / [테스트 목록](../portfolio/09_test_case_master.md)
-
 ## 02 테스트 방법
 
 ### 저장한 기록이 사라지는 상황부터 봤습니다
@@ -47,7 +45,7 @@ SwiftUI 앱에서 로컬 저장을 지원합니다. 서버 모드에서는 NestJ
 
 앱·서버 구현과 후속 자동화의 코드 작성·실행·증거 수집에는 AI를 활용했습니다. 뒤에 나오는 후속 자동화 결과를 초기 수동 수행 실적으로 세지 않았습니다.
 
-[수동 실행 기록](../portfolio/06_manual_execution.md) / [API·네트워크 기록](../portfolio/07_api_and_network.md) / [회차별 조건과 역할](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/submission/technical-summary.md)
+[수동 실행 기록](../portfolio/06_manual_execution.md) / [API·네트워크 실행 기록](../portfolio/07_api_and_network.md)
 
 ## 03 도안을 바꾸면 선이 사라지는 문제
 
@@ -65,7 +63,7 @@ SwiftUI 앱에서 로컬 저장을 지원합니다. 서버 모드에서는 NestJ
 
 Appium은 ‘그리기 삭제’ 메뉴가 있는지로 선의 존재를 간접 확인했습니다. 실제로 선이 남았는지 사라졌는지는 PNG 화면도 함께 확인했습니다.
 
-[최초 재현과 수정 기록](../portfolio/06_manual_execution.md) / [화면·촬영 조건](evidence/2026-10-04/README.md)
+[촬영·검사 코드](../../../qa/appium/capture_portfolio.py) / [최초 재현](../portfolio/06_manual_execution.md) / [화면·실행 결과](evidence/2026-10-04/README.md)
 
 ## 04 이전 목록만 남아 있던 조회 오류
 
@@ -91,7 +89,7 @@ Appium은 ‘그리기 삭제’ 메뉴가 있는지로 선의 존재를 간접 
 
 서버에서 제외한 ID는 응답 헤더로 전달합니다. 앱 내부 테스트에서는 해당 캐시와 미저장 메모가 남고, 실제 삭제 항목은 정리되며 정상 단수 99는 갱신되는지 확인했습니다. 디스크에서 다시 읽은 뒤에도 같은 상태인지 확인했습니다.
 
-[최초 실행](../portfolio/06_manual_execution.md) / [API·SQL 테스트](../../../qa/api-tests/test_13_row_counter_isolation.py) / [10월 31일 결과](../validation/2026-10-31/integrity-device/README.md)
+[API·SQL 테스트](../../../qa/api-tests/test_13_row_counter_isolation.py) / [캐시 테스트](../../../KnitGetherTests/OfflineFirstProjectRepositoryTests.swift) / [재검증 결과](../validation/2026-10-31/integrity-device/README.md)
 
 ## 05 두 기기에서 같은 메모를 수정할 때
 
@@ -116,7 +114,7 @@ Appium은 ‘그리기 삭제’ 메뉴가 있는지로 선의 존재를 간접 
 
 촬영: 2026-10-26 두 시뮬레이터 후속 자동화. 기본 12개는 UI·API 혼합, 보완 7개는 양쪽 변경을 화면에서 수행했습니다. 자동 재저장 없음은 300초 관찰입니다. 메모·단수 외 모든 입력을 확인한 결과는 아닙니다.
 
-[화면·HTTP·SQL](evidence/2026-10-26/README.md) / [충돌 후 DB](evidence/2026-10-26/sync-04-after-conflict-db.json) / [재저장 후 DB](evidence/2026-10-26/sync-05-final-db.json)
+[두 기기 화면 테스트](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/run_pure_ui.py) / [실행 결과·HTTP·DB](evidence/2026-10-26/README.md)
 
 ## 06 메모 외의 변경도 충돌을 막는지 확인
 
@@ -141,7 +139,7 @@ Appium은 ‘그리기 삭제’ 메뉴가 있는지로 선의 존재를 간접 
 
 3페이지로 이동한 뒤 본문의 고유 표시를 기준으로 홈·사전 복귀를 확인했습니다. 확대율, 페이지 안의 스크롤 위치, 앱 재실행 후 복원은 이 실행에서 확인하지 않았습니다.
 
-[동시성 테스트 코드](../../../server/test/projects-concurrency.real-db-spec.ts) / [수정 전후 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) / [페이지 복귀 화면](evidence/2026-10-04/README.md)
+[동시성 테스트](../../../server/test/projects-concurrency.real-db-spec.ts) / [수정 전후 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) / [페이지 복귀 코드](../../../qa/appium/capture_portfolio.py) / [페이지 복귀 결과](evidence/2026-10-04/README.md)
 
 ## 07 실행 결과와 확인하지 못한 부분
 
@@ -167,7 +165,7 @@ iPhone 16 Pro·iOS 27.0.1에서 비로그인 상태로 단수 1을 기록했습�
 
 도안 교체·페이지 화면은 10월 4일, 두 기기 충돌 화면은 10월 26일 실행입니다. 전 기종 테스트와 장시간 부하는 실행하지 않았으며, 속도 향상률·전체 커버리지·운영 성과도 측정하지 않았습니다.
 
-[조회 오류·실기기 결과](../validation/2026-10-31/integrity-device/README.md) / [온보딩 실패와 재검증](../validation/2026-10-31/README.md) / [서버·DB 실행 기록](../validation/2026-10-29/README.md)
+[실기기 테스트](../../../KnitGetherUITests/DeviceLocalFlowTests.swift) / [조회 오류·실기기 결과](../validation/2026-10-31/integrity-device/README.md) / [온보딩 실패와 재검증](../validation/2026-10-31/README.md) / [서버·DB 실행 기록](../validation/2026-10-29/README.md)
 
 ## 08 다음에 확인할 것
 
@@ -182,8 +180,6 @@ iPhone 16 Pro·iOS 27.0.1에서 비로그인 상태로 단수 1을 기록했습�
 
 이번에는 목록이 보이는지만 보지 않고 DB의 단수를 바꿔 실제 갱신을 확인했습니다. 저장 충돌도 409 응답에서 끝내지 않고, 기기에 남은 메모와 직접 재저장한 DB 값까지 확인했습니다.
 
-### 테스트 문서와 코드
+### 테스트 코드와 실행 결과
 
-[기능 정의](../portfolio/02_functional_spec.md) / [테스트 목록·RTM](../portfolio/09_test_case_master.md) / [결함 대장](../portfolio/10_defect_catalog.md)
-
-[앱](../../../KnitGether/) / [서버](../../../server/) / [Appium](../../../qa/appium/README.md) / [API 테스트](../../../qa/api-tests/README.md) / [최신 실행 기록](../validation/2026-10-31/integrity-device/README.md)
+[사례별 코드·실행 결과](../../../README.md)
