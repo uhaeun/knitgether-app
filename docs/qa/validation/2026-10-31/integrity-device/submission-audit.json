@@ -1,10 +1,10 @@
 {
   "pdf_path": "output/pdf/knitgether_qa_portfolio.pdf",
-  "sha256": "f41d0bd7303fd4caeee874f6242dd11fe5f798a9388d002a44b211aea19c00d2",
-  "document_ref": "9f2e53172bae58fecff9330a7176e038b7577542",
+  "sha256": "3958cf8493d709659b38d71b8878a6945aab45489057430c23d039c17b4a4a58",
+  "document_ref": "7c290595f1bb9505f33f46d480d8698ecf9fc67f",
   "code_ref": "f0663a621f4c939f80d172922a40be5a71e40871",
   "pages": 8,
-  "link_annotations": 32,
+  "link_annotations": 31,
   "unique_links": 24,
   "all_github_targets_exist_at_pinned_commits": true,
   "korean_fonts_embedded": {
