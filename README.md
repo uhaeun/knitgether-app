@@ -2,7 +2,7 @@
 
 도안을 보며 단수를 세고, 작업 메모와 재료를 관리하는 SwiftUI iOS 앱입니다.
 
-Tibero DB QA 5년차입니다. DB 기능과 버그 수정을 주로 검증해 왔고, 앱의 화면부터 API·저장 데이터까지 연결해 테스트해 보고 싶어 뜨개더를 만들었습니다.
+DB 기능과 버그 수정을 주로 검증해 왔습니다. 앱의 화면 흐름과 API·저장 데이터까지 연결해 테스트해 보고 싶어 뜨개더를 만들었습니다.
 
 **[제출용 포트폴리오 PDF](output/pdf/knitgether_qa_portfolio.pdf) · [GitHub에서 본문 읽기](docs/qa/submission/github-guide.md)**
 
