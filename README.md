@@ -1,27 +1,22 @@
 # 뜨개더 QA
 
-도안을 보며 단수를 세고 메모·재료를 관리하는 개인 iOS 앱입니다. 화면 조작 후 API 응답, DB 저장값과 기기 캐시를 대조해 테스트했습니다.
+뜨개질을 하면서 도안에 나온 실과 기법을 따로 찾아보는 일이 번거로워, 자료와 단수(뜬 줄 수), 메모를 한곳에 모으는 iOS 앱을 기획했습니다. 아래는 사용자 흐름과 기록 보존을 확인한 테스트 코드, 실행 결과입니다.
 
-앱 기획과 테스트 우선순위·기대 결과를 정하고, 초기 수동 검증에 Postman·Charles·SQL을 사용했습니다. 구현과 후속 자동화의 코드 작성·실행·증거 수집에는 AI를 활용했습니다.
+[테스트 설계와 주요 사례](docs/qa/submission/github-guide.md)에서 우선순위, 확인 방법과 수정 전후를 읽을 수 있습니다.
 
-## 검증 범위
+## 테스트 코드와 실행 결과
 
-- 저장·동기화: 두 기기 충돌, 미저장 입력 유지와 직접 재저장
-- 도안·작업 화면: 교체 취소·승인과 화면 복귀
-- 종료·오프라인·계정: 재실행 뒤 기록, 서버 복구 후 저장과 계정별 분리
-
-## 대표 테스트와 결과
-
-| 사례 | 테스트 코드 | 실행 결과 |
+| 확인한 내용 | 설계 또는 테스트 코드 | 실행 결과 |
 |---|---|---|
-| 도안 교체 | [Appium](qa/appium/capture_portfolio.py) | [화면과 실행 조건](docs/qa/submission/evidence/2026-10-04/README.md) |
-| 단수 정보 누락·목록 오류·캐시 유지 | [API·SQL](qa/api-tests/test_13_row_counter_isolation.py) · [기기 캐시](KnitGetherTests/OfflineFirstProjectRepositoryTests.swift) | [조회 오류 재검증](docs/qa/validation/2026-10-31/integrity-device/README.md) |
-| 두 기기 동시 수정·미저장 메모 | [두 기기 화면](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/run_pure_ui.py) · [메모 초안](KnitGetherTests/ProjectWorkspaceViewModelTests.swift) | [화면·HTTP·DB](docs/qa/submission/evidence/2026-10-26/README.md) |
-| 연관 데이터 변경·동시 요청·롤백 | [HTTP·PostgreSQL](server/test/projects-concurrency.real-db-spec.ts) | [수정 전후](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) · [전용 DB 재실행](docs/qa/validation/2026-10-29/README.md) |
-| 실제 iPhone의 단수 유지·카메라 권한 거부 | [실기기 XCUITest](KnitGetherUITests/DeviceLocalFlowTests.swift) | [실기기 결과 (서버 연결 미완료)](docs/qa/validation/2026-10-31/integrity-device/README.md) |
+| 첫 사용, 작업 재개, 기법 조회 후 복귀 | [사용자 흐름과 TC](docs/qa/portfolio/05_test_cases.md) | [최초 수동 수행](docs/qa/portfolio/06_manual_execution.md) |
+| 일부 항목 오류에도 정상 목록 조회와 메모 보존 | [API와 SQL](qa/api-tests/test_13_row_counter_isolation.py) / [캐시](KnitGetherTests/OfflineFirstProjectRepositoryTests.swift) | [응답과 DB 재검증](docs/qa/validation/2026-10-31/integrity-device/README.md) |
+| 도안 교체 취소 시 표시선 보존, 승인 시 교체 | [Appium UI](qa/appium/capture_portfolio.py) | [화면과 실행 조건](docs/qa/submission/evidence/2026-10-04/README.md) |
+| 두 기기 충돌 후 미저장 메모 보존과 직접 재저장 | [두 기기 UI](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/run_pure_ui.py) / [메모 초안](KnitGetherTests/ProjectWorkspaceViewModelTests.swift) | [화면과 DB 결과](docs/qa/submission/evidence/2026-10-26/README.md) |
+| 연관 데이터 변경 후 동시 요청과 롤백 | [HTTP와 PostgreSQL](server/test/projects-concurrency.real-db-spec.ts) | [수정 전후](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) / [전용 DB 재실행](docs/qa/validation/2026-10-29/README.md) |
+| 실제 iPhone의 단수 유지와 카메라 권한 거부 후 복귀 | [실기기 XCUITest](KnitGetherUITests/DeviceLocalFlowTests.swift) | [로컬 2개 최종 통과, 서버 연결 미완료](docs/qa/validation/2026-10-31/integrity-device/README.md) |
 
-## 설계와 실행 방법
+## 상세 기록과 실행 방법
 
-[기능별 기대 동작](docs/qa/portfolio/02_functional_spec.md) · [테스트 설계](docs/qa/portfolio/05_test_cases.md) · [수동 수행](docs/qa/portfolio/06_manual_execution.md) · [결함 대장](docs/qa/portfolio/10_defect_catalog.md)
+[기능 기준](docs/qa/portfolio/02_functional_spec.md) / [우선순위 근거](docs/qa/portfolio/03_quality_risk_map.md) / [결함 대장](docs/qa/portfolio/10_defect_catalog.md)
 
-[Appium 실행](qa/appium/README.md) · [API 테스트 실행](qa/api-tests/README.md)
+[Appium 실행](qa/appium/README.md) / [API 테스트 실행](qa/api-tests/README.md) / [기록 목차](docs/qa/README.md)

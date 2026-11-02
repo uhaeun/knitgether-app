@@ -1,6 +1,6 @@
 # 결함 대장
 
-본문에 적힌 날짜·빌드의 기록입니다. [현재 결과](../README.md)는 후속 실행 기록에서 확인할 수 있습니다.
+본문에 적힌 날짜, 빌드의 기록입니다. [현재 결과](../README.md)는 후속 실행 기록에서 확인할 수 있습니다.
 
 ISTQB가 결함 리포트에 요구하는 항목과 이 문서의 대응이다.
 
@@ -76,7 +76,7 @@ DEF-01은 핸드오프 known issue #16의 동작을 실측으로 확정한 것�
 
 ##### 2-2. 수정 확인과 상태
 
-상태는 30건 모두 수정 완료다. 이슈가 있는 29건은 모두 닫혔고 DEF-22만 이슈 없이 수정됐다. verified 라벨 유무는 2026-09-18 이슈 기준이다. 라벨이 없는 건은 수정 확인 수단 열에 판정 근거를 적었다.
+30건 모두 수정 커밋이 반영된 상태다. 실행 검증 여부는 아래의 수정 확인과 회귀 열을 기준으로 구분한다. 이슈가 있는 29건은 모두 닫혔고 DEF-22만 이슈 없이 수정됐다. verified 라벨 유무는 2026-09-18 이슈 기준이다. 라벨이 없는 건은 수정 확인 수단 열에 판정 근거를 적었다.
 
 | ID | 수정 커밋 | 수정 확인과 회귀 | 이슈 | 닫힌 날 | verified |
 | --- | --- | --- | --- | --- | --- |
@@ -420,45 +420,45 @@ DEF-006과 DEF-009는 7월 개발 단계의 세 자리 번호로, 이 대장의 
 게이트를 빨간 채로 두면 게이트가 아니게 된다. 실패가 하나 있으면 두 번째 실패는 신호가 되지 못한다. 스킵은 실패로 보이지 않으므로 커버가 있는 것처럼 읽힌다. 다섯 사례는 형태가 다르지만 질문이 같다. 통과했다는 표시가 실제로 무엇을 증명하는가.
 
 
-## 2026-10-26 자식 카운터·도안 파일 후속 수정
+## 2026-10-26 자식 카운터, 도안 파일 후속 수정
 
-[수정·재검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
+[수정, 재검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-child-files-fix/report.md). CHILD-01/02와 FILES-01/02는 수정 전 4 FAIL 증거를 보존하고, 이번 로컬 수정 후 모두 PASS로 확인했다. 실제 PostgreSQL+HTTP 총18 PASS/0 SKIP, 서버 회귀147 PASS, 별도 API 회귀75 PASS, build PASS다.
 
-- 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모·자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
-- 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체·연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.
-- durable marker로 삭제 실패/중단 후보를 보존한다. 서비스 시작 및60초 주기로1시간 이상 지난 미참조 후보를 재시도한다. 장애 중 완료 시간은 보장하지 않는다. 과거 누적 파일 일괄 정리·모든 업로드 경로·카운터 이외 자식 API는 별도다.
+- 카운터 전용 PATCH는 전체 저장과 같은 부모 행을 먼저 조건부 갱신해 잠그고 버전을 증가시킨 뒤 자식을 저장한다. 부모, 자식은 한 트랜잭션이며 실패 시 함께 rollback한다. 카운터와 경합한 오래된 전체 PATCH는409다. 카운터 자체는 baseline 없는 기존 부분 저장 계약을 유지한다.
+- 전체 생성/저장의 새 도안 PDF는 SQL rollback 뒤 보상 삭제한다. 사본 ID 교체, 연결 해제의 이전 PDF/드로잉은 commit 후 미참조를 확인하고 삭제한다. 창고 원본과 soft-delete 참조는 보존한다.
+- durable marker로 삭제 실패/중단 후보를 보존한다. 서비스 시작 및60초 주기로1시간 이상 지난 미참조 후보를 재시도한다. 장애 중 완료 시간은 보장하지 않는다. 과거 누적 파일 일괄 정리, 모든 업로드 경로, 카운터 이외 자식 API는 별도다.
 - 기존 known-gap opt-in을 제거해 수용 검사4개를 기본 실제DB CI 게이트에 포함했다. 원격 CI와 iOS는 이번 변경에서 미실행이며 로컬 검증과 구분한다.
 
 이 절은 위 과거 FAIL/미실행 판정의 후속 이력이다. 과거 증거를 삭제하거나 RC-08 전체 및 제품 릴리즈를 일괄 완료 처리하지 않는다.
 
 ## 2026-10-26 최신 main 통합 후보 재검증
 
-[최신 main 대조·수정 후보 검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-main-revalidation/report.md). QA-SYNC11-RACE는 main6df5c4e에서 재현되지만 수정 후보의 실제DB·외부20쌍·두 시뮬레이터 범위에서는 수정 검증 PASS다. 카운터의 CHILD-01/02와 FILES-01/02를 포함한18개는 기본 게이트에서0 SKIP으로 통과했다. main 병합·운영 배포 완료를 의미하지 않는다.
+[최신 main 대조, 수정 후보 검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-main-revalidation/report.md). QA-SYNC11-RACE는 main6df5c4e에서 재현되지만 수정 후보의 실제DB, 외부20쌍, 두 시뮬레이터 범위에서는 수정 검증 PASS다. 카운터의 CHILD-01/02와 FILES-01/02를 포함한18개는 기본 게이트에서0 SKIP으로 통과했다. main 병합, 운영 배포 완료를 의미하지 않는다.
 
 추가 위험: 작업 세션 삭제는 부모 버전을 바꾸지 않아 오래된 전체 저장이 삭제를 복원했다. 기존에 범위 밖으로 둔 통합 버전 공백의 새 재현으로 기록하며, 카운터 유실 수정 PASS를 모든 자식 경로의 해결로 확대하지 않는다. 앱 종료 후 미저장 초안은 수명 요구가 정해지지 않아 제품 결함 PASS/FAIL로 임의 확정하지 않는다.
 
 
-## 2026-10-26 작업 세션 경합·종료 후 초안 보존 후속
+## 2026-10-26 작업 세션 경합, 종료 후 초안 보존 후속
 
-[제품 수정·검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/report.md) · [항목별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
+[제품 수정, 검증 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/report.md) / [항목별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-session-fix/case-results.md). 제품 기준7579663. 이전 FAIL/CHARACTERIZED는 당시 이력으로 보존한다.
 
-QA-SYNC11-SESSION: 부모 버전을 올리지 않는 세션 변경 때문에 오래된 전체 저장이 최신 세션을 덮거나 삭제 세션을 복원했다.71fc254에서 생성·수정·삭제3건 모두200으로 재현했고7579663의 실제DB에서409와SQL 상태 보존으로 확인했다. 부모 버전 증가와 자식 변경을 같은 트랜잭션으로 옮겨 수정했다. 추가3개는 경합 순서·rollback 확인이다. Fixed/Verified는 이 경로에 한정하며 모든 자식 API 완료를 뜻하지 않는다.
+QA-SYNC11-SESSION: 부모 버전을 올리지 않는 세션 변경 때문에 오래된 전체 저장이 최신 세션을 덮거나 삭제 세션을 복원했다.71fc254에서 생성, 수정, 삭제3건 모두200으로 재현했고7579663의 실제DB에서409와SQL 상태 보존으로 확인했다. 부모 버전 증가와 자식 변경을 같은 트랜잭션으로 옮겨 수정했다. 추가3개는 경합 순서, rollback 확인이다. Fixed/Verified는 이 경로에 한정하며 모든 자식 API 완료를 뜻하지 않는다.
 
-종료 후 초안 소실은 이전 명세 공백의 관찰이었고 기존 확정 요구 위반으로 소급 등록하지 않는다. 이번 사용자 선택으로 보존 정책을 확정하고 구현·검증했다. 중간 fixture의불필요한 ownerId로400이 발생한 것은 테스트 코드 문제, Appium 준비 전 연결 거절은 환경 문제다.
+종료 후 초안 소실은 이전 명세 공백의 관찰이었고 기존 확정 요구 위반으로 소급 등록하지 않는다. 이번 사용자 선택으로 보존 정책을 확정하고 구현, 검증했다. 중간 fixture의불필요한 ownerId로400이 발생한 것은 테스트 코드 문제, Appium 준비 전 연결 거절은 환경 문제다.
 
 
 ## 2026-10-26 목록 프로젝트 삭제의 초안 정리 보완
 
-[추가 발견·수정·검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정·프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
+[추가 발견, 수정, 검증](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-draft-delete-fix/report.md). 작업 화면과 목록의 삭제 진입점을 대조해 목록 삭제의 초안 정리 누락(QA-DRAFT-LIST-DELETE)을 발견했다. 이전 앱의 실제 목록 삭제에서 서버 soft-delete와 화면 제거 후 파일 잔존 FAIL을 재현했다. 목록 삭제 성공 직후 계정, 프로젝트 초안을 제거하고, 삭제 실패 시 유지하도록 보완했다. 기존 MyKnitting Swift12개 중 성공/실패 삭제2개의 파일 단언을 강화해 수정 전1 FAIL, 수정 후 전체Swift354 PASS 및 실제목록UI1 PASS로 확인했다. 반복한354를708개로 합산하지 않는다.
 
-사용자가 보존·제거 정책을 선택했고 Codex가 누락 발견·구현·시험·판정을 수행했다. 앞선 세션·두 기기·초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24·API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA·완료 상태로 확인한다. Draft 유지, 병합·배포 없음.
+사용자가 보존, 제거 정책을 선택했고 Codex가 누락 발견, 구현, 시험, 판정을 수행했다. 앞선 세션, 두 기기, 초안 실행은 기존 소스 범위의 이력으로 유지한다. 이 후속 변경은 MyKnitting 목록 삭제 경로에 한정하며 앞선 서버 실제DB24, API75 등을 새로 실행했다고 기록하지 않는다. 최신 원격CI는 전달 묶음의 대상SHA, 완료 상태로 확인한다. Draft 유지, 병합, 배포 없음.
 
 
-## 2026-10-26 최종 자식 API·UI-03·병합 검증
+## 2026-10-26 최종 자식 API, UI-03, 병합 검증
 
-[최종 실행 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) · [TC별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/case-results.md) · [코드 리뷰](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/code-review.md). QA-CMP-01: 행 안내3경로의 부모 버전 누락. QA-CMP-02: PDF/드로잉3경로의 버전 누락 및 고정 드로잉 파일 선행 변경. QA-CMP-03: 행 안내/세션 ID의 owner/project 범위 누락. QA-CMP-04: 클라이언트의 중복 전체 저장과 동기화된 캐시 파일 재업로드. 전역 DEF 번호를 임의로 재사용하지 않고 이번 실행 ID로 추적한다.
+[최종 실행 보고서](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/report.md) / [TC별 결과](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/case-results.md) / [코드 리뷰](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/qa-runs/2026-10-26-completion/code-review.md). QA-CMP-01: 행 안내3경로의 부모 버전 누락. QA-CMP-02: PDF/드로잉3경로의 버전 누락 및 고정 드로잉 파일 선행 변경. QA-CMP-03: 행 안내/세션 ID의 owner/project 범위 누락. QA-CMP-04: 클라이언트의 중복 전체 저장과 동기화된 캐시 파일 재업로드. 전역 DEF 번호를 임의로 재사용하지 않고 이번 실행 ID로 추적한다.
 
-수정 전 실제DB 재현은6+3 FAIL이며 최초6은 기존24 PASS와 함께 실행했다. 수정 후 실제DB40 PASS(소유자 차이6개와 롤백·보존 포함), 서버147/API75/Swift359 PASS다. QA-CMP-04는 정적 호출 순서 분석에서 발견한 보완이며 수정 전 실제 시뮬레이터 FAIL로 포장하지 않는다. 상세 전후 상태·요청/응답·파일 검증은 실행 증거를 따른다. 자동화 팝업·컨테이너 지연·목 테스트 조정은 제품 결함과 별도로 기록한다.
+수정 전 실제DB 재현은6+3 FAIL이며 최초6은 기존24 PASS와 함께 실행했다. 수정 후 실제DB40 PASS(소유자 차이6개와 롤백, 보존 포함), 서버147/API75/Swift359 PASS다. QA-CMP-04는 정적 호출 순서 분석에서 발견한 보완이며 수정 전 실제 시뮬레이터 FAIL로 포장하지 않는다. 상세 전후 상태, 요청/응답, 파일 검증은 실행 증거를 따른다. 자동화 팝업, 컨테이너 지연, 목 테스트 조정은 제품 결함과 별도로 기록한다.
 
 <details>
 <summary>원본과 문서 수정 이력</summary>

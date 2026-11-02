@@ -1,9 +1,7 @@
 """Build the submission PDF from the single portfolio Markdown source."""
 from pathlib import Path
 from html import escape
-import os
 import re
-from urllib.parse import quote
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
@@ -19,9 +17,8 @@ ROOT = Path(__file__).resolve().parents[4]
 SOURCE = ROOT / 'docs/qa/submission/github-guide.md'
 OUT = ROOT / 'output/pdf/knitgether_qa_portfolio.pdf'
 FONT_DIR = SOURCE.parent / 'fonts'
-SUBMISSION_REF = os.environ.get('KNITGETHER_SUBMISSION_REF', 'main')
-REPO = 'https://github.com/uhaeun/knitgether-app'
-PAGE_COUNT = 3
+PAGE_COUNT = 4
+IMAGE_URLS = {'evidence/2026-10-04/04_cancel_preserved.png': 'https://github.com/uhaeun/knitgether-app/blob/1f260ee25bad6fe51b0a9a76b989bee5da500867/docs/qa/submission/evidence/2026-10-04/04_cancel_preserved.png', 'evidence/2026-10-04/05_confirm_replaced.png': 'https://github.com/uhaeun/knitgether-app/blob/1f260ee25bad6fe51b0a9a76b989bee5da500867/docs/qa/submission/evidence/2026-10-04/05_confirm_replaced.png', 'evidence/2026-10-26/sync-04-b-conflict.png': 'https://github.com/uhaeun/knitgether-app/blob/1f260ee25bad6fe51b0a9a76b989bee5da500867/docs/qa/submission/evidence/2026-10-26/sync-04-b-conflict.png'}
 W, H = A4
 M = 19 * mm
 CW = W - 2 * M
@@ -36,6 +33,7 @@ def style(name, size=10.7, leading=16.8, **kw):
     styles[name] = ParagraphStyle(name, fontName='KR', fontSize=size, leading=leading,
         textColor=INK, wordWrap='CJK', spaceAfter=8, splitLongWords=True, **kw)
 style('body')
+styles['cover'] = ParagraphStyle('cover', fontName='KRB', fontSize=32, leading=40, textColor=INK, spaceAfter=18)
 styles['title'] = ParagraphStyle('title', fontName='KRB', fontSize=30, leading=39,
     textColor=INK, spaceAfter=13, wordWrap='CJK')
 styles['chapter'] = ParagraphStyle('chapter', fontName='KRB', fontSize=20, leading=28,
@@ -52,14 +50,9 @@ styles['label'] = ParagraphStyle('label', parent=styles['body'], fontName='KRS',
 
 
 def url(href):
-    if href.startswith(('https://', 'http://')):
+    if href.startswith(('https://', '#')):
         return href
-    target = (SOURCE.parent / href).resolve()
-    rel = target.relative_to(ROOT).as_posix()
-    if not target.exists():
-        raise FileNotFoundError(f'Portfolio link target does not exist: {rel}')
-    kind = 'tree' if target.is_dir() else 'blob'
-    return f'{REPO}/{kind}/{SUBMISSION_REF}/{quote(rel)}'
+    return IMAGE_URLS[href]
 
 
 def inline(text):
@@ -68,7 +61,9 @@ def inline(text):
     for part in chunks:
         match = re.fullmatch(r'\[([^\]]+)\]\(([^)]+)\)', part)
         if match:
-            rendered.append(f'<link href="{escape(url(match[2]), quote=True)}" color="#267267"><u>{escape(match[1])}</u></link>')
+            page_hints = {'#list-case': ' 2쪽', '#pattern-case': ' 3쪽', '#sync-case': ' 4쪽'}
+            label = match[1] + page_hints.get(match[2], '')
+            rendered.append(f'<link href="{escape(url(match[2]), quote=True)}" color="#267267"><u>{escape(label)}</u></link>')
         else:
             value = escape(part)
             value = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', value)
@@ -101,6 +96,12 @@ def make_table(lines, width, photo_width=144):
     n = len(rows[0])
     if is_photo:
         widths = [width / n] * n
+    elif n == 3 and rows[0][0] == '사용자 흐름':
+        widths = [width * .18, width * .39, width * .43]
+    elif n == 3 and rows[0][0] == '우선순위':
+        widths = [width * .13, width * .36, width * .51]
+    elif n == 3 and rows[0][0] == '설계 방법':
+        widths = [width * .18, width * .44, width * .38]
     elif n == 3 and rows[0][0] == '순서':
         widths = [width * .09, width * .43, width * .48]
     elif n == 3:
@@ -135,9 +136,19 @@ def parse(lines, width=CW):
         i += 1
         if not text:
             continue
+        if text.startswith('<a id='):
+            continue
+        if text == '```mermaid':
+            while i < len(lines) and lines[i].strip() != '```':
+                i += 1
+            i += 1
+            continue
         setting = re.fullmatch(r'<!-- photo-width: (\d+) -->', text)
         if setting:
             photo_width = int(setting[1]); continue
+        if text.startswith('<!-- flow:'):
+            flows += [process_flow(text.split(':', 1)[1].split('-->')[0].strip(), width), Spacer(1,12)]
+            continue
         if text.startswith('<!--'):
             continue
         if text.startswith('### '):
@@ -152,7 +163,7 @@ def parse(lines, width=CW):
         while i < len(lines) and lines[i].strip() and not re.match(r'^(#|\||<!--)', lines[i].strip()):
             block.append(lines[i].strip()); i += 1
         text = ' '.join(block)
-        if text.startswith('촬영:'):
+        if text.startswith(('촬영:', '검증 조건:', '검증 범위:', '집계 기준:')):
             kind = 'caption'
         elif text.startswith('['):
             kind = 'link'
@@ -164,19 +175,64 @@ def parse(lines, width=CW):
     return flows
 
 
+def process_flow(kind, width):
+    from reportlab.graphics.shapes import Drawing, Rect, Line, Polygon, String
+    if kind == 'architecture':
+        d = Drawing(width, 84)
+        gap = 34
+        w = (width - 2*gap)/3
+        rows = [('iOS 앱', 'SwiftUI / 로컬 캐시', 'UI 흐름 / Appium'),
+                ('API 서버', 'NestJS / Prisma', '통신 / Postman, Charles'),
+                ('DB', 'PostgreSQL', '저장값 / SQL')]
+        def arrow(x1, x2, y):
+            d.add(Line(x1,y,x2,y,strokeColor=MUTED,strokeWidth=.7))
+            step = 3 if x2>x1 else -3
+            d.add(Polygon([x2,y,x2-step,y+2,x2-step,y-2],fillColor=MUTED,strokeColor=MUTED))
+        for i,(label,value,check) in enumerate(rows):
+            x=i*(w+gap)
+            d.add(Rect(x,25,w,53,rx=5,ry=5,fillColor=PALE,strokeColor=LINE,strokeWidth=.6))
+            d.add(String(x+w/2,59,label,fontName='KRS',fontSize=9.3,textAnchor='middle',fillColor=TEAL))
+            d.add(String(x+w/2,40,value,fontName='KR',fontSize=9.0,textAnchor='middle',fillColor=INK))
+            d.add(String(x+w/2,8,check,fontName='KR',fontSize=8.0,textAnchor='middle',fillColor=MUTED))
+            if i<2:
+                left,right=x+w+3,x+w+gap-3
+                arrow(left,right,58)
+                arrow(right,left,44)
+                d.add(String((left+right)/2,64,'HTTP' if i==0 else 'SQL',fontName='KR',fontSize=7.0,textAnchor='middle',fillColor=MUTED))
+                d.add(String((left+right)/2,31,'응답' if i==0 else '결과',fontName='KR',fontSize=7.0,textAnchor='middle',fillColor=MUTED))
+        return d
+    labels = [('DB', '정상 단수 99'), ('목록 API', 'HTTP 500'), ('앱 캐시', '이전 단수 22')]
+    d = Drawing(width, 64)
+    gap = 18
+    w = (width-gap*(len(labels)-1))/len(labels)
+    for i,(label,value) in enumerate(labels):
+        x=i*(w+gap)
+        d.add(Rect(x,5,w,53,rx=5,ry=5,fillColor=PALE,strokeColor=LINE,strokeWidth=.6))
+        d.add(String(x+w/2,39,label,fontName='KRS',fontSize=9.3,textAnchor='middle',fillColor=TEAL))
+        d.add(String(x+w/2,20,value,fontName='KR',fontSize=9.2,textAnchor='middle',fillColor=INK))
+        if i+1<len(labels):
+            y=32
+            d.add(Line(x+w+3,y,x+w+gap-3,y,strokeColor=MUTED,strokeWidth=.8))
+            d.add(Polygon([x+w+gap-3,y,x+w+gap-6,y+2,x+w+gap-6,y-2],fillColor=MUTED,strokeColor=MUTED))
+    return d
+
+
 def footer(canvas, doc):
     canvas.saveState()
+    if doc.page == 2: canvas.bookmarkPage('list-case')
+    if doc.page == 3: canvas.bookmarkPage('pattern-case')
+    if doc.page == 4: canvas.bookmarkPage('sync-case')
     canvas.setFillColor(TEAL)
     canvas.rect(M, H-31, 22, 2, stroke=0, fill=1)
     canvas.setFont('KRS', 8)
-    canvas.drawString(M+30, H-33, 'KNITGETHER / QA CASE STUDY')
+    canvas.drawString(M+30, H-33, 'QA PORTFOLIO')
     canvas.setFillColor(MUTED)
     canvas.setFont('KR', 8)
-    canvas.drawRightString(W-M, H-33, '2026.10')
+    canvas.drawRightString(W-M, H-33, '2026.11')
     canvas.setStrokeColor(LINE)
     canvas.line(M, 41, W-M, 41)
     canvas.setFont('KR', 8)
-    canvas.drawString(M, 26, '유하은 | 뜨개더 QA')
+    canvas.drawString(M, 26, '유하은 | 뜨개더')
     canvas.drawRightString(W-M, 26, f'{doc.page:02d} / {PAGE_COUNT:02d}')
     canvas.restoreState()
 
@@ -192,14 +248,14 @@ def build():
         title = lines.pop(0).strip()
         if number > 1:
             story.append(PageBreak())
-        story.append(p(title, 'chapter'))
-        if number == 3:
+        story.append(p(title, 'cover' if number == 1 else 'chapter'))
+        if number == 4:
             # Float the narrow phone screenshot beside its explanation.
             image_start = next(i for i,line in enumerate(lines) if line.startswith('| 충돌 안내'))
             left_lines = [line for line in lines[:image_start] if not line.startswith('<!--')]
             image_source = re.search(r'<img src="([^"]+)"', '\n'.join(lines[image_start:])).group(1)
             last_image_row = next(i for i in range(image_start, len(lines)) if '<img ' in lines[i])
-            left_width, image_width = CW-174, 148
+            left_width, image_width = CW-174, 136
             split = Table([[parse(left_lines, left_width), ProofImage(image_source, image_width)]],
                 colWidths=[left_width+10, CW-left_width-10], hAlign='LEFT')
             split.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),
@@ -210,8 +266,8 @@ def build():
             story += parse(lines)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     doc = SimpleDocTemplate(str(OUT), pagesize=A4, leftMargin=M, rightMargin=M,
-        topMargin=52, bottomMargin=56, title='뜨개더 QA 포트폴리오 | 유하은', author='유하은',
-        subject='iOS 앱의 기록 보존, API와 DB 정합성, 저장 충돌과 복구 검증')
+        topMargin=52, bottomMargin=56, title='QA Portfolio | 유하은', author='유하은',
+        subject='뜨개더 iOS 앱의 테스트 설계, 결함 분석과 재검증')
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     print(OUT)
 

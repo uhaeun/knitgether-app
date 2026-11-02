@@ -1,22 +1,25 @@
-# 포트폴리오 본문과 PDF
+# 테스트 설계와 실행 근거
 
-- [QA 포트폴리오 본문](github-guide.md): 대표 사례, 판단, 결과와 한계
-- [QA 포트폴리오 (PDF)](../../../output/pdf/knitgether_qa_portfolio.pdf): 통합 포트폴리오에 넣을 뜨개더 3쪽
-- [최신 조회·기기 검증](../validation/2026-10-31/integrity-device/README.md): 조회 계약·캐시 보존·실행 조건과 결과
-- [앞선 iOS 재검증](../validation/2026-10-31/README.md): 최초 실패·시험 준비 보완·후속 결과
-- [서버·DB·API 검증](../validation/2026-10-29/README.md): 계층별 결과와 재현 방법
-- [테스트 코드와 실행 결과](../../../README.md): 본문 사례별 코드·결과 링크
-- [과거 실행 원본](../history.md): 최초 실패와 반복 실행, 이전 상세 문서
+- [테스트 설계와 주요 사례](github-guide.md): 사용자 흐름, 우선순위, 수정 전후와 확인 범위
+- [사용자 흐름별 TC](../portfolio/05_test_cases.md) / [최초 수동 수행](../portfolio/06_manual_execution.md)
+- [목록과 개별 조회, 캐시와 실기기](../validation/2026-10-31/integrity-device/README.md)
+- [도안 교체와 페이지 복귀](evidence/2026-10-04/README.md)
+- [동시 수정과 미저장 메모](evidence/2026-10-26/README.md)
+- [서버와 DB 재실행](../validation/2026-10-29/README.md)
+- [전체 코드와 결과](../../../README.md) / [과거 실행 기록](../history.md)
 
-## PDF 생성
+<details>
+<summary>PDF와 생성 방법</summary>
 
-Python 3.10 이상과 ReportLab, Pillow가 필요합니다. 글꼴은 포함된 Pretendard를 사용합니다. 이용 조건은 [라이선스](fonts/LICENSE.txt)를 참고합니다.
+[현재 본문의 PDF](../../../output/pdf/knitgether_qa_portfolio.pdf)는 뜨개더 단독 4쪽입니다. 이전 3쪽 버전은 [이전 커밋](https://github.com/uhaeun/knitgether-app/blob/fc17e9e77a1d481cd5e365b12d02d5a7be2a1bd3/output/pdf/knitgether_qa_portfolio.pdf)에 남아 있습니다.
+
+Python 3.10 이상과 ReportLab, Pillow가 필요합니다. 포함된 Pretendard 글꼴의 [라이선스](fonts/LICENSE.txt)를 따릅니다.
 
 ```sh
 python3 -m pip install reportlab pillow
 python3 docs/qa/submission/tools/build_pdf.py
 ```
 
-스크립트는 `github-guide.md`를 읽습니다. 본문을 바꾸지 않고 페이지·글꼴·표·화면을 PDF에 배치합니다. 생성 후 전체 페이지를 이미지로 확인합니다.
+스크립트는 `github-guide.md`를 읽습니다. GitHub의 Mermaid 도식과 PDF의 도식은 같은 상태와 확인 위치를 표시합니다. 본문의 근거 링크는 실행 기록의 커밋에 고정했습니다. 이 문서의 수정일을 제품 테스트 실행일로 사용하지 않습니다.
 
-PDF의 저장소 내부 링크는 `KNITGETHER_SUBMISSION_REF`로 지정한 커밋에 고정합니다. 기본값은 `main`이며, 공개하는 PDF는 문서 커밋을 지정해 생성합니다. 보존 자료는 본문의 고정 커밋 URL을 그대로 사용합니다. 실행한 제품 소스의 커밋은 각 보고서 안에 별도로 명시합니다.
+</details>
