@@ -31,7 +31,7 @@ pytest tests/ -v --empty-given                 # 음성 대조: Given 주입을 
 
 ## 구조
 
-- `tests/` TC 그룹별 파일 하나(`test_tc08_sort_filter.py`), 함수 이름은 케이스 ID(`test_ui_33_...`)로 [09 카탈로그](../../docs/qa/portfolio/09_test_case_master.md)와 이름으로 대응된다.
+- `tests/` TC 그룹별 파일 하나(`test_tc08_sort_filter.py`), 함수 이름은 케이스 ID(`test_ui_33_...`)로 [09 카탈로그](https://github.com/uhaeun/knitgether-app/blob/760e1aae1d54db5f7381652d01f44e4c9dbd5af2/docs/qa/portfolio/09_test_case_master.md)와 이름으로 대응된다.
 - `pages/` 페이지 오브젝트 12개와 공통 부모 `base_page.py`. 로케이터는 페이지 밖으로 새지 않고, 이동은 도착 확인까지 한 메서드가 책임진다.
 - `support/` 시뮬레이터 조작(`simctl.py`), Given 시딩(`seed.py`), 서버 계정 유틸(`server_api.py`), 네트워크 열화 프록시(`netgate.py`), 경로(`paths.py`), 화면 문구 상수(`texts.py`).
 - `conftest.py` 드라이버 풀(`DriverPool`), 앱 세션(`AppSession`), 픽스처 `kg`, `kg_server`, `kg_offline`, `onboarding`, `netgate`, 실패 스크린샷 훅.
@@ -43,13 +43,13 @@ pytest tests/ -v --empty-given                 # 음성 대조: Given 주입을 
 - **음성 대조의 사각**: `--empty-given`은 파일 시딩만 끄므로 서버 시딩에 기대는 서버 케이스에는 신호를 주지 못한다. 서버 시딩까지 끄는 스위치가 필요하다.
 - 시뮬레이터에 카메라 피드가 없어 실기기 전용 케이스 1건은 skip이다.
 
-초기화와 세션 관리 문제의 배경은 [08 6절](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/08_automation_comparison.md), 자동화 구성은 [13 자동화 스위트](../../docs/qa/portfolio/13_automation_showcase.md)에 있다.
+초기화와 세션 관리 문제의 배경은 [08 6절](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/08_automation_comparison.md), 자동화 구성은 [13 자동화 스위트](https://github.com/uhaeun/knitgether-app/blob/760e1aae1d54db5f7381652d01f44e4c9dbd5af2/docs/qa/portfolio/13_automation_showcase.md)에 있다.
 
 ## 문서
 
-- [09_test_case_master](../../docs/qa/portfolio/09_test_case_master.md) 케이스 카탈로그
+- [09_test_case_master](https://github.com/uhaeun/knitgether-app/blob/760e1aae1d54db5f7381652d01f44e4c9dbd5af2/docs/qa/portfolio/09_test_case_master.md) 케이스 카탈로그
 - [11_execution_results](https://github.com/uhaeun/knitgether-app/blob/b2f916bb9b248291a7f7ef421eb7739fda103d11/docs/qa/portfolio/11_execution_results.md) 실행 결과
-- [13_automation_showcase](../../docs/qa/portfolio/13_automation_showcase.md) 자동화 쇼케이스: 구조 설명, 음성 대조, 결함 주입
+- [13_automation_showcase](https://github.com/uhaeun/knitgether-app/blob/760e1aae1d54db5f7381652d01f44e4c9dbd5af2/docs/qa/portfolio/13_automation_showcase.md) 자동화 쇼케이스: 구조 설명, 음성 대조, 결함 주입
 
 ## 2026-10-04 판정 보완
 

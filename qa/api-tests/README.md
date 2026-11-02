@@ -6,9 +6,9 @@
 
 ## 2026-10-31 보완 결과
 
-새 전용 DB와 원격 CI에서 **79 PASS / 0 xfail**을 확인했습니다. 파일 13은 목록의 행 삭제, 삭제 표시 2조건, 개별 조회의 행 삭제, 삭제 표시, 소유자 불일치 3조건을 확인합니다. 개별 조회는 409와 `PROJECT_ROW_COUNTER_MISSING`, 다른 계정은 기존 404를 기대합니다. 조회 전후 DB 무변경, 정상 단수 99, 제외 ID 헤더, 정확한 시험 사본 복원 후 200도 대조합니다. [조회 계약, HTTP, SQL 근거](../../docs/qa/validation/2026-10-31/integrity-device/README.md)
+새 전용 DB와 원격 CI에서 **79 PASS / 0 xfail**을 확인했습니다. 파일 13은 목록의 행 삭제, 삭제 표시 2조건, 개별 조회의 행 삭제, 삭제 표시, 소유자 불일치 3조건을 확인합니다. 개별 조회는 409와 `PROJECT_ROW_COUNTER_MISSING`, 다른 계정은 기존 404를 기대합니다. 조회 전후 DB 무변경, 정상 단수 99, 제외 ID 헤더, 정확한 시험 사본 복원 후 200도 대조합니다. [조회 계약, HTTP, SQL 근거](../../docs/qa/evidence/2026-10-31/README.md)
 
-10월 29일의 76 PASS, 알려진 실패 1개는 [당시 이력](../../docs/qa/validation/2026-10-29/README.md)으로 보존합니다. 해당 xfail은 조건별 기대 동작과 회귀 시험으로 전환했습니다.
+10월 29일의 76 PASS, 알려진 실패 1개는 [당시 이력](https://github.com/uhaeun/knitgether-app/blob/760e1aae1d54db5f7381652d01f44e4c9dbd5af2/docs/qa/validation/2026-10-29/README.md)으로 보존합니다. 해당 xfail은 조건별 기대 동작과 회귀 시험으로 전환했습니다.
 
 ## 파일별 확인 대상
 

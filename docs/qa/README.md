@@ -1,17 +1,19 @@
-# QA 기록
+# 테스트 기록
 
-[테스트 설계와 주요 사례](submission/github-guide.md) / [코드와 실행 결과](../../README.md)
+화면 조작, API 응답, DB 저장값과 기기 캐시를 연결해 확인했습니다. 핵심 사용자 흐름을 먼저 수행하고, 기록 유실과 계정 간 노출은 통신 실패와 두 기기 충돌 조건을 추가했습니다.
 
-## 설계와 최초 수행
+| 문서 | 확인할 내용 |
+|---|---|
+| [테스트 설계](test-design.md) | 사용자 흐름, 기대 동작, 우선순위와 TC |
+| [수행 결과](test-results.md) | 최초 수동 수행, 수정 후 회귀, 기기와 미검증 범위 |
+| [결함 분석](defects.md) | 재현, 원인 가설, 수정 확인과 회귀 |
 
-[기능 기준, 위험, TC와 수동 수행](portfolio/README.md)에서 기대 결과와 최초 판정을 확인할 수 있습니다.
+## 주요 실행 근거
 
-## 수정 후 확인
+- [도안 교체와 페이지 복귀](evidence/2026-10-04/README.md)
+- [두 기기 충돌과 미저장 메모](evidence/2026-10-26/README.md)
+- [조회 오류, 캐시 보존과 실제 iPhone](evidence/2026-10-31/README.md)
 
-- [목록과 개별 조회, 캐시 보존, 실기기](validation/2026-10-31/integrity-device/README.md)
-- [도안 교체와 페이지 복귀](submission/evidence/2026-10-04/README.md)
-- [두 기기 충돌과 메모 보존](submission/evidence/2026-10-26/README.md)
-- [전용 DB의 서버 회귀](validation/2026-10-29/README.md)
-- [앞선 iOS 실패와 준비 조건 보완](validation/2026-10-31/README.md)
+기획과 기대 동작, 우선순위와 TC를 정하고 Appium UI 테스트를 진행했습니다. Postman과 Charles로 통신을 확인하고 SQL로 저장값을 대조했습니다. AI는 앱과 서버 구현, 수정 코드 작성과 후속 반복 테스트 보조에 활용했습니다.
 
-각 결과는 기록된 제품 버전과 환경에 해당합니다. 과거 실행의 수치를 합산하거나 모든 화면과 기기의 통과로 확대하지 않았습니다. [이전 상세 문서와 실행 원본](history.md)은 당시 커밋에서 확인할 수 있습니다.
+[테스트 코드](../../README.md) / [실행 환경](../setup.md) / [이전 상세 기록](history.md)

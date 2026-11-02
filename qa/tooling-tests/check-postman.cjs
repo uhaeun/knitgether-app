@@ -12,7 +12,7 @@ serverRequire('reflect-metadata');
 const { plainToInstance } = serverRequire('class-transformer');
 const { validateSync } = serverRequire('class-validator');
 const { SaveProjectDto } = serverRequire('./src/projects/project-save.dto.ts');
-const collection = JSON.parse(fs.readFileSync(path.join(root, 'docs/qa/postman/knitgether-local.postman_collection.json')));
+const collection = JSON.parse(fs.readFileSync(path.join(root, 'qa/postman/knitgether-local.postman_collection.json')));
 const item = collection.item.find(item => item.name === 'Projects Create');
 function generate() {
   const values = new Map();

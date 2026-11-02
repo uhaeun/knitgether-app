@@ -35,7 +35,7 @@ def test_api_28_dictionary_patch_rejects_partial_body(account_a):
     )
     assert partial.status_code == 400, (
         "부분 전송이 통과했다. 전체 교체 계약이 바뀐 것이라면 이 케이스와 "
-        f"docs/spec 결정을 함께 갱신해야 한다: {partial.text}"
+        f"docs/qa/test-design.md의 기준을 함께 갱신해야 한다: {partial.text}"
     )
 
     full = account_a.api.patch(
