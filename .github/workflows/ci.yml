@@ -400,6 +400,7 @@ jobs:
             -only-testing:KnitGetherUITests/KnitGetherUITests/testCoreUserFlowRegistersAndSavesCommonRecords \
             -only-testing:KnitGetherUITests/KnitGetherUITests/testServerOffWithCachedProjectShowsCachedProject \
             -only-testing:KnitGetherUITests/KnitGetherUITests/testServerOffPendingProjectSyncsAfterServerRecovers \
+            -only-testing:KnitGetherQAUITests/CounterInputRegressionTests \
             -parallel-testing-enabled NO \
             -resultBundlePath TestResults/KnitGetherUITests.xcresult
 

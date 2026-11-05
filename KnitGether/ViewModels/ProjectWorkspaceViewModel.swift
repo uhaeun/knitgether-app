@@ -979,7 +979,15 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     }
 
     func updateCurrentRow(_ row: Int) async {
-        await updateRow(to: max(0, row))
+        guard row >= 0 else {
+            errorMessage = "음수는 저장할 수 없어요. 기존 단수는 유지돼요."
+            return
+        }
+        if row == currentRow {
+            errorMessage = nil
+            return
+        }
+        await updateRow(to: row)
     }
 
     func resetCurrentRow() async {
@@ -1018,6 +1026,10 @@ final class ProjectWorkspaceViewModel: ObservableObject {
     }
 
     func updateTargetRow(_ targetRow: Int?) async {
+        if let targetRow, targetRow < 0 {
+            errorMessage = "음수는 저장할 수 없어요. 기존 단수는 유지돼요."
+            return
+        }
         let normalizedTargetRow = targetRow.flatMap { $0 > 0 ? $0 : nil }
         let updatedCounter = makeRowCounter(targetRow: normalizedTargetRow)
         await persistRowCounter(updatedCounter, errorMessage: "총 단수를 저장하지 못했어요.")
