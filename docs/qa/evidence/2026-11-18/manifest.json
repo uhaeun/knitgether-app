@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-18",
+  "timezone": "Asia/Seoul",
+  "newFeatureScreenshotCount": 10,
+  "newFeatureFigureCount": 5,
+  "contextFigureCount": 2,
+  "images": [
+    {
+      "file": "feature-screens/overview.png",
+      "kind": "context",
+      "bytes": 1340164,
+      "width": 5488,
+      "height": 2932,
+      "sha256": "5d35fd929fd97cec5ff224b0222166c690210ae7edca840d32eab8336702f8ef"
+    },
+    {
+      "file": "feature-screens/pattern-materials.png",
+      "kind": "new_feature_capture",
+      "bytes": 905161,
+      "width": 2880,
+      "height": 3248,
+      "sha256": "9fe82f7fed9ece69dd487f0ca7962a3bbf095649a88c10d32039832edc092e42",
+      "actualUIPixelsUnchanged": true,
+      "rawScreenshotSha256": [
+        "31dcc81538c1b9ccc3d0c4af8f9ad203a9db01ed8887fda64207f700e29f294a",
+        "f92ddc7d570075d078b7d5cf53da984a06ec601174b5c7e113d28a820ae69d26"
+      ]
+    },
+    {
+      "file": "feature-screens/pattern-work-records.png",
+      "kind": "new_feature_capture",
+      "bytes": 1006250,
+      "width": 2880,
+      "height": 3248,
+      "sha256": "81a58ad385b5ef8aa33613b7b5f2e174c2b25666ca4b4d2692187cd85ce218f5",
+      "actualUIPixelsUnchanged": true,
+      "rawScreenshotSha256": [
+        "359eeabc566aeb70d9a09544f930f2d9375533e3852eb10962ec3a79cb0b4e7b",
+        "dbcfa4b56f615e7212ebc1f46c5a356e2fe848a9ef2ee43d341a346247b0b67e"
+      ]
+    },
+    {
+      "file": "feature-screens/pattern-replacement-cancel.png",
+      "kind": "new_feature_capture",
+      "bytes": 925850,
+      "width": 2880,
+      "height": 3248,
+      "sha256": "b397f2f843ed81b65aec4a02e9364dd71050311d3174b754e3965960f609fa97",
+      "actualUIPixelsUnchanged": true,
+      "rawScreenshotSha256": [
+        "1327d1b2d450754ceb2a3aab98debda27cd278d6d95e4ea94defccfb7232a795",
+        "85ce40b7aec5618cad073182e3a467ee65fdb7c2b2f5e9b26b4a8c372dd350b4"
+      ]
+    },
+    {
+      "file": "feature-screens/pending-and-synced.png",
+      "kind": "new_feature_capture",
+      "bytes": 532432,
+      "width": 2880,
+      "height": 3248,
+      "sha256": "fcc2b41a38c86dcb6459eee3a304212e0b289f8c0cf9a5a02ffe7586b990f5cb",
+      "actualUIPixelsUnchanged": true,
+      "rawScreenshotSha256": [
+        "46e78ff76f9fa9d9545531832e300e4c5f5763b1cb1c9825407f369a0c93659b",
+        "42f4d1c4364c0ee8ce70057f0b83931c89aaebe5abb61ce4d0117b6c3acf22fb"
+      ]
+    },
+    {
+      "file": "feature-screens/conflict-and-draft.png",
+      "kind": "new_feature_capture",
+      "bytes": 1249551,
+      "width": 2880,
+      "height": 3248,
+      "sha256": "6bd94700c0d40768c9a5acf72c692427b7499ea5873e6034dd0f64f9e0113040",
+      "actualUIPixelsUnchanged": true,
+      "rawScreenshotSha256": [
+        "bf57e76c33b1cbcf3fa60a65cb6061efff830228e20fc7234c3f2f275de0e6ab",
+        "3aafb1719ab20fbd720ebba5f17af25b6455295523eeb948b3442dd3ef179742"
+      ]
+    },
+    {
+      "file": "feature-screens/skill-test-guidance.png",
+      "kind": "context",
+      "bytes": 1090860,
+      "width": 2880,
+      "height": 3248,
+      "sha256": "9724483133b896b88f2b33d3138ce7851a06b45207d9ab82c53cc676eb12df1c"
+    }
+  ]
+}

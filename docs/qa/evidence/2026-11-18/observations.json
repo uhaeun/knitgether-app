@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-18",
+  "timezone": "Asia/Seoul",
+  "purpose": "feature introduction and the explicitly listed behavior checks",
+  "actor": "Codex using Appium",
+  "environment": {
+    "platform": "iOS Simulator",
+    "platformVersion": "26.5",
+    "appVersion": "1.0",
+    "appBuild": "1",
+    "sourceCommit": "not established for installed app",
+    "actor": "Codex using Appium",
+    "deviceExecution": "simulator only",
+    "installedFiles": {
+      "KnitGether": "c652d0f8aa45295be87ae7c74ddd9f71cf1a067b14bc1d8ad4df167354d06a4d",
+      "__preview.dylib": "1d6d210c7fb96e761eface8fc4e55394afc3e3f344bfb444d10a864a3f88fc95",
+      "KnitGether.debug.dylib": "6322269c7f5f66783eee31f625205463640bc37f6158b1d5d579b25d4798812e"
+    }
+  },
+  "serverBinarySha256": "7cc18e5fa9767c97b549691f29df606929925bc88995ef79f8d07fc1a5585809",
+  "executionScope": {
+    "simulators": 1,
+    "newFeatureScreenshots": 10,
+    "newFeatureFigures": 5,
+    "fullOriginalManualSuiteRerun": false,
+    "physicalIPhoneRun": false,
+    "conflictSetup": "one simulator and a separate API save request"
+  },
+  "localRecords": {
+    "project": "Weekend Cardigan",
+    "currentRow": 43,
+    "memo": "43단까지 완료. 다음 작업은 소매 늘림부터 이어가기.",
+    "patternFile": "sample1.pdf",
+    "yarn": "Soft Merino DK",
+    "needle": "Wood Circular Needle"
+  },
+  "offline": {
+    "phase": "offline",
+    "serverRow": 42,
+    "deviceRow": 43,
+    "deviceStatus": "Pending Upload"
+  },
+  "afterConnectionRestoredBeforeExplicitRetry": {
+    "phase": "reconnected",
+    "serverRow": 42,
+    "deviceRow": 43,
+    "deviceStatus": "Pending Upload"
+  },
+  "afterExplicitStatusRetry": {
+    "phase": "explicit status retry after recovery",
+    "serverRow": 43,
+    "deviceRow": 43,
+    "deviceStatus": "Synced",
+    "sql": {
+      "currentRow": 43,
+      "memo": "42단까지 완료. 다음 작업은 소매 늘림부터 시작."
+    }
+  },
+  "conflict": {
+    "serverMemo": "다른 저장 요청에서 남긴 메모. 다음 작업은 44단부터 시작.",
+    "deviceDraft": "43단까지 완료. 다음 작업은 소매 늘림부터 이어가기.",
+    "serverRow": 43,
+    "actualAlert": "다른 기기에서 먼저 수정돼서 저장하지 못했어요. 입력하신 내용은 그대로 있어요. 다시 저장하면 이 기기의 내용으로 저장돼요."
+  }
+}
