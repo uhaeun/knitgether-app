@@ -51,6 +51,8 @@ enum AppAccessibilityID {
         static let counterEditTargetButton = "workspace.counter.edit_target"
         static let counterNumberField = "workspace.counter.number_field"
         static let counterNumberSaveButton = "workspace.counter.number_save"
+        static let counterNumberError = "workspace.counter.number_error"
+        static let counterNumberCancelButton = "workspace.counter.number_cancel"
         static let counterSectionField = "workspace.counter.section"
         static let counterSectionSaveButton = "workspace.counter.section_save"
         static let counterMemoButton = "workspace.counter.memo"

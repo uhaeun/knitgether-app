@@ -67,9 +67,9 @@ def test_ui_54_lower_bound_stays_at_start(kg):
 
 
 def test_ui_55_direct_input_boundaries(kg):
-    """UI-55 직접 입력 경계값. 큰 값과 0은 반영되고 음수는 0으로 보정된다.
+    """UI-55 직접 입력 경계값. 10000, 0, 1은 저장되고 재실행 후에도 유지된다.
 
-    음수 무통보 보정은 06 관찰 이력이고 상한은 명세가 없다. 기법: 경계값
+    2026-11-05 정책 검토: 음수 거절은 별도 케이스에서 25단을 전제로 확인한다.
     """
     s = Seed(); s.project("직접입력")
     kg.launch(s)
@@ -85,5 +85,47 @@ def test_ui_55_direct_input_boundaries(kg):
     counter.set_current(0)
     assert counter.current_text() == T.COUNTER_START, "0이 '시작 전'으로 표시되지 않음"
 
-    counter.set_current(-5)
-    assert counter.current_text() == T.COUNTER_START, "음수가 0으로 보정되지 않음"
+    counter.set_current(1)
+    assert counter.current_text() == T.COUNTER_CURRENT.format(1)
+
+    kg.relaunch()
+    kg.page(MyKnittingPage).open().open_project("직접입력")
+    assert kg.page(CounterPanelPage).open().current_text() == T.COUNTER_CURRENT.format(1)
+
+
+def test_ui_55_negative_input_preserves_saved_value(kg):
+    """25단에서 -1 입력 → 안내·저장 차단 → 취소·재실행 후 25단 유지."""
+    s = Seed(); s.project("음수입력보존")
+    kg.launch(s)
+    kg.page(MyKnittingPage).open().open_project("음수입력보존")
+    counter = kg.page(CounterPanelPage).open().set_current(25)
+
+    counter.edit_current(-1)
+    assert "음수는 저장할 수 없어요" in counter.number_error()
+    assert not counter.number_save_enabled(), "음수 입력인데 저장 버튼이 활성화됨"
+    counter.cancel_number()
+    assert counter.current_text() == T.COUNTER_CURRENT.format(25)
+
+    kg.relaunch()
+    kg.page(MyKnittingPage).open().open_project("음수입력보존")
+    assert kg.page(CounterPanelPage).open().current_text() == T.COUNTER_CURRENT.format(25)
+
+
+def test_ui_55_negative_input_can_be_corrected(kg):
+    """같은 입력창에서 -1을 26으로 고치면 오류가 해제되고 26단을 저장한다."""
+    s = Seed(); s.project("입력오류복구")
+    kg.launch(s)
+    kg.page(MyKnittingPage).open().open_project("입력오류복구")
+    counter = kg.page(CounterPanelPage).open().set_current(25)
+
+    counter.edit_current(-1)
+    assert "음수는 저장할 수 없어요" in counter.number_error()
+    assert not counter.number_save_enabled()
+    counter.replace_number(26)
+    assert counter.number_save_enabled(), "올바른 입력으로 고쳐도 저장할 수 없음"
+    counter.save_number().wait_for_current(26)
+    assert counter.current_text() == T.COUNTER_CURRENT.format(26)
+
+    kg.relaunch()
+    kg.page(MyKnittingPage).open().open_project("입력오류복구")
+    assert kg.page(CounterPanelPage).open().current_text() == T.COUNTER_CURRENT.format(26)

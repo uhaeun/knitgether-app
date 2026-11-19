@@ -213,6 +213,95 @@ struct ProjectWorkspaceViewModelTests {
         #expect(!message.contains("다시 불러왔으니"))
     }
 
+    @Test(arguments: [-1, Int.min])
+    func negativeCurrentRowDoesNotWriteAndCanBeCorrected(_ invalidRow: Int) async throws {
+        // 0에서 시작하면 '0 보정'과 '기존 값 유지'를 구별할 수 없다.
+        let project = Self.makeProject(currentRow: 25, targetRow: 100)
+        let repository = ProjectRepositorySpy(project: project)
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        await viewModel.updateCurrentRow(invalidRow)
+
+        #expect(viewModel.currentRow == 25)
+        #expect(repository.projects.first?.rowCounter.currentRow == 25)
+        #expect(repository.savedProjects.isEmpty)
+        #expect(viewModel.errorMessage == "음수는 저장할 수 없어요. 기존 단수는 유지돼요.")
+
+        await viewModel.updateCurrentRow(25)
+        #expect(viewModel.errorMessage == nil)
+        #expect(repository.savedProjects.isEmpty)
+
+        await viewModel.updateCurrentRow(26)
+
+        #expect(viewModel.currentRow == 26)
+        #expect(repository.savedProjects.count == 1)
+        #expect(repository.projects.first?.rowCounter.currentRow == 26)
+        #expect(viewModel.rowCounter.id == project.rowCounter.id)
+        #expect(viewModel.rowCounter.targetRow == 100)
+        #expect(viewModel.errorMessage == nil)
+    }
+
+    @Test(arguments: [0, 1, 26, 10000])
+    func nonnegativeCurrentRowPersistsWithoutChangingTarget(_ row: Int) async throws {
+        let project = Self.makeProject(currentRow: 25, targetRow: 100)
+        let repository = ProjectRepositorySpy(project: project)
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        await viewModel.updateCurrentRow(row)
+
+        #expect(viewModel.currentRow == row)
+        #expect(repository.savedProjects.count == 1)
+        #expect(repository.projects.first?.rowCounter.currentRow == row)
+        #expect(viewModel.rowCounter.targetRow == 100)
+        #expect(viewModel.errorMessage == nil)
+    }
+
+    @Test func negativeTargetRowDoesNotClearTargetAndZeroStillUnsetsIt() async throws {
+        let project = Self.makeProject(currentRow: 25, targetRow: 100)
+        let repository = ProjectRepositorySpy(project: project)
+        let viewModel = ProjectWorkspaceViewModel(
+            project: project,
+            projectRepository: repository,
+            patternRepository: PatternRepositoryFake(),
+            skillRepository: SkillRepositoryFake(),
+            libraryRepository: LibraryRepositorySpy()
+        )
+
+        await viewModel.updateTargetRow(-1)
+
+        #expect(viewModel.rowCounter.targetRow == 100)
+        #expect(repository.projects.first?.rowCounter.targetRow == 100)
+        #expect(repository.savedProjects.isEmpty)
+        #expect(viewModel.errorMessage != nil)
+
+        await viewModel.updateTargetRow(0)
+
+        #expect(viewModel.rowCounter.targetRow == nil)
+        #expect(repository.projects.first?.rowCounter.targetRow == nil)
+        #expect(repository.savedProjects.count == 1)
+        #expect(viewModel.currentRow == 25)
+        #expect(viewModel.errorMessage == nil)
+
+        await viewModel.updateTargetRow(100)
+        await viewModel.updateTargetRow(nil)
+
+        #expect(viewModel.rowCounter.targetRow == nil)
+        #expect(repository.projects.first?.rowCounter.targetRow == nil)
+        #expect(viewModel.currentRow == 25)
+    }
+
     @Test func resetCurrentRowPersistsZeroAndKeepsCounterMetadata() async throws {
         let project = Self.makeProject(currentRow: 12, targetRow: 40, rowInstructions: [
             Self.makeInstruction(rowNumber: 12, text: "K all", skillTags: "K")

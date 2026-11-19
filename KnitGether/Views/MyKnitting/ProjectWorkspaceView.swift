@@ -1229,7 +1229,6 @@ private struct NumberEditSheet: View {
     @Environment(\.dismiss) private var dismiss
     let title: String
     let message: String
-    let initialValue: Int
     let saveAction: (Int) -> Void
     @State private var valueText: String
 
@@ -1241,18 +1240,21 @@ private struct NumberEditSheet: View {
     ) {
         self.title = title
         self.message = message
-        self.initialValue = initialValue
         self.saveAction = saveAction
         _valueText = State(initialValue: "\(initialValue)")
     }
 
-    private var isNegativeInput: Bool {
-        (Int(valueText) ?? 0) < 0
+    private var validValue: Int? {
+        guard let value = Int(valueText), value >= 0 else { return nil }
+        return value
     }
 
-    /// 비어 있지 않은데 정수로 해석되지 않는 입력. 저장 시 기존 값이 유지된다.
-    private var isNonNumericInput: Bool {
-        !valueText.isEmpty && Int(valueText) == nil
+    private var validationMessage: String? {
+        guard validValue == nil else { return nil }
+        if let value = Int(valueText), value < 0 {
+            return "음수는 저장할 수 없어요. 기존 단수는 유지돼요."
+        }
+        return "0 이상의 정수를 입력해 주세요. 기존 단수는 유지돼요."
     }
 
     var body: some View {
@@ -1274,18 +1276,12 @@ private struct NumberEditSheet: View {
                         )
                         .keyboardType(.numberPad)
 
-                        if isNegativeInput {
-                            Label("음수는 저장할 수 없어 0으로 보정돼요.", systemImage: "exclamationmark.triangle")
+                        if let validationMessage {
+                            Label(validationMessage, systemImage: "exclamationmark.triangle")
                                 .font(.caption.weight(.semibold))
                                 .foregroundStyle(AppTheme.Color.rose)
                                 .padding(.bottom, 8)
-                        }
-
-                        if isNonNumericInput {
-                            Label("숫자만 입력할 수 있어요. 저장하면 기존 값이 유지돼요.", systemImage: "exclamationmark.triangle")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(AppTheme.Color.rose)
-                                .padding(.bottom, 8)
+                                .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNumberError)
                         }
                     }
                 }
@@ -1299,11 +1295,11 @@ private struct NumberEditSheet: View {
             .safeAreaInset(edge: .bottom) {
                 AppFormSubmitBar(
                     title: "저장",
-                    isDisabled: false,
+                    isDisabled: validValue == nil,
                     accessibilityIdentifier: AppAccessibilityID.Workspace.counterNumberSaveButton
                 ) {
-                    // 음수는 0으로 보정한다. 보정 사실은 시트 안 안내 문구로 표시된다.
-                    saveAction(max(0, Int(valueText) ?? initialValue))
+                    guard let value = validValue else { return }
+                    saveAction(value)
                     dismiss()
                 }
             }
@@ -1312,6 +1308,7 @@ private struct NumberEditSheet: View {
                     Button("취소") {
                         dismiss()
                     }
+                    .accessibilityIdentifier(AppAccessibilityID.Workspace.counterNumberCancelButton)
                 }
             }
         }
